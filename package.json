@@ -1,0 +1,27 @@
+{
+  "name": "lm-presentation",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Site de présentations Lausanne Marketing : slides.lausanne.marketing",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/sitemap": "^3.7.2",
+    "@iconify-json/ph": "^1.2.0",
+    "astro": "^6.0.8",
+    "astro-icon": "^1.1.5",
+    "reveal.js": "^5.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/reveal.js": "^5.0.0",
+    "pagefind": "^1.4.0",
+    "tailwindcss": "^4.0.0"
+  }
+}
