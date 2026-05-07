@@ -12,6 +12,7 @@ interface Props {
 
 const { title, subtitle, short, description, cover } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const lecturePath = `${Astro.url.pathname.replace(/\/$/, '')}/lecture`;
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,7 +29,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta property="og:locale" content="fr_FR" />
   </head>
   <body>
-    <a class="mode-toggle" href={`${Astro.url.pathname}/lecture`} title="Mode lecture">Lecture</a>
+    <a class="mode-toggle" href={lecturePath} title="Mode lecture">Lecture</a>
     <div class="reveal">
       <div class="slides">
         <slot />
