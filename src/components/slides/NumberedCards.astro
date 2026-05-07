@@ -1,0 +1,80 @@
+---
+// src/components/slides/NumberedCards.astro
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Item {
+  number: string;
+  title: string;
+  description?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+  cols?: 1 | 2;
+  items: Item[];
+  fragments?: boolean;
+}
+
+const { title, subtitle, highlight, cols = 2, items, fragments = false } = Astro.props;
+---
+<section class="numbered-cards" data-layout="numbered-cards">
+  {title && <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />}
+  <div class={`numbered-cards__grid numbered-cards__grid--cols-${cols}`}>
+    {items.map((item) => (
+      <article class={`numbered-card${fragments ? ' fragment fade-in' : ''}`}>
+        <span class="numbered-card__number">{item.number}</span>
+        <div class="numbered-card__body">
+          <h3 class="numbered-card__title">{item.title}</h3>
+          {item.description && <p class="numbered-card__description">{item.description}</p>}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .numbered-cards {
+    justify-content: flex-start !important;
+  }
+  .numbered-cards__grid {
+    display: grid;
+    gap: 48px 64px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .numbered-cards__grid--cols-1 {
+    grid-template-columns: 1fr;
+    max-width: 1100px;
+  }
+  .numbered-cards__grid--cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .numbered-card {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .numbered-card__number {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 64px;
+    font-weight: 700;
+    color: #5BA8D6;
+    line-height: 1;
+  }
+  .numbered-card__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #191919;
+    margin: 0 0 8px;
+  }
+  .numbered-card__description {
+    font-size: 20px;
+    color: #6B6F84;
+    margin: 0;
+    line-height: 1.4;
+  }
+</style>
