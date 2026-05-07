@@ -12,6 +12,13 @@ import Cover from '@/components/slides/Cover.astro';
 import Title from '@/components/slides/Title.astro';
 import Statement from '@/components/slides/Statement.astro';
 import TableSlide from '@/components/slides/TableSlide.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import NumberedCardWithDetail from '@/components/slides/NumberedCardWithDetail.astro';
+import BigImage from '@/components/slides/BigImage.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import Quote from '@/components/slides/Quote.astro';
+import Custom from '@/components/slides/Custom.astro';
 import Closing from '@/components/slides/Closing.astro';
 
 <Cover
@@ -31,6 +38,19 @@ import Closing from '@/components/slides/Closing.astro';
 La donnée est la nouvelle <span class="underline">matière première</span> du marketing.
 </Statement>
 
+<Calendar
+  title="Calendrier"
+  subtitle="Jour 1, données client"
+  day="Jour 1"
+  slots={[
+    { time: '09h00 - 10h30', subject: "Pourquoi la donnée", speaker: 'Thomas' },
+    { time: '10h45 - 12h00', subject: 'Sources et collecte', speaker: 'Thomas' },
+    { time: '13h00 - 14h30', subject: 'Structuration et qualité', speaker: 'Thomas' },
+    { time: '14h45 - 16h00', subject: 'Intégration et synchronisation', speaker: 'Thomas' },
+    { time: '16h15 - 17h00', subject: 'Atelier pratique', speaker: 'Thomas' },
+  ]}
+/>
+
 <TableSlide
   title="Stack pour petite structure"
   subtitle="Moins de 50 CHF par mois"
@@ -48,5 +68,64 @@ La donnée est la nouvelle <span class="underline">matière première</span> du 
     ['ChatGPT', 'IA générative', 'Gratuit'],
   ]}
 />
+
+<NumberedCards
+  title="Faire progresser vos prospects dans le funnel"
+  subtitle="Quatre leviers pour automatiser le parcours"
+  cols={2}
+  items={[
+    { number: '01', title: "Analyse d'engagement", description: 'Suivi des interactions avec vos contenus et offres' },
+    { number: '02', title: 'Lead nurturing', description: 'Communications régulières et personnalisées' },
+    { number: '03', title: 'Analyse de correspondance', description: "Matching avec le profil d'un client idéal" },
+    { number: '04', title: 'Lead scoring', description: 'Notation des leads selon leurs comportements' },
+  ]}
+/>
+
+<NumberedCardWithDetail
+  title="Exemples de workflows d'automatisation"
+  subtitle="Workflow 01 : analyse d'engagement"
+  number="01"
+  cardTitle="Analyse d'engagement"
+  cardDescription="Suivi des interactions avec vos contenus et offres"
+  details={[
+    { label: 'Déclencheur', text: 'Le lead X a visité la page pricing 2 fois en 3 jours.' },
+    { label: 'Prérequis', text: 'Tracking des pages (HubSpot, ActiveCampaign, Brevo, etc.).' },
+    { label: 'Actions', text: "Envoi d'une offre d'essai spéciale valable deux jours (FOMO)." },
+  ]}
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=900&fit=crop"
+/>
+
+<BigImage
+  title="Funnel marketing complet"
+  subtitle="Vue inbound + outbound, des touchpoints aux résultats"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1600&h=900&fit=crop"
+  caption="Schéma de funnel marketing inbound et outbound"
+  frame
+/>
+
+<Workshop
+  title="Atelier"
+  subtitle="Funnel marketing"
+  subject="Funnel marketing"
+  rows={[
+    { label: 'Temps', content: '30 minutes' },
+    { label: 'Travail', content: ['10 minutes individuelles', '20 minutes de peer sharing'] },
+    { label: 'Objectif', content: ["Identifier tout ou partie du funnel individuellement", "Partager avec la classe pour réaliser un funnel commun"] },
+    { label: 'Sujet', content: "Business, objectif et persona d'un participant" },
+    { label: 'Attentes', content: ['Faire le lien avec les sujets du cours (Landing page, nurturing, etc.)', 'Couvrir un maximum de canaux'] },
+  ]}
+/>
+
+<Quote
+  text="Sur un projet récent, un client estimait à 10 minutes le temps de création d'une offre commerciale. Je lui ai demandé de chronométrer pendant une semaine. Résultat : 20 minutes par offre. Le double."
+  author="Thomas Rouaud"
+  role="Consultant CRM, Data, IA & Automation"
+  highlight="20 minutes"
+/>
+
+<Custom background="dark" align="center">
+  <h1 style="color: #FFD838; font-size: 80px; margin: 0;">Pause café</h1>
+  <p style="color: rgba(255, 255, 255, 0.7); font-size: 28px; margin-top: 16px;">15 minutes</p>
+</Custom>
 
 <Closing variant="qa" />
