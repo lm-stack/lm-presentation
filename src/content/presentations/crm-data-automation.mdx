@@ -1,0 +1,52 @@
+---
+title: "CRM, Data & automation"
+subtitle: "Formation continue HEC Lausanne"
+short: "CRM, Data, Automation"
+date: 2026-06-25
+type: cours
+unlisted: false
+description: "Formation Executive Education sur la collecte de données, le choix d'un CRM et l'automatisation des parcours client avec IA et low-code."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Title from '@/components/slides/Title.astro';
+import Statement from '@/components/slides/Statement.astro';
+import TableSlide from '@/components/slides/TableSlide.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+<Cover
+  title="CRM, Data & automation"
+  subtitle="Formation continue HEC Lausanne"
+  eyebrow="Juin 2026"
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=900&fit=crop"
+/>
+
+<Title
+  chapter="Jour 1"
+  title="Data"
+  subtitle="Collecter, structurer, intégrer la donnée client"
+/>
+
+<Statement>
+La donnée est la nouvelle <span class="underline">matière première</span> du marketing.
+</Statement>
+
+<TableSlide
+  title="Stack pour petite structure"
+  subtitle="Moins de 50 CHF par mois"
+  highlight="50 CHF"
+  intro="Les outils ne nécessitent pas un investissement élevé. Voici une proposition de stack digital pour les petites structures sans budget."
+  headers={['Nom', 'Fonction', 'Prix']}
+  rows={[
+    ['Brevo', 'CRM, Landing page, Emailing, Calendly like', '13 CHF'],
+    ['Airtable', 'Base de données', 'Gratuit'],
+    ['Zapier', "Outil d'automatisation", 'Gratuit'],
+    ['Infomaniak', 'Hébergement, nom de domaine', '11 CHF'],
+    ['WordPress', 'Site web', 'Gratuit'],
+    ['Bexio', 'Comptabilité et finance', '25 CHF'],
+    ['Canva', 'Outil de design', 'Gratuit'],
+    ['ChatGPT', 'IA générative', 'Gratuit'],
+  ]}
+/>
+
+<Closing variant="qa" />
