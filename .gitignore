@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+.env.local
+
+# OneDrive desktop.ini
+desktop.ini
+
+# Source archive (PDF, PPTX, RAW) - trop lourd pour git, conservé en local
+source/**/*.pptx
+source/**/*.pdf
+source/**/*.arw
+source/**/*.png
+source/**/*.jpg
+
+# Fichiers Cloudflare
+.wrangler/
