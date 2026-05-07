@@ -1,0 +1,113 @@
+---
+// src/pages/index.astro
+import { getCollection } from 'astro:content';
+import Site from '@/layouts/Site.astro';
+
+const all = await getCollection('presentations');
+const presentations = all
+  .filter((p) => !p.data.unlisted)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const typeLabels: Record<string, string> = {
+  cours: 'Cours',
+  commercial: 'Présentation',
+  workshop: 'Workshop',
+  evenement: 'Événement',
+};
+---
+<Site title="Lausanne Marketing : Présentations" description="Cours, présentations commerciales, workshops et événements de Lausanne Marketing.">
+  <header class="hero">
+    <h1>Présentations <span class="underline">Lausanne Marketing</span></h1>
+    <p>Cours de formation continue, présentations commerciales, workshops et événements.</p>
+  </header>
+  <section class="presentations">
+    {presentations.length === 0 && (
+      <p class="empty">Aucune présentation publique pour l'instant.</p>
+    )}
+    <ul class="presentation-grid">
+      {presentations.map((p) => (
+        <li>
+          <a href={`/p/${p.id.replace('.mdx', '')}`} class="presentation-card">
+            <span class="presentation-card__type">{typeLabels[p.data.type] ?? p.data.type}</span>
+            <h2>{p.data.title}</h2>
+            {p.data.subtitle && <p class="presentation-card__subtitle">{p.data.subtitle}</p>}
+            <time datetime={p.data.date.toISOString()}>
+              {p.data.date.toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <style>
+    .hero {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 96px 32px 48px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(3.6rem, 2.51rem + 2.73vw, 6rem);
+      margin: 0 0 16px;
+    }
+    .hero p {
+      font-size: 20px;
+      color: #6B6F84;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .presentations {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    .empty {
+      text-align: center;
+      color: #6B6F84;
+      padding: 64px 0;
+    }
+    .presentation-grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .presentation-card {
+      display: block;
+      padding: 32px;
+      background: #FFFFFF;
+      border-radius: 20px;
+      box-shadow: 0 12px 12px 0 rgba(26, 26, 26, 0.04);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+    .presentation-card:hover {
+      transform: translateY(-4px);
+    }
+    .presentation-card__type {
+      display: inline-block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6B6F84;
+      margin-bottom: 12px;
+    }
+    .presentation-card h2 {
+      font-size: 24px;
+      margin: 0 0 8px;
+    }
+    .presentation-card__subtitle {
+      font-size: 16px;
+      color: #6B6F84;
+      margin: 0 0 16px;
+    }
+    .presentation-card time {
+      font-size: 14px;
+      color: #6B6F84;
+    }
+  </style>
+</Site>
