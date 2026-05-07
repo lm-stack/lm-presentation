@@ -1,0 +1,90 @@
+---
+// src/layouts/Deck.astro
+import '@/styles/slides.css';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  short?: string;
+  description?: string;
+  cover?: string;
+}
+
+const { title, subtitle, short, description, cover } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} : Lausanne Marketing</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {cover && <meta property="og:image" content={new URL(cover, Astro.site).toString()} />}
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="fr_FR" />
+  </head>
+  <body>
+    <a class="mode-toggle" href={`${Astro.url.pathname}/lecture`} title="Mode lecture">Lecture</a>
+    <div class="reveal">
+      <div class="slides">
+        <slot />
+      </div>
+    </div>
+    <footer class="deck-footer">
+      <span class="deck-brand">Lausanne Marketing</span>
+      <span class="deck-title">{short ?? title}</span>
+      <span class="deck-counter"><span class="reveal-current">1</span> / <span class="reveal-total">1</span></span>
+    </footer>
+
+    <style>
+      .mode-toggle {
+        position: fixed;
+        top: 16px;
+        right: 96px;
+        z-index: 100;
+        padding: 8px 16px;
+        background: #FFD838;
+        color: #191919;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 12px;
+        text-decoration: none;
+      }
+      .mode-toggle:hover {
+        background: #FEE487;
+      }
+    </style>
+
+    <script>
+      import Reveal from 'reveal.js';
+
+      const deck = new Reveal({
+        hash: true,
+        slideNumber: false,
+        transition: 'fade',
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1920,
+        height: 1080,
+        margin: 0,
+      });
+
+      deck.initialize().then(() => {
+        const total = deck.getTotalSlides();
+        const totalEl = document.querySelector('.reveal-total');
+        if (totalEl) totalEl.textContent = String(total);
+
+        deck.on('slidechanged', (event) => {
+          const current = deck.getSlidePastCount() + 1;
+          const currentEl = document.querySelector('.reveal-current');
+          if (currentEl) currentEl.textContent = String(current);
+        });
+      });
+    </script>
+  </body>
+</html>
