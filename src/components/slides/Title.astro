@@ -1,0 +1,65 @@
+---
+// src/components/slides/Title.astro
+interface Props {
+  title: string;
+  subtitle?: string;
+  chapter?: string;
+  highlight?: string;
+}
+const { title, subtitle, chapter, highlight } = Astro.props;
+
+function splitHighlight(text: string, mot?: string) {
+  if (!mot) return null;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
+}
+
+const titleParts = splitHighlight(title, highlight);
+---
+<section class="slide-title-chapter" data-layout="title">
+  <div class="title-chapter__inner">
+    {chapter && <p class="title-chapter__chapter">{chapter}</p>}
+    <h1>
+      {titleParts
+        ? <>{titleParts.before}<span class="underline">{titleParts.match}</span>{titleParts.after}</>
+        : title}
+    </h1>
+    {subtitle && <p class="title-chapter__subtitle">{subtitle}</p>}
+  </div>
+</section>
+
+<style>
+  .slide-title-chapter {
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center;
+    background: #FFFFFF;
+  }
+  .title-chapter__inner {
+    max-width: 1280px;
+  }
+  .title-chapter__chapter {
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #FFD838;
+    margin: 0 0 24px;
+    font-weight: 500;
+  }
+  .slide-title-chapter h1 {
+    font-size: 96px;
+    line-height: 1.1;
+    color: #191919;
+    margin: 0 0 24px;
+  }
+  .title-chapter__subtitle {
+    font-size: 28px;
+    color: #6B6F84;
+    margin: 0;
+  }
+</style>
