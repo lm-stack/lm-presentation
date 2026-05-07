@@ -1,0 +1,61 @@
+---
+// src/components/slides/Closing.astro
+interface Props {
+  variant?: 'qa' | 'thanks' | 'contact';
+  title?: string;
+  subtitle?: string;
+  email?: string;
+  url?: string;
+}
+const {
+  variant = 'qa',
+  title = variant === 'qa' ? 'Questions & Réponses' : variant === 'thanks' ? 'Merci' : 'Contact',
+  subtitle = variant === 'qa' ? 'Échanges et discussions' : variant === 'thanks' ? 'Pour votre attention' : 'Pour aller plus loin',
+  email,
+  url,
+} = Astro.props;
+---
+<section class="closing" data-layout={`closing-${variant}`}>
+  <div class="closing__inner">
+    <h1>{title}</h1>
+    <p class="closing__subtitle">{subtitle}</p>
+    {variant === 'contact' && (email || url) && (
+      <ul class="closing__contact">
+        {email && <li><a href={`mailto:${email}`}>{email}</a></li>}
+        {url && <li><a href={url} target="_blank" rel="noopener">{url}</a></li>}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .closing {
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center;
+    background: #191919;
+    color: #FFFFFF;
+  }
+  .closing h1 {
+    font-size: 96px;
+    color: #FFFFFF !important;
+    margin: 0 0 24px;
+  }
+  .closing__subtitle {
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 32px;
+  }
+  .closing__contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 24px;
+  }
+  .closing__contact li {
+    margin-bottom: 12px;
+  }
+  .closing__contact a {
+    color: #FFD838;
+  }
+</style>
