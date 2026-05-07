@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+@layer base {
+  :root {
+    /* Tokens fluides typo (calque sur lm/) */
+    --text-xs: 1.2rem;
+    --text-sm: 1.4rem;
+    --text-base: 1.6rem;
+    --text-md: 1.8rem;
+    --text-lg: 2rem;
+    --text-xl: 2.4rem;
+    --text-2xl: 2.8rem;
+    --text-3xl: clamp(2.6rem, 2.33rem + 0.68vw, 3.2rem);
+    --text-4xl: clamp(2.8rem, 2.62rem + 0.45vw, 3.2rem);
+    --text-5xl: clamp(3.6rem, 2.51rem + 2.73vw, 6rem);
+
+    --color-text: #6B6F84;
+  }
+
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--color-text);
+    background: #FFFFFF;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: #191919;
+    line-height: 1.2;
+  }
+}
+
+/* Underline gold rotatif (signature LM, hors @layer pour battre Tailwind utility) */
+.underline {
+  position: relative;
+  display: inline;
+  text-decoration-line: none !important;
+}
+.underline::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 10px solid #FFD838;
+  transform: rotate(-3deg);
+  pointer-events: none;
+  background-color: transparent;
+  z-index: -1;
+}
+@media (max-width: 767px) {
+  .underline::after {
+    border-bottom-width: 6px;
+  }
+}
