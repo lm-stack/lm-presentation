@@ -1,0 +1,64 @@
+---
+// src/components/slides/Custom.astro
+interface Props {
+  background?: 'white' | 'dark' | 'gold';
+  align?: 'top' | 'center' | 'bottom';
+  class?: string;
+}
+
+const { background = 'white', align = 'top', class: extraClass } = Astro.props;
+
+const classes = [
+  'custom-slide',
+  `custom-slide--bg-${background}`,
+  `custom-slide--align-${align}`,
+  extraClass,
+].filter(Boolean).join(' ');
+---
+<section class={classes} data-layout="custom">
+  <slot />
+</section>
+
+<style>
+  .custom-slide {
+    width: 100%;
+    height: 100%;
+  }
+  .custom-slide--bg-white {
+    background: #FFFFFF;
+    color: #6B6F84;
+  }
+  .custom-slide--bg-dark {
+    background: #191919;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .custom-slide--bg-gold {
+    background: #FFD838;
+    color: #191919;
+  }
+  .custom-slide--align-top {
+    justify-content: flex-start !important;
+  }
+  .custom-slide--align-center {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .custom-slide--align-bottom {
+    justify-content: flex-end !important;
+  }
+  .custom-slide :global(h1),
+  .custom-slide :global(h2),
+  .custom-slide :global(h3) {
+    color: inherit;
+  }
+  .custom-slide--bg-dark :global(h1),
+  .custom-slide--bg-dark :global(h2),
+  .custom-slide--bg-dark :global(h3) {
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .custom-slide--bg-gold :global(h1),
+  .custom-slide--bg-gold :global(h2),
+  .custom-slide--bg-gold :global(h3) {
+    color: #191919;
+  }
+</style>
