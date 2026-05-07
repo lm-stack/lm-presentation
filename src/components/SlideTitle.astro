@@ -1,0 +1,39 @@
+---
+// src/components/SlideTitle.astro
+interface Props {
+  title: string;
+  subtitle?: string;
+  highlight?: string;
+}
+const { title, subtitle, highlight } = Astro.props;
+
+function renderHighlight(text: string | undefined, mot: string | undefined) {
+  if (!text || !mot) return text;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return text;
+  const before = text.slice(0, idx);
+  const match = text.slice(idx, idx + mot.length);
+  const after = text.slice(idx + mot.length);
+  return { before, match, after };
+}
+
+const subtitleParts = renderHighlight(subtitle, highlight);
+---
+<div class="slide-title">
+  <h2>{title}</h2>
+  {subtitle && (
+    typeof subtitleParts === 'string'
+      ? <p class="slide-subtitle">{subtitleParts}</p>
+      : <p class="slide-subtitle">
+          {subtitleParts.before}<span class="underline">{subtitleParts.match}</span>{subtitleParts.after}
+        </p>
+  )}
+  <span class="slide-divider"></span>
+</div>
+
+<style>
+  .slide-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+</style>
