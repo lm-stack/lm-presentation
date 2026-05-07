@@ -1,0 +1,25 @@
+---
+// src/pages/p/[slug]/lecture.astro
+import { getCollection, render } from 'astro:content';
+import DeckReading from '@/layouts/DeckReading.astro';
+
+export async function getStaticPaths() {
+  const decks = await getCollection('presentations');
+  return decks.map((d) => ({
+    params: { slug: d.id.replace('.mdx', '') },
+    props: { entry: d },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const slug = entry.id.replace('.mdx', '');
+---
+<DeckReading
+  title={entry.data.title}
+  subtitle={entry.data.subtitle}
+  description={entry.data.description}
+  presentationPath={`/p/${slug}`}
+>
+  <Content />
+</DeckReading>
