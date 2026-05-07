@@ -1,0 +1,62 @@
+---
+// src/components/slides/Statement.astro
+interface Props {
+  highlight?: string;
+  image?: string;
+  title?: string;
+  subtitle?: string;
+}
+const { highlight, image, title, subtitle } = Astro.props;
+---
+<section class="statement" data-layout="statement">
+  {(title || subtitle) && (
+    <div class="statement__title">
+      {title && <h2>{title}</h2>}
+      {subtitle && <p class="slide-subtitle">{subtitle}</p>}
+      <span class="slide-divider"></span>
+    </div>
+  )}
+  <div class="statement__body">
+    <p class="statement__text">
+      <slot />
+    </p>
+    {image && (
+      <div class="statement__image">
+        <img src={image} alt="" loading="lazy" decoding="async" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .statement {
+    justify-content: center !important;
+  }
+  .statement__title {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .statement__body {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .statement__text {
+    font-size: 36px;
+    line-height: 1.4;
+    color: #191919;
+    margin: 0 0 48px;
+  }
+  .statement__image {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 12px 0 rgba(26, 26, 26, 0.04);
+    max-height: 400px;
+  }
+  .statement__image img {
+    width: 100%;
+    height: 100%;
+    max-height: 400px;
+    object-fit: cover;
+  }
+</style>
