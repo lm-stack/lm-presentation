@@ -17,9 +17,9 @@ const { highlight, image, title, subtitle } = Astro.props;
     </div>
   )}
   <div class="statement__body">
-    <p class="statement__text">
+    <div class="statement__text">
       <slot />
-    </p>
+    </div>
     {image && (
       <div class="statement__image">
         <img src={image} alt="" loading="lazy" decoding="async" />
