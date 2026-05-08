@@ -1,0 +1,107 @@
+---
+title: "Template par défaut"
+subtitle: "Catalogue des layouts validés"
+short: "Template"
+date: 2026-05-08
+type: cours
+unlisted: true
+description: "Deck modèle qui montre les layouts validés (Cover, Section, ImageGrid 2/3/4/5)."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Section from '@/components/slides/Section.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+<Cover
+  title="Template par défaut"
+  subtitle="Layouts validés Lausanne Marketing"
+  eyebrow="Catalogue interne"
+  highlight="défaut"
+  watermark="LM"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1600&h=900&fit=crop"
+/>
+
+<Section
+  number="01"
+  eyebrow="Modèle 1"
+  title="Slide de section, plus light que le cover"
+  highlight="section"
+  subtitle="Transition entre chapitres : pill gold, watermark numérique, mot signature en bande noire."
+/>
+
+<Section
+  number="02"
+  eyebrow="Modèle 2"
+  title="Grille de 2 images, format panorama"
+  highlight="2 images"
+  subtitle="Comparatif côte à côte, avant/après ou deux concepts."
+/>
+
+<ImageGrid
+  title="Grille 2 images"
+  subtitle="Comparatif ou diptyque"
+  images={[
+    { src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=600&fit=crop', caption: 'Image 1 · contexte ou avant' },
+    { src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=600&fit=crop', caption: 'Image 2 · contraste ou après' },
+  ]}
+/>
+
+<Section
+  number="03"
+  eyebrow="Modèle 3"
+  title="Grille de 3 images, triptyque"
+  highlight="3 images"
+  subtitle="Trois concepts à mettre en parallèle dans une même respiration visuelle."
+/>
+
+<ImageGrid
+  title="Grille 3 images"
+  subtitle="Triptyque pédagogique"
+  images={[
+    { src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=450&fit=crop', caption: 'Étape 1' },
+    { src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=450&fit=crop', caption: 'Étape 2' },
+    { src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=450&fit=crop', caption: 'Étape 3' },
+  ]}
+/>
+
+<Section
+  number="04"
+  eyebrow="Modèle 4"
+  title="Grille de 4 images, mosaïque 2x2"
+  highlight="4 images"
+  subtitle="Galerie ou ensemble cohérent : quatre faces d'un même sujet."
+/>
+
+<ImageGrid
+  title="Grille 4 images"
+  subtitle="Mosaïque carrée"
+  images={[
+    { src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop', caption: 'Quadrant 1' },
+    { src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop', caption: 'Quadrant 2' },
+    { src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop', caption: 'Quadrant 3' },
+    { src: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&h=600&fit=crop', caption: 'Quadrant 4' },
+  ]}
+/>
+
+<Section
+  number="05"
+  eyebrow="Modèle 5"
+  title="Grille de 5 images, hero plus quatre vignettes"
+  highlight="5 images"
+  subtitle="Une image dominante à gauche, quatre déclinaisons à droite."
+/>
+
+<ImageGrid
+  title="Grille 5 images"
+  subtitle="Hero + vignettes"
+  images={[
+    { src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=900&fit=crop', caption: 'Image principale' },
+    { src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=450&fit=crop', caption: 'Détail 1' },
+    { src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=450&fit=crop', caption: 'Détail 2' },
+    { src: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=600&h=450&fit=crop', caption: 'Détail 3' },
+    { src: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=450&fit=crop', caption: 'Détail 4' },
+  ]}
+/>
+
+<Closing variant="qa" />

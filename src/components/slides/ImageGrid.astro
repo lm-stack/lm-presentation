@@ -1,0 +1,137 @@
+---
+// src/components/slides/ImageGrid.astro
+// Slide grille d'images, layout adaptatif selon le nombre :
+// 2 → 2 colonnes egales / 3 → 3 colonnes / 4 → 2x2 / 5 → 1 hero + 2x2.
+// Charte LM : titre + accent gold, gap genereux, radius 16px, ombre douce, stagger reveal.
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface ImageItem {
+  src: string;
+  alt?: string;
+  caption?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+  images: ImageItem[];
+}
+
+const { title, subtitle, highlight, images } = Astro.props;
+const count = Math.min(Math.max(images.length, 2), 5);
+const variantClass = `image-grid__grid--${count}`;
+const hasHeader = Boolean(title || subtitle);
+---
+<section class="image-grid" data-layout="image-grid">
+  {hasHeader && <SlideTitle title={title ?? ''} subtitle={subtitle} highlight={highlight} />}
+  <div class={`image-grid__grid ${variantClass}`}>
+    {images.map((img, i) => (
+      <figure class="image-grid__item" style={`--i: ${i}`}>
+        <img src={img.src} alt={img.alt ?? ''} loading="lazy" decoding="async" />
+        {img.caption && <figcaption>{img.caption}</figcaption>}
+      </figure>
+    ))}
+  </div>
+  <span class="image-grid__rule" aria-hidden="true"></span>
+</section>
+
+<style>
+  .image-grid {
+    justify-content: flex-start !important;
+    position: relative;
+  }
+
+  .image-grid__grid {
+    display: grid;
+    gap: 28px;
+    max-width: 1700px;
+    margin: 0 auto;
+    width: 100%;
+    /* Hauteur cap pour laisser de la place au header et au trait du bas */
+    max-height: 720px;
+  }
+
+  /* Variantes selon le nombre d'images */
+  .image-grid__grid--2 {
+    grid-template-columns: 1fr 1fr;
+    aspect-ratio: 32 / 9;
+  }
+  .image-grid__grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+    aspect-ratio: 21 / 6;
+  }
+  .image-grid__grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 1fr;
+    aspect-ratio: 4 / 3;
+  }
+  .image-grid__grid--5 {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    aspect-ratio: 16 / 7;
+  }
+  /* Hero (1ere image) du layout 5 : prend les 2 lignes a gauche */
+  .image-grid__grid--5 .image-grid__item:first-child {
+    grid-row: 1 / 3;
+  }
+
+  /* Items */
+  .image-grid__item {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #191919;
+    box-shadow: 0 12px 24px -8px rgba(25, 25, 25, 0.18);
+    animation: image-grid-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.08s) both;
+  }
+  .image-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .image-grid__item figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(
+      to top,
+      rgba(25, 25, 25, 0.86) 0%,
+      rgba(25, 25, 25, 0.72) 60%,
+      rgba(25, 25, 25, 0) 100%
+    );
+    color: #FFFFFF;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+
+  /* Trait gold ancrage bottom-left, comme Section */
+  .image-grid__rule {
+    position: absolute;
+    left: 96px;
+    bottom: 64px;
+    width: 64px;
+    height: 4px;
+    background: #FFD838;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @keyframes image-grid-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>
