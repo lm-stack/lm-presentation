@@ -49,6 +49,10 @@ const lecturePath = `${Astro.url.pathname.replace(/\/$/, '')}/lecture`;
           <span>Mis à jour : {updated}</span>
         </p>
       )}
+      <nav class="deck-menu__toc" id="deck-menu-toc" aria-label="Sommaire" hidden>
+        <p class="deck-menu__toc-label">Sommaire</p>
+        <ol class="deck-menu__toc-list" id="deck-menu-toc-list"></ol>
+      </nav>
     </aside>
     <div class="deck-toolbar">
       <button type="button" class="deck-icon-btn" id="deck-download-btn" title="Télécharger en PDF" aria-label="Télécharger la présentation en PDF">
@@ -158,6 +162,38 @@ const lecturePath = `${Astro.url.pathname.replace(/\/$/, '')}/lecture`;
         const printUrl = window.location.pathname + '?print-pdf';
         window.open(printUrl, '_blank', 'noopener');
       });
+
+      // Table des matières : auto-construite depuis toute slide marquee data-section-title.
+      // Inclut le slide d'accueil (Cover) + les sections, et tout slide custom qui s'expose.
+      const tocNav = document.getElementById('deck-menu-toc') as HTMLElement | null;
+      const tocList = document.getElementById('deck-menu-toc-list') as HTMLOListElement | null;
+      if (tocNav && tocList) {
+        const tocSlides = Array.from(
+          document.querySelectorAll<HTMLElement>('.slides > section[data-section-title]')
+        );
+        if (tocSlides.length > 0) {
+          tocNav.hidden = false;
+          const slidesParent = tocSlides[0].parentElement;
+          tocSlides.forEach((sec) => {
+            const indexInDeck = slidesParent
+              ? Array.from(slidesParent.children).indexOf(sec)
+              : 0;
+            const label = sec.dataset.sectionTitle ?? `Slide ${indexInDeck + 1}`;
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'deck-menu__toc-btn';
+            btn.dataset.slideIndex = String(indexInDeck);
+            btn.textContent = label;
+            btn.addEventListener('click', () => {
+              deck.slide(indexInDeck);
+              closeMenu();
+            });
+            li.appendChild(btn);
+            tocList.appendChild(li);
+          });
+        }
+      }
     </script>
   </body>
 </html>

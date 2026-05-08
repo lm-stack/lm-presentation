@@ -9,6 +9,7 @@ description: "Formation Executive Education sur la collecte de données, le choi
 ---
 
 import Cover from '@/components/slides/Cover.astro';
+import Section from '@/components/slides/Section.astro';
 import Title from '@/components/slides/Title.astro';
 import Statement from '@/components/slides/Statement.astro';
 import TableSlide from '@/components/slides/TableSlide.astro';
@@ -30,10 +31,12 @@ import Closing from '@/components/slides/Closing.astro';
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=900&fit=crop"
 />
 
-<Title
-  chapter="Jour 1"
-  title="Data"
-  subtitle="Collecter, structurer, intégrer la donnée client"
+<Section
+  number="01"
+  eyebrow="Jour 1"
+  title="Collecter, structurer, intégrer la donnée client"
+  highlight="donnée"
+  subtitle="Premier jour de la formation : sources, qualité, intégration."
 />
 
 <Statement>
@@ -129,5 +132,21 @@ La donnée est la nouvelle <span class="underline">matière première</span> du 
   <h1 style="color: #FFD838; font-size: 80px; margin: 0;">Pause café</h1>
   <p style="color: rgba(255, 255, 255, 0.7); font-size: 28px; margin-top: 16px;">15 minutes</p>
 </Custom>
+
+<Section
+  number="02"
+  eyebrow="Jour 2"
+  title="Évaluer et choisir un CRM"
+  highlight="CRM"
+  subtitle="Comparatif HubSpot, Salesforce, Zoho. Implémentation, adoption et maintenance."
+/>
+
+<Section
+  number="03"
+  eyebrow="Jour 3"
+  title="Automatiser avec IA et low-code"
+  highlight="Automatiser"
+  subtitle="Workflows pratiques, Zapier, n8n, IA générative dans le marketing automation."
+/>
 
 <Closing variant="qa" />

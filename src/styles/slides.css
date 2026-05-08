@@ -299,6 +299,73 @@ html:has(:fullscreen) .deck-footer {
   margin: 0;
 }
 
+.deck-menu__toc {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(25, 25, 25, 0.08);
+}
+
+.deck-menu__toc-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #6B6F84;
+  margin: 0 0 8px;
+}
+
+.deck-menu__toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: toc;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deck-menu__toc-list li {
+  counter-increment: toc;
+}
+
+.deck-menu__toc-btn {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 8px 12px 8px 36px;
+  margin: 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #191919;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.deck-menu__toc-btn::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6B6F84;
+}
+
+.deck-menu__toc-btn:hover {
+  background: #FFD838;
+  color: #191919;
+}
+
+.deck-menu__toc-btn:hover::before {
+  color: #191919;
+}
+
 /* Mode lecture : reset Reveal, scroll vertical */
 .deck-reading {
   max-width: 1280px;
