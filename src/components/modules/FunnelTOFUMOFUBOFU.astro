@@ -1,0 +1,100 @@
+---
+// src/components/modules/FunnelTOFUMOFUBOFU.astro
+import SlideTitle from '@/components/SlideTitle.astro';
+import { Icon } from 'astro-icon/components';
+---
+<section class="funnel-tofu" data-layout="funnel-tofu">
+  <SlideTitle title="Funnel marketing" subtitle="Étapes importantes" />
+  <div class="funnel-tofu__grid">
+    <div class="funnel-tofu__pyramid">
+      <div class="funnel-tofu__band funnel-tofu__band--top">
+        <Icon name="ph:megaphone" />
+      </div>
+      <div class="funnel-tofu__band funnel-tofu__band--middle">
+        <Icon name="ph:target" />
+      </div>
+      <div class="funnel-tofu__band funnel-tofu__band--bottom">
+        <Icon name="ph:handshake" />
+      </div>
+    </div>
+    <ul class="funnel-tofu__legend">
+      <li>
+        <h3>TOFU</h3>
+        <p>Top of the funnel : Attirer</p>
+      </li>
+      <li>
+        <h3>MOFU</h3>
+        <p>Middle of the funnel : Convertir</p>
+      </li>
+      <li>
+        <h3>BOFU</h3>
+        <p>Bottom of the funnel : Conclure</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .funnel-tofu {
+    justify-content: flex-start !important;
+  }
+  .funnel-tofu__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: center;
+    max-width: 1500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .funnel-tofu__pyramid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .funnel-tofu__band {
+    background: #191919;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 130px;
+  }
+  .funnel-tofu__band :global(svg) {
+    width: 56px;
+    height: 56px;
+  }
+  .funnel-tofu__band--top {
+    width: 100%;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+  }
+  .funnel-tofu__band--middle {
+    width: 80%;
+    clip-path: polygon(6.25% 0, 93.75% 0, 81.25% 100%, 18.75% 100%);
+  }
+  .funnel-tofu__band--bottom {
+    width: 60%;
+    clip-path: polygon(8.33% 0, 91.67% 0, 50% 100%, 50% 100%);
+    height: 130px;
+  }
+  .funnel-tofu__legend {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .funnel-tofu__legend h3 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #191919;
+    margin: 0 0 4px;
+  }
+  .funnel-tofu__legend p {
+    font-size: 22px;
+    color: #6B6F84;
+    margin: 0;
+  }
+</style>
