@@ -1,0 +1,147 @@
+---
+// src/components/modules/LeadNurturingPrincipes.astro
+import Statement from '@/components/slides/Statement.astro';
+import SlideTitle from '@/components/SlideTitle.astro';
+---
+<section class="lead-nurturing-def" data-layout="lead-nurturing-def">
+  <SlideTitle title="Lead nurturing" subtitle="Définition" />
+  <div class="lead-nurturing-def__body">
+    <h3>Stimulation des leads pour <span class="underline">maintenir leur intérêt</span></h3>
+    <p>Concerne généralement tous les leads pas encore assez matures pour une conversion.</p>
+    <p>Permet d'entretenir la relation et de bâtir une relation de confiance avec la marque.</p>
+  </div>
+</section>
+
+<Statement>
+Dans un monde où nous sommes tous ultra sollicités et où il faut toujours plus de touchpoints pour convertir, le lead nurturing est une formidable occasion de <span class="underline">créer une relation de confiance</span>.
+</Statement>
+
+<section class="lead-nurturing-stat" data-layout="lead-nurturing-stat">
+  <SlideTitle title="Lead nurturing" subtitle="Pourquoi c'est si important ?" />
+  <p class="lead-nurturing-stat__intro">
+    Discuter et nourrir la relation avec un lead, c'est d'abord et avant tout comprendre qu'un lead ne veut pas qu'on lui parle, <span class="underline">il veut qu'on l'écoute</span>.
+  </p>
+  <div class="lead-nurturing-stat__figure">
+    <span class="lead-nurturing-stat__big">79%</span>
+    <p>des leads marketing ne convertissent jamais en vente à cause d'un manque de lead nurturing</p>
+    <cite>MarketingSherpa</cite>
+  </div>
+</section>
+
+<section class="lead-nurturing-stat" data-layout="lead-nurturing-stat">
+  <SlideTitle title="Lead nurturing" subtitle="Pourquoi c'est si important ?" />
+  <p class="lead-nurturing-stat__intro">
+    C'est aussi un lead qui souhaite bénéficier d'une <span class="underline">expérience transversale, uniforme et ultra personnalisée</span>, quel que soit le touchpoint qu'il privilégie.
+  </p>
+  <div class="lead-nurturing-stat__figure">
+    <span class="lead-nurturing-stat__big">50%</span>
+    <p>des SQLs coûtent 33% moins chers grâce au lead nurturing</p>
+    <cite>Marketo</cite>
+  </div>
+</section>
+
+<section class="lead-nurturing-objectifs" data-layout="lead-nurturing-objectifs">
+  <SlideTitle title="Lead nurturing" subtitle="Objectifs" />
+  <p class="lead-nurturing-objectifs__intro">
+    D'après Marketo, une solution de marketing automation, <span class="underline">la moitié des leads</span> dans n'importe quel système ne sont pas encore prêts à passer à l'achat. Dans l'intervalle, il faut les occuper.
+  </p>
+  <ul class="lead-nurturing-objectifs__cards">
+    <li>
+      <strong>Comprendre les besoins</strong>
+    </li>
+    <li>
+      <strong>Entretenir la relation</strong>
+    </li>
+    <li>
+      <strong>Qualifier les leads</strong>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .lead-nurturing-def {
+    justify-content: flex-start !important;
+  }
+  .lead-nurturing-def__body {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .lead-nurturing-def__body h3 {
+    font-size: 44px;
+    font-weight: 700;
+    color: #191919;
+    margin: 0 0 32px;
+    line-height: 1.2;
+  }
+  .lead-nurturing-def__body p {
+    font-size: 22px;
+    color: #6B6F84;
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .lead-nurturing-stat {
+    justify-content: flex-start !important;
+  }
+  .lead-nurturing-stat__intro {
+    max-width: 1300px;
+    margin: 0 auto 64px;
+    text-align: center;
+    font-size: 24px;
+    color: #6B6F84;
+    line-height: 1.5;
+  }
+  .lead-nurturing-stat__figure {
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .lead-nurturing-stat__big {
+    display: block;
+    font-size: 220px;
+    font-weight: 700;
+    color: #5BA8D6;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .lead-nurturing-stat__figure p {
+    font-size: 26px;
+    color: #5BA8D6;
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+  .lead-nurturing-stat__figure cite {
+    font-size: 18px;
+    color: #6B6F84;
+    font-style: normal;
+  }
+  .lead-nurturing-objectifs {
+    justify-content: flex-start !important;
+  }
+  .lead-nurturing-objectifs__intro {
+    max-width: 1400px;
+    margin: 0 auto 64px;
+    text-align: center;
+    font-size: 22px;
+    color: #6B6F84;
+    line-height: 1.5;
+  }
+  .lead-nurturing-objectifs__cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .lead-nurturing-objectifs__cards li {
+    background: rgba(91, 168, 214, 0.08);
+    border-radius: 20px;
+    padding: 64px 32px;
+    text-align: center;
+    font-size: 26px;
+    color: #191919;
+  }
+</style>
