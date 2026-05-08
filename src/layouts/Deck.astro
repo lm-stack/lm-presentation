@@ -62,9 +62,11 @@ const lecturePath = `${Astro.url.pathname.replace(/\/$/, '')}/lecture`;
         </svg>
       </a>
     </div>
-    <div class="reveal">
-      <div class="slides">
-        <slot />
+    <div class="deck-stage">
+      <div class="reveal">
+        <div class="slides">
+          <slot />
+        </div>
       </div>
     </div>
     <footer class="deck-footer">

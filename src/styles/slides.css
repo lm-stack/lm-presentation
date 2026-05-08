@@ -2,6 +2,38 @@
 @import 'reveal.js/dist/reveal.css';
 @import './global.css';
 
+/* En mode fenetre : la slide vit dans un wrapper rétréci (deck-stage) qui laisse de */
+/* la place au chrome (menu, toolbar, footer). En fullscreen le browser passe le .reveal */
+/* en top layer et masque automatiquement les siblings (chrome inclus). */
+body {
+  background: #F4F5F7;
+  margin: 0;
+}
+
+.deck-stage {
+  position: fixed;
+  top: 72px;
+  left: 16px;
+  right: 16px;
+  bottom: 88px;
+  background: #FFFFFF;
+  border: 1px solid rgba(25, 25, 25, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(25, 25, 25, 0.08);
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Quand le navigateur passe en fullscreen (touche F sur Reveal), masquer le chrome */
+/* Le browser met .reveal en top layer donc le chrome est deja invisible visuellement, */
+/* mais on coupe display pour eviter qu'il intercepte les events. */
+html:has(:fullscreen) .deck-menu-pill,
+html:has(:fullscreen) .deck-menu,
+html:has(:fullscreen) .deck-toolbar,
+html:has(:fullscreen) .deck-footer {
+  display: none !important;
+}
+
 .reveal {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 28px;
