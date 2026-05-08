@@ -11,9 +11,7 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
-    sitemap({
-      filter: (page) => !page.includes('/lecture/'),
-    }),
+    sitemap(),
     icon(),
   ],
   vite: {

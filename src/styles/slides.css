@@ -28,13 +28,17 @@ body {
   z-index: 1;
 }
 
-/* Quand le navigateur passe en fullscreen (touche F sur Reveal), masquer le chrome */
-/* Le browser met .reveal en top layer donc le chrome est deja invisible visuellement, */
-/* mais on coupe display pour eviter qu'il intercepte les events. */
+/* Mode plein ecran : on masque tout le chrome. Deux selecteurs en doublon : */
+/* :has(:fullscreen) (CSS moderne) et body.is-fullscreen (classe ajoutee par JS via */
+/* l'event fullscreenchange) pour la compat tous navigateurs. */
 html:has(:fullscreen) .deck-menu-pill,
 html:has(:fullscreen) .deck-menu,
 html:has(:fullscreen) .deck-toolbar,
-html:has(:fullscreen) .deck-footer {
+html:has(:fullscreen) .deck-footer,
+body.is-fullscreen .deck-menu-pill,
+body.is-fullscreen .deck-menu,
+body.is-fullscreen .deck-toolbar,
+body.is-fullscreen .deck-footer {
   display: none !important;
 }
 
