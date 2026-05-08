@@ -1,61 +1,246 @@
 ---
 // src/components/slides/Closing.astro
+// Slide finale, version bold : fond noir, watermark glyph gold, titre Hanken Black,
+// signature gold rotative sous mot cle, eyebrow pill gold.
 interface Props {
   variant?: 'qa' | 'thanks' | 'contact';
   title?: string;
   subtitle?: string;
   email?: string;
   url?: string;
+  highlight?: string;
 }
+
 const {
   variant = 'qa',
-  title = variant === 'qa' ? 'Questions & Réponses' : variant === 'thanks' ? 'Merci' : 'Contact',
-  subtitle = variant === 'qa' ? 'Échanges et discussions' : variant === 'thanks' ? 'Pour votre attention' : 'Pour aller plus loin',
+  title = variant === 'qa'
+    ? 'Questions & Réponses'
+    : variant === 'thanks'
+      ? 'Merci'
+      : 'Restons en contact',
+  subtitle = variant === 'qa'
+    ? 'Échanges, débats, retours d’expérience.'
+    : variant === 'thanks'
+      ? 'Pour votre attention et vos contributions.'
+      : 'Pour aller plus loin ensemble.',
   email,
   url,
+  highlight = variant === 'qa'
+    ? 'Questions'
+    : variant === 'thanks'
+      ? 'Merci'
+      : 'contact',
 } = Astro.props;
+
+const eyebrowLabel =
+  variant === 'qa' ? 'Échange' : variant === 'thanks' ? 'Fin' : 'Contact';
+
+const watermark = variant === 'qa' ? '?' : variant === 'thanks' ? '·' : '@';
+
+function splitHighlight(text: string, mot?: string) {
+  if (!mot) return null;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
+}
+
+const titleParts = splitHighlight(title, highlight);
 ---
-<section class="closing" data-layout={`closing-${variant}`}>
+<section class="closing" data-layout={`closing-${variant}`} data-section-title={title}>
+  <span class="closing__noise" aria-hidden="true"></span>
+  <span class="closing__watermark" aria-hidden="true">{watermark}</span>
+
   <div class="closing__inner">
-    <h1>{title}</h1>
+    <p class="closing__eyebrow">{eyebrowLabel}</p>
+    <h1 class="closing__title">
+      {titleParts
+        ? <>{titleParts.before}<span class="closing__mark">{titleParts.match}</span>{titleParts.after}</>
+        : title}
+    </h1>
     <p class="closing__subtitle">{subtitle}</p>
     {variant === 'contact' && (email || url) && (
       <ul class="closing__contact">
-        {email && <li><a href={`mailto:${email}`}>{email}</a></li>}
-        {url && <li><a href={url} target="_blank" rel="noopener">{url}</a></li>}
+        {email && (
+          <li>
+            <a href={`mailto:${email}`}>{email}</a>
+          </li>
+        )}
+        {url && (
+          <li>
+            <a href={url} target="_blank" rel="noopener">{url}</a>
+          </li>
+        )}
       </ul>
     )}
   </div>
+
+  <span class="closing__rule" aria-hidden="true"></span>
 </section>
 
 <style>
   .closing {
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 96px 96px !important;
     background: #191919;
     color: #FFFFFF;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    text-align: left;
   }
-  .closing h1 {
-    font-size: 96px;
-    color: #FFFFFF !important;
-    margin: 0 0 24px;
+
+  /* Grain noise overlay subtile sur fond noir */
+  .closing__noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    mix-blend-mode: screen;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .closing__subtitle {
-    font-size: 28px;
-    color: rgba(255, 255, 255, 0.7);
+
+  /* Watermark monumental (glyph "?", "@", "·") gold a droite, fade vers le bord */
+  .closing__watermark {
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(560px, 70vw, 1100px);
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    color: #FFD838;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 0;
+    -webkit-mask-image: linear-gradient(to right, #000 30%, rgba(0, 0, 0, 0.18) 100%);
+    mask-image: linear-gradient(to right, #000 30%, rgba(0, 0, 0, 0.18) 100%);
+    animation: closing-watermark 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+
+  .closing__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    animation: closing-stagger 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .closing__eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: #191919;
     margin: 0 0 32px;
+    padding: 8px 16px;
+    background: #FFD838;
+    border: 2px solid #FFD838;
+    border-radius: 4px;
   }
+
+  .closing__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(96px, 11vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: #FFFFFF;
+    margin: 0 0 28px;
+    text-align: left;
+    text-wrap: balance;
+  }
+
+  /* Marqueur signature : bande gold rotative sous le mot cle (variation pour fond noir) */
+  .closing__mark {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .closing__mark::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: 6px;
+    height: 14px;
+    background: #FFD838;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+  }
+
+  .closing__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0;
+    max-width: 1100px;
+  }
+
+  /* Liste de contact pour variant=contact */
   .closing__contact {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 32px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Space Grotesk', monospace;
     font-size: 24px;
-  }
-  .closing__contact li {
-    margin-bottom: 12px;
   }
   .closing__contact a {
     color: #FFD838;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 216, 56, 0.35);
+    transition: border-color 0.15s ease;
+  }
+  .closing__contact a:hover {
+    border-bottom-color: #FFD838;
+  }
+
+  /* Trait gold ancrage bottom-left */
+  .closing__rule {
+    position: absolute;
+    left: 96px;
+    bottom: 80px;
+    width: 96px;
+    height: 6px;
+    background: #FFD838;
+    z-index: 1;
+  }
+
+  @keyframes closing-stagger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes closing-watermark {
+    from {
+      opacity: 0;
+      transform: translateY(-50%) translateX(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
   }
 </style>
