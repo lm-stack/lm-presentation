@@ -89,9 +89,12 @@ const hasHeader = Boolean(title || subtitle);
     animation: image-grid-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.08s) both;
   }
 
+  /* Image prend l'espace restant apres le body : si on agrandit la typo, le */
+  /* body grandit, l'image retrecit en consequence. min-height empeche que */
+  /* l'image disparaisse completement sur les layouts denses. */
   .image-grid__media {
-    flex: 1 1 60%;
-    min-height: 0;
+    flex: 1 1 auto;
+    min-height: 120px;
     overflow: hidden;
     background: #191919;
   }
@@ -104,41 +107,38 @@ const hasHeader = Boolean(title || subtitle);
 
   .image-grid__body {
     flex: 0 0 auto;
-    padding: 18px 26px 22px;
+    padding: 22px 28px 26px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
+  /* Tailles uniformes partout : meme titre et texte sur les 4 variantes */
   .image-grid__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 700;
     color: #191919;
     margin: 0;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
   }
   .image-grid__text {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 400;
     color: #6B6F84;
     margin: 0;
-    line-height: 1.5;
-    /* Tronquer apres 3 lignes pour rester compact dans les variantes serrées */
+    line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
-  /* Pour le hero (5 layout, premier item) on agrandit titre + texte */
-  .image-grid__grid--5 .image-grid__item:first-child .image-grid__title {
-    font-size: 30px;
-  }
-  .image-grid__grid--5 .image-grid__item:first-child .image-grid__text {
-    font-size: 20px;
-    -webkit-line-clamp: 4;
+  /* Sur les layouts les plus serres (4 cards 2x2 et smalls du 5) on clamp a 2 lignes */
+  /* pour preserver une zone image visible. */
+  .image-grid__grid--4 .image-grid__text,
+  .image-grid__grid--5 .image-grid__item:not(:first-child) .image-grid__text {
+    -webkit-line-clamp: 2;
   }
 
   @keyframes image-grid-reveal {
