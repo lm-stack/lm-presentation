@@ -9,6 +9,7 @@ const presentations = defineCollection({
     subtitle: z.string().optional(),
     short: z.string().optional(),
     date: z.coerce.date(),
+    updated: z.string().optional(),
     type: z.enum(['cours', 'commercial', 'workshop', 'evenement']),
     unlisted: z.boolean().default(false),
     cover: z.string().optional(),

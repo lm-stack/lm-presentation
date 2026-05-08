@@ -13,6 +13,13 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+function formatDate(d: Date) {
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  return `${day}.${month}.${d.getFullYear()}`;
+}
+const updatedLabel = entry.data.updated ?? formatDate(entry.data.date);
 ---
 <Deck
   title={entry.data.title}
@@ -20,6 +27,7 @@ const { Content } = await render(entry);
   short={entry.data.short}
   description={entry.data.description}
   cover={entry.data.cover}
+  updated={updatedLabel}
 >
   <Content />
 </Deck>
