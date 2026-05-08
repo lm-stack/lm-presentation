@@ -1,0 +1,17 @@
+---
+// src/components/modules/Workflow02Nurturing.astro
+import NumberedCardWithDetail from '@/components/slides/NumberedCardWithDetail.astro';
+---
+<NumberedCardWithDetail
+  title="Funnel marketing"
+  subtitle="Exemples de workflows d'automatisation"
+  number="02"
+  cardTitle="Lead nurturing"
+  cardDescription="Communications régulières et personnalisées"
+  details={[
+    { label: 'Déclencheur', text: 'Le lead X a participé à un webinar.' },
+    { label: 'Prérequis', text: 'Tracking de la participation au webinar (auto, manuel, etc.).' },
+    { label: 'Actions', text: 'Envoyer une séquence de trois emails adaptés.' },
+  ]}
+  image="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=900&h=900&fit=crop"
+/>
