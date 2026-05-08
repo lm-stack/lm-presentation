@@ -6,8 +6,12 @@
 /* la place au chrome (menu, toolbar, footer). En fullscreen le browser passe le .reveal */
 /* en top layer et masque automatiquement les siblings (chrome inclus). */
 body {
-  background: #F4F5F7;
+  /* Le bg du body est ajuste dynamiquement par JS (slidechanged) pour matcher */
+  /* la couleur de la slide courante. Les bandes autour du wrapper deviennent ainsi */
+  /* invisibles (continuite de couleur). Defaut blanc avant l'init JS. */
+  background: #FFFFFF;
   margin: 0;
+  transition: background-color 0.4s ease;
 }
 
 .deck-stage {
@@ -16,14 +20,13 @@ body {
   top: calc(50% - 8px);
   left: 50%;
   transform: translate(-50%, -50%);
-  /* Le wrapper respecte l'aspect ratio 16:9 du slide pour qu'il n'y ait pas */
-  /* de bandes blanches autour. Il prend le max de la zone dispo (largeur ou hauteur). */
+  /* Le wrapper respecte l'aspect ratio 16:9 pour que le slide remplisse pile le */
+  /* container, plus aucune bande visible a l'interieur. Plus de card style (border/ */
+  /* radius/shadow/bg) : la slide repose directement sur le body, dont le bg suit */
+  /* la couleur de la slide courante via JS. */
   width: min(calc(100vw - 32px), calc((100vh - 160px) * 16 / 9));
   aspect-ratio: 16 / 9;
-  background: #FFFFFF;
-  border: 1px solid rgba(25, 25, 25, 0.08);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(25, 25, 25, 0.08);
+  background: transparent;
   overflow: hidden;
   z-index: 1;
 }
@@ -45,7 +48,7 @@ body.is-fullscreen .deck-footer {
 .reveal {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 28px;
-  background: #FFFFFF;
+  background: transparent;
   color: #6B6F84;
 }
 

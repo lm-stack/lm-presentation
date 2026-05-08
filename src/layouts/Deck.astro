@@ -128,6 +128,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         nextBtn?.addEventListener('click', () => deck.next());
         deck.on('slidechanged', updateNavState);
         updateNavState();
+
+        // Body bg suit la couleur de la slide courante : les bandes autour de la
+        // card 16:9 deviennent invisibles (continuite de couleur).
+        const updateBodyBg = () => {
+          const slide = deck.getCurrentSlide() as HTMLElement | null;
+          if (!slide) return;
+          const computed = window.getComputedStyle(slide).backgroundColor;
+          // Si transparent (ex : Custom slide vide), on garde blanc.
+          const isTransparent =
+            !computed ||
+            computed === 'rgba(0, 0, 0, 0)' ||
+            computed === 'transparent';
+          document.body.style.backgroundColor = isTransparent ? '#FFFFFF' : computed;
+        };
+        deck.on('slidechanged', updateBodyBg);
+        updateBodyBg();
       });
 
       // Menu (infos cours) : pastille en haut-gauche, fermé par défaut, click pour basculer
