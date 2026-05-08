@@ -42,17 +42,6 @@ body.is-fullscreen .deck-footer {
   display: none !important;
 }
 
-/* En fullscreen, le .reveal occupe le viewport entier mais la slide reste en 16:9. */
-/* On peint les bandes (letter/pillar-boxing) en noir pour un effet cinema, plutot */
-/* que le blanc par defaut de .reveal. */
-.reveal:fullscreen,
-body.is-fullscreen .reveal {
-  background: #191919;
-}
-.reveal::backdrop {
-  background: #191919;
-}
-
 .reveal {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 28px;
