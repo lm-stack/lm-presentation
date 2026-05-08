@@ -243,4 +243,37 @@ const titleParts = splitHighlight(title, highlight);
       transform: translateY(-50%) translateX(0);
     }
   }
+
+  /* Variant Q&R : fond gold avec inversion des accents (calque sur Cover) */
+  .closing[data-layout="closing-qa"] {
+    background: #FFD838;
+    color: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__noise {
+    mix-blend-mode: multiply;
+    opacity: 0.18;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .closing[data-layout="closing-qa"] .closing__watermark {
+    color: #191919;
+    opacity: 0.08;
+  }
+  .closing[data-layout="closing-qa"] .closing__eyebrow {
+    background: #191919;
+    color: #FFD838;
+    border-color: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__title {
+    color: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__mark::after {
+    background: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__subtitle {
+    color: #191919;
+    opacity: 0.78;
+  }
+  .closing[data-layout="closing-qa"] .closing__rule {
+    background: #191919;
+  }
 </style>
