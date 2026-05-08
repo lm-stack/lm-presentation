@@ -12,10 +12,14 @@ body {
 
 .deck-stage {
   position: fixed;
-  top: 72px;
-  left: 16px;
-  right: 16px;
-  bottom: 88px;
+  /* Centre dans la zone dispo (72px chrome top, 88px chrome bottom : centre = 50% - 8px) */
+  top: calc(50% - 8px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Le wrapper respecte l'aspect ratio 16:9 du slide pour qu'il n'y ait pas */
+  /* de bandes blanches autour. Il prend le max de la zone dispo (largeur ou hauteur). */
+  width: min(calc(100vw - 32px), calc((100vh - 160px) * 16 / 9));
+  aspect-ratio: 16 / 9;
   background: #FFFFFF;
   border: 1px solid rgba(25, 25, 25, 0.08);
   border-radius: 12px;
