@@ -31,17 +31,94 @@ body::before {
   z-index: 0;
 }
 
+/* Noise interne sur le slide Section : Section n'a pas son propre noise (contrairement
+   a Cover, Closing, Timer), or le body autour porte un noise multiply via body::before.
+   Sans matching le body apparait subtilement gris alors que le slide est blanc pur,
+   creant une rupture visible a la frontiere. On replique ici le meme noise. */
+.slide-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+/* Wash gold radial sur le body, calque sur celui du slide Section (.slide-section__wash).
+   Apparait uniquement quand un slide Section est actif (selecteur :has) pour que le
+   degrade gold deborde du slide vers la zone autour. Le wash interne du slide reste
+   en place (span .slide-section__wash) : a l'impression PDF le body n'est pas imprime
+   donc seul le wash interne du slide assure la continuite.
+
+   Position : on cale le centre du radial sur le coin bas-gauche du SLIDE (pas du
+   viewport) pour que le wash interne et le wash externe partagent exactement la
+   meme origine et donnent l'illusion d'un seul gradient continu. La taille du
+   slide depend de la formule de .deck-stage : min(100vw-32px, (100vh-160px)*16/9). */
+body:has(.slide-section.present)::after {
+  --slide-w: min(
+    calc(100vw - var(--slide-h-margin)),
+    calc((100vh - var(--slide-v-chrome)) * 16 / 9)
+  );
+  --slide-h: calc(var(--slide-w) * 9 / 16);
+  --slide-bottom-left-x: calc(50vw - var(--slide-w) / 2);
+  --slide-bottom-left-y: calc(50vh + var(--slide-top-offset) + var(--slide-h) / 2);
+  /* Rayon : farthest-corner du wash interne sur un slide 16:9 = diagonale = w*1.147,
+     puis 55% de cette diagonale = 0.631 * w. On applique le meme rayon ici pour
+     que la decroissance de l'opacite soit identique. */
+  --wash-radius: calc(var(--slide-w) * 0.631);
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle var(--wash-radius) at var(--slide-bottom-left-x) var(--slide-bottom-left-y),
+    rgba(255, 216, 56, 0.32) 0%,
+    rgba(255, 216, 56, 0) 100%
+  );
+}
+
+/* Impression : forcer la conservation des fonds, gradients, et couleurs. Sans cela
+   les browsers strippent les backgrounds en PDF (washes, fonds gold, etc. disparaissent). */
+@media print {
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Variables partagees pour la geometrie du slide. Permet de switcher entre mode
+   fenetre (avec marges chrome) et mode fullscreen (pleine taille) en redefinissant
+   uniquement ces vars. Utilisees par .deck-stage ET le wash externe sur le body. */
+:root {
+  --slide-top-offset: -40px;       /* remonte le slide par rapport au centre viewport */
+  --slide-h-margin: 32px;          /* marge horizontale autour du slide */
+  --slide-v-chrome: 160px;         /* hauteur de chrome reservee (top + bottom) */
+}
+
+/* Mode fullscreen : on supprime les marges et on recentre, le slide remplit l'ecran. */
+:root:has(:fullscreen),
+body.is-fullscreen {
+  --slide-top-offset: 0px;
+  --slide-h-margin: 0px;
+  --slide-v-chrome: 0px;
+}
+
 .deck-stage {
   position: fixed;
-  /* Centre dans la zone dispo (72px chrome top, 88px chrome bottom : centre = 50% - 8px) */
-  top: calc(50% - 8px);
+  top: calc(50% + var(--slide-top-offset));
   left: 50%;
   transform: translate(-50%, -50%);
   /* Le wrapper respecte l'aspect ratio 16:9 pour que le slide remplisse pile le */
   /* container, plus aucune bande visible a l'interieur. Plus de card style (border/ */
   /* radius/shadow/bg) : la slide repose directement sur le body, dont le bg suit */
   /* la couleur de la slide courante via JS. */
-  width: min(calc(100vw - 32px), calc((100vh - 160px) * 16 / 9));
+  width: min(
+    calc(100vw - var(--slide-h-margin)),
+    calc((100vh - var(--slide-v-chrome)) * 16 / 9)
+  );
   aspect-ratio: 16 / 9;
   background: transparent;
   overflow: hidden;
