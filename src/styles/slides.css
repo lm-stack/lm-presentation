@@ -391,6 +391,32 @@ body.is-fullscreen .deck-footer {
   padding: 0 2px;
 }
 
+/* Lien retour au parcours dans le menu (active par JS si ?from=<slug>) :
+   pill discrete avec icone fleche + label, en haut du panel avant l'eyebrow. */
+.deck-menu__back-parcours {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #191919;
+  text-decoration: none;
+  padding: 8px 12px;
+  margin: 0 0 20px;
+  background: #FFD838;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  align-self: flex-start;
+  width: fit-content;
+}
+.deck-menu__back-parcours:hover {
+  background: #FFE55A;
+  transform: translateX(-2px);
+}
+
 .deck-menu__title {
   font-size: 24px;
   line-height: 1.3;

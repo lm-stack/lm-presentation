@@ -1,0 +1,478 @@
+---
+// src/pages/parcours/[slug].astro
+// Portail d'un parcours : page d'accueil qui agrege plusieurs decks sous un theme.
+// Acces direct uniquement par lien (pas d'index global volontairement, pour
+// reserver l'acces a ceux qui ont l'URL).
+import { getCollection, getEntry } from 'astro:content';
+import '@/styles/global.css';
+
+export async function getStaticPaths() {
+  const all = await getCollection('parcours');
+  return all
+    .filter((p) => !p.data.unlisted)
+    .map((p) => ({
+      params: { slug: p.id.replace('.mdx', '') },
+      props: { entry: p },
+    }));
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+const parcoursSlug = entry.id.replace('.mdx', '');
+
+const decksData = await Promise.all(
+  data.decks.map(async (slug) => {
+    const deck = await getEntry('presentations', slug);
+    if (!deck) {
+      throw new Error(
+        `Parcours "${parcoursSlug}" reference le deck "${slug}" qui n'existe pas dans src/content/presentations/.`
+      );
+    }
+    return { slug, ...deck.data };
+  })
+);
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+function splitHighlight(text: string, mot?: string) {
+  if (!mot) return null;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
+}
+const titleParts = splitHighlight(data.title, data.highlight);
+---
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{data.title} : Lausanne Marketing</title>
+    {data.description && <meta name="description" content={data.description} />}
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="noindex" />
+    <meta property="og:title" content={data.title} />
+    {data.description && <meta property="og:description" content={data.description} />}
+    {data.cover && <meta property="og:image" content={new URL(data.cover, Astro.site).toString()} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+  </head>
+  <body class="parcours-body">
+    <header class="parcours-hero">
+      <span class="parcours-hero__noise" aria-hidden="true"></span>
+      <span class="parcours-hero__wash" aria-hidden="true"></span>
+
+      <div class="parcours-hero__inner">
+        <div class="parcours-hero__head">
+          <p class="parcours-hero__eyebrow">{data.eyebrow ?? 'Parcours'}</p>
+          <span class="parcours-hero__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M32 64 128 32l96 32-96 32z" />
+              <path d="M32 64v72" />
+              <path d="M64 80v52a64 64 0 0 0 128 0V80" />
+            </svg>
+          </span>
+        </div>
+        <h1 class="parcours-hero__title">
+          {titleParts
+            ? <>{titleParts.before}<span class="parcours-hero__mark">{titleParts.match}</span>{titleParts.after}</>
+            : data.title}
+        </h1>
+        {data.description && <p class="parcours-hero__description">{data.description}</p>}
+        <p class="parcours-hero__meta">
+          <span class="parcours-hero__count">{decksData.length} {decksData.length > 1 ? 'présentations' : 'présentation'}</span>
+          {data.updated && (
+            <>
+              <span class="parcours-hero__sep" aria-hidden="true">·</span>
+              <span>Mis à jour : {data.updated}</span>
+            </>
+          )}
+        </p>
+        <span class="parcours-hero__rule" aria-hidden="true"></span>
+      </div>
+    </header>
+
+    <main class="parcours-main">
+      <ol class="parcours-grid">
+        {decksData.map((deck, i) => {
+          const num = String(i + 1).padStart(2, '0');
+          return (
+            <li class="parcours-card">
+              <a class="parcours-card__link" href={`/p/${deck.slug}?from=${parcoursSlug}`}>
+                <div class="parcours-card__media">
+                  {deck.cover ? (
+                    <img src={deck.cover} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <span class="parcours-card__placeholder" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 256 256" fill="currentColor">
+                        <path d="M164.44 105.34 108.32 67.92A8 8 0 0 0 96 74.59v74.83a8 8 0 0 0 12.32 6.66l56.12-37.41a8 8 0 0 0 0-13.31ZM112 134.49V89.51l33.74 22.49Z" />
+                        <path d="M232 32H24a8 8 0 0 0-8 8v144a8 8 0 0 0 8 8h208a8 8 0 0 0 8-8V40a8 8 0 0 0-8-8m-8 144H32V48h192Z" />
+                      </svg>
+                    </span>
+                  )}
+                  <span class="parcours-card__num" aria-hidden="true">{num}</span>
+                </div>
+                <div class="parcours-card__body">
+                  <h2 class="parcours-card__title">{deck.title}</h2>
+                  {deck.description && <p class="parcours-card__desc">{deck.description}</p>}
+                  <span class="parcours-card__cta" aria-hidden="true">
+                    Ouvrir
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor">
+                      <path d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z" />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </main>
+
+    <footer class="parcours-footer">
+      <span class="parcours-footer__brand">Lausanne Marketing</span>
+      <span class="parcours-footer__sep" aria-hidden="true">•</span>
+      <span class="parcours-footer__short">{data.short ?? data.title}</span>
+    </footer>
+
+    <style>
+      .parcours-body {
+        margin: 0;
+        font-family: 'Hanken Grotesk', sans-serif;
+        background: #FFFFFF;
+        color: #191919;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .parcours-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 56px 64px 40px;
+      }
+
+      .parcours-hero__noise {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.18;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .parcours-hero__wash {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(circle at 0% 100%, rgba(255, 216, 56, 0.32) 0%, rgba(255, 216, 56, 0) 55%);
+      }
+
+      .parcours-hero__inner {
+        position: relative;
+        z-index: 1;
+        max-width: 1152px;
+        margin: 0 auto;
+        animation: parcours-stagger 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .parcours-hero__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .parcours-hero__eyebrow {
+        display: inline-block;
+        font-family: 'Space Grotesk', monospace;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        color: #191919;
+        margin: 0;
+        padding: 6px 14px;
+        background: #FFD838;
+        border: 2px solid #191919;
+        border-radius: 4px;
+      }
+
+      .parcours-hero__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #191919;
+        color: #FFD838;
+        flex-shrink: 0;
+      }
+
+      .parcours-hero__title {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 900;
+        font-size: clamp(40px, 5.5vw, 72px);
+        line-height: 0.98;
+        letter-spacing: -0.035em;
+        color: #191919;
+        margin: 0 0 16px;
+        text-wrap: balance;
+      }
+
+      .parcours-hero__mark {
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+      }
+      .parcours-hero__mark::after {
+        content: '';
+        position: absolute;
+        left: -6px;
+        right: -6px;
+        bottom: 4px;
+        height: 9px;
+        background: #191919;
+        z-index: -1;
+        transform: rotate(-1.5deg);
+      }
+
+      .parcours-hero__description {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 1.5;
+        color: rgba(25, 25, 25, 0.72);
+        margin: 0 0 16px;
+        max-width: 720px;
+      }
+
+      .parcours-hero__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Space Grotesk', monospace;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(25, 25, 25, 0.55);
+        margin: 0;
+      }
+      .parcours-hero__count { color: #191919; }
+      .parcours-hero__sep { color: rgba(25, 25, 25, 0.25); }
+
+      .parcours-hero__rule {
+        display: block;
+        width: 64px;
+        height: 5px;
+        background: #FFD838;
+        margin-top: 24px;
+      }
+
+      .parcours-main {
+        flex: 1;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 48px 64px 64px;
+        box-sizing: border-box;
+      }
+
+      .parcours-grid {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .parcours-card {
+        animation: parcours-card-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .parcours-card:nth-child(1) { animation-delay: 0.05s; }
+      .parcours-card:nth-child(2) { animation-delay: 0.1s; }
+      .parcours-card:nth-child(3) { animation-delay: 0.15s; }
+      .parcours-card:nth-child(4) { animation-delay: 0.2s; }
+      .parcours-card:nth-child(5) { animation-delay: 0.25s; }
+      .parcours-card:nth-child(6) { animation-delay: 0.3s; }
+      .parcours-card:nth-child(7) { animation-delay: 0.35s; }
+      .parcours-card:nth-child(8) { animation-delay: 0.4s; }
+      .parcours-card:nth-child(9) { animation-delay: 0.45s; }
+      .parcours-card:nth-child(10) { animation-delay: 0.5s; }
+      .parcours-card:nth-child(11) { animation-delay: 0.55s; }
+      .parcours-card:nth-child(12) { animation-delay: 0.6s; }
+
+      .parcours-card__link {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        background: #FFFFFF;
+        border: 1px solid rgba(25, 25, 25, 0.08);
+        border-radius: 14px;
+        overflow: hidden;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+        height: 100%;
+      }
+      .parcours-card__link:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 216, 56, 0.7);
+        box-shadow: 0 24px 48px -12px rgba(25, 25, 25, 0.18);
+      }
+      .parcours-card__link:hover .parcours-card__media img {
+        transform: scale(1.04);
+      }
+      .parcours-card__link:hover .parcours-card__cta {
+        color: #191919;
+        gap: 10px;
+      }
+
+      .parcours-card__media {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        background: #191919;
+        overflow: hidden;
+      }
+      .parcours-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      /* Voile sombre subtil sur l'image pour rendre le numero gold lisible
+         quelle que soit la photo. */
+      .parcours-card__media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(25, 25, 25, 0.55) 0%, rgba(25, 25, 25, 0) 50%);
+        pointer-events: none;
+      }
+      .parcours-card__placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFD838;
+        background: linear-gradient(135deg, #1F1F1F 0%, #191919 100%);
+      }
+
+      /* Gros numero monumental signature LM : Hanken Black, ancre bottom-left de
+         la zone media. Stroke noir simule via text-shadow multi-direction (compat
+         universelle, contrairement a -webkit-text-stroke qui peut buger). */
+      .parcours-card__num {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        z-index: 2;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        font-size: clamp(64px, 9vw, 96px);
+        line-height: 0.84;
+        letter-spacing: -0.04em;
+        color: #FFD838;
+        text-shadow:
+          -2px -2px 0 #191919,
+          2px -2px 0 #191919,
+          -2px 2px 0 #191919,
+          2px 2px 0 #191919,
+          0 6px 20px rgba(25, 25, 25, 0.5);
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .parcours-card__body {
+        padding: 22px 22px 24px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .parcours-card__title {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #191919;
+        margin: 0 0 8px;
+        text-wrap: balance;
+      }
+
+      .parcours-card__desc {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 14.5px;
+        font-weight: 400;
+        color: rgba(25, 25, 25, 0.62);
+        line-height: 1.5;
+        margin: 0 0 16px;
+        flex: 1;
+      }
+
+      .parcours-card__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'Space Grotesk', monospace;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(25, 25, 25, 0.55);
+        margin-top: auto;
+        transition: color 0.2s ease, gap 0.2s ease;
+      }
+
+      .parcours-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 24px 32px 32px;
+        font-family: 'Space Grotesk', monospace;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(25, 25, 25, 0.45);
+        border-top: 1px solid rgba(25, 25, 25, 0.06);
+      }
+      .parcours-footer__brand { color: #191919; }
+      .parcours-footer__sep { color: rgba(25, 25, 25, 0.25); }
+
+      @keyframes parcours-stagger {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes parcours-card-in {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 1024px) {
+        .parcours-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 640px) {
+        .parcours-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 768px) {
+        .parcours-hero { padding: 40px 24px 32px; }
+        .parcours-hero__rule { width: 48px; margin-top: 16px; }
+        .parcours-hero__icon { width: 48px; height: 48px; }
+        .parcours-hero__icon svg { width: 28px; height: 28px; }
+        .parcours-main { padding: 32px 20px 56px; }
+        .parcours-grid { gap: 16px; }
+      }
+    </style>
+  </body>
+</html>
