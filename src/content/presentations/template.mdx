@@ -12,7 +12,6 @@ import Cover from '@/components/slides/Cover.astro';
 import Section from '@/components/slides/Section.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Timer from '@/components/slides/Timer.astro';
-import MusicPlayer from '@/components/slides/MusicPlayer.astro';
 import Closing from '@/components/slides/Closing.astro';
 
 <Cover
@@ -131,18 +130,9 @@ import Closing from '@/components/slides/Closing.astro';
 />
 
 <Timer
-  minutes={10}
-  title="Pause de 10 minutes"
+  title="Pause"
   subtitle="Café, eau, étirements. On reprend ensemble."
-  highlight="10 minutes"
   spotify="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ"
-/>
-
-<MusicPlayer
-  url="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ"
-  title="Pause musicale"
-  subtitle="Connectez-vous à Spotify dans le navigateur pour la lecture complète."
-  highlight="musicale"
 />
 
 <Closing variant="qa" />
