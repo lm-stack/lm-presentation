@@ -1,0 +1,156 @@
+---
+// src/components/deck/PdfModal.astro
+// Modale de choix de layout PDF, ouverte au clic sur le bouton
+// "Télécharger" du Deck. Trois options : 1up paysage, 2up portrait,
+// 3up + lignes portrait. Click sur une card -> fetch lm-pdf -> download.
+---
+<dialog id="pdf-modal" class="pdf-modal" aria-labelledby="pdf-modal-title">
+  <div class="pdf-modal__inner">
+    <h2 id="pdf-modal-title" class="pdf-modal__title">Télécharger en PDF</h2>
+    <p class="pdf-modal__hint">Choisis la disposition</p>
+
+    <div class="pdf-modal__cards">
+      <button type="button" class="pdf-modal__card" data-mode="1">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="2" y="20" width="96" height="40" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="10" y="28" width="80" height="24" fill="currentColor" opacity="0.15"/>
+        </svg>
+        <span class="pdf-modal__card-title">1 slide / page</span>
+        <span class="pdf-modal__card-sub">Paysage</span>
+      </button>
+
+      <button type="button" class="pdf-modal__card" data-mode="2">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="20" y="2" width="60" height="76" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="26" y="14" width="48" height="22" fill="currentColor" opacity="0.15"/>
+          <rect x="26" y="44" width="48" height="22" fill="currentColor" opacity="0.15"/>
+        </svg>
+        <span class="pdf-modal__card-title">2 slides / page</span>
+        <span class="pdf-modal__card-sub">Portrait</span>
+      </button>
+
+      <button type="button" class="pdf-modal__card" data-mode="3">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="20" y="2" width="60" height="76" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="24" y="10" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="13" x2="76" y2="13" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="17" x2="76" y2="17" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="21" x2="76" y2="21" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <rect x="24" y="32" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="35" x2="76" y2="35" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="39" x2="76" y2="39" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="43" x2="76" y2="43" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <rect x="24" y="54" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="57" x2="76" y2="57" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="61" x2="76" y2="61" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="65" x2="76" y2="65" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+        <span class="pdf-modal__card-title">3 slides + lignes</span>
+        <span class="pdf-modal__card-sub">Portrait</span>
+      </button>
+    </div>
+
+    <p class="pdf-modal__error" id="pdf-modal-error" hidden role="alert"></p>
+
+    <button type="button" class="pdf-modal__close" id="pdf-modal-close" aria-label="Fermer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+        <path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/>
+      </svg>
+    </button>
+  </div>
+</dialog>
+
+<script>
+  const LM_PDF_URL = import.meta.env.PUBLIC_LM_PDF_URL || 'https://lm-pdf.hello-cb2.workers.dev';
+
+  const modal = document.getElementById('pdf-modal') as HTMLDialogElement | null;
+  const closeBtn = document.getElementById('pdf-modal-close') as HTMLButtonElement | null;
+  const errorEl = document.getElementById('pdf-modal-error') as HTMLParagraphElement | null;
+  const cards = modal ? Array.from(modal.querySelectorAll<HTMLButtonElement>('.pdf-modal__card')) : [];
+
+  function getSlugFromPath(): string {
+    // `/p/<slug>/` -> `<slug>`. Fallback : last non-empty segment.
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const pIdx = parts.indexOf('p');
+    if (pIdx >= 0 && parts[pIdx + 1]) return parts[pIdx + 1];
+    return parts[parts.length - 1] || 'presentation';
+  }
+
+  function buildTargetUrl(mode: '1' | '2' | '3'): { url: string; orientation: 'portrait' | 'landscape' } {
+    const origin = window.location.origin;
+    const slug = getSlugFromPath();
+    if (mode === '1') {
+      return { url: `${origin}/p/${slug}/?print-pdf`, orientation: 'landscape' };
+    }
+    return { url: `${origin}/p/${slug}/handout/${mode}/`, orientation: 'portrait' };
+  }
+
+  function buildFilename(mode: '1' | '2' | '3'): string {
+    const slug = getSlugFromPath();
+    if (mode === '1') return `${slug}-1up`;
+    if (mode === '2') return `${slug}-2up`;
+    return `${slug}-3up-notes`;
+  }
+
+  function setLoading(card: HTMLButtonElement, loading: boolean) {
+    if (loading) {
+      card.classList.add('pdf-modal__card--loading');
+      cards.forEach((c) => { c.disabled = true; });
+    } else {
+      card.classList.remove('pdf-modal__card--loading');
+      cards.forEach((c) => { c.disabled = false; });
+    }
+  }
+
+  function showError(msg: string) {
+    if (!errorEl) return;
+    errorEl.textContent = msg;
+    errorEl.hidden = false;
+  }
+
+  function clearError() {
+    if (!errorEl) return;
+    errorEl.textContent = '';
+    errorEl.hidden = true;
+  }
+
+  async function handleCardClick(card: HTMLButtonElement) {
+    const mode = card.dataset.mode as '1' | '2' | '3' | undefined;
+    if (!mode) return;
+    clearError();
+    setLoading(card, true);
+    try {
+      const { url: targetUrl, orientation } = buildTargetUrl(mode);
+      const filename = buildFilename(mode);
+      const pdfUrl = `${LM_PDF_URL}/api/pdf?url=${encodeURIComponent(targetUrl)}&format=A4&orientation=${orientation}&filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(pdfUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${filename}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      modal?.close();
+    } catch (err) {
+      console.error('PDF generation failed', err);
+      showError('La génération du PDF a échoué. Réessaie dans un instant.');
+    } finally {
+      setLoading(card, false);
+    }
+  }
+
+  cards.forEach((card) => card.addEventListener('click', () => handleCardClick(card)));
+  closeBtn?.addEventListener('click', () => modal?.close());
+
+  // Expose une fonction pour ouvrir la modale depuis Deck.astro.
+  (window as any).openPdfModal = () => {
+    clearError();
+    modal?.showModal();
+    // Focus sur la premiere card apres ouverture (frame suivante).
+    requestAnimationFrame(() => cards[0]?.focus());
+  };
+</script>
