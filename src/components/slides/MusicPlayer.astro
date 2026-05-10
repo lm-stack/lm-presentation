@@ -1,0 +1,279 @@
+---
+// src/components/slides/MusicPlayer.astro
+// Slide pause avec embed Spotify officiel. Charte LM.
+// Coller l'URL Spotify standard (track, album, playlist, episode, show).
+// L'embed nécessite un compte Spotify connecté dans le navigateur pour la lecture
+// complète, sinon preview 30s. C'est la voie légale : Spotify gère les droits.
+interface Props {
+  url: string; // ex: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT
+  title?: string;
+  subtitle?: string;
+  eyebrow?: string;
+  highlight?: string;
+  height?: number; // hauteur iframe en px (default selon le type)
+  theme?: 'dark' | 'light'; // theme du slide
+}
+
+const {
+  url,
+  title = 'Pause musicale',
+  subtitle = 'Petite respiration sonore. Reprenez quand vous voulez.',
+  eyebrow = 'Pause',
+  highlight = 'musicale',
+  height,
+  theme = 'dark',
+} = Astro.props;
+
+// Parse URL Spotify : https://open.spotify.com/{type}/{id}?si=...
+// Types valides : track, album, playlist, episode, show, artist
+const VALID_TYPES = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
+
+function parseSpotifyUrl(raw: string): { type: string; id: string } | null {
+  try {
+    const u = new URL(raw);
+    if (!u.hostname.endsWith('spotify.com')) return null;
+    // Path possibles : /track/{id}, /embed/track/{id}, /intl-fr/track/{id}
+    const segments = u.pathname.split('/').filter(Boolean);
+    // Cherche le premier segment qui est un type valide
+    const typeIdx = segments.findIndex((s) => VALID_TYPES.has(s));
+    if (typeIdx === -1 || !segments[typeIdx + 1]) return null;
+    return { type: segments[typeIdx], id: segments[typeIdx + 1] };
+  } catch {
+    return null;
+  }
+}
+
+const parsed = parseSpotifyUrl(url);
+const embedUrl = parsed
+  ? `https://open.spotify.com/embed/${parsed.type}/${parsed.id}?utm_source=generator&theme=0`
+  : null;
+
+// Hauteur par défaut : track = 152 (compact), album/playlist = 352 (riche).
+// Si l'utilisateur passe une hauteur, on l'utilise.
+const iframeHeight =
+  height ??
+  (parsed?.type === 'track' || parsed?.type === 'episode' ? 152 : 352);
+
+function splitHighlight(text: string, mot?: string) {
+  if (!mot) return null;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
+}
+
+const titleParts = splitHighlight(title, highlight);
+---
+<section class="music-slide" data-layout="music" data-section-title={title} data-theme={theme}>
+  <span class="music-slide__noise" aria-hidden="true"></span>
+  <span class="music-slide__watermark" aria-hidden="true">♪</span>
+
+  <div class="music-slide__inner">
+    {eyebrow && <p class="music-slide__eyebrow">{eyebrow}</p>}
+    <h2 class="music-slide__title">
+      {titleParts
+        ? <>{titleParts.before}<span class="music-slide__mark">{titleParts.match}</span>{titleParts.after}</>
+        : title}
+    </h2>
+    {subtitle && <p class="music-slide__subtitle">{subtitle}</p>}
+
+    <div class="music-slide__player">
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          width="100%"
+          height={iframeHeight}
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+          title={`Lecteur Spotify : ${title}`}
+        ></iframe>
+      ) : (
+        <p class="music-slide__error">
+          URL Spotify invalide. Format attendu : <code>https://open.spotify.com/track/...</code> (ou album, playlist, episode, show, artist).
+        </p>
+      )}
+    </div>
+  </div>
+
+  <span class="music-slide__rule" aria-hidden="true"></span>
+</section>
+
+<style>
+  .music-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 96px 96px !important;
+    background: #191919;
+    color: #FFFFFF;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    text-align: left;
+  }
+
+  .music-slide[data-theme="light"] {
+    background: #FFFFFF;
+    color: #191919;
+  }
+
+  .music-slide__noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    mix-blend-mode: screen;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .music-slide[data-theme="light"] .music-slide__noise {
+    mix-blend-mode: multiply;
+    opacity: 0.18;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Watermark note de musique gold à droite */
+  .music-slide__watermark {
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(560px, 70vw, 1100px);
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    color: #FFD838;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 0;
+    -webkit-mask-image: linear-gradient(to right, #000 30%, rgba(0, 0, 0, 0.18) 100%);
+    mask-image: linear-gradient(to right, #000 30%, rgba(0, 0, 0, 0.18) 100%);
+    animation: music-watermark 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+  .music-slide[data-theme="light"] .music-slide__watermark {
+    opacity: 0.85;
+  }
+
+  .music-slide__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    width: 100%;
+    animation: music-stagger 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .music-slide__eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: #191919;
+    margin: 0 0 32px;
+    padding: 8px 16px;
+    background: #FFD838;
+    border: 2px solid #FFD838;
+    border-radius: 4px;
+  }
+
+  .music-slide__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(72px, 8vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin: 0 0 24px;
+    text-align: left;
+    text-wrap: balance;
+  }
+
+  .music-slide__mark {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .music-slide__mark::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: 6px;
+    height: 14px;
+    background: #FFD838;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+  }
+  .music-slide[data-theme="light"] .music-slide__mark::after {
+    background: #191919;
+  }
+
+  .music-slide__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0 0 48px;
+    max-width: 1000px;
+  }
+  .music-slide[data-theme="light"] .music-slide__subtitle {
+    color: rgba(25, 25, 25, 0.72);
+  }
+
+  /* Player wrapper */
+  .music-slide__player {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px -8px rgba(0, 0, 0, 0.45);
+  }
+  .music-slide__player iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+  }
+
+  .music-slide__error {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 216, 56, 0.4);
+    border-radius: 8px;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    color: #FFD838;
+  }
+  .music-slide__error code {
+    background: rgba(255, 216, 56, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .music-slide__rule {
+    position: absolute;
+    left: 96px;
+    bottom: 80px;
+    width: 96px;
+    height: 6px;
+    background: #FFD838;
+    z-index: 1;
+  }
+
+  @keyframes music-stagger {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes music-watermark {
+    from { opacity: 0; transform: translateY(-50%) translateX(60px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  }
+</style>
