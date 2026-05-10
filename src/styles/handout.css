@@ -1,0 +1,146 @@
+/* src/styles/handout.css */
+/* Styles pour le mode handout : rendu HTML statique paginé pour impression A4 portrait. */
+/* Pas de Reveal.js ; on prend les <section> slottées et on les arrange en grille print-paginated. */
+
+@import 'reveal.js/dist/reveal.css';
+@import './global.css';
+
+/* ============================================================ */
+/* Reset screen pour preview interactif                          */
+/* ============================================================ */
+
+body {
+  margin: 0;
+  background: #F5F5F5;
+  font-family: 'Hanken Grotesk', sans-serif;
+  color: #191919;
+}
+
+.handout-doc {
+  padding: 24px 0;
+}
+
+/* ============================================================ */
+/* Une page A4 portrait                                          */
+/* ============================================================ */
+
+.handout-page {
+  width: 210mm;
+  height: 297mm;
+  background: #FFFFFF;
+  margin: 0 auto 16px;
+  padding: 10mm;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 10mm;
+  page-break-after: always;
+  break-after: page;
+}
+.handout-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+/* Mode 2up : 2 lignes égales, slides centrées verticalement */
+.handout-page--2up {
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+}
+
+/* Mode 3up : 3 lignes égales, 2 colonnes (slide 60% / lignes 40%) */
+.handout-page--3up {
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 60% 40%;
+  align-items: center;
+}
+
+/* ============================================================ */
+/* Conteneur d'une slide dans le handout                         */
+/* ============================================================ */
+
+.handout-slide {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+}
+
+/* La slide Reveal d'origine est dimensionnée 1920 x 1080. On la scale */
+/* pour qu'elle tienne dans le slot du handout. Le scale est calculé en JS */
+/* après le mount (largeur du slot / 1920). */
+.handout-slide__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: top left;
+}
+
+/* ============================================================ */
+/* Colonne lignes vierges (mode 3up uniquement)                  */
+/* ============================================================ */
+
+.handout-lines {
+  height: 100%;
+  padding: 4mm 6mm;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 6.9mm,
+    #BBB 7mm,
+    #BBB 7.1mm
+  );
+}
+
+/* ============================================================ */
+/* Header / footer subtils                                       */
+/* ============================================================ */
+
+.handout-header {
+  position: absolute;
+  top: 4mm;
+  left: 10mm;
+  right: 10mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9pt;
+  color: #6B6F84;
+}
+
+/* ============================================================ */
+/* @media print : c'est ce qui compte pour Puppeteer page.pdf()  */
+/* ============================================================ */
+
+@media print {
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  body {
+    background: #FFFFFF;
+    margin: 0;
+  }
+  .handout-doc {
+    padding: 0;
+  }
+  .handout-page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+  .handout-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+}

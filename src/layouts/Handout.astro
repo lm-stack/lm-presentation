@@ -1,0 +1,96 @@
+---
+// src/layouts/Handout.astro
+// Layout handout sans Reveal.js. Reçoit les <section> via <slot />,
+// les groupe par paquets de 2 ou 3, et les arrange en pages A4 portrait
+// imprimables. Le scale des slides Reveal (1920x1080) vers le slot
+// est calculé en JS après le mount.
+import '@/styles/handout.css';
+
+interface Props {
+  title: string;
+  mode: '2' | '3';
+}
+
+const { title, mode } = Astro.props;
+const perPage = mode === '2' ? 2 : 3;
+---
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} : handout {mode}up : Lausanne Marketing</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <main
+      class="handout-doc"
+      data-mode={mode}
+      data-per-page={perPage}
+    >
+      <!-- Les sections du MDX sont injectées ici. Le script post-mount -->
+      <!-- les regroupe en pages, scale les slides, et insère les zones lignes. -->
+      <div id="handout-source" hidden>
+        <slot />
+      </div>
+      <div id="handout-pages"></div>
+    </main>
+
+    <script define:vars={{ mode, perPage }}>
+      // Post-mount : groupe les <section> sources par paquets, scale, pagine.
+      const source = document.getElementById('handout-source');
+      const target = document.getElementById('handout-pages');
+      if (!source || !target) {
+        // garde-fou : ne rien faire
+      } else {
+        const sections = Array.from(source.querySelectorAll(':scope > section'));
+        // Largeur d'un slot : dépend du mode.
+        // 2up : largeur utile A4 = 190mm = ~ 718px @ 96dpi
+        // 3up : 60% de 190mm = 114mm = ~ 431px @ 96dpi
+        // Le scale est appliqué en CSS via une variable.
+        const slotPxByMode = mode === '2' ? 718 : 431;
+        const scale = slotPxByMode / 1920;
+
+        const groups = [];
+        for (let i = 0; i < sections.length; i += perPage) {
+          groups.push(sections.slice(i, i + perPage));
+        }
+
+        for (const group of groups) {
+          const page = document.createElement('div');
+          page.className = `handout-page handout-page--${mode}up`;
+
+          if (mode === '2') {
+            for (const sec of group) {
+              page.appendChild(makeSlideContainer(sec, scale));
+            }
+          } else {
+            // mode 3 : pour chaque slide, 2 cells (slide + zone lignes)
+            for (const sec of group) {
+              page.appendChild(makeSlideContainer(sec, scale));
+              const lines = document.createElement('div');
+              lines.className = 'handout-lines';
+              page.appendChild(lines);
+            }
+          }
+          target.appendChild(page);
+        }
+
+        // Cleanup source après extraction.
+        source.remove();
+      }
+
+      function makeSlideContainer(section, scale) {
+        const slot = document.createElement('div');
+        slot.className = 'handout-slide';
+        const inner = document.createElement('div');
+        inner.className = 'handout-slide__inner';
+        inner.style.transform = `scale(${scale})`;
+        // Move la section originale dans le slot pour préserver les styles Reveal.
+        inner.appendChild(section);
+        slot.appendChild(inner);
+        return slot;
+      }
+    </script>
+  </body>
+</html>
