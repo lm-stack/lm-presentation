@@ -1,6 +1,7 @@
 ---
 // src/layouts/Deck.astro
 import '@/styles/slides.css';
+import PdfModal from '@/components/deck/PdfModal.astro';
 
 interface Props {
   title: string;
@@ -103,6 +104,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       </button>
     </footer>
 
+    <PdfModal />
 
     <script>
       import Reveal from 'reveal.js';
@@ -201,11 +203,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         }
       }
 
-      // Bouton téléchargement PDF : ouvre la vue print-pdf de Reveal dans un nouvel onglet
+      // Bouton télécharger PDF : ouvre la modale qui propose 3 layouts.
       const downloadBtn = document.getElementById('deck-download-btn') as HTMLButtonElement | null;
       downloadBtn?.addEventListener('click', () => {
-        const printUrl = window.location.pathname + '?print-pdf';
-        window.open(printUrl, '_blank', 'noopener');
+        (window as any).openPdfModal?.();
       });
 
       // Bouton mode présentation : passe Reveal en plein écran browser (top layer)

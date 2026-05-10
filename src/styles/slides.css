@@ -516,3 +516,128 @@ body.is-fullscreen .deck-footer {
   border-bottom: 1px solid rgba(25, 25, 25, 0.08);
   padding-bottom: 64px;
 }
+
+/* ============================================================ */
+/* PdfModal : modale de choix de layout PDF (pattern .deck-menu) */
+/* ============================================================ */
+
+.pdf-modal {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  background: #FFFFFF;
+  color: #191919;
+  max-width: 720px;
+  width: calc(100vw - 32px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.pdf-modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+.pdf-modal__inner {
+  position: relative;
+  padding: 32px 24px 24px;
+}
+.pdf-modal__title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #191919;
+}
+.pdf-modal__hint {
+  font-size: 14px;
+  color: #6B6F84;
+  margin: 0 0 20px;
+}
+.pdf-modal__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.pdf-modal__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #191919;
+  font-family: 'Hanken Grotesk', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.pdf-modal__card:hover:not(:disabled) {
+  border-color: #191919;
+}
+.pdf-modal__card:focus-visible {
+  outline: 2px solid #191919;
+  outline-offset: 2px;
+}
+.pdf-modal__card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pdf-modal__card--loading {
+  border-color: #191919;
+}
+.pdf-modal__card--loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='3' stroke-linecap='round'><circle cx='12' cy='12' r='9' opacity='0.25'/><path d='M21 12a9 9 0 0 0-9-9'><animateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='0.9s' repeatCount='indefinite'/></path></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.pdf-modal__card {
+  position: relative;
+}
+.pdf-modal__preview {
+  width: 80px;
+  height: 64px;
+  color: #6B6F84;
+}
+.pdf-modal__card-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.pdf-modal__card-sub {
+  font-size: 12px;
+  color: #6B6F84;
+}
+.pdf-modal__error {
+  margin: 16px 0 0;
+  padding: 8px 12px;
+  background: #FEE2E2;
+  color: #B91C1C;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.pdf-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6B6F84;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-modal__close:hover {
+  background: #F3F4F6;
+}
+
+@media (max-width: 600px) {
+  .pdf-modal__cards {
+    grid-template-columns: 1fr;
+  }
+}
