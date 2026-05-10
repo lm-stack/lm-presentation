@@ -79,10 +79,8 @@
   function buildTargetUrl(mode: '1' | '2' | '3'): { url: string; orientation: 'portrait' | 'landscape' } {
     const origin = window.location.origin;
     const slug = getSlugFromPath();
-    if (mode === '1') {
-      return { url: `${origin}/p/${slug}/?print-pdf`, orientation: 'landscape' };
-    }
-    return { url: `${origin}/p/${slug}/handout/${mode}/`, orientation: 'portrait' };
+    const orientation = mode === '1' ? 'landscape' : 'portrait';
+    return { url: `${origin}/p/${slug}/handout/${mode}/`, orientation };
   }
 
   function buildFilename(mode: '1' | '2' | '3'): string {

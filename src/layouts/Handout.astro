@@ -8,11 +8,11 @@ import '@/styles/handout.css';
 
 interface Props {
   title: string;
-  mode: '2' | '3';
+  mode: '1' | '2' | '3';
 }
 
 const { title, mode } = Astro.props;
-const perPage = mode === '2' ? 2 : 3;
+const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 3;
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -45,10 +45,10 @@ const perPage = mode === '2' ? 2 : 3;
       } else {
         const sections = Array.from(source.querySelectorAll(':scope > section'));
         // Largeur d'un slot : dépend du mode.
-        // 2up : largeur utile A4 = 190mm = ~ 718px @ 96dpi
-        // 3up : 60% de 190mm = 114mm = ~ 431px @ 96dpi
-        // Le scale est appliqué en CSS via une variable.
-        const slotPxByMode = mode === '2' ? 718 : 431;
+        // Mode 1up : landscape A4 = 297mm width, 277mm utile (10mm padding each side) ≈ 1047px @ 96dpi.
+        // Mode 2up : portrait A4 = 210mm width, 190mm utile ≈ 718px.
+        // Mode 3up : 70% of 190mm = 133mm ≈ 503px (was 60% / 431px, increased to make slides bigger).
+        const slotPxByMode = mode === '1' ? 1047 : mode === '2' ? 718 : 503;
         const scale = slotPxByMode / 1920;
 
         const groups = [];
@@ -60,17 +60,18 @@ const perPage = mode === '2' ? 2 : 3;
           const page = document.createElement('div');
           page.className = `handout-page handout-page--${mode}up`;
 
-          if (mode === '2') {
-            for (const sec of group) {
-              page.appendChild(makeSlideContainer(sec, scale));
-            }
-          } else {
+          if (mode === '3') {
             // mode 3 : pour chaque slide, 2 cells (slide + zone lignes)
             for (const sec of group) {
               page.appendChild(makeSlideContainer(sec, scale));
               const lines = document.createElement('div');
               lines.className = 'handout-lines';
               page.appendChild(lines);
+            }
+          } else {
+            // mode 1 ou 2 : juste les slides
+            for (const sec of group) {
+              page.appendChild(makeSlideContainer(sec, scale));
             }
           }
           target.appendChild(page);
