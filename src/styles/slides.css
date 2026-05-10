@@ -14,17 +14,111 @@ body {
   transition: background-color 0.4s ease;
 }
 
+/* Noise overlay global sur la viewport, identique a celui des slides (multiply
+   opacity 0.18). Garantit une continuite visuelle entre le slide (qui a son
+   propre noise) et la zone du body autour : sans ce overlay le body apparait
+   plus pale que le slide a couleur identique car le noise multiply assombrit
+   subtilement les zones colorees du slide. Z-index 0 pour passer derriere
+   .deck-stage (z-index: 1). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+/* Noise interne sur le slide Section : Section n'a pas son propre noise (contrairement
+   a Cover, Closing, Timer), or le body autour porte un noise multiply via body::before.
+   Sans matching le body apparait subtilement gris alors que le slide est blanc pur,
+   creant une rupture visible a la frontiere. On replique ici le meme noise. */
+.slide-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+/* Wash gold radial sur le body, calque sur celui du slide Section (.slide-section__wash).
+   Apparait uniquement quand un slide Section est actif (selecteur :has) pour que le
+   degrade gold deborde du slide vers la zone autour. Le wash interne du slide reste
+   en place (span .slide-section__wash) : a l'impression PDF le body n'est pas imprime
+   donc seul le wash interne du slide assure la continuite.
+
+   Position : on cale le centre du radial sur le coin bas-gauche du SLIDE (pas du
+   viewport) pour que le wash interne et le wash externe partagent exactement la
+   meme origine et donnent l'illusion d'un seul gradient continu. La taille du
+   slide depend de la formule de .deck-stage : min(100vw-32px, (100vh-160px)*16/9). */
+body:has(.slide-section.present)::after {
+  --slide-w: min(
+    calc(100vw - var(--slide-h-margin)),
+    calc((100vh - var(--slide-v-chrome)) * 16 / 9)
+  );
+  --slide-h: calc(var(--slide-w) * 9 / 16);
+  --slide-bottom-left-x: calc(50vw - var(--slide-w) / 2);
+  --slide-bottom-left-y: calc(50vh + var(--slide-top-offset) + var(--slide-h) / 2);
+  /* Rayon : farthest-corner du wash interne sur un slide 16:9 = diagonale = w*1.147,
+     puis 55% de cette diagonale = 0.631 * w. On applique le meme rayon ici pour
+     que la decroissance de l'opacite soit identique. */
+  --wash-radius: calc(var(--slide-w) * 0.631);
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle var(--wash-radius) at var(--slide-bottom-left-x) var(--slide-bottom-left-y),
+    rgba(255, 216, 56, 0.32) 0%,
+    rgba(255, 216, 56, 0) 100%
+  );
+}
+
+/* Impression : forcer la conservation des fonds, gradients, et couleurs. Sans cela
+   les browsers strippent les backgrounds en PDF (washes, fonds gold, etc. disparaissent). */
+@media print {
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Variables partagees pour la geometrie du slide. Permet de switcher entre mode
+   fenetre (avec marges chrome) et mode fullscreen (pleine taille) en redefinissant
+   uniquement ces vars. Utilisees par .deck-stage ET le wash externe sur le body. */
+:root {
+  --slide-top-offset: -40px;       /* remonte le slide par rapport au centre viewport */
+  --slide-h-margin: 32px;          /* marge horizontale autour du slide */
+  --slide-v-chrome: 160px;         /* hauteur de chrome reservee (top + bottom) */
+}
+
+/* Mode fullscreen : on supprime les marges et on recentre, le slide remplit l'ecran. */
+:root:has(:fullscreen),
+body.is-fullscreen {
+  --slide-top-offset: 0px;
+  --slide-h-margin: 0px;
+  --slide-v-chrome: 0px;
+}
+
 .deck-stage {
   position: fixed;
-  /* Centre dans la zone dispo (72px chrome top, 88px chrome bottom : centre = 50% - 8px) */
-  top: calc(50% - 8px);
+  top: calc(50% + var(--slide-top-offset));
   left: 50%;
   transform: translate(-50%, -50%);
   /* Le wrapper respecte l'aspect ratio 16:9 pour que le slide remplisse pile le */
   /* container, plus aucune bande visible a l'interieur. Plus de card style (border/ */
   /* radius/shadow/bg) : la slide repose directement sur le body, dont le bg suit */
   /* la couleur de la slide courante via JS. */
-  width: min(calc(100vw - 32px), calc((100vh - 160px) * 16 / 9));
+  width: min(
+    calc(100vw - var(--slide-h-margin)),
+    calc((100vh - var(--slide-v-chrome)) * 16 / 9)
+  );
   aspect-ratio: 16 / 9;
   background: transparent;
   overflow: hidden;
@@ -285,6 +379,44 @@ body.is-fullscreen .deck-footer {
   margin-right: 24px;
 }
 
+/* Le span "Lausanne Marketing" a une bande jaune sous le texte,
+   facon marqueur — pas un text-decoration: underline classique.
+   Override la utility Tailwind `.underline` au cas ou. */
+.deck-menu__eyebrow .underline {
+  text-decoration: none;
+  background-image: linear-gradient(#FFD838, #FFD838);
+  background-repeat: no-repeat;
+  background-position: 0 92%;
+  background-size: 100% 6px;
+  padding: 0 2px;
+}
+
+/* Lien retour au parcours dans le menu (active par JS si ?from=<slug>) :
+   pill discrete avec icone fleche + label, en haut du panel avant l'eyebrow. */
+.deck-menu__back-parcours {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #191919;
+  text-decoration: none;
+  padding: 8px 12px;
+  margin: 0 0 20px;
+  background: #FFD838;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  align-self: flex-start;
+  width: fit-content;
+}
+.deck-menu__back-parcours:hover {
+  background: #FFE55A;
+  transform: translateX(-2px);
+}
+
 .deck-menu__title {
   font-size: 24px;
   line-height: 1.3;
@@ -326,22 +458,23 @@ body.is-fullscreen .deck-footer {
   list-style: none;
   margin: 0;
   padding: 0;
-  counter-reset: toc;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.deck-menu__toc-list li {
-  counter-increment: toc;
-}
-
+/* Bouton TOC : flex baseline pour aligner numero et titre proprement,
+   peu importe les font-sizes / line-heights. Plus de ::before counter
+   absolument positionne (qui cassait l'alignement vertical). */
 .deck-menu__toc-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: none;
-  padding: 8px 12px 8px 36px;
+  padding: 8px 12px;
   margin: 0;
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 14px;
@@ -349,19 +482,17 @@ body.is-fullscreen .deck-footer {
   color: #191919;
   border-radius: 6px;
   cursor: pointer;
-  position: relative;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.deck-menu__toc-btn::before {
-  content: counter(toc, decimal-leading-zero);
-  position: absolute;
-  left: 12px;
-  top: 8px;
+.deck-menu__toc-num {
   font-family: 'Space Grotesk', monospace;
   font-size: 12px;
   font-weight: 700;
   color: #6B6F84;
+  flex-shrink: 0;
+  min-width: 18px;
+  transition: color 0.15s ease;
 }
 
 .deck-menu__toc-btn:hover {
@@ -369,7 +500,7 @@ body.is-fullscreen .deck-footer {
   color: #191919;
 }
 
-.deck-menu__toc-btn:hover::before {
+.deck-menu__toc-btn:hover .deck-menu__toc-num {
   color: #191919;
 }
 

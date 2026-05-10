@@ -11,6 +11,7 @@ description: "Deck modèle qui montre les layouts validés (Cover, Section, Imag
 import Cover from '@/components/slides/Cover.astro';
 import Section from '@/components/slides/Section.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Timer from '@/components/slides/Timer.astro';
 import Closing from '@/components/slides/Closing.astro';
 
 <Cover
@@ -126,6 +127,12 @@ import Closing from '@/components/slides/Closing.astro';
       text: 'Molestias excepturi sint occaecati cupiditate non provident.',
     },
   ]}
+/>
+
+<Timer
+  title="Pause"
+  subtitle="Café, eau, étirements. On reprend ensemble."
+  spotify="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ"
 />
 
 <Closing variant="qa" />

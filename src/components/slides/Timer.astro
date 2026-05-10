@@ -1,0 +1,442 @@
+---
+// src/components/slides/Timer.astro
+// Slide pause avec compte à rebours configurable. Charte LM, gros chiffres
+// monumentaux, contrôles cliquables ou clavier (Espace = start/pause, R = reset).
+interface Props {
+  minutes?: number;
+  title?: string;
+  subtitle?: string;
+  eyebrow?: string;
+  highlight?: string;
+  autoStart?: boolean;
+  spotify?: string; // URL Spotify optionnelle pour ajouter un mini-player discret
+}
+
+const {
+  minutes = 15,
+  title = 'Pause',
+  subtitle,
+  eyebrow = 'Pause',
+  highlight = 'Pause',
+  autoStart = false,
+  spotify,
+} = Astro.props;
+
+const totalSeconds = Math.max(1, Math.round(minutes * 60));
+
+// Parse URL Spotify : https://open.spotify.com/{type}/{id}?si=...
+const VALID_SPOTIFY_TYPES = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
+function parseSpotifyUrl(raw?: string): { type: string; id: string } | null {
+  if (!raw) return null;
+  try {
+    const u = new URL(raw);
+    if (!u.hostname.endsWith('spotify.com')) return null;
+    const segments = u.pathname.split('/').filter(Boolean);
+    const typeIdx = segments.findIndex((s) => VALID_SPOTIFY_TYPES.has(s));
+    if (typeIdx === -1 || !segments[typeIdx + 1]) return null;
+    return { type: segments[typeIdx], id: segments[typeIdx + 1] };
+  } catch {
+    return null;
+  }
+}
+const spotifyParsed = parseSpotifyUrl(spotify);
+const spotifyEmbed = spotifyParsed
+  ? `https://open.spotify.com/embed/${spotifyParsed.type}/${spotifyParsed.id}?utm_source=generator&theme=0`
+  : null;
+
+function splitHighlight(text: string, mot?: string) {
+  if (!mot) return null;
+  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
+  if (idx === -1) return null;
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
+}
+
+const titleParts = splitHighlight(title, highlight);
+---
+<section
+  class="timer-slide"
+  data-layout="timer"
+  data-section-title={title}
+  data-total-seconds={totalSeconds}
+  data-auto-start={autoStart ? 'true' : 'false'}
+  data-has-spotify={spotifyEmbed ? 'true' : 'false'}
+  data-background-color="#FFD838"
+  style="background-color: #FFD838;"
+>
+  <span class="timer-slide__noise" aria-hidden="true"></span>
+
+  <div class="timer-slide__inner">
+    {eyebrow && <p class="timer-slide__eyebrow">{eyebrow}</p>}
+    <h2 class="timer-slide__title">
+      {titleParts
+        ? <>{titleParts.before}<span class="timer-slide__mark">{titleParts.match}</span>{titleParts.after}</>
+        : title}
+    </h2>
+    {subtitle && <p class="timer-slide__subtitle">{subtitle}</p>}
+
+    <div class="timer-slide__display" aria-live="polite">
+      <span class="timer-slide__time" data-timer-display>
+        {Math.floor(totalSeconds / 60).toString().padStart(2, '0')}:{(totalSeconds % 60).toString().padStart(2, '0')}
+      </span>
+      <span class="timer-slide__progress" aria-hidden="true">
+        <span class="timer-slide__progress-fill" data-timer-progress></span>
+      </span>
+    </div>
+
+    <div class="timer-slide__controls">
+      <button type="button" class="timer-slide__btn timer-slide__btn--primary" data-timer-toggle aria-label="Démarrer ou mettre en pause le minuteur">
+        <span data-timer-toggle-label>Démarrer</span>
+      </button>
+      <button type="button" class="timer-slide__btn" data-timer-reset aria-label="Réinitialiser le minuteur">Réinitialiser</button>
+    </div>
+
+  </div>
+
+  {spotifyEmbed && (
+    <div class="timer-slide__spotify" aria-label="Lecteur audio">
+      <iframe
+        src={spotifyEmbed}
+        width="100%"
+        height="680"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        title="Lecteur Spotify"
+      ></iframe>
+    </div>
+  )}
+</section>
+
+<script>
+  function initTimer(slide: HTMLElement) {
+    if (slide.dataset.timerInit === 'true') return;
+    slide.dataset.timerInit = 'true';
+
+    const total = Number(slide.dataset.totalSeconds || '300');
+    const autoStart = slide.dataset.autoStart === 'true';
+    const display = slide.querySelector<HTMLElement>('[data-timer-display]');
+    const progress = slide.querySelector<HTMLElement>('[data-timer-progress]');
+    const toggleBtn = slide.querySelector<HTMLButtonElement>('[data-timer-toggle]');
+    const toggleLabel = slide.querySelector<HTMLElement>('[data-timer-toggle-label]');
+    const resetBtn = slide.querySelector<HTMLButtonElement>('[data-timer-reset]');
+
+    if (!display || !progress || !toggleBtn || !toggleLabel || !resetBtn) return;
+
+    let remaining = total;
+    let intervalId: number | null = null;
+    let running = false;
+
+    function format(s: number) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function render() {
+      display!.textContent = format(remaining);
+      const pct = total > 0 ? ((total - remaining) / total) * 100 : 0;
+      progress!.style.width = `${pct}%`;
+      slide.classList.toggle('is-done', remaining <= 0);
+      toggleLabel!.textContent = running ? 'Pause' : remaining <= 0 ? 'Terminé' : remaining < total ? 'Reprendre' : 'Démarrer';
+      toggleBtn!.disabled = remaining <= 0;
+    }
+
+    function tick() {
+      remaining = Math.max(0, remaining - 1);
+      render();
+      if (remaining <= 0) stop();
+    }
+
+    function start() {
+      if (running || remaining <= 0) return;
+      running = true;
+      intervalId = window.setInterval(tick, 1000);
+      render();
+    }
+
+    function stop() {
+      running = false;
+      if (intervalId !== null) {
+        window.clearInterval(intervalId);
+        intervalId = null;
+      }
+      render();
+    }
+
+    function reset() {
+      stop();
+      remaining = total;
+      render();
+    }
+
+    toggleBtn.addEventListener('click', () => (running ? stop() : start()));
+    resetBtn.addEventListener('click', reset);
+
+    // Raccourcis clavier seulement si la slide est visible (Reveal active)
+    function isActive() {
+      // Reveal marque la slide active avec .present sur la <section>
+      return slide.classList.contains('present') || slide.matches(':hover') || document.activeElement === slide;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (!isActive()) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        running ? stop() : start();
+      } else if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        reset();
+      }
+    });
+
+    // Reveal.js : auto reset quand on quitte la slide, auto-start optionnel à l'entrée
+    document.addEventListener('slidechanged', (e: Event) => {
+      const detail = (e as CustomEvent).detail as { currentSlide?: HTMLElement } | undefined;
+      const isCurrent = detail?.currentSlide === slide || slide.contains(detail?.currentSlide ?? null);
+      if (!isCurrent) {
+        stop();
+        return;
+      }
+      reset();
+      if (autoStart) start();
+    });
+
+    render();
+    if (autoStart && document.readyState !== 'loading') {
+      // Si chargement direct sur la slide
+      if (slide.classList.contains('present')) start();
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-layout="timer"]').forEach(initTimer);
+</script>
+
+<style>
+  .timer-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 96px 96px !important;
+    background: #FFD838;
+    color: #191919;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    text-align: left;
+  }
+
+  .timer-slide__noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+.timer-slide__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    width: 100%;
+    animation: timer-stagger 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .timer-slide__eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: #FFD838;
+    margin: 0 0 32px;
+    padding: 8px 16px;
+    background: #191919;
+    border: 2px solid #191919;
+    border-radius: 4px;
+  }
+
+  .timer-slide__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 900;
+    font-size: clamp(80px, 9vw, 160px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: #191919;
+    margin: 0 0 20px;
+    text-align: left;
+    text-wrap: balance;
+  }
+
+  .timer-slide__mark {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .timer-slide__mark::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: 6px;
+    height: 14px;
+    background: #191919;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+  }
+
+  .timer-slide__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgba(25, 25, 25, 0.78);
+    margin: 0 0 48px;
+    max-width: 1100px;
+  }
+
+  /* Display compteur monumental */
+  .timer-slide__display {
+    margin: 32px 0 40px;
+  }
+
+  .timer-slide__time {
+    display: block;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(180px, 22vw, 360px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #191919;
+    transition: color 0.3s ease;
+  }
+
+  .timer-slide.is-done .timer-slide__time {
+    animation: timer-done 1.2s ease-in-out;
+  }
+
+  /* Barre de progression sous le compteur */
+  .timer-slide__progress {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: 6px;
+    background: rgba(25, 25, 25, 0.14);
+    border-radius: 999px;
+    margin-top: 24px;
+    overflow: hidden;
+  }
+  .timer-slide__progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: #191919;
+    border-radius: 999px;
+    transition: width 0.9s linear;
+  }
+
+  /* Contrôles */
+  .timer-slide__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .timer-slide__btn {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #191919;
+    background: transparent;
+    border: 2px solid rgba(25, 25, 25, 0.55);
+    border-radius: 6px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .timer-slide__btn:hover:not(:disabled) {
+    background: rgba(25, 25, 25, 0.08);
+    border-color: #191919;
+  }
+  .timer-slide__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .timer-slide__btn--primary {
+    background: #191919;
+    color: #FFD838;
+    border-color: #191919;
+  }
+  .timer-slide__btn--primary:hover:not(:disabled) {
+    background: #2A2A2A;
+    border-color: #2A2A2A;
+  }
+
+  /* Player Spotify vertical à droite, format carte (artwork + tracklist).
+     L'iframe a une taille logique réduite (le widget Spotify "pense" être plus
+     petit, donc utilise une typo proportionnellement plus grosse), puis on
+     applique transform: scale(1.25) pour la rendre visuellement à la taille
+     voulue. Le wrapper crop avec overflow:hidden. */
+  .timer-slide__spotify {
+    position: absolute;
+    right: 128px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 580px;
+    height: 680px;
+    z-index: 2;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 28px 56px -12px rgba(25, 25, 25, 0.35);
+    opacity: 1;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    animation: timer-spotify-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  }
+  .timer-slide__spotify:hover,
+  .timer-slide__spotify:focus-within {
+    transform: translateY(-50%) scale(1.015);
+    box-shadow: 0 32px 64px -12px rgba(25, 25, 25, 0.45);
+  }
+  .timer-slide__spotify iframe {
+    display: block;
+    width: 387px;   /* 580 / 1.5 : taille logique du widget */
+    height: 454px;  /* 680 / 1.5 */
+    transform: scale(1.5);
+    transform-origin: top left;
+    border: 0;
+    border-radius: 16px;
+  }
+
+  /* Quand le player est présent, on réserve l'espace à droite pour le contenu */
+  .timer-slide[data-has-spotify="true"] .timer-slide__inner {
+    padding-right: 740px;
+  }
+
+  @keyframes timer-spotify-in {
+    from { opacity: 0; transform: translateY(-50%) translateX(40px); }
+    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  }
+
+  @keyframes timer-stagger {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes timer-done {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.03); }
+    50% { transform: scale(0.99); }
+    75% { transform: scale(1.02); }
+  }
+</style>
