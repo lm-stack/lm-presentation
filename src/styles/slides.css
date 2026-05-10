@@ -326,22 +326,23 @@ body.is-fullscreen .deck-footer {
   list-style: none;
   margin: 0;
   padding: 0;
-  counter-reset: toc;
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.deck-menu__toc-list li {
-  counter-increment: toc;
-}
-
+/* Bouton TOC : flex baseline pour aligner numero et titre proprement,
+   peu importe les font-sizes / line-heights. Plus de ::before counter
+   absolument positionne (qui cassait l'alignement vertical). */
 .deck-menu__toc-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: none;
-  padding: 8px 12px 8px 36px;
+  padding: 8px 12px;
   margin: 0;
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 14px;
@@ -349,19 +350,17 @@ body.is-fullscreen .deck-footer {
   color: #191919;
   border-radius: 6px;
   cursor: pointer;
-  position: relative;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.deck-menu__toc-btn::before {
-  content: counter(toc, decimal-leading-zero);
-  position: absolute;
-  left: 12px;
-  top: 8px;
+.deck-menu__toc-num {
   font-family: 'Space Grotesk', monospace;
   font-size: 12px;
   font-weight: 700;
   color: #6B6F84;
+  flex-shrink: 0;
+  min-width: 18px;
+  transition: color 0.15s ease;
 }
 
 .deck-menu__toc-btn:hover {
@@ -369,7 +368,7 @@ body.is-fullscreen .deck-footer {
   color: #191919;
 }
 
-.deck-menu__toc-btn:hover::before {
+.deck-menu__toc-btn:hover .deck-menu__toc-num {
   color: #191919;
 }
 

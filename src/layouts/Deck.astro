@@ -207,7 +207,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         if (tocSlides.length > 0) {
           tocNav.hidden = false;
           const slidesParent = tocSlides[0].parentElement;
-          tocSlides.forEach((sec) => {
+          tocSlides.forEach((sec, i) => {
             const indexInDeck = slidesParent
               ? Array.from(slidesParent.children).indexOf(sec)
               : 0;
@@ -217,7 +217,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
             btn.type = 'button';
             btn.className = 'deck-menu__toc-btn';
             btn.dataset.slideIndex = String(indexInDeck);
-            btn.textContent = label;
+            const num = document.createElement('span');
+            num.className = 'deck-menu__toc-num';
+            num.setAttribute('aria-hidden', 'true');
+            num.textContent = String(i + 1).padStart(2, '0');
+            const text = document.createElement('span');
+            text.className = 'deck-menu__toc-text';
+            text.textContent = label;
+            btn.appendChild(num);
+            btn.appendChild(text);
             btn.addEventListener('click', () => {
               deck.slide(indexInDeck);
               closeMenu();
