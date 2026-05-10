@@ -1,0 +1,29 @@
+---
+// src/pages/p/[slug]/handout/[mode].astro
+// Route dynamique : produit cartesien presentations x [2, 3].
+// Reutilise la collection presentations et le composant Content du MDX,
+// mais avec le layout Handout au lieu de Deck.
+import { getCollection, render } from 'astro:content';
+import Handout from '@/layouts/Handout.astro';
+
+export async function getStaticPaths() {
+  const decks = await getCollection('presentations');
+  const modes = ['2', '3'];
+  const paths = [];
+  for (const d of decks) {
+    for (const mode of modes) {
+      paths.push({
+        params: { slug: d.id.replace('.mdx', ''), mode },
+        props: { entry: d, mode },
+      });
+    }
+  }
+  return paths;
+}
+
+const { entry, mode } = Astro.props;
+const { Content } = await render(entry);
+---
+<Handout title={entry.data.title} mode={mode as '2' | '3'}>
+  <Content />
+</Handout>
