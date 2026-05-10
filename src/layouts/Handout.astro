@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { title, mode } = Astro.props;
-const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 3;
+const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -45,10 +45,10 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 3;
       } else {
         const sections = Array.from(source.querySelectorAll(':scope > section'));
         // Largeur d'un slot : dépend du mode.
-        // Mode 1up : landscape A4 = 297mm width, 277mm utile (10mm padding each side) ≈ 1047px @ 96dpi.
-        // Mode 2up : portrait A4 = 210mm width, 190mm utile ≈ 718px.
-        // Mode 3up : 70% of 190mm = 133mm ≈ 503px (was 60% / 431px, increased to make slides bigger).
-        const slotPxByMode = mode === '1' ? 1047 : mode === '2' ? 718 : 503;
+        // Mode 1up : landscape A4 277mm utile (10mm padding each side) = ~1047px @ 96dpi.
+        // Mode 2up : portrait A4 190mm utile = ~718px.
+        // Mode 3up : 60% de 190mm = 114mm = ~431px.
+        const slotPxByMode = mode === '1' ? 1047 : mode === '2' ? 718 : 431;
         const scale = slotPxByMode / 1920;
 
         const groups = [];
@@ -66,6 +66,11 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 3;
               page.appendChild(makeSlideContainer(sec, scale));
               const lines = document.createElement('div');
               lines.className = 'handout-lines';
+              for (let i = 0; i < 6; i++) {
+                const line = document.createElement('div');
+                line.className = 'handout-line';
+                lines.appendChild(line);
+              }
               page.appendChild(lines);
             }
           } else {

@@ -57,11 +57,12 @@ body {
   align-items: center;
 }
 
-/* Mode 3up : 3 lignes égales, 2 colonnes (slide 70% / lignes 30%) */
+/* Mode 3up : 4 lignes égales, 2 colonnes (slide 60% / lignes 40%) */
 .handout-page--3up {
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 70% 30%;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 60% 40%;
   align-items: center;
+  gap: 6mm;
 }
 
 /* ============================================================ */
@@ -69,13 +70,24 @@ body {
 /* ============================================================ */
 
 .handout-slide {
-  width: 100%;
-  justify-self: stretch;
-  aspect-ratio: 16 / 9;
   position: relative;
   overflow: hidden;
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
+}
+
+/* Override par mode : largeur explicite en mm pour éviter les conflits aspect-ratio/grid. */
+.handout-page--1up .handout-slide {
+  width: 277mm;
+  height: 156mm;
+}
+.handout-page--2up .handout-slide {
+  width: 190mm;
+  height: 107mm;
+}
+.handout-page--3up .handout-slide {
+  width: 114mm;
+  height: 64mm;
 }
 
 /* La slide Reveal d'origine est dimensionnée 1920 x 1080. On la scale */
@@ -97,13 +109,14 @@ body {
 .handout-lines {
   height: 100%;
   padding: 4mm 6mm;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 9.9mm,
-    #BBB 10mm,
-    #BBB 10.1mm
-  );
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.handout-line {
+  height: 0.2mm;
+  background: #BBB;
+  width: 100%;
 }
 
 /* ============================================================ */
@@ -131,7 +144,6 @@ body {
     print-color-adjust: exact;
   }
   @page {
-    size: A4;
     margin: 0;
   }
   body {
