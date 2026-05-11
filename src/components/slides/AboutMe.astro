@@ -168,11 +168,11 @@ const lastNameParts = splitHighlight(lastName, highlight);
   .about-me__name {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 900;
-    font-size: clamp(96px, 11vw, 200px);
+    font-size: clamp(140px, 15vw, 260px);
     line-height: 0.85;
     letter-spacing: -0.045em;
     color: #191919;
-    margin: 0 0 16px;
+    margin: 0 0 24px;
     text-align: left;
     text-wrap: balance;
     display: flex;
@@ -206,12 +206,12 @@ const lastNameParts = splitHighlight(lastName, highlight);
 
   .about-me__role {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 500;
-    line-height: 1.35;
+    line-height: 1.3;
     color: #6B6F84;
-    margin: 0 0 28px;
-    max-width: 800px;
+    margin: 0 0 36px;
+    max-width: 900px;
   }
 
   .about-me__rule {
@@ -245,22 +245,22 @@ const lastNameParts = splitHighlight(lastName, highlight);
   .about-me__bullet-num {
     font-family: 'Space Grotesk', monospace;
     font-weight: 700;
-    font-size: 36px;
+    font-size: 56px;
     line-height: 1;
     color: #FFD838;
-    -webkit-text-stroke: 1.5px #191919;
+    -webkit-text-stroke: 2px #191919;
     letter-spacing: -0.02em;
   }
 
   .about-me__bullet-body {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
 
   .about-me__bullet-label {
     font-family: 'Space Grotesk', monospace;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -269,9 +269,9 @@ const lastNameParts = splitHighlight(lastName, highlight);
 
   .about-me__bullet-text {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 19px;
+    font-size: 26px;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.35;
     color: #6B6F84;
   }
 
@@ -284,10 +284,10 @@ const lastNameParts = splitHighlight(lastName, highlight);
   }
 
   .about-me__polaroid {
-    width: 480px;
+    width: 560px;
     aspect-ratio: 4 / 5;
     background: #191919;
-    padding: 16px 16px 80px;
+    padding: 18px 18px 88px;
     transform: rotate(3deg);
     box-shadow: 0 32px 60px -16px rgba(25, 25, 25, 0.45);
     position: relative;
@@ -297,9 +297,9 @@ const lastNameParts = splitHighlight(lastName, highlight);
     /* Trace gold subtile en bas de la polaroid (signature) */
     content: '';
     position: absolute;
-    left: 24px;
-    bottom: 32px;
-    width: 64px;
+    left: 26px;
+    bottom: 36px;
+    width: 72px;
     height: 4px;
     background: #FFD838;
   }
@@ -307,7 +307,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.05) sepia(0.35) hue-rotate(-12deg) brightness(1.02);
     display: block;
   }
 
