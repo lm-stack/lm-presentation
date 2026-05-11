@@ -70,6 +70,17 @@ body {
 }
 
 /* ============================================================ */
+/* Centrage vertical force des slides en handout                 */
+/* ============================================================ */
+/* Les composants (Calendar, ImageGrid, NumberedCards, etc.) forcent un */
+/* justify-content:flex-start pour Reveal (le contenu colle en haut sous le titre). */
+/* En PDF handout c'est moche : le contenu touche le haut et il reste un grand */
+/* espace blanc en bas. On centre verticalement uniquement en mode handout. */
+.handout-doc section {
+  justify-content: center !important;
+}
+
+/* ============================================================ */
 /* Conteneur d'une slide dans le handout                         */
 /* ============================================================ */
 
