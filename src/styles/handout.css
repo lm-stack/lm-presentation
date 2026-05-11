@@ -76,7 +76,10 @@ body {
 /* justify-content:flex-start pour Reveal (le contenu colle en haut sous le titre). */
 /* En PDF handout c'est moche : le contenu touche le haut et il reste un grand */
 /* espace blanc en bas. On centre verticalement uniquement en mode handout. */
-.handout-doc section {
+/* Spec necessaire (0,2,1) pour battre les regles scoppees Astro (0,2,0) du genre */
+/* `.image-grid[data-astro-cid-xxx]`. On cible via l'attribut data-layout que */
+/* tous les composants slide exposent. */
+.handout-doc section[data-layout] {
   justify-content: center !important;
 }
 
