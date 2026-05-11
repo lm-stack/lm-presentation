@@ -71,8 +71,9 @@ jobs:
             exit 0
           fi
 
-          # Sinon, lister les slugs des .mdx modifies
-          SLUGS=$(echo "$CHANGED" | grep -E '^src/content/presentations/.+\.mdx$' | sed 's|^src/content/presentations/||; s|\.mdx$||' | paste -sd, -)
+          # Sinon, lister les slugs des .mdx modifies.
+          # `|| true` car grep retourne 1 si pas de match, ce qui ferait crash set -e.
+          SLUGS=$(echo "$CHANGED" | { grep -E '^src/content/presentations/.+\.mdx$' || true; } | sed 's|^src/content/presentations/||; s|\.mdx$||' | paste -sd, -)
           if [ -z "$SLUGS" ]; then
             echo "Aucun handout a rebuilder."
             echo "args=" >> "$GITHUB_OUTPUT"
