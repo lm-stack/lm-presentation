@@ -109,20 +109,22 @@ jobs:
 
       - name: Upload to R2
         if: steps.detect.outputs.args != ''
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # `wrangler r2 object put` ne supporte pas la wildcard, on boucle.
-          # Cache 1h CDN + 5min navigateur : utilisateur recoit la version recente
-          # vite (max 5min lag) tout en deduisant la charge sur R2.
-          command: |
-            for f in dist/handouts/*.pdf; do
-              key=$(basename "$f")
-              echo "Upload $key"
-              wrangler r2 object put "${{ env.R2_BUCKET }}/$key" \
-                --file "$f" \
-                --content-type "application/pdf" \
-                --cache-control "public, max-age=300, s-maxage=3600" \
-                --remote
-            done
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # wrangler-action ne supporte pas les boucles shell : on appelle wrangler
+        # directement via npx (wrangler est deja installe via puppeteer-core deps
+        # ... non, on l'installe explicitement ici, plus simple). Cache 1h CDN +
+        # 5min navigateur : utilisateur recoit la version recente vite tout en
+        # deduisant la charge sur R2.
+        run: |
+          npm install --no-save wrangler@4
+          for f in dist/handouts/*.pdf; do
+            key=$(basename "$f")
+            echo "Upload $key"
+            npx wrangler r2 object put "${{ env.R2_BUCKET }}/$key" \
+              --file "$f" \
+              --content-type "application/pdf" \
+              --cache-control "public, max-age=300, s-maxage=3600" \
+              --remote
+          done
