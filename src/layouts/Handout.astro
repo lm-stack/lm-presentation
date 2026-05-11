@@ -17,7 +17,9 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
 // Le worker lm-pdf passe preferCSSPageSize:true donc Puppeteer respecte size.
 // Sans cette regle, certaines builds Cloudflare Browser Rendering ignorent
 // page.pdf({ landscape:true }) et impriment en portrait par defaut.
-const pageSize = mode === '1' ? '297mm 210mm' : '210mm 297mm';
+// Mode 1up : format custom 297x167mm = ratio 16:9 exact, slide pleine page sans blanc.
+// Mode 2up/3up : A4 portrait standard.
+const pageSize = mode === '1' ? '297mm 167mm' : '210mm 297mm';
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -61,11 +63,11 @@ const pageSize = mode === '1' ? '297mm 210mm' : '210mm 297mm';
         });
 
         const sections = Array.from(source.querySelectorAll(':scope > section'));
-        // Largeur d'un slot : dépend du mode.
-        // Mode 1up : landscape A4 277mm utile (10mm padding each side) = ~1047px @ 96dpi.
+        // Largeur d'un slot : depend du mode.
+        // Mode 1up : page custom 297x167mm pleine (pas de padding) = ~1123px @ 96dpi.
         // Mode 2up : portrait A4 190mm utile = ~718px.
         // Mode 3up : 60% de 190mm = 114mm = ~431px.
-        const slotPxByMode = mode === '1' ? 1047 : mode === '2' ? 718 : 431;
+        const slotPxByMode = mode === '1' ? 1123 : mode === '2' ? 718 : 431;
         const scale = slotPxByMode / 1920;
 
         const groups = [];

@@ -43,15 +43,15 @@ body {
   break-after: auto;
 }
 
-/* Mode 1up : 1 slide par page A4 landscape (297 × 210mm). */
-/* A4 paysage (1.414:1) est plus carré que 16:9 (1.778:1), donc on scale par la largeur */
-/* et on centre verticalement, sinon ~34mm de blanc en bas. */
+/* Mode 1up : page custom 297 × 167mm = ratio 16:9 exact (zero blanc). */
+/* On override le padding 10mm de .handout-page pour que la slide remplisse pleine page. */
 .handout-page--1up {
   width: 297mm;
-  height: 210mm;
+  height: 167mm;
+  padding: 0;
   grid-template-rows: 1fr;
-  align-items: center;
-  justify-items: center;
+  align-items: stretch;
+  justify-items: stretch;
 }
 
 /* Mode 2up : 2 lignes égales, slides centrées verticalement */
@@ -82,8 +82,9 @@ body {
 
 /* Override par mode : largeur explicite en mm pour éviter les conflits aspect-ratio/grid. */
 .handout-page--1up .handout-slide {
-  width: 277mm;
-  height: 156mm;
+  width: 297mm;
+  height: 167mm;
+  border: none;
 }
 .handout-page--2up .handout-slide {
   width: 190mm;
@@ -166,7 +167,8 @@ body {
   }
   .handout-page--1up {
     width: 297mm;
-    height: 210mm;
+    height: 167mm;
+    padding: 0;
   }
   .handout-page--2up,
   .handout-page--3up {
