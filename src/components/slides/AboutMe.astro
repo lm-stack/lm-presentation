@@ -1,25 +1,18 @@
 ---
 // src/components/slides/AboutMe.astro
-// Slide "a propos" editoriale, layout split 60/40 :
-// - Gauche : eyebrow + nom monumental avec accent + 4 bullets numerotes
-// - Droite : photo polaroid grand format inclinee, filtre duotone sepia/gold
+// Slide "a propos" intro : eyebrow, nom monumental, role, photo polaroid.
+// Pas de bullets : la liste vit sur la slide suivante (AboutMeBullets).
 // Charte LM (#FFD838 gold, Hanken Grotesk + Space Grotesk), watermark gold derriere.
-
-interface Bullet {
-  label: string; // ex: "Executive Education HEC"
-  text: string;  // ex: "Responsable Marketing & Ventes, Intervenant"
-}
 
 interface Props {
   eyebrow?: string;
   firstName: string;
   lastName: string;
-  highlight?: string;   // Mot du nom a souligner (ex: "Rouaud")
+  highlight?: string;   // Mot du nom a souligner (bande noire rotative)
   role?: string;
   photo: string;
   photoAlt?: string;
   watermark?: string;   // Watermark monumental (ex: initiales)
-  bullets: Bullet[];
 }
 
 const {
@@ -31,7 +24,6 @@ const {
   photo,
   photoAlt = '',
   watermark,
-  bullets,
 } = Astro.props;
 
 function splitHighlight(text: string, mot?: string) {
@@ -47,7 +39,13 @@ function splitHighlight(text: string, mot?: string) {
 
 const lastNameParts = splitHighlight(lastName, highlight);
 ---
-<section class="about-me" data-layout="about-me" data-section-title="À propos">
+<section
+  class="about-me"
+  data-layout="about-me"
+  data-section-title="À propos"
+  data-background-color="#FFFFFF"
+  style="background-color: #FFFFFF;"
+>
   <span class="about-me__wash" aria-hidden="true"></span>
   {watermark && <span class="about-me__watermark" aria-hidden="true">{watermark}</span>}
 
@@ -64,18 +62,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
       </h2>
       {role && <p class="about-me__role">{role}</p>}
       <span class="about-me__rule" aria-hidden="true"></span>
-
-      <ul class="about-me__bullets">
-        {bullets.map((b, i) => (
-          <li class="about-me__bullet" style={`--i: ${i}`}>
-            <span class="about-me__bullet-num">{String(i + 1).padStart(2, '0')}</span>
-            <div class="about-me__bullet-body">
-              <span class="about-me__bullet-label">{b.label}</span>
-              <span class="about-me__bullet-text">{b.text}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
 
     <div class="about-me__portrait" aria-hidden={!photoAlt}>
@@ -100,7 +86,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
     justify-content: center !important;
   }
 
-  /* Wash gold radial bottom-left, calque sur la slide Section */
   .about-me__wash {
     position: absolute;
     inset: 0;
@@ -109,17 +94,15 @@ const lastNameParts = splitHighlight(lastName, highlight);
     z-index: 0;
   }
 
-  /* Watermark monumental gold a droite (initiales par ex.), avec mask */
   .about-me__watermark {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding-right: 0;
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 900;
-    font-size: 720px;
+    font-size: 880px;
     line-height: 0.78;
     letter-spacing: -0.07em;
     color: #FFD838;
@@ -132,12 +115,11 @@ const lastNameParts = splitHighlight(lastName, highlight);
     animation: about-watermark 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
   }
 
-  /* Layout split */
   .about-me__layout {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: 1.45fr 1fr;
+    grid-template-columns: 1.35fr 1fr;
     gap: 96px;
     align-items: center;
     max-width: 1700px;
@@ -145,7 +127,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
     margin: 0 auto;
   }
 
-  /* Colonne textuelle gauche */
   .about-me__text {
     animation: about-stagger 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -153,13 +134,13 @@ const lastNameParts = splitHighlight(lastName, highlight);
   .about-me__eyebrow {
     display: inline-block;
     font-family: 'Space Grotesk', monospace;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.32em;
     color: #191919;
-    margin: 0 0 28px;
-    padding: 8px 16px;
+    margin: 0 0 36px;
+    padding: 10px 20px;
     background: #FFD838;
     border: 2px solid #191919;
     border-radius: 4px;
@@ -168,11 +149,11 @@ const lastNameParts = splitHighlight(lastName, highlight);
   .about-me__name {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 900;
-    font-size: clamp(140px, 15vw, 260px);
+    font-size: clamp(160px, 16vw, 280px);
     line-height: 0.85;
     letter-spacing: -0.045em;
     color: #191919;
-    margin: 0 0 24px;
+    margin: 0 0 32px;
     text-align: left;
     text-wrap: balance;
     display: flex;
@@ -186,7 +167,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
     color: #191919;
   }
 
-  /* Marqueur signature : bande noire rotative (calque sur Cover/Section) */
   .about-me__mark {
     position: relative;
     display: inline-block;
@@ -197,8 +177,8 @@ const lastNameParts = splitHighlight(lastName, highlight);
     position: absolute;
     left: -8px;
     right: -8px;
-    bottom: 4px;
-    height: 14px;
+    bottom: 6px;
+    height: 16px;
     background: #191919;
     z-index: -1;
     transform: rotate(-1.5deg);
@@ -206,7 +186,7 @@ const lastNameParts = splitHighlight(lastName, highlight);
 
   .about-me__role {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 500;
     line-height: 1.3;
     color: #6B6F84;
@@ -219,63 +199,8 @@ const lastNameParts = splitHighlight(lastName, highlight);
     width: 96px;
     height: 6px;
     background: #FFD838;
-    margin: 0 0 36px;
   }
 
-  /* Bullets : 2x2 grid, numero monumental + label/text */
-  .about-me__bullets {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px 32px;
-  }
-
-  .about-me__bullet {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 16px;
-    align-items: baseline;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.10);
-    animation: about-stagger 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(0.15s + var(--i, 0) * 0.08s) both;
-  }
-
-  .about-me__bullet-num {
-    font-family: 'Space Grotesk', monospace;
-    font-weight: 700;
-    font-size: 56px;
-    line-height: 1;
-    color: #FFD838;
-    -webkit-text-stroke: 2px #191919;
-    letter-spacing: -0.02em;
-  }
-
-  .about-me__bullet-body {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .about-me__bullet-label {
-    font-family: 'Space Grotesk', monospace;
-    font-size: 20px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: #191919;
-  }
-
-  .about-me__bullet-text {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 1.35;
-    color: #6B6F84;
-  }
-
-  /* Polaroid grand format, leger angle, ombre, duotone sepia/gold */
   .about-me__portrait {
     position: relative;
     display: flex;
@@ -284,22 +209,21 @@ const lastNameParts = splitHighlight(lastName, highlight);
   }
 
   .about-me__polaroid {
-    width: 560px;
+    width: 620px;
     aspect-ratio: 4 / 5;
     background: #191919;
-    padding: 18px 18px 88px;
+    padding: 20px 20px 96px;
     transform: rotate(3deg);
     box-shadow: 0 32px 60px -16px rgba(25, 25, 25, 0.45);
     position: relative;
     animation: about-pop 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
   }
   .about-me__polaroid::after {
-    /* Trace gold subtile en bas de la polaroid (signature) */
     content: '';
     position: absolute;
-    left: 26px;
-    bottom: 36px;
-    width: 72px;
+    left: 28px;
+    bottom: 40px;
+    width: 80px;
     height: 4px;
     background: #FFD838;
   }

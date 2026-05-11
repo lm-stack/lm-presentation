@@ -33,7 +33,13 @@ function splitHighlight(text: string, mot?: string) {
 
 const titleParts = splitHighlight(title, highlight);
 ---
-<section class="cover" data-layout="cover" data-section-title={tocLabel}>
+<section
+  class="cover"
+  data-layout="cover"
+  data-section-title={tocLabel}
+  data-background-color="#FFD838"
+  style="background-color: #FFD838;"
+>
   <div class="cover__noise" aria-hidden="true"></div>
   {watermark && <span class="cover__watermark" aria-hidden="true">{watermark}</span>}
 

@@ -227,8 +227,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       // Toggle classe body lors d'un changement d'etat fullscreen.
       // Doublon defensif a la regle CSS html:has(:fullscreen) — masquage du chrome garanti
       // sur tous les navigateurs et indépendamment du support de :has().
+      // Sur entree ET sortie fullscreen on appelle deck.layout() apres un rAF pour que
+      // Reveal recalcule le scaling du slide en fonction de la nouvelle taille de viewport.
+      // Sans ca, le slide reste a son ancien scaling et apparait croppe au retour fenetre.
       document.addEventListener('fullscreenchange', () => {
-        document.body.classList.toggle('is-fullscreen', !!document.fullscreenElement);
+        const inFs = !!document.fullscreenElement;
+        document.body.classList.toggle('is-fullscreen', inFs);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            try { (window as any).Reveal?.layout?.(); } catch {}
+          });
+        });
       });
 
       // Table des matières : auto-construite depuis toute slide marquee data-section-title.

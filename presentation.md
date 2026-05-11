@@ -62,13 +62,36 @@ Tout composant slide doit :
 2. Avoir `width: 100%; height: 100%; overflow: hidden`
 3. Pouvoir être imprimé sans interaction JS (timers, iframe Spotify, etc. sont gated sur `Astro.url.pathname.includes('/handout/')`)
 
+### Fond seamless en mode présentation Reveal
+
+En mode présentation, Reveal pose le slide dans un wrapper 16:9 et laisse des **bandes autour** (haut/bas ou côtés selon le ratio de l'écran). Pour que ces bandes deviennent invisibles, le `body` est colorisé via JS (`Deck.astro`, `updateBodyBg`) avec la couleur de fond du slide courant (`getComputedStyle(slide).backgroundColor`).
+
+**Chaque composant slide doit donc :**
+- Déclarer son `background` dans son CSS scoppé (`.cover { background: #FFD838 }`, etc.)
+- **ET** poser le double redondance Reveal-friendly directement sur la `<section>` :
+  ```astro
+  <section
+    class="..."
+    data-layout="..."
+    data-background-color="#FFD838"
+    style="background-color: #FFD838;"
+  >
+  ```
+- Si le bg dépend d'une variante, dériver `data-background-color` du prop : `data-background-color={variant === 'qa' ? '#FFD838' : '#191919'}`.
+
+Pourquoi double : le `data-background-color` est lu par Reveal pour le canvas externe, le `style` inline garantit que `getComputedStyle` retourne la bonne valeur dès le premier render (sinon le JS lit `rgba(0,0,0,0)` et fallback sur blanc, créant une bande blanche autour d'une slide colorée).
+
+### Reveal layout + fullscreen
+`Deck.astro` appelle `Reveal.layout()` (via 2 `requestAnimationFrame`) sur chaque `fullscreenchange`. Sans ça, à la sortie de plein écran le scaling Reveal reste figé sur l'ancien viewport et la slide apparaît croppée. Ne pas retirer ce hook.
+
 ## Composants slide existants
 
 | Composant | Usage | Props principaux |
 |-----------|-------|------------------|
 | `Cover` | Page de garde gold pleine | title, subtitle, eyebrow, image (polaroid), highlight, watermark |
 | `Section` | Transition de section, fond blanc, watermark numérique gold latéral | number, title, subtitle, highlight, eyebrow |
-| `AboutMe` | Slide intervenant, photo polaroid + 4 bullets numérotés | firstName, lastName, highlight, role, photo, watermark, bullets[] |
+| `AboutMe` | Slide intervenant intro : nom monumental + role + photo polaroid grand format. Vient juste avant `AboutMeBullets`. | firstName, lastName, highlight, role, photo, watermark, eyebrow |
+| `AboutMeBullets` | Suite de `AboutMe` : eyebrow + nom rappelé + 4 bullets numérotés en grid 2x2. Pas de photo (allège la composition). | firstName, lastName, highlight, watermark, eyebrow, bullets[] |
 | `ImageGrid` | Grille 2 / 3 / 4 / 5 cards image + titre + texte | title, subtitle, highlight, images[] |
 | `TableSlide` | Tableau structuré (calendrier, comparatif tarifaire, etc.) | title, subtitle, columns[], rows[] |
 | `Calendar` | Variant de `TableSlide` pour les calendriers jour | day, sessions[] |

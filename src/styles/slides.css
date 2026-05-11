@@ -383,16 +383,11 @@ body.is-fullscreen .deck-footer {
   margin-right: 24px;
 }
 
-/* Le span "Lausanne Marketing" a une bande jaune sous le texte,
-   facon marqueur — pas un text-decoration: underline classique.
-   Override la utility Tailwind `.underline` au cas ou. */
+/* Le span "Lausanne Marketing" a une bande jaune rotative en pseudo-element via */
+/* `.underline::after` (defini dans global.css). On ne re-applique PAS un second */
+/* background-image plat ici, sinon doublon visuel (deux bandes superposees). */
 .deck-menu__eyebrow .underline {
   text-decoration: none;
-  background-image: linear-gradient(#FFD838, #FFD838);
-  background-repeat: no-repeat;
-  background-position: 0 92%;
-  background-size: 100% 6px;
-  padding: 0 2px;
 }
 
 /* Lien retour au parcours dans le menu (active par JS si ?from=<slug>) :

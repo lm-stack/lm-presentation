@@ -26,7 +26,13 @@ function splitHighlight(text: string, mot?: string) {
 
 const titleParts = splitHighlight(title, highlight);
 ---
-<section class="slide-section" data-layout="section" data-section-title={title}>
+<section
+  class="slide-section"
+  data-layout="section"
+  data-section-title={title}
+  data-background-color="#FFFFFF"
+  style="background-color: #FFFFFF;"
+>
   <span class="slide-section__wash" aria-hidden="true"></span>
   {number && <span class="slide-section__watermark" aria-hidden="true">{number}</span>}
 
