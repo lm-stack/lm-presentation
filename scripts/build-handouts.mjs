@@ -96,7 +96,13 @@ async function main() {
   const executablePath =
     process.env.PUPPETEER_EXECUTABLE_PATH ||
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-  const browser = await puppeteer.launch({ executablePath, headless: 'new' });
+  // --no-sandbox necessaire sur les runners GitHub Actions (Linux) : le ZygoteHost
+  // de Chrome crash sans acces /proc/cpufreq. Sur Windows en local c'est inoffensif.
+  const browser = await puppeteer.launch({
+    executablePath,
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   try {
     for (const slug of targets) {
       console.log(`- ${slug}`);
