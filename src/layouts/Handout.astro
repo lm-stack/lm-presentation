@@ -110,8 +110,12 @@ const pageSize = mode === '1' ? '297mm 167mm' : '210mm 297mm';
         slot.className = 'handout-slide';
         const inner = document.createElement('div');
         inner.className = 'handout-slide__inner';
-        inner.style.transform = `scale(${scale})`;
-        // Move la section originale dans le slot pour préserver les styles Reveal.
+        // BUG observe : transform:scale + page-break-after:always sur plusieurs pages
+        // empilees casse la pagination dans page.pdf() de Chrome (le contenu transforme
+        // ne remplit que ~62% de la page au lieu du 100% attendu). CSS `zoom` evite ce
+        // bug parce qu'il scale aussi la layout box, pas seulement le rendu visuel.
+        inner.style.zoom = scale;
+        // Move la section originale dans le slot pour preserver les styles Reveal.
         inner.appendChild(section);
         slot.appendChild(inner);
         return slot;

@@ -95,9 +95,10 @@ body {
   height: 64mm;
 }
 
-/* La slide Reveal d'origine est dimensionnée 1920 x 1080. On la scale */
-/* pour qu'elle tienne dans le slot du handout. Le scale est calculé en JS */
-/* après le mount (largeur du slot / 1920). */
+/* La slide Reveal d'origine est dimensionnée 1920 x 1080. On la scale via */
+/* CSS `zoom` (pas `transform: scale`) parce que transform:scale + */
+/* page-break-after:always casse la pagination du PDF Chrome (le contenu */
+/* ne remplit que ~60% de la page). `zoom` scale aussi la layout box. */
 .handout-slide__inner {
   position: absolute;
   top: 0;
@@ -105,7 +106,6 @@ body {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
-  transform-origin: top left;
 }
 
 /* ============================================================ */
