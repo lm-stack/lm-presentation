@@ -530,6 +530,12 @@ body.is-fullscreen .deck-footer {
   max-width: 720px;
   width: calc(100vw - 32px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  /* Centrage explicite : certains contextes (Reveal initialise, fullscreen,
+     transforms ancestraux) cassent le margin:auto auto du UA dialog:modal. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  max-height: calc(100vh - 32px);
 }
 .pdf-modal::backdrop {
   background: rgba(0, 0, 0, 0.4);

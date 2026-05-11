@@ -13,14 +13,20 @@ interface Props {
 
 const { title, mode } = Astro.props;
 const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
+// Taille de page par mode (utilisee par @page CSS).
+// Le worker lm-pdf passe preferCSSPageSize:true donc Puppeteer respecte size.
+// Sans cette regle, certaines builds Cloudflare Browser Rendering ignorent
+// page.pdf({ landscape:true }) et impriment en portrait par defaut.
+const pageSize = mode === '1' ? '297mm 210mm' : '210mm 297mm';
 ---
 <!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} : handout {mode}up : Lausanne Marketing</title>
+    <title>{`${title} : handout ${mode}up : Lausanne Marketing`}</title>
     <meta name="robots" content="noindex" />
+    <style set:html={`@page { size: ${pageSize}; margin: 0; }`}></style>
   </head>
   <body>
     <main
@@ -43,6 +49,17 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
       if (!source || !target) {
         // garde-fou : ne rien faire
       } else {
+        // Mode handout = impression. Toutes les images sont au-dessus du fold
+        // car la page est paginee en A4 statiques (pas scroll). Le `lazy` natif
+        // serait satisfait par networkidle0 sur la slide 1 mais pas sur les
+        // slides hors viewport au moment du goto() de Puppeteer : les images
+        // lazy restent non chargees et le fond noir #191919 du media remonte.
+        // On force eager avant la pagination pour que toutes les images soient
+        // demarrees au document.load et que networkidle0 attende leur reseau.
+        source.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+          img.loading = 'eager';
+        });
+
         const sections = Array.from(source.querySelectorAll(':scope > section'));
         // Largeur d'un slot : dépend du mode.
         // Mode 1up : landscape A4 277mm utile (10mm padding each side) = ~1047px @ 96dpi.
