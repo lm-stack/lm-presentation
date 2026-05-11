@@ -64,6 +64,9 @@
 
 <script>
   const LM_PDF_URL = import.meta.env.PUBLIC_LM_PDF_URL || 'https://lm-pdf.hello-cb2.workers.dev';
+  // Bucket R2 ou les PDFs sont pre-buildes a chaque push (workflow build-handouts.yml).
+  // Si le PDF y est present, telechargement instantane. Sinon fallback sur le worker.
+  const LM_HANDOUTS_URL = import.meta.env.PUBLIC_LM_HANDOUTS_URL || 'https://pdf.lausanne.marketing';
 
   const modal = document.getElementById('pdf-modal') as HTMLDialogElement | null;
   const closeBtn = document.getElementById('pdf-modal-close') as HTMLButtonElement | null;
@@ -95,6 +98,12 @@
     if (mode === '1') return `${slug}-1up`;
     if (mode === '2') return `${slug}-2up`;
     return `${slug}-3up-notes`;
+  }
+
+  function buildR2Url(mode: '1' | '2' | '3'): string {
+    // Cle dans le bucket : <slug>-<mode>up.pdf (voir scripts/build-handouts.mjs).
+    const slug = getSlugFromPath();
+    return `${LM_HANDOUTS_URL}/${slug}-${mode}up.pdf`;
   }
 
   function setLoading(card: HTMLButtonElement, loading: boolean) {
@@ -129,15 +138,29 @@
     throw lastError;
   }
 
+  async function fetchPdf(mode: '1' | '2' | '3', filename: string): Promise<Response> {
+    // 1) Tentative directe sur R2 : PDFs pre-buildes a chaque push.
+    //    Telechargement quasi-instantane si present (CDN), pas de Browser Rendering.
+    try {
+      const r2 = await fetch(buildR2Url(mode));
+      if (r2.ok) return r2;
+    } catch {
+      // CORS, reseau, etc. : on tombe sur le fallback.
+    }
+
+    // 2) Fallback : generation a la volee via lm-pdf worker (retry inclus).
+    const { url: targetUrl, orientation } = buildTargetUrl(mode);
+    const workerUrl = `${LM_PDF_URL}/api/pdf?url=${encodeURIComponent(targetUrl)}&format=A4&orientation=${orientation}&filename=${encodeURIComponent(filename)}`;
+    return fetchPdfWithRetry(workerUrl);
+  }
+
   async function handleCardClick(card: HTMLButtonElement) {
     const mode = card.dataset.mode as '1' | '2' | '3' | undefined;
     if (!mode) return;
     setLoading(card, true);
     try {
-      const { url: targetUrl, orientation } = buildTargetUrl(mode);
       const filename = buildFilename(mode);
-      const pdfUrl = `${LM_PDF_URL}/api/pdf?url=${encodeURIComponent(targetUrl)}&format=A4&orientation=${orientation}&filename=${encodeURIComponent(filename)}`;
-      const response = await fetchPdfWithRetry(pdfUrl);
+      const response = await fetchPdf(mode, filename);
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');

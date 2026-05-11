@@ -8,7 +8,8 @@
     "dev": "astro dev",
     "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "build:handouts": "node scripts/build-handouts.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
@@ -22,6 +23,7 @@
     "@tailwindcss/vite": "4.2.1",
     "@types/reveal.js": "^5.0.0",
     "pagefind": "^1.4.0",
+    "puppeteer-core": "^23.0.0",
     "tailwindcss": "4.2.1"
   }
 }

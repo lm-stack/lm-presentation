@@ -1,0 +1,128 @@
+name: Build & upload handouts
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "Slugs separes par virgules (vide = tous)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+env:
+  R2_BUCKET: lm-handouts
+  PREVIEW_URL: http://localhost:4321
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # On a besoin de l'historique pour faire git diff HEAD~1
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Detect changed handouts
+        id: detect
+        run: |
+          set -euo pipefail
+
+          # Manual dispatch : utiliser l'input
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            INPUT="${{ github.event.inputs.slugs }}"
+            if [ -z "$INPUT" ]; then
+              echo "args=--all" >> "$GITHUB_OUTPUT"
+            else
+              echo "args=--slugs $INPUT" >> "$GITHUB_OUTPUT"
+            fi
+            exit 0
+          fi
+
+          # Push : detecter via git diff
+          BEFORE="${{ github.event.before }}"
+          # Premier commit ou force-push : pas d'historique fiable, build tout
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "args=--all" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" || true)
+          echo "Fichiers modifies :"
+          echo "$CHANGED"
+
+          # Globals = fichier dont la modif force un rebuild de TOUS les handouts.
+          # On reste large : layouts, composants slides, modules, styles communs, package.json, le script lui-meme.
+          GLOBAL_RE='^(src/layouts/|src/components/slides/|src/components/modules/|src/components/SlideTitle\.astro|src/styles/handout\.css|src/styles/slides\.css|src/styles/global\.css|package\.json|package-lock\.json|astro\.config|scripts/build-handouts\.mjs)'
+          if echo "$CHANGED" | grep -E "$GLOBAL_RE" > /dev/null; then
+            echo "Changement global detecte -> rebuild all"
+            echo "args=--all" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Sinon, lister les slugs des .mdx modifies
+          SLUGS=$(echo "$CHANGED" | grep -E '^src/content/presentations/.+\.mdx$' | sed 's|^src/content/presentations/||; s|\.mdx$||' | paste -sd, -)
+          if [ -z "$SLUGS" ]; then
+            echo "Aucun handout a rebuilder."
+            echo "args=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Slugs detectes : $SLUGS"
+            echo "args=--slugs $SLUGS" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Chrome
+        if: steps.detect.outputs.args != ''
+        uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
+
+      - name: Build Astro
+        if: steps.detect.outputs.args != ''
+        run: npm run build
+
+      - name: Start preview server
+        if: steps.detect.outputs.args != ''
+        run: |
+          npm run preview > preview.log 2>&1 &
+          echo "Preview PID: $!"
+
+      - name: Generate PDFs
+        if: steps.detect.outputs.args != ''
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          PREVIEW_URL: ${{ env.PREVIEW_URL }}
+        run: npm run build:handouts -- ${{ steps.detect.outputs.args }}
+
+      - name: List generated PDFs
+        if: steps.detect.outputs.args != ''
+        run: ls -lh dist/handouts/
+
+      - name: Upload to R2
+        if: steps.detect.outputs.args != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # `wrangler r2 object put` ne supporte pas la wildcard, on boucle.
+          # Cache 1h CDN + 5min navigateur : utilisateur recoit la version recente
+          # vite (max 5min lag) tout en deduisant la charge sur R2.
+          command: |
+            for f in dist/handouts/*.pdf; do
+              key=$(basename "$f")
+              echo "Upload $key"
+              wrangler r2 object put "${{ env.R2_BUCKET }}/$key" \
+                --file "$f" \
+                --content-type "application/pdf" \
+                --cache-control "public, max-age=300, s-maxage=3600" \
+                --remote
+            done
