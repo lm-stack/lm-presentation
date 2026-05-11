@@ -34,6 +34,7 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: grid;
   gap: 10mm;
+  overflow: hidden;
   page-break-after: always;
   break-after: page;
 }
@@ -42,12 +43,15 @@ body {
   break-after: auto;
 }
 
-/* Mode 1up : 1 slide par page A4 landscape (297 × 210mm) */
+/* Mode 1up : 1 slide par page A4 landscape (297 × 210mm). */
+/* A4 paysage (1.414:1) est plus carré que 16:9 (1.778:1), donc on scale par la largeur */
+/* et on centre verticalement, sinon ~34mm de blanc en bas. */
 .handout-page--1up {
   width: 297mm;
   height: 210mm;
   grid-template-rows: 1fr;
-  align-items: stretch;
+  align-items: center;
+  justify-items: center;
 }
 
 /* Mode 2up : 2 lignes égales, slides centrées verticalement */
@@ -99,6 +103,7 @@ body {
   left: 0;
   width: 1920px;
   height: 1080px;
+  overflow: hidden;
   transform-origin: top left;
 }
 

@@ -54,8 +54,6 @@
       </button>
     </div>
 
-    <p class="pdf-modal__error" id="pdf-modal-error" hidden role="alert"></p>
-
     <button type="button" class="pdf-modal__close" id="pdf-modal-close" aria-label="Fermer">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
         <path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/>
@@ -69,8 +67,13 @@
 
   const modal = document.getElementById('pdf-modal') as HTMLDialogElement | null;
   const closeBtn = document.getElementById('pdf-modal-close') as HTMLButtonElement | null;
-  const errorEl = document.getElementById('pdf-modal-error') as HTMLParagraphElement | null;
   const cards = modal ? Array.from(modal.querySelectorAll<HTMLButtonElement>('.pdf-modal__card')) : [];
+
+  // Cloudflare Browser Rendering rate-limit les sessions concurrentes, donc trois
+  // exports lances en parallele peuvent retourner une erreur transitoire 5xx.
+  // On retry en silence avec backoff exponentiel + jitter avant d'abandonner.
+  const RETRY_ATTEMPTS = 3;
+  const RETRY_BASE_MS = 1500;
 
   function getSlugFromPath(): string {
     // `/p/<slug>/` -> `<slug>`. Fallback : last non-empty segment.
@@ -95,38 +98,46 @@
   }
 
   function setLoading(card: HTMLButtonElement, loading: boolean) {
+    // On desactive seulement la card cliquee, pas les autres : l'utilisateur peut
+    // ainsi lancer les trois exports en parallele sans attendre.
     if (loading) {
       card.classList.add('pdf-modal__card--loading');
-      cards.forEach((c) => { c.disabled = true; });
+      card.disabled = true;
     } else {
       card.classList.remove('pdf-modal__card--loading');
-      cards.forEach((c) => { c.disabled = false; });
+      card.disabled = false;
     }
   }
 
-  function showError(msg: string) {
-    if (!errorEl) return;
-    errorEl.textContent = msg;
-    errorEl.hidden = false;
-  }
-
-  function clearError() {
-    if (!errorEl) return;
-    errorEl.textContent = '';
-    errorEl.hidden = true;
+  async function fetchPdfWithRetry(url: string): Promise<Response> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt < RETRY_ATTEMPTS; attempt++) {
+      try {
+        const response = await fetch(url);
+        if (response.ok) return response;
+        // 4xx : erreur cliente, inutile de retenter (URL invalide, etc.).
+        if (response.status < 500) throw new Error(`HTTP ${response.status}`);
+        lastError = new Error(`HTTP ${response.status}`);
+      } catch (err) {
+        lastError = err;
+      }
+      if (attempt < RETRY_ATTEMPTS - 1) {
+        const delay = RETRY_BASE_MS * Math.pow(2, attempt) + Math.random() * 500;
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+    throw lastError;
   }
 
   async function handleCardClick(card: HTMLButtonElement) {
     const mode = card.dataset.mode as '1' | '2' | '3' | undefined;
     if (!mode) return;
-    clearError();
     setLoading(card, true);
     try {
       const { url: targetUrl, orientation } = buildTargetUrl(mode);
       const filename = buildFilename(mode);
       const pdfUrl = `${LM_PDF_URL}/api/pdf?url=${encodeURIComponent(targetUrl)}&format=A4&orientation=${orientation}&filename=${encodeURIComponent(filename)}`;
-      const response = await fetch(pdfUrl);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const response = await fetchPdfWithRetry(pdfUrl);
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -136,10 +147,10 @@
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-      modal?.close();
+      // On NE ferme PAS la modale : permet de lancer un autre layout dans la foulee.
     } catch (err) {
-      console.error('PDF generation failed', err);
-      showError('La génération du PDF a échoué. Réessaie dans un instant.');
+      console.error('PDF generation failed after retries', err);
+      // Volontairement pas d'UI d'erreur : l'utilisateur peut simplement recliquer.
     } finally {
       setLoading(card, false);
     }
@@ -150,7 +161,6 @@
 
   // Expose une fonction pour ouvrir la modale depuis Deck.astro.
   (window as any).openPdfModal = () => {
-    clearError();
     modal?.showModal();
     // Focus sur la premiere card apres ouverture (frame suivante).
     requestAnimationFrame(() => cards[0]?.focus());
