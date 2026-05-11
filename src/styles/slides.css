@@ -158,26 +158,30 @@ body.is-fullscreen .deck-footer {
   justify-content: flex-start;
 }
 
-.reveal h1, .reveal h2 {
+/* :where(.reveal, .handout-doc) : 0-specificity wildcard pour que la meme regle */
+/* s'applique en mode presentation (Deck/Reveal) ET en mode handout (PDF), sans  */
+/* augmenter la specificite. Sinon le subtitle ressort en 16px et le divider     */
+/* jaune disparait completement en handout.                                       */
+:where(.reveal, .handout-doc) h1, :where(.reveal, .handout-doc) h2 {
   font-weight: 700;
   color: #191919;
   margin: 0;
   text-align: center;
 }
 
-.reveal h2 {
+:where(.reveal, .handout-doc) h2 {
   font-size: 56px;
   margin-bottom: 8px;
 }
 
-.reveal h2 + .slide-subtitle {
+:where(.reveal, .handout-doc) h2 + .slide-subtitle {
   font-size: 24px;
   color: #6B6F84;
   text-align: center;
   margin-bottom: 8px;
 }
 
-.reveal .slide-divider {
+:where(.reveal, .handout-doc) .slide-divider {
   display: block;
   width: 80px;
   height: 3px;

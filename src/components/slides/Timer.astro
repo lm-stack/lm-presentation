@@ -24,6 +24,10 @@ const {
 
 const totalSeconds = Math.max(1, Math.round(minutes * 60));
 
+// Pas de Spotify en mode handout (PDF) : le widget n'a aucun sens imprime
+// et l'iframe vide tronquee polluerait la slide.
+const isHandout = Astro.url.pathname.includes('/handout/');
+
 // Parse URL Spotify : https://open.spotify.com/{type}/{id}?si=...
 const VALID_SPOTIFY_TYPES = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
 function parseSpotifyUrl(raw?: string): { type: string; id: string } | null {
@@ -63,7 +67,7 @@ const titleParts = splitHighlight(title, highlight);
   data-section-title={title}
   data-total-seconds={totalSeconds}
   data-auto-start={autoStart ? 'true' : 'false'}
-  data-has-spotify={spotifyEmbed ? 'true' : 'false'}
+  data-has-spotify={(spotifyEmbed && !isHandout) ? 'true' : 'false'}
   data-background-color="#FFD838"
   style="background-color: #FFD838;"
 >
@@ -96,7 +100,7 @@ const titleParts = splitHighlight(title, highlight);
 
   </div>
 
-  {spotifyEmbed && (
+  {spotifyEmbed && !isHandout && (
     <div class="timer-slide__spotify" aria-label="Lecteur audio">
       <iframe
         src={spotifyEmbed}

@@ -78,12 +78,15 @@ const titleParts = splitHighlight(title, highlight);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Watermark monumental en arriere-plan */
+  /* Watermark monumental en arriere-plan. */
+  /* Centrage par flex sur un overlay 100x100% : translate(-50%, -50%) se comporte */
+  /* mal avec zoom() sur ancetre en mode handout (LM rendu en bas au lieu du centre). */
   .cover__watermark {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 900;
     font-size: 1100px;

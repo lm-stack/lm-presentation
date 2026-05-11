@@ -4,6 +4,9 @@
 // les groupe par paquets de 2 ou 3, et les arrange en pages A4 portrait
 // imprimables. Le scale des slides Reveal (1920x1080) vers le slot
 // est calculé en JS après le mount.
+// slides.css fournit les styles communs aux composants (.slide-subtitle,
+// .slide-divider, etc.) scopes sur :where(.reveal, .handout-doc).
+import '@/styles/slides.css';
 import '@/styles/handout.css';
 
 interface Props {
