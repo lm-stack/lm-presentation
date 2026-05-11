@@ -11,6 +11,7 @@ description: "Deck modèle qui montre les layouts validés (Cover, Section, Imag
 import Cover from '@/components/slides/Cover.astro';
 import Section from '@/components/slides/Section.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
+import AboutMe from '@/components/slides/AboutMe.astro';
 import Timer from '@/components/slides/Timer.astro';
 import Closing from '@/components/slides/Closing.astro';
 
@@ -126,6 +127,35 @@ import Closing from '@/components/slides/Closing.astro';
       title: 'Détail quatre',
       text: 'Molestias excepturi sint occaecati cupiditate non provident.',
     },
+  ]}
+/>
+
+<AboutMe
+  eyebrow="À propos"
+  firstName="Thomas"
+  lastName="Rouaud"
+  highlight="Rouaud"
+  role="Senior consultant en CRM, Data, IA & Automation. Speaker, formateur et bâtisseur de stack."
+  photo="/assets/thomas-rouaud.png"
+  photoAlt="Portrait de Thomas Rouaud"
+  watermark="TR"
+  bullets={[
+    {
+      label: "Executive Education HEC Lausanne",
+      text: "Responsable Marketing & Ventes, intervenant régulier en formation continue."
+    },
+    {
+      label: "Lausanne Marketing",
+      text: "Senior consultant en CRM, Data, IA & Automation pour PME et institutions suisses."
+    },
+    {
+      label: "Fun fact",
+      text: "N°2 du Marketing Digital en Suisse sur LinkedIn."
+    },
+    {
+      label: "Ambassadeur n8n officiel",
+      text: "Partenaire reconnu de la communauté n8n, formateur et relais en Suisse romande."
+    }
   ]}
 />
 
