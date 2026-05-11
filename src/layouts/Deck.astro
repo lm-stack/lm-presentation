@@ -161,6 +161,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         };
         deck.on('slidechanged', updateBodyBg);
         updateBodyBg();
+
+        // Reveal.layout sur entree ET sortie fullscreen : sinon le scaling reste
+        // fige sur l'ancien viewport et la slide est croppee au retour fenetre.
+        // On rappelle layout plusieurs fois pour couvrir tous les moments de
+        // stabilisation du viewport (transition fullscreen browser peut prendre 100-500ms
+        // selon le navigateur, et resize event peut fire avant que la geometrie soit prete).
+        const relayout = () => {
+          try { deck.layout(); } catch {}
+          updateBodyBg();
+        };
+        document.addEventListener('fullscreenchange', () => {
+          requestAnimationFrame(() => requestAnimationFrame(relayout));
+          setTimeout(relayout, 100);
+          setTimeout(relayout, 300);
+          setTimeout(relayout, 600);
+        });
+        // Hook resize aussi : double securite, certains browsers fire seulement resize
+        // sans fullscreenchange pour les exits par ESC.
+        window.addEventListener('resize', () => {
+          requestAnimationFrame(relayout);
+        });
       });
 
       // Menu (infos cours) : pastille en haut-gauche, fermé par défaut, click pour basculer
@@ -224,20 +245,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         }
       });
 
-      // Toggle classe body lors d'un changement d'etat fullscreen.
-      // Doublon defensif a la regle CSS html:has(:fullscreen) — masquage du chrome garanti
-      // sur tous les navigateurs et indépendamment du support de :has().
-      // Sur entree ET sortie fullscreen on appelle deck.layout() apres un rAF pour que
-      // Reveal recalcule le scaling du slide en fonction de la nouvelle taille de viewport.
-      // Sans ca, le slide reste a son ancien scaling et apparait croppe au retour fenetre.
+      // Toggle classe body lors d'un changement d'etat fullscreen. Doublon defensif
+      // a html:has(:fullscreen) pour garantir le masquage du chrome cross-browser.
+      // (Le rappel deck.layout() vit dans le .then() ci-dessus pour avoir acces a deck.)
       document.addEventListener('fullscreenchange', () => {
-        const inFs = !!document.fullscreenElement;
-        document.body.classList.toggle('is-fullscreen', inFs);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            try { (window as any).Reveal?.layout?.(); } catch {}
-          });
-        });
+        document.body.classList.toggle('is-fullscreen', !!document.fullscreenElement);
       });
 
       // Table des matières : auto-construite depuis toute slide marquee data-section-title.
