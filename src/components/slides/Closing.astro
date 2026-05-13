@@ -245,4 +245,23 @@ const titleParts = splitHighlight(title, highlight);
     }
   }
 
+  /* Variant Q&R : fond gold ; les accents gold internes (eyebrow, rule, mark
+     highlight, lien underline) deviennent noirs pour rester visibles. */
+  .closing[data-layout="closing-qa"] {
+    background: #FFD838;
+  }
+  .closing[data-layout="closing-qa"] .closing__eyebrow {
+    background: #191919;
+    color: #FFD838;
+    border-color: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__mark::after {
+    background: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__rule {
+    background: #191919;
+  }
+  .closing[data-layout="closing-qa"] .closing__contact a {
+    border-bottom-color: #191919;
+  }
 </style>
