@@ -123,6 +123,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         width: 1920,
         height: 1080,
         margin: 0,
+        // Reveal v5 active automatiquement un "scroll view" quand innerWidth < 435px,
+        // ce qui casse notre layout 16:9 confine dans .deck-stage (le slide est rendu
+        // a sa hauteur logique 1080px et deborde du container overflow:hidden, d'ou
+        // l'absence de contenu visible sur mobile + nav clavier/click qui scroll
+        // au lieu de changer de slide). On force le mode paginated.
+        scrollActivationWidth: null,
       });
 
       deck.initialize().then(() => {

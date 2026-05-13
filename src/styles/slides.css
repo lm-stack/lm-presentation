@@ -267,17 +267,18 @@ body.is-fullscreen .deck-footer {
   padding: 0;
 }
 
-.deck-nav-btn:hover {
-  background: #FFD838;
+/* @media (hover: hover) : sur tactile, :hover reste "colle" apres tap (sticky hover). */
+/* On limite l'effet hover aux pointeurs reels (souris/trackpad) pour eviter qu'un bouton */
+/* tape reste affiche en jaune apres relachement. */
+@media (hover: hover) {
+  .deck-nav-btn:hover {
+    background: #FFD838;
+  }
 }
 
 .deck-nav-btn:disabled {
   cursor: not-allowed;
   opacity: 0.4;
-  background: #FFFFFF;
-}
-
-.deck-nav-btn:disabled:hover {
   background: #FFFFFF;
 }
 
@@ -308,8 +309,10 @@ body.is-fullscreen .deck-footer {
   text-decoration: none;
 }
 
-.deck-icon-btn:hover {
-  background: #FFD838;
+@media (hover: hover) {
+  .deck-icon-btn:hover {
+    background: #FFD838;
+  }
 }
 
 /* Menu (infos cours) — pastille en haut-gauche + panel deroulable, calque sur InfoPanel lm-diagrams */
@@ -333,8 +336,10 @@ body.is-fullscreen .deck-footer {
   padding: 0;
 }
 
-.deck-menu-pill:hover {
-  background: #FFD838;
+@media (hover: hover) {
+  .deck-menu-pill:hover {
+    background: #FFD838;
+  }
 }
 
 .deck-menu {
@@ -501,6 +506,80 @@ body.is-fullscreen .deck-footer {
 
 .deck-menu__toc-btn:hover .deck-menu__toc-num {
   color: #191919;
+}
+
+/* ============================================================ */
+/* Mobile : chrome compacte pour libere de l'espace au slide      */
+/* ============================================================ */
+
+@media (max-width: 600px) {
+  /* Reduit la marge verticale reservee au chrome : sur petit ecran le slide */
+  /* 16:9 est de toute facon contraint par la largeur. */
+  :root {
+    --slide-h-margin: 16px;
+    --slide-v-chrome: 120px;
+    --slide-top-offset: -28px;
+  }
+
+  /* Footer : on cache brand+title (manque de place pour wrap proprement). */
+  /* Reste : prev | counter | next, parfaitement alignes sur une ligne.    */
+  .deck-footer {
+    height: 48px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  .deck-footer__center {
+    gap: 8px;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  .deck-footer .deck-brand,
+  .deck-footer .deck-title,
+  .deck-footer .deck-sep {
+    display: none;
+  }
+  .deck-footer .deck-counter {
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  .deck-nav-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  /* Toolbar haut-droite et pastille menu : un poil plus petits */
+  .deck-toolbar {
+    top: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+  .deck-icon-btn,
+  .deck-menu-pill {
+    width: 36px;
+    height: 36px;
+  }
+  .deck-menu-pill {
+    top: 8px;
+    left: 8px;
+  }
+
+  /* Menu (panel TOC) : plein largeur ecran, scroll vertical possible */
+  .deck-menu {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    max-width: none;
+    padding: 20px 20px 16px;
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+  }
+  .deck-menu__title {
+    font-size: 20px;
+  }
 }
 
 /* Mode lecture : reset Reveal, scroll vertical */
