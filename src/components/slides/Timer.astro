@@ -68,8 +68,6 @@ const titleParts = splitHighlight(title, highlight);
   data-total-seconds={totalSeconds}
   data-auto-start={autoStart ? 'true' : 'false'}
   data-has-spotify={(spotifyEmbed && !isHandout) ? 'true' : 'false'}
-  data-background-color="#FFD838"
-  style="background-color: #FFD838;"
 >
   <span class="timer-slide__noise" aria-hidden="true"></span>
 
@@ -226,7 +224,7 @@ const titleParts = splitHighlight(title, highlight);
     height: 100%;
     overflow: hidden;
     padding: 96px 96px !important;
-    background: #FFD838;
+    background: var(--slide-bg, #FAF8F3);
     color: #191919;
     display: flex !important;
     flex-direction: column;

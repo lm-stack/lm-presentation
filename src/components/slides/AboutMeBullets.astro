@@ -45,8 +45,6 @@ const showHeader = Boolean(firstName || lastName);
   class="about-me-bullets"
   data-layout="about-me-bullets"
   data-section-title="À propos"
-  data-background-color="#FFFFFF"
-  style="background-color: #FFFFFF;"
 >
   <span class="about-me-bullets__wash" aria-hidden="true"></span>
   {watermark && <span class="about-me-bullets__watermark" aria-hidden="true">{watermark}</span>}
@@ -92,7 +90,7 @@ const showHeader = Boolean(firstName || lastName);
     height: 100%;
     overflow: hidden;
     padding: 96px 96px !important;
-    background: #FFFFFF;
+    background: var(--slide-bg, #FAF8F3);
     color: #191919;
     display: flex !important;
     flex-direction: column;

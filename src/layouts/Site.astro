@@ -25,6 +25,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="shortcut icon" href="/favicon.png" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
+    <meta name="robots" content="noindex" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={fullTitle} />
     {description && <meta property="og:description" content={description} />}

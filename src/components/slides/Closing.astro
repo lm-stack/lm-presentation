@@ -88,8 +88,8 @@ const titleParts = splitHighlight(title, highlight);
     height: 100%;
     overflow: hidden;
     padding: 96px 96px !important;
-    background: #191919;
-    color: #FFFFFF;
+    background: var(--slide-bg, #FAF8F3);
+    color: #191919;
     display: flex !important;
     flex-direction: column;
     justify-content: center !important;
@@ -97,14 +97,14 @@ const titleParts = splitHighlight(title, highlight);
     text-align: left;
   }
 
-  /* Grain noise overlay subtile sur fond noir */
+  /* Grain noise overlay subtile (multiply pour fond clair) */
   .closing__noise {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.12;
-    mix-blend-mode: screen;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   /* Watermark monumental (glyph "?", "@", "·") gold a droite, fade vers le bord */
@@ -118,7 +118,8 @@ const titleParts = splitHighlight(title, highlight);
     font-size: clamp(560px, 70vw, 1100px);
     line-height: 0.78;
     letter-spacing: -0.06em;
-    color: #FFD838;
+    color: #191919;
+    opacity: 0.08;
     user-select: none;
     pointer-events: none;
     white-space: nowrap;
@@ -156,7 +157,7 @@ const titleParts = splitHighlight(title, highlight);
     font-size: clamp(96px, 11vw, 200px);
     line-height: 0.9;
     letter-spacing: -0.04em;
-    color: #FFFFFF;
+    color: #191919;
     margin: 0 0 28px;
     text-align: left;
     text-wrap: balance;
@@ -185,7 +186,7 @@ const titleParts = splitHighlight(title, highlight);
     font-size: 28px;
     font-weight: 500;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(25, 25, 25, 0.72);
     margin: 0;
     max-width: 1100px;
   }
@@ -202,13 +203,13 @@ const titleParts = splitHighlight(title, highlight);
     font-size: 24px;
   }
   .closing__contact a {
-    color: #FFD838;
+    color: #191919;
     text-decoration: none;
-    border-bottom: 1px solid rgba(255, 216, 56, 0.35);
+    border-bottom: 1px solid #FFD838;
     transition: border-color 0.15s ease;
   }
   .closing__contact a:hover {
-    border-bottom-color: #FFD838;
+    border-bottom-color: #191919;
   }
 
   /* Trait gold ancrage bottom-left */
@@ -244,36 +245,4 @@ const titleParts = splitHighlight(title, highlight);
     }
   }
 
-  /* Variant Q&R : fond gold avec inversion des accents (calque sur Cover) */
-  .closing[data-layout="closing-qa"] {
-    background: #FFD838;
-    color: #191919;
-  }
-  .closing[data-layout="closing-qa"] .closing__noise {
-    mix-blend-mode: multiply;
-    opacity: 0.18;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .closing[data-layout="closing-qa"] .closing__watermark {
-    color: #191919;
-    opacity: 0.08;
-  }
-  .closing[data-layout="closing-qa"] .closing__eyebrow {
-    background: #191919;
-    color: #FFD838;
-    border-color: #191919;
-  }
-  .closing[data-layout="closing-qa"] .closing__title {
-    color: #191919;
-  }
-  .closing[data-layout="closing-qa"] .closing__mark::after {
-    background: #191919;
-  }
-  .closing[data-layout="closing-qa"] .closing__subtitle {
-    color: #191919;
-    opacity: 0.78;
-  }
-  .closing[data-layout="closing-qa"] .closing__rule {
-    background: #191919;
-  }
 </style>
