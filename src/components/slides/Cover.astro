@@ -37,8 +37,6 @@ const titleParts = splitHighlight(title, highlight);
   class="cover"
   data-layout="cover"
   data-section-title={tocLabel}
-  data-background-color="#FFD838"
-  style="background-color: #FFD838;"
 >
   <div class="cover__noise" aria-hidden="true"></div>
   {watermark && <span class="cover__watermark" aria-hidden="true">{watermark}</span>}
@@ -67,7 +65,7 @@ const titleParts = splitHighlight(title, highlight);
     height: 100%;
     overflow: hidden;
     padding: 96px 96px !important;
-    background: #FFD838;
+    background: var(--slide-bg, #FAF8F3);
     color: #191919;
     display: flex !important;
     flex-direction: column;

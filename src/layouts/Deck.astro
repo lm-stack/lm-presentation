@@ -26,6 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="shortcut icon" href="/favicon.png" />
     <title>{title} : Lausanne Marketing</title>
     {description && <meta name="description" content={description} />}
+    <meta name="robots" content="noindex" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
@@ -152,22 +153,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         deck.on('slidechanged', updateNavState);
         updateNavState();
 
-        // Body bg suit la couleur de la slide courante : les bandes autour de la
-        // card 16:9 deviennent invisibles (continuite de couleur).
-        const updateBodyBg = () => {
-          const slide = deck.getCurrentSlide() as HTMLElement | null;
-          if (!slide) return;
-          const computed = window.getComputedStyle(slide).backgroundColor;
-          // Si transparent (ex : Custom slide vide), on garde blanc.
-          const isTransparent =
-            !computed ||
-            computed === 'rgba(0, 0, 0, 0)' ||
-            computed === 'transparent';
-          document.body.style.backgroundColor = isTransparent ? '#FFFFFF' : computed;
-        };
-        deck.on('slidechanged', updateBodyBg);
-        updateBodyBg();
-
         // Reveal.layout sur entree ET sortie fullscreen : sinon le scaling reste
         // fige sur l'ancien viewport et la slide est croppee au retour fenetre.
         // On rappelle layout plusieurs fois pour couvrir tous les moments de
@@ -175,7 +160,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         // selon le navigateur, et resize event peut fire avant que la geometrie soit prete).
         const relayout = () => {
           try { deck.layout(); } catch {}
-          updateBodyBg();
         };
         document.addEventListener('fullscreenchange', () => {
           requestAnimationFrame(() => requestAnimationFrame(relayout));

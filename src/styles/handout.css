@@ -90,7 +90,7 @@ body {
 .handout-slide {
   position: relative;
   overflow: hidden;
-  background: #FFFFFF;
+  background: var(--slide-bg, #FAF8F3);
   border: 1px solid #E5E7EB;
 }
 

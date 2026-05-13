@@ -26,8 +26,6 @@ const hasHeader = Boolean(title || subtitle);
 <section
   class="image-grid"
   data-layout="image-grid"
-  data-background-color="#FFFFFF"
-  style="background-color: #FFFFFF;"
 >
   {hasHeader && <SlideTitle title={title ?? ''} subtitle={subtitle} highlight={highlight} />}
   <div class={`image-grid__grid ${variantClass}`}>

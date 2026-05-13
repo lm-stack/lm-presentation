@@ -43,8 +43,6 @@ const lastNameParts = splitHighlight(lastName, highlight);
   class="about-me"
   data-layout="about-me"
   data-section-title="À propos"
-  data-background-color="#FFFFFF"
-  style="background-color: #FFFFFF;"
 >
   <span class="about-me__wash" aria-hidden="true"></span>
   {watermark && <span class="about-me__watermark" aria-hidden="true">{watermark}</span>}
@@ -79,7 +77,7 @@ const lastNameParts = splitHighlight(lastName, highlight);
     height: 100%;
     overflow: hidden;
     padding: 96px 96px !important;
-    background: #FFFFFF;
+    background: var(--slide-bg, #FAF8F3);
     color: #191919;
     display: flex !important;
     flex-direction: column;
