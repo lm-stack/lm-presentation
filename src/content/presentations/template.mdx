@@ -15,6 +15,7 @@ import AboutMe from '@/components/slides/AboutMe.astro';
 import AboutMeBullets from '@/components/slides/AboutMeBullets.astro';
 import Timer from '@/components/slides/Timer.astro';
 import Closing from '@/components/slides/Closing.astro';
+import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
 
 <Cover
   title="Template par défaut"
@@ -165,6 +166,33 @@ import Closing from '@/components/slides/Closing.astro';
       label: "Ambassadeur n8n officiel",
       text: "Partenaire reconnu de la communauté n8n, formateur et relais en Suisse romande."
     }
+  ]}
+/>
+
+<Section
+  number="02"
+  eyebrow="Tableaux"
+  title="Tableau deux colonnes, en-tête jaune"
+  highlight="jaune"
+  subtitle="Format compact pour comparatifs, glossaires ou checklists chiffrées."
+/>
+
+<TwoColumnTable
+  eyebrow="Glossaire interne"
+  title="Notre vocabulaire commun"
+  subtitle="Huit termes à aligner avant le workshop"
+  highlight="vocabulaire"
+  intro="Référentiel partagé entre marketing, ventes et data. Une définition par terme, pas d'ambiguïté."
+  headers={["Terme", "Définition opérationnelle"]}
+  rows={[
+    { label: "Lead", value: "Contact identifié avec coordonnées valides et signal d'intérêt mesurable." },
+    { label: "MQL", value: "Lead qualifié marketing : score comportemental et fit ICP confirmés." },
+    { label: "SQL", value: "Lead qualifié ventes : budget, autorité, besoin et calendrier validés." },
+    { label: "ICP", value: "Profil client idéal : taille, secteur, géographie, maturité digitale." },
+    { label: "TOFU", value: "Haut de funnel : audience large, contenu pédagogique, intention faible." },
+    { label: "MOFU", value: "Milieu de funnel : audience qualifiée, comparatifs et cas clients." },
+    { label: "BOFU", value: "Bas de funnel : intention d'achat haute, démos, devis, négociation." },
+    { label: "CAC payback", value: "Mois nécessaires pour rentabiliser le coût d'acquisition d'un client." },
   ]}
 />
 
