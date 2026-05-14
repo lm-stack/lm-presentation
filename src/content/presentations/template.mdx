@@ -16,6 +16,8 @@ import AboutMeBullets from '@/components/slides/AboutMeBullets.astro';
 import Timer from '@/components/slides/Timer.astro';
 import Closing from '@/components/slides/Closing.astro';
 import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
+import AgendaLight from '@/components/slides/AgendaLight.astro';
+import AgendaFull from '@/components/slides/AgendaFull.astro';
 
 <Cover
   title="Template par défaut"
@@ -171,6 +173,108 @@ import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
 
 <Section
   number="02"
+  eyebrow="Agendas"
+  title="Deux formats d'agenda éditoriaux"
+  highlight="agenda"
+  subtitle="AgendaLight pour un programme aéré avec visuel, AgendaFull pour un déroulé dense sur deux colonnes."
+/>
+
+<AgendaLight
+  eyebrow="Workshop"
+  title="Au programme aujourd'hui"
+  subtitle="Cinq temps forts, une demi-journée"
+  highlight="programme"
+  items={[
+    {
+      time: "09:00",
+      title: "Accueil et cadrage",
+      description: "Tour de table, objectifs individuels, règles du workshop."
+    },
+    {
+      time: "09:30",
+      title: "Diagnostic stack actuelle",
+      description: "Cartographie des outils, points de friction, dettes techniques."
+    },
+    {
+      time: "10:30",
+      title: "Pause café",
+      description: "Quinze minutes pour respirer et continuer les conversations."
+    },
+    {
+      time: "10:45",
+      title: "Atelier priorisation",
+      description: "Matrice impact / effort, vote silencieux puis discussion."
+    },
+    {
+      time: "12:00",
+      title: "Synthèse et prochains pas",
+      description: "Décisions, owners, calendrier des trois prochains sprints."
+    },
+  ]}
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=900&h=1200&fit=crop"
+  imageAlt="Salle de workshop en lumière naturelle"
+  imageCaption="HEC Lausanne · Salle 312"
+/>
+
+<AgendaFull
+  eyebrow="Journée complète"
+  title="Programme du séminaire CRM"
+  subtitle="Huit séquences, du cadrage stratégique à la mise en production"
+  highlight="séminaire"
+  items={[
+    {
+      time: "08:30",
+      duration: "30 min",
+      title: "Accueil et café",
+      description: "Networking informel, remise des badges et du dossier participant."
+    },
+    {
+      time: "09:00",
+      duration: "60 min",
+      title: "Vision et enjeux CRM 2026",
+      description: "Le marché suisse romand, les attentes côté direction générale."
+    },
+    {
+      time: "10:00",
+      duration: "75 min",
+      title: "Architecture data et intégrations",
+      description: "Mapping des sources, choix du référentiel, gouvernance des champs."
+    },
+    {
+      time: "11:15",
+      duration: "15 min",
+      title: "Pause active",
+      description: "Étirements, café, eau."
+    },
+    {
+      time: "11:30",
+      duration: "60 min",
+      title: "Atelier scoring et segmentation",
+      description: "Construction d'un score lead simple, défense en sous-groupes."
+    },
+    {
+      time: "12:30",
+      duration: "60 min",
+      title: "Déjeuner",
+      description: "Buffet sur place, table par profil métier pour faciliter les échanges."
+    },
+    {
+      time: "13:30",
+      duration: "90 min",
+      title: "Automatisations et nurturing",
+      description: "Workflows clés, garde-fous, mesure d'efficacité par cohorte."
+    },
+    {
+      time: "15:00",
+      duration: "60 min",
+      title: "Plan d'action et clôture",
+      description: "Roadmap 90 jours, owners, prochains rendez-vous individuels."
+    },
+  ]}
+/>
+
+<Section
+  number="03"
   eyebrow="Tableaux"
   title="Tableau deux colonnes, en-tête jaune"
   highlight="jaune"
