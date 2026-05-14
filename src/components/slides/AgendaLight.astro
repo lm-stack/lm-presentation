@@ -1,0 +1,250 @@
+---
+// src/components/slides/AgendaLight.astro
+// Agenda compact, 4 à 6 points + image éditoriale à droite.
+// Timeline jaune verticale, horaires en Space Grotesk tabulaire,
+// titres bold noir, descriptions grises.
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Item {
+  time?: string;
+  title: string;
+  description?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+  eyebrow?: string;
+  items: Item[];
+  image?: string;
+  imageAlt?: string;
+  imageCaption?: string;
+}
+
+const {
+  title = 'Agenda',
+  subtitle,
+  highlight,
+  eyebrow = 'Programme',
+  items,
+  image,
+  imageAlt = '',
+  imageCaption,
+} = Astro.props;
+
+// Clamp à 6 points max pour préserver la respiration.
+const safeItems = items.slice(0, 6);
+---
+<section class="agenda-light" data-layout="agenda-light">
+  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
+
+  <div class="agenda-light__grid">
+    <div class="agenda-light__list-wrap">
+      {eyebrow && <span class="agenda-light__eyebrow">{eyebrow}</span>}
+      <ol class="agenda-light__list" style={`--count: ${safeItems.length};`}>
+        {safeItems.map((item, i) => (
+          <li class="agenda-light__item">
+            <span class="agenda-light__node" aria-hidden="true"></span>
+            <div class="agenda-light__head">
+              <span class="agenda-light__num">{String(i + 1).padStart(2, '0')}</span>
+              {item.time && <span class="agenda-light__time">{item.time}</span>}
+            </div>
+            <div class="agenda-light__body">
+              <h3 class="agenda-light__title">{item.title}</h3>
+              {item.description && (
+                <p class="agenda-light__desc">{item.description}</p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    {image && (
+      <figure class="agenda-light__figure">
+        <span class="agenda-light__figure-tag" aria-hidden="true">AGENDA</span>
+        <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
+        {imageCaption && (
+          <figcaption class="agenda-light__caption">{imageCaption}</figcaption>
+        )}
+      </figure>
+    )}
+  </div>
+</section>
+
+<style>
+  .agenda-light {
+    justify-content: flex-start !important;
+  }
+
+  .agenda-light__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 80px;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .agenda-light__list-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .agenda-light__eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #191919;
+    padding: 6px 12px;
+    background: #FFD838;
+    margin-bottom: 28px;
+    align-self: flex-start;
+  }
+
+  /* Liste : rail vertical jaune en pseudo-élément, nœuds noirs sur chaque item.
+     Reset de l'auto-numérotation native pour utiliser notre rendu __num. */
+  .agenda-light__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 56px;
+    position: relative;
+  }
+  .agenda-light__list::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+    background: #FFD838;
+    border-radius: 2px;
+  }
+
+  .agenda-light__item {
+    position: relative;
+    padding: 14px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .agenda-light__item + .agenda-light__item {
+    border-top: 1px solid rgba(25, 25, 25, 0.08);
+  }
+
+  /* Pastille noire qui mord sur le rail jaune. */
+  .agenda-light__node {
+    position: absolute;
+    left: -47px;
+    top: 24px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #191919;
+    border: 3px solid #FAF8F3;
+    box-shadow: 0 0 0 2px #191919;
+  }
+
+  .agenda-light__head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .agenda-light__num {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: rgba(25, 25, 25, 0.35);
+    font-feature-settings: 'tnum';
+  }
+
+  .agenda-light__time {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #191919;
+    background: rgba(25, 25, 25, 0.06);
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-feature-settings: 'tnum';
+    letter-spacing: 0.02em;
+  }
+
+  .agenda-light__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #191919;
+    margin: 6px 0 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .agenda-light__desc {
+    font-size: 18px;
+    color: #6B6F84;
+    margin: 4px 0 0;
+    line-height: 1.45;
+    max-width: 640px;
+  }
+
+  /* Image éditoriale à droite : ratio portrait, bord noir, label vertical "AGENDA"
+     en Space Grotesk qui longe le côté gauche du cadre. Pas de rotation pour
+     conserver une lecture posée, façon édito Suisse. */
+  .agenda-light__figure {
+    position: relative;
+    margin: 0;
+    align-self: center;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: #191919;
+    padding: 14px 14px 14px 14px;
+    box-shadow: 0 20px 40px -12px rgba(25, 25, 25, 0.25);
+  }
+
+  .agenda-light__figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(0.15) contrast(1.05);
+  }
+
+  .agenda-light__figure-tag {
+    position: absolute;
+    top: 50%;
+    left: -28px;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: #191919;
+    background: #FFD838;
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
+
+  .agenda-light__caption {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 24px;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+</style>
