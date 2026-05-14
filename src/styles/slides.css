@@ -47,9 +47,9 @@ body.is-fullscreen {
   left: 50%;
   transform: translate(-50%, -50%);
   /* Le wrapper respecte l'aspect ratio 16:9 pour que le slide remplisse pile le */
-  /* container, plus aucune bande visible a l'interieur. Plus de card style (border/ */
-  /* radius/shadow/bg) : la slide repose directement sur le body, dont le bg suit */
-  /* la couleur de la slide courante via JS. */
+  /* container, plus aucune bande visible a l'interieur. Hairline 1px pour     */
+  /* materialiser le bord du slide contre le bg du body (meme creme partage). */
+  /* Cette bordure est neutralisee en mode plein ecran via .is-fullscreen.    */
   width: min(
     calc(100vw - var(--slide-h-margin)),
     calc((100vh - var(--slide-v-chrome)) * 16 / 9)
@@ -58,6 +58,14 @@ body.is-fullscreen {
   background: transparent;
   overflow: hidden;
   z-index: 1;
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  box-shadow: 0 1px 2px rgba(25, 25, 25, 0.04);
+}
+
+html:has(:fullscreen) .deck-stage,
+body.is-fullscreen .deck-stage {
+  border: none;
+  box-shadow: none;
 }
 
 /* Mode plein ecran : on masque tout le chrome. Deux selecteurs en doublon : */
