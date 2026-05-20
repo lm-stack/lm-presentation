@@ -15,7 +15,6 @@ interface Props {
   subtitle?: string;
   highlight?: string;
   intro?: string;
-  eyebrow?: string;
   headers: [string, string];
   rows: Row[];
 }
@@ -25,7 +24,6 @@ const {
   subtitle,
   highlight,
   intro,
-  eyebrow,
   headers,
   rows,
 } = Astro.props;
@@ -37,7 +35,6 @@ const fixedRows: Row[] = [
 ];
 ---
 <section class="two-col-table" data-layout="two-col-table">
-  {eyebrow && <span class="two-col-table__eyebrow">{eyebrow}</span>}
   <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
   {intro && <p class="two-col-table__intro">{intro}</p>}
 
@@ -69,20 +66,6 @@ const fixedRows: Row[] = [
 </section>
 
 <style>
-  .two-col-table {
-    justify-content: flex-start !important;
-  }
-
-  .two-col-table__eyebrow {
-    display: block;
-    text-align: center;
-    font-size: 14px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #6B6F84;
-    margin-bottom: 12px;
-  }
-
   .two-col-table__intro {
     font-size: 20px;
     color: #6B6F84;

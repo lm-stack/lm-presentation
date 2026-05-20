@@ -100,12 +100,17 @@ body.is-fullscreen .deck-footer {
   text-align: left;
 }
 
+/* REGLE INTANGIBLE : le contenu d'une slide est CENTRE verticalement par defaut.
+   Si une slide laisse un grand blanc en bas, c'est un bug : le composant override
+   probablement avec justify-content: flex-start, a retirer.
+   Les slides "structurelles" (Cover, Section, Closing, AboutMe, AboutMeBullets,
+   Timer) gardent leur center !important pour battre cette regle si besoin. */
 .reveal section {
   padding: 80px 96px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 /* :where(.reveal, .handout-doc) : 0-specificity wildcard pour que la meme regle */
@@ -119,16 +124,26 @@ body.is-fullscreen .deck-footer {
   text-align: center;
 }
 
+/* REGLE INTANGIBLE : la zone titre = h2 + .slide-subtitle + .slide-divider,
+   dans cet ordre exact, AUCUN autre element entre h2 et .slide-divider.
+   Rythme : 4px entre titre et sous-titre, 32px entre sous-titre et bordure.
+   Toute violation casse la coherence visuelle du deck — voir .claude/CLAUDE.md. */
 :where(.reveal, .handout-doc) h2 {
   font-size: 56px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 :where(.reveal, .handout-doc) h2 + .slide-subtitle {
   font-size: 24px;
   color: #6B6F84;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 32px;
+}
+
+/* Cas sans sous-titre : h2 colle direct a la bordure jaune via 32px aussi
+   (le selecteur h2 + .slide-divider preserve le rythme quand subtitle absent). */
+:where(.reveal, .handout-doc) h2 + .slide-divider {
+  margin-top: 32px;
 }
 
 :where(.reveal, .handout-doc) .slide-divider {

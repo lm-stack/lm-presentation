@@ -16,7 +16,6 @@ interface Props {
   title?: string;
   subtitle?: string;
   highlight?: string;
-  eyebrow?: string;
   items: Item[];
 }
 
@@ -24,7 +23,6 @@ const {
   title = 'Programme du jour',
   subtitle,
   highlight,
-  eyebrow = 'Agenda',
   items,
 } = Astro.props;
 
@@ -37,12 +35,6 @@ const colA = safeItems.slice(0, splitAt);
 const colB = safeItems.slice(splitAt);
 ---
 <section class="agenda-full" data-layout="agenda-full">
-  {eyebrow && (
-    <div class="agenda-full__eyebrow-wrap">
-      <span class="agenda-full__eyebrow">{eyebrow}</span>
-      <span class="agenda-full__count">{String(count).padStart(2, '0')} points</span>
-    </div>
-  )}
   <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
 
   <div class="agenda-full__grid">
@@ -72,39 +64,6 @@ const colB = safeItems.slice(splitAt);
 </section>
 
 <style>
-  .agenda-full {
-    justify-content: flex-start !important;
-  }
-
-  .agenda-full__eyebrow-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-
-  .agenda-full__eyebrow {
-    font-family: 'Space Grotesk', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #191919;
-    padding: 6px 14px;
-    background: #FFD838;
-  }
-
-  .agenda-full__count {
-    font-family: 'Space Grotesk', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #6B6F84;
-    font-feature-settings: 'tnum';
-  }
-
   .agenda-full__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
