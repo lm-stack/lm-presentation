@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   for (const d of decks) {
     for (const mode of modes) {
       paths.push({
-        params: { slug: d.id.replace('.mdx', ''), mode },
+        params: { slug: d.id, mode },
         props: { entry: d, mode },
       });
     }

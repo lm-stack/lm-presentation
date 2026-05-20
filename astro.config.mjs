@@ -14,12 +14,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      watch: {
-        usePolling: true,
-        interval: 1000,
-      },
-    },
   },
   build: {
     format: 'directory',

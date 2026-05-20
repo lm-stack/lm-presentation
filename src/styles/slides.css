@@ -1,5 +1,5 @@
 /* Theme LM pour Reveal.js : layout de Reveal + override visuels LM */
-@import 'reveal.js/dist/reveal.css';
+@import 'reveal.js/reveal.css';
 @import './global.css';
 
 /* Fond unique creme pour tout le deck : body + slides partagent --slide-bg.
@@ -68,6 +68,13 @@ body.is-fullscreen .deck-stage {
   box-shadow: none;
 }
 
+/* Init Reveal echouee : on masque les controles qui ne servent plus a rien (compteur,
+   nav prev/next, bouton fullscreen). Le contenu MDX reste lisible en flux normal. */
+body.deck-init-failed .deck-footer,
+body.deck-init-failed .deck-toolbar {
+  display: none !important;
+}
+
 /* Mode plein ecran : on masque tout le chrome. Deux selecteurs en doublon : */
 /* :has(:fullscreen) (CSS moderne) et body.is-fullscreen (classe ajoutee par JS via */
 /* l'event fullscreenchange) pour la compat tous navigateurs. */
@@ -132,22 +139,6 @@ body.is-fullscreen .deck-footer {
   margin: 0 auto 48px;
 }
 
-.reveal .deck-pagenum {
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #191919;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 500;
-}
-
 /* Footer flottant du deck : style aligne sur les icones flottantes lm-diagrams */
 .deck-footer {
   position: fixed;
@@ -190,7 +181,7 @@ body.is-fullscreen .deck-footer {
 
 .deck-footer .deck-counter {
   font-family: 'Space Grotesk', monospace;
-  font-weight: 500;
+  font-weight: 700;
   color: #191919;
 }
 
@@ -609,6 +600,24 @@ body.is-fullscreen .deck-footer {
 }
 .pdf-modal__card--loading {
   border-color: #191919;
+}
+/* Etat erreur transitoire : 4s apres l'echec final, la classe est retiree. */
+.pdf-modal__card--error {
+  border-color: #C2410C;
+  background: #FFF5F0;
+}
+.pdf-modal__card--error::before {
+  content: 'Erreur, reessayer';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #C2410C;
 }
 .pdf-modal__card--loading::after {
   content: '';

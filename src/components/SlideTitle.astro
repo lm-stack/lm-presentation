@@ -7,26 +7,35 @@ interface Props {
 }
 const { title, subtitle, highlight } = Astro.props;
 
-function renderHighlight(text: string | undefined, mot: string | undefined) {
+type HighlightParts = { before: string; match: string; after: string };
+
+function renderHighlight(text: string | undefined, mot: string | undefined): string | HighlightParts | undefined {
   if (!text || !mot) return text;
   const idx = text.toLowerCase().indexOf(mot.toLowerCase());
   if (idx === -1) return text;
-  const before = text.slice(0, idx);
-  const match = text.slice(idx, idx + mot.length);
-  const after = text.slice(idx + mot.length);
-  return { before, match, after };
+  return {
+    before: text.slice(0, idx),
+    match: text.slice(idx, idx + mot.length),
+    after: text.slice(idx + mot.length),
+  };
 }
 
 const subtitleParts = renderHighlight(subtitle, highlight);
+// Narrowing explicite : on traite separement le cas "objet HighlightParts" pour
+// avoir un acces type aux champs before/match/after. typeof === 'string' seul
+// laissait passer undefined dans la branche objet, ce qui crashait au runtime
+// si le garde-fou {subtitle && ...} sautait pour une raison ou une autre.
+const subtitlePartsIsObject = subtitleParts !== undefined && typeof subtitleParts === 'object';
 ---
 <div class="slide-title">
   <h2>{title}</h2>
-  {subtitle && (
-    typeof subtitleParts === 'string'
-      ? <p class="slide-subtitle">{subtitleParts}</p>
-      : <p class="slide-subtitle">
-          {subtitleParts.before}<span class="underline">{subtitleParts.match}</span>{subtitleParts.after}
-        </p>
+  {subtitle && subtitlePartsIsObject && (
+    <p class="slide-subtitle">
+      {subtitleParts.before}<span class="underline">{subtitleParts.match}</span>{subtitleParts.after}
+    </p>
+  )}
+  {subtitle && !subtitlePartsIsObject && (
+    <p class="slide-subtitle">{subtitleParts}</p>
   )}
   <span class="slide-divider"></span>
 </div>

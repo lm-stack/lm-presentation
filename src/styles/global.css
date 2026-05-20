@@ -15,7 +15,10 @@
     --text-4xl: clamp(2.8rem, 2.62rem + 0.45vw, 3.2rem);
     --text-5xl: clamp(3.6rem, 2.51rem + 2.73vw, 6rem);
 
-    --color-text: #6B6F84;
+    /* Texte secondaire : assombri pour passer le ratio WCAG AA (>=4.5:1) sur
+       fond blanc et sur fond creme. L'ancien #6B6F84 plafonnait a 4.32:1 sur
+       blanc et 4.08:1 sur #FAF8F3, donc echec AA pour texte normal. */
+    --color-text: #5A5E72;
   }
 
   html {
@@ -36,6 +39,27 @@
     color: #191919;
     line-height: 1.2;
   }
+}
+
+/* Reduced motion : respect WCAG 2.3.3 et de la pref utilisateur. Toutes les */
+/* animations (parcours, slides Cover/Section/Closing, watermarks, stagger) */
+/* sont neutralisees. On garde une duree de 0.01ms plutot que 0 pour ne pas */
+/* casser les chains JS qui ecoutent transitionend / animationend. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible global : keyboard navigation reste visible sur tous interactifs. */
+/* Outline gold sur fond clair = signature LM, ressort sans casser le rythme. */
+:focus-visible {
+  outline: 2px solid #FFD838;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Underline gold rotatif (signature LM, hors @layer pour battre Tailwind utility) */

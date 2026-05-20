@@ -6,7 +6,7 @@ import Deck from '@/layouts/Deck.astro';
 export async function getStaticPaths() {
   const decks = await getCollection('presentations');
   return decks.map((d) => ({
-    params: { slug: d.id.replace('.mdx', '') },
+    params: { slug: d.id },
     props: { entry: d },
   }));
 }

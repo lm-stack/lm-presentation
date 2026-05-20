@@ -27,7 +27,7 @@ const typeLabels: Record<string, string> = {
     <ul class="presentation-grid">
       {presentations.map((p) => (
         <li>
-          <a href={`/p/${p.id.replace('.mdx', '')}`} class="presentation-card">
+          <a href={`/p/${p.id}`} class="presentation-card">
             <span class="presentation-card__type">{typeLabels[p.data.type] ?? p.data.type}</span>
             <h2>{p.data.title}</h2>
             {p.data.subtitle && <p class="presentation-card__subtitle">{p.data.subtitle}</p>}

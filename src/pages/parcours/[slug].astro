@@ -5,20 +5,21 @@
 // reserver l'acces a ceux qui ont l'URL).
 import { getCollection, getEntry } from 'astro:content';
 import '@/styles/global.css';
+import FontsPreload from '@/components/FontsPreload.astro';
 
 export async function getStaticPaths() {
   const all = await getCollection('parcours');
   return all
     .filter((p) => !p.data.unlisted)
     .map((p) => ({
-      params: { slug: p.id.replace('.mdx', '') },
+      params: { slug: p.id },
       props: { entry: p },
     }));
 }
 
 const { entry } = Astro.props;
 const data = entry.data;
-const parcoursSlug = entry.id.replace('.mdx', '');
+const parcoursSlug = entry.id;
 
 const decksData = await Promise.all(
   data.decks.map(async (slug) => {
@@ -51,6 +52,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <FontsPreload />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
@@ -105,7 +107,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
         {decksData.map((deck, i) => {
           const num = String(i + 1).padStart(2, '0');
           return (
-            <li class="parcours-card">
+            <li class="parcours-card" style={`--stagger-i: ${i}`}>
               <a class="parcours-card__link" href={`/p/${deck.slug}?from=${parcoursSlug}`}>
                 <div class="parcours-card__media">
                   {deck.cover ? (
@@ -221,7 +223,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
 
       .parcours-hero__title {
         font-family: 'Hanken Grotesk', sans-serif;
-        font-weight: 900;
+        font-weight: 800;
         font-size: clamp(40px, 5.5vw, 72px);
         line-height: 0.98;
         letter-spacing: -0.035em;
@@ -264,7 +266,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
         gap: 10px;
         font-family: 'Space Grotesk', monospace;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: rgba(25, 25, 25, 0.55);
@@ -301,19 +303,8 @@ const titleParts = splitHighlight(data.title, data.highlight);
 
       .parcours-card {
         animation: parcours-card-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(var(--stagger-i, 0) * 0.05s + 0.05s);
       }
-      .parcours-card:nth-child(1) { animation-delay: 0.05s; }
-      .parcours-card:nth-child(2) { animation-delay: 0.1s; }
-      .parcours-card:nth-child(3) { animation-delay: 0.15s; }
-      .parcours-card:nth-child(4) { animation-delay: 0.2s; }
-      .parcours-card:nth-child(5) { animation-delay: 0.25s; }
-      .parcours-card:nth-child(6) { animation-delay: 0.3s; }
-      .parcours-card:nth-child(7) { animation-delay: 0.35s; }
-      .parcours-card:nth-child(8) { animation-delay: 0.4s; }
-      .parcours-card:nth-child(9) { animation-delay: 0.45s; }
-      .parcours-card:nth-child(10) { animation-delay: 0.5s; }
-      .parcours-card:nth-child(11) { animation-delay: 0.55s; }
-      .parcours-card:nth-child(12) { animation-delay: 0.6s; }
 
       .parcours-card__link {
         display: flex;
@@ -380,7 +371,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
         left: 16px;
         z-index: 2;
         font-family: 'Hanken Grotesk', sans-serif;
-        font-weight: 900;
+        font-weight: 800;
         font-variant-numeric: tabular-nums;
         font-size: clamp(64px, 9vw, 96px);
         line-height: 0.84;
@@ -445,7 +436,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
         padding: 24px 32px 32px;
         font-family: 'Space Grotesk', monospace;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: rgba(25, 25, 25, 0.45);

@@ -2,6 +2,7 @@
 // src/layouts/Deck.astro
 import '@/styles/slides.css';
 import PdfModal from '@/components/deck/PdfModal.astro';
+import FontsPreload from '@/components/FontsPreload.astro';
 
 interface Props {
   title: string;
@@ -20,6 +21,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <FontsPreload />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
@@ -113,7 +115,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
     <script>
       import Reveal from 'reveal.js';
+      import type { RevealApi } from 'reveal.js';
 
+      // Le type RevealConfig v6 n'admet pas null pour scrollActivationWidth (type number)
+      // ni null pour les valeurs d'un keymap (type string | function). Reveal accepte
+      // les deux en runtime pour respectivement disabler la feature et disabler une
+      // touche. On cast l'objet en RevealConfig pour preserver l'autocomplete sur le
+      // reste, sans pulluer le code avec @ts-ignore.
       const deck = new Reveal({
         hash: true,
         slideNumber: false,
@@ -124,12 +132,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         width: 1920,
         height: 1080,
         margin: 0,
-        // Reveal v5 active automatiquement un "scroll view" quand innerWidth < 435px,
+        // Reveal active automatiquement un "scroll view" quand innerWidth < 435px,
         // ce qui casse notre layout 16:9 confine dans .deck-stage (le slide est rendu
         // a sa hauteur logique 1080px et deborde du container overflow:hidden, d'ou
         // l'absence de contenu visible sur mobile + nav clavier/click qui scroll
         // au lieu de changer de slide). On force le mode paginated.
-        scrollActivationWidth: null,
+        scrollActivationWidth: null as unknown as number,
+        // On bloque l'overlay help "?" (Shift+/) qui peut popper en demo et casser
+        // la presentation. La barre oblique seule sert souvent en raccourci d'edition.
+        keyboard: {
+          191: null as unknown as string,
+        },
       });
 
       deck.initialize().then(() => {
@@ -153,25 +166,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         deck.on('slidechanged', updateNavState);
         updateNavState();
 
-        // Reveal.layout sur entree ET sortie fullscreen : sinon le scaling reste
-        // fige sur l'ancien viewport et la slide est croppee au retour fenetre.
-        // On rappelle layout plusieurs fois pour couvrir tous les moments de
-        // stabilisation du viewport (transition fullscreen browser peut prendre 100-500ms
-        // selon le navigateur, et resize event peut fire avant que la geometrie soit prete).
-        const relayout = () => {
-          try { deck.layout(); } catch {}
-        };
-        document.addEventListener('fullscreenchange', () => {
-          requestAnimationFrame(() => requestAnimationFrame(relayout));
-          setTimeout(relayout, 100);
-          setTimeout(relayout, 300);
-          setTimeout(relayout, 600);
-        });
-        // Hook resize aussi : double securite, certains browsers fire seulement resize
-        // sans fullscreenchange pour les exits par ESC.
-        window.addEventListener('resize', () => {
-          requestAnimationFrame(relayout);
-        });
+        // Recall layout des que la taille de .deck-stage change (fullscreen enter/exit,
+        // resize fenetre, devtools open/close, rotation device). ResizeObserver est
+        // plus robuste que les cascades setTimeout sur fullscreenchange : on reagit
+        // exactement quand la geometrie est stabilisee, pas avant ni apres.
+        const stage = document.querySelector('.deck-stage');
+        if (stage) {
+          const ro = new ResizeObserver(() => {
+            try { deck.layout(); } catch {}
+          });
+          ro.observe(stage);
+        }
+      }).catch((err) => {
+        // Init Reveal echouee : on log + on flag le body pour que le CSS puisse
+        // masquer les controles inutilisables (cf. body.deck-init-failed dans slides.css).
+        console.error('Reveal init failed', err);
+        document.body.classList.add('deck-init-failed');
       });
 
       // Menu (infos cours) : pastille en haut-gauche, fermé par défaut, click pour basculer
@@ -228,7 +238,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       const presentBtn = document.getElementById('deck-present-btn') as HTMLButtonElement | null;
       presentBtn?.addEventListener('click', () => {
         try {
-          deck.triggerFullscreen();
+          // triggerFullscreen() existe en runtime (v6+) mais n'est pas exposee
+          // dans le type RevealApi. Cast cible plutot qu'on importe Fullscreen API.
+          (deck as RevealApi & { triggerFullscreen(): void }).triggerFullscreen();
         } catch {
           // Fallback sur l'API browser si Reveal ne s'expose pas
           document.documentElement.requestFullscreen?.();

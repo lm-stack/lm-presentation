@@ -2,7 +2,7 @@
 /* Styles pour le mode handout : rendu HTML statique paginé pour impression A4 portrait. */
 /* Pas de Reveal.js ; on prend les <section> slottées et on les arrange en grille print-paginated. */
 
-@import 'reveal.js/dist/reveal.css';
+@import 'reveal.js/reveal.css';
 @import './global.css';
 
 /* ============================================================ */

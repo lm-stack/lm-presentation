@@ -173,7 +173,11 @@
       // On NE ferme PAS la modale : permet de lancer un autre layout dans la foulee.
     } catch (err) {
       console.error('PDF generation failed after retries', err);
-      // Volontairement pas d'UI d'erreur : l'utilisateur peut simplement recliquer.
+      // Flag visuel sur la card pendant 4s : sans signal, l'utilisateur attend ~10s
+      // (3 retries + backoff) puis voit la card revenir a l'etat initial sans
+      // comprendre pourquoi le download ne s'est pas declenche.
+      card.classList.add('pdf-modal__card--error');
+      setTimeout(() => card.classList.remove('pdf-modal__card--error'), 4000);
     } finally {
       setLoading(card, false);
     }
