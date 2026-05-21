@@ -1,0 +1,220 @@
+---
+// src/components/slides/WordCloud.astro
+// Slide nuage de mots live. Meme structure que Poll mais viz differente :
+// nuage flex-wrap avec taille proportionnelle au count.
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Props {
+  id: string;
+  question: string;
+  subtitle?: string;
+  highlight?: string;
+}
+
+const { id, question, subtitle, highlight } = Astro.props;
+---
+<section
+  class="wordcloud-slide"
+  data-layout="wordcloud"
+  data-section-title={question.slice(0, 60)}
+  data-poll-id={id}
+  data-poll-type="word"
+  data-poll-question={question}
+>
+  <SlideTitle title={question} subtitle={subtitle} highlight={highlight} />
+
+  <div class="wordcloud-slide__body">
+    <div class="wordcloud-slide__chart" data-poll-chart>
+      <!-- Mots injectes en JS -->
+    </div>
+
+    <div class="wordcloud-slide__side" data-poll-side>
+      <div class="wordcloud-slide__initial" data-poll-state="initial" hidden>
+        <button type="button" class="wordcloud-slide__start-btn" data-poll-start>
+          Démarrer le sondage
+        </button>
+      </div>
+
+      <div class="wordcloud-slide__live" data-poll-state="live" hidden>
+        <div class="wordcloud-slide__qr" data-poll-qr></div>
+        <div class="wordcloud-slide__code" data-poll-code>------</div>
+        <div class="wordcloud-slide__url" data-poll-url>slides.lausanne.marketing/v/------</div>
+        <div class="wordcloud-slide__counter" data-poll-counter>0 mots</div>
+        <div class="wordcloud-slide__actions">
+          <button type="button" class="wordcloud-slide__action-btn" data-poll-freeze title="Figer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16M96 56a32 32 0 0 1 64 0v24H96Z"/>
+            </svg>
+          </button>
+          <button type="button" class="wordcloud-slide__action-btn" data-poll-reset title="Reset">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="wordcloud-slide__frozen" data-poll-state="frozen" hidden>
+        <div class="wordcloud-slide__frozen-badge">Vote terminé</div>
+        <div class="wordcloud-slide__counter" data-poll-frozen-counter>0 mots</div>
+        <div class="wordcloud-slide__actions">
+          <button type="button" class="wordcloud-slide__action-btn" data-poll-reset title="Nouvelle session">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="wordcloud-slide__archived" data-poll-state="archived" hidden>
+        <div class="wordcloud-slide__frozen-badge">Session archivée</div>
+        <div class="wordcloud-slide__counter" data-poll-archived-counter>0 mots</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wordcloud-slide__body {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 64px;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  .wordcloud-slide__chart {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    align-self: center;
+    min-height: 500px;
+    padding: 24px;
+  }
+
+  .wordcloud-slide__word {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    line-height: 1.2;
+    animation: wordcloud-pop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .wordcloud-slide__word--c0 { color: #FFD838; }
+  .wordcloud-slide__word--c1 { color: #191919; }
+  .wordcloud-slide__word--c2 { color: #6B6F84; }
+
+  @keyframes wordcloud-pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .wordcloud-slide__side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .wordcloud-slide__initial,
+  .wordcloud-slide__live,
+  .wordcloud-slide__frozen,
+  .wordcloud-slide__archived {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .wordcloud-slide__start-btn {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: #191919;
+    background: #FFD838;
+    border: 2px solid #191919;
+    border-radius: 12px;
+    padding: 24px 48px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .wordcloud-slide__start-btn:hover { transform: translateY(-2px); }
+
+  .wordcloud-slide__qr {
+    width: 420px;
+    height: 420px;
+    background: #FAF8F3;
+    border: 1px solid #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wordcloud-slide__qr svg { width: 100%; height: 100%; }
+
+  .wordcloud-slide__code {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 80px;
+    letter-spacing: 0.15em;
+    color: #191919;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wordcloud-slide__url {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #6B6F84;
+  }
+
+  .wordcloud-slide__counter {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 18px;
+    color: #6B6F84;
+    margin-top: 4px;
+  }
+
+  .wordcloud-slide__actions {
+    display: flex;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+    padding: 6px;
+    margin-top: 12px;
+  }
+
+  .wordcloud-slide__action-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #191919;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  @media (hover: hover) {
+    .wordcloud-slide__action-btn:hover { background: #FFD838; }
+  }
+
+  .wordcloud-slide__frozen-badge {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    color: #191919;
+    background: #FFD838;
+    padding: 24px 48px;
+    border: 2px solid #191919;
+    border-radius: 12px;
+    text-align: center;
+  }
+</style>

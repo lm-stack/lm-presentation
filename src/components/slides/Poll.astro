@@ -1,0 +1,277 @@
+---
+// src/components/slides/Poll.astro
+// Slide QCM live : question + QR + graphique barres horizontales animees.
+// Suit le pattern SlideTitle (h2 + slide-subtitle + slide-divider).
+// Quatre etats : initial (bouton Demarrer), live (QR + polling), frozen (snapshot fige),
+// archived (lecture KV apres cours).
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Props {
+  id: string;
+  question: string;
+  options: string[];
+  subtitle?: string;
+  highlight?: string;
+}
+
+const { id, question, options, subtitle, highlight } = Astro.props;
+
+if (options.length < 2 || options.length > 6) {
+  throw new Error(`Poll "${id}" : options doit contenir 2 à 6 entrées, reçu ${options.length}`);
+}
+---
+<section
+  class="poll-slide"
+  data-layout="poll"
+  data-section-title={question.slice(0, 60)}
+  data-poll-id={id}
+  data-poll-type="choice"
+  data-poll-question={question}
+  data-poll-options={JSON.stringify(options)}
+>
+  <SlideTitle title={question} subtitle={subtitle} highlight={highlight} />
+
+  <div class="poll-slide__body">
+    <div class="poll-slide__chart" data-poll-chart>
+      {options.map((opt, i) => (
+        <div class="poll-slide__bar-row" data-bar-index={i}>
+          <span class="poll-slide__bar-label">{opt}</span>
+          <div class="poll-slide__bar-track">
+            <div class="poll-slide__bar-fill" data-bar-fill style="width: 0%"></div>
+          </div>
+          <span class="poll-slide__bar-count" data-bar-count>0</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="poll-slide__side" data-poll-side>
+      <div class="poll-slide__initial" data-poll-state="initial" hidden>
+        <button type="button" class="poll-slide__start-btn" data-poll-start>
+          Démarrer le sondage
+        </button>
+      </div>
+
+      <div class="poll-slide__live" data-poll-state="live" hidden>
+        <div class="poll-slide__qr" data-poll-qr></div>
+        <div class="poll-slide__code" data-poll-code>------</div>
+        <div class="poll-slide__url" data-poll-url>slides.lausanne.marketing/v/------</div>
+        <div class="poll-slide__counter" data-poll-counter>0 votes</div>
+        <div class="poll-slide__actions">
+          <button type="button" class="poll-slide__action-btn" data-poll-freeze title="Figer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16M96 56a32 32 0 0 1 64 0v24H96Z"/>
+            </svg>
+          </button>
+          <button type="button" class="poll-slide__action-btn" data-poll-reset title="Reset">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="poll-slide__frozen" data-poll-state="frozen" hidden>
+        <div class="poll-slide__frozen-badge">Vote terminé</div>
+        <div class="poll-slide__counter" data-poll-frozen-counter>0 votes</div>
+        <div class="poll-slide__actions">
+          <button type="button" class="poll-slide__action-btn" data-poll-reset title="Nouvelle session">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
+              <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="poll-slide__archived" data-poll-state="archived" hidden>
+        <div class="poll-slide__frozen-badge">Session archivée</div>
+        <div class="poll-slide__counter" data-poll-archived-counter>0 votes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .poll-slide__body {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 64px;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  .poll-slide__chart {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-self: center;
+  }
+
+  .poll-slide__bar-row {
+    display: grid;
+    grid-template-columns: 280px 1fr 80px;
+    align-items: center;
+    gap: 16px;
+    height: 56px;
+  }
+
+  .poll-slide__bar-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: #191919;
+    text-align: right;
+  }
+
+  .poll-slide__bar-track {
+    height: 56px;
+    background: rgba(25, 25, 25, 0.06);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .poll-slide__bar-fill {
+    height: 100%;
+    background: #FFD838;
+    border-radius: 6px;
+    transition: width 400ms ease-out;
+    position: relative;
+  }
+
+  .poll-slide__bar-fill.is-flash::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.4);
+    animation: poll-flash 600ms ease-out forwards;
+  }
+
+  @keyframes poll-flash {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  .poll-slide__bar-count {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 24px;
+    color: #191919;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .poll-slide__side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .poll-slide__initial,
+  .poll-slide__live,
+  .poll-slide__frozen,
+  .poll-slide__archived {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .poll-slide__start-btn {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: #191919;
+    background: #FFD838;
+    border: 2px solid #191919;
+    border-radius: 12px;
+    padding: 24px 48px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .poll-slide__start-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .poll-slide__qr {
+    width: 420px;
+    height: 420px;
+    background: #FAF8F3;
+    border: 1px solid #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .poll-slide__qr svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .poll-slide__code {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 80px;
+    letter-spacing: 0.15em;
+    color: #191919;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .poll-slide__url {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #6B6F84;
+  }
+
+  .poll-slide__counter {
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 700;
+    font-size: 18px;
+    color: #6B6F84;
+    margin-top: 4px;
+  }
+
+  .poll-slide__actions {
+    display: flex;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+    padding: 6px;
+    margin-top: 12px;
+  }
+
+  .poll-slide__action-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #191919;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  @media (hover: hover) {
+    .poll-slide__action-btn:hover {
+      background: #FFD838;
+    }
+  }
+
+  .poll-slide__frozen-badge {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    color: #191919;
+    background: #FFD838;
+    padding: 24px 48px;
+    border: 2px solid #191919;
+    border-radius: 12px;
+    text-align: center;
+  }
+</style>
