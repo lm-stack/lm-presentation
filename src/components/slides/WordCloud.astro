@@ -69,6 +69,9 @@ const { id, question, subtitle, highlight } = Astro.props;
       <div class="wordcloud-slide__archived" data-poll-state="archived" hidden>
         <div class="wordcloud-slide__frozen-badge">Session archivée</div>
         <div class="wordcloud-slide__counter" data-poll-archived-counter>0 mots</div>
+        <button type="button" class="wordcloud-slide__start-btn" data-poll-start>
+          Nouvelle session
+        </button>
       </div>
     </div>
   </div>

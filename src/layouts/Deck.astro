@@ -498,7 +498,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       function wirePollSlide(s: PollSlideState) {
         const sec = s.section;
-        sec.querySelector<HTMLButtonElement>('[data-poll-start]')?.addEventListener('click', () => onPollStart(s));
+        sec.querySelectorAll<HTMLButtonElement>('[data-poll-start]').forEach((btn) => {
+          btn.addEventListener('click', () => onPollStart(s));
+        });
         sec.querySelector<HTMLButtonElement>('[data-poll-freeze]')?.addEventListener('click', () => onPollFreeze(s));
         sec.querySelectorAll<HTMLButtonElement>('[data-poll-reset]').forEach((btn) => {
           btn.addEventListener('click', () => onPollReset(s));
