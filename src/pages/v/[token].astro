@@ -1,0 +1,358 @@
+---
+// src/pages/v/[token].astro
+// Page mobile ou les participants votent. Statique cote Astro, le contenu est
+// charge via fetch cote client a partir du :token dans l'URL.
+import FontsPreload from '@/components/FontsPreload.astro';
+
+export function getStaticPaths() {
+  // Route statique avec catch-all : on genere une seule page template,
+  // le token est lu cote client. Renvoyer un placeholder pour Astro.
+  return [{ params: { token: 'PLACEHOLDER' } }];
+}
+---
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <FontsPreload />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <title>Sondage : Lausanne Marketing</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      :root {
+        font-size: 62.5%;
+      }
+      body {
+        margin: 0;
+        font-family: 'Hanken Grotesk', sans-serif;
+        background: #FAF8F3;
+        color: #191919;
+        min-height: 100vh;
+      }
+      .vote-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #FAF8F3;
+        border-bottom: 1px solid rgba(25, 25, 25, 0.08);
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 60px;
+        box-sizing: border-box;
+      }
+      .vote-brand {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .vote-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #6B6F84;
+      }
+      .vote-status__dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #6B6F84;
+      }
+      .vote-status--open .vote-status__dot { background: #22C55E; }
+      .vote-status--closed .vote-status__dot { background: #EF4444; }
+
+      .vote-body {
+        padding: 24px;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      .vote-question {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 800;
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 0 0 32px;
+      }
+
+      .vote-option {
+        display: block;
+        width: 100%;
+        min-height: 72px;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        text-align: left;
+        background: #FFFFFF;
+        color: #191919;
+        border: 2px solid #191919;
+        border-radius: 12px;
+        padding: 16px 24px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
+      .vote-option:active,
+      .vote-option.is-selected {
+        background: #FFD838;
+      }
+
+      .vote-input {
+        width: 100%;
+        height: 60px;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 18px;
+        padding: 16px;
+        box-sizing: border-box;
+        border: 2px solid #191919;
+        border-radius: 12px;
+        margin-bottom: 12px;
+      }
+      .vote-submit {
+        width: 100%;
+        height: 60px;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        background: #191919;
+        color: #FFD838;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+      .vote-submit:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .vote-message {
+        text-align: center;
+        padding: 40px 16px;
+      }
+      .vote-message__icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        line-height: 1;
+      }
+      .vote-message__title {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 28px;
+        margin: 0 0 8px;
+      }
+      .vote-message__detail {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: #6B6F84;
+        margin: 0;
+      }
+      .vote-message__action {
+        margin-top: 24px;
+        background: #FFD838;
+        border: 2px solid #191919;
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="vote-header">
+      <span class="vote-brand">Lausanne Marketing</span>
+      <span class="vote-status" id="vote-status">
+        <span class="vote-status__dot"></span>
+        <span id="vote-status-label">Connexion</span>
+      </span>
+    </header>
+    <main class="vote-body" id="vote-body">
+      <p style="text-align: center; padding: 40px 16px; color: #6B6F84;">Chargement...</p>
+    </main>
+
+    <script>
+      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || '';
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const token = pathParts[pathParts.length - 1];
+
+      const statusEl = document.getElementById('vote-status') as HTMLElement;
+      const statusLabel = document.getElementById('vote-status-label') as HTMLElement;
+      const body = document.getElementById('vote-body') as HTMLElement;
+
+      function setStatus(state: 'open' | 'closed' | 'idle', label: string) {
+        statusEl.classList.remove('vote-status--open', 'vote-status--closed');
+        if (state === 'open') statusEl.classList.add('vote-status--open');
+        if (state === 'closed') statusEl.classList.add('vote-status--closed');
+        statusLabel.textContent = label;
+      }
+
+      function showMessage(icon: string, title: string, detail: string, action?: { label: string; onClick: () => void }) {
+        body.innerHTML = '';
+        const wrap = document.createElement('div');
+        wrap.className = 'vote-message';
+        wrap.innerHTML = `
+          <div class="vote-message__icon">${icon}</div>
+          <h2 class="vote-message__title">${title}</h2>
+          <p class="vote-message__detail">${detail}</p>
+        `;
+        if (action) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'vote-message__action';
+          btn.textContent = action.label;
+          btn.addEventListener('click', action.onClick);
+          wrap.appendChild(btn);
+        }
+        body.appendChild(wrap);
+      }
+
+      async function init() {
+        if (!token || !/^[A-Z0-9]{6}$/.test(token)) {
+          setStatus('closed', 'Code invalide');
+          showMessage('❌', 'Code invalide', "Le code de session n'est pas reconnu.");
+          return;
+        }
+
+        try {
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/info`);
+          if (res.status === 404) {
+            setStatus('closed', 'Non démarré');
+            showMessage('⏳', 'Sondage non démarré', "Demande à l'animateur de lancer le vote.");
+            return;
+          }
+          if (res.status === 423) {
+            setStatus('closed', 'Vote fermé');
+            showMessage('🔒', 'Vote terminé', 'Merci pour ta participation !');
+            return;
+          }
+          if (!res.ok) {
+            setStatus('closed', 'Erreur');
+            showMessage('⚠️', 'Erreur', 'Impossible de charger le sondage.');
+            return;
+          }
+          const info = await res.json();
+          setStatus('open', 'Vote ouvert');
+          renderForm(info);
+        } catch (err) {
+          console.error(err);
+          setStatus('closed', 'Erreur réseau');
+          showMessage('⚠️', 'Erreur réseau', 'Vérifie ta connexion et recharge la page.');
+        }
+      }
+
+      function renderForm(info: { type: 'choice' | 'word'; question: string; options?: string[] }) {
+        body.innerHTML = '';
+        const h = document.createElement('h1');
+        h.className = 'vote-question';
+        h.textContent = info.question;
+        body.appendChild(h);
+
+        if (info.type === 'choice' && info.options) {
+          info.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'vote-option';
+            btn.textContent = opt;
+            btn.addEventListener('click', () => submitChoice(i, opt));
+            body.appendChild(btn);
+          });
+        } else {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'vote-input';
+          input.maxLength = 30;
+          input.placeholder = 'Un mot ou une expression';
+          input.autocomplete = 'off';
+          input.spellcheck = false;
+
+          const submit = document.createElement('button');
+          submit.type = 'button';
+          submit.className = 'vote-submit';
+          submit.textContent = 'Envoyer';
+          submit.disabled = true;
+
+          input.addEventListener('input', () => {
+            submit.disabled = input.value.trim().length < 1 || input.value.trim().length > 30;
+          });
+          submit.addEventListener('click', () => {
+            const word = input.value.trim();
+            if (word.length === 0) return;
+            submitWord(word, info);
+          });
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !submit.disabled) submit.click();
+          });
+
+          body.appendChild(input);
+          body.appendChild(submit);
+        }
+      }
+
+      async function submitChoice(choice: number, label: string) {
+        try {
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ choice }),
+          });
+          if (res.status === 200) {
+            showMessage('✅', 'Merci pour ton vote !', `Tu as voté pour : ${label}`);
+            return;
+          }
+          if (res.status === 409) {
+            showMessage('ℹ️', 'Tu as déjà voté', 'Un vote par appareil pour ce sondage.');
+            return;
+          }
+          if (res.status === 423) {
+            setStatus('closed', 'Vote fermé');
+            showMessage('🔒', 'Vote fermé', 'Le sondage a été clôturé entre-temps.');
+            return;
+          }
+          if (res.status === 429) {
+            showMessage('⏱️', 'Trop de tentatives', 'Attends une minute avant de réessayer.');
+            return;
+          }
+          showMessage('⚠️', 'Erreur', `Le vote n'a pas pu être enregistré (${res.status}).`, { label: 'Réessayer', onClick: () => init() });
+        } catch (err) {
+          showMessage('⚠️', 'Erreur réseau', 'Vérifie ta connexion.', { label: 'Réessayer', onClick: () => init() });
+        }
+      }
+
+      async function submitWord(word: string, info: any) {
+        try {
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ word }),
+          });
+          if (res.status === 200) {
+            showMessage('✅', 'Réponse envoyée !', 'Propose-en une autre si tu veux.', {
+              label: 'Envoyer un autre mot',
+              onClick: () => renderForm(info),
+            });
+            return;
+          }
+          if (res.status === 423) {
+            setStatus('closed', 'Vote fermé');
+            showMessage('🔒', 'Vote fermé', 'Le sondage a été clôturé entre-temps.');
+            return;
+          }
+          if (res.status === 429) {
+            showMessage('⏱️', 'Trop de tentatives', 'Attends une minute avant de réessayer.');
+            return;
+          }
+          showMessage('⚠️', 'Erreur', `La réponse n'a pas pu être envoyée (${res.status}).`, { label: 'Réessayer', onClick: () => renderForm(info) });
+        } catch (err) {
+          showMessage('⚠️', 'Erreur réseau', 'Vérifie ta connexion.', { label: 'Réessayer', onClick: () => renderForm(info) });
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
