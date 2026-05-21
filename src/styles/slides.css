@@ -264,6 +264,109 @@ body.is-fullscreen .deck-footer {
   }
 }
 
+/* ============================================================ */
+/* Recherche dans le deck : panel pill qui descend sous la toolbar */
+/* ============================================================ */
+
+/* Panel ancre top-right, sous la deck-toolbar (qui est a top:16px height:40px) */
+.deck-search {
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid rgba(25, 25, 25, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(25, 25, 25, 0.12);
+  padding: 6px 8px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+}
+
+.deck-search[hidden] {
+  display: none;
+}
+
+.deck-search__icon {
+  color: #6B6F84;
+  flex-shrink: 0;
+  margin: 0 4px 0 6px;
+}
+
+.deck-search__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15px;
+  color: #191919;
+  padding: 6px 4px;
+}
+.deck-search__input::placeholder {
+  color: #6B6F84;
+}
+
+.deck-search__count {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6B6F84;
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.deck-search__nav,
+.deck-search__close {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #6B6F84;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+@media (hover: hover) {
+  .deck-search__nav:hover,
+  .deck-search__close:hover {
+    background: #FFD838;
+    color: #191919;
+  }
+}
+
+/* Masquage en fullscreen au meme titre que le reste du chrome */
+html:has(:fullscreen) .deck-search,
+body.is-fullscreen .deck-search {
+  display: none !important;
+}
+
+/* Highlight des matches dans les slides. mark est neutralise par defaut
+   pour eviter le surlignage hideux jaune fluo des UA stylesheets. */
+.search-hit {
+  background: rgba(255, 216, 56, 0.45);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+}
+.search-hit--current {
+  background: #FFD838;
+  outline: 2px solid #191919;
+  outline-offset: 0;
+}
+
 /* Menu (infos cours) — pastille en haut-gauche + panel deroulable, calque sur InfoPanel lm-diagrams */
 .deck-menu-pill {
   position: fixed;
