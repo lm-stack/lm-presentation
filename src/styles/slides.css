@@ -265,6 +265,49 @@ body.is-fullscreen .deck-footer {
 }
 
 /* ============================================================ */
+/* Mode présentateur : active via ?presenter dans l'URL.
+   Les viewers (sans ce param) ne voient pas les boutons admin Démarrer/Figer/Reset
+   ni le bouton "Nouvelle session" en mode archived. Les éléments .viewer-only
+   inversement n'apparaissent que pour les viewers. */
+body:not(.is-presenter) .presenter-only { display: none !important; }
+body.is-presenter .viewer-only { display: none !important; }
+
+/* Badge "Présentateur" en haut centre du viewport quand mode actif.
+   Masqué en plein écran avec le reste du chrome. */
+.presenter-badge {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  padding: 4px 12px;
+  background: #191919;
+  color: #FFD838;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+body.is-presenter .presenter-badge { display: inline-flex; }
+html:has(:fullscreen) .presenter-badge,
+body.is-fullscreen .presenter-badge { display: none !important; }
+
+/* Message "En attente de l'animateur" pour les viewers sur slides poll/wordcloud
+   en mode initial. Style discret aligné sur les autres messages d'état. */
+.poll-waiting {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: #6B6F84;
+  text-align: center;
+  padding: 24px;
+}
+
+/* ============================================================ */
 /* Recherche dans le deck : panel pill qui descend sous la toolbar */
 /* ============================================================ */
 

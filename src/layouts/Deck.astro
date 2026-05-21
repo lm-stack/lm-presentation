@@ -149,9 +149,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
     <PdfModal />
 
+    <div class="presenter-badge" aria-hidden="true">Présentateur</div>
+
     <script>
       import Reveal from 'reveal.js';
       import type { RevealApi } from 'reveal.js';
+
+      // Mode présentateur : active via ?presenter dans l'URL (param retire apres),
+      // stocke en sessionStorage. Les boutons admin (Demarrer, Figer, Reset) sont
+      // caches en mode viewer (par defaut) via la classe body.is-presenter.
+      const presenterUrl = new URL(window.location.href);
+      if (presenterUrl.searchParams.has('presenter')) {
+        sessionStorage.setItem('lm-presenter', '1');
+        presenterUrl.searchParams.delete('presenter');
+        history.replaceState({}, '', presenterUrl.toString());
+      }
+      if (sessionStorage.getItem('lm-presenter') === '1') {
+        document.body.classList.add('is-presenter');
+      }
 
       // Le type RevealConfig v6 n'admet pas null pour scrollActivationWidth (type number)
       // ni null pour les valeurs d'un keymap (type string | function). Reveal accepte
