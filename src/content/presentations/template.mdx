@@ -18,6 +18,8 @@ import Closing from '@/components/slides/Closing.astro';
 import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
 import AgendaLight from '@/components/slides/AgendaLight.astro';
 import AgendaFull from '@/components/slides/AgendaFull.astro';
+import Poll from '@/components/slides/Poll.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
 <Cover
   title="Template par défaut"
@@ -302,6 +304,34 @@ import AgendaFull from '@/components/slides/AgendaFull.astro';
   title="Pause"
   subtitle="Café, eau, étirements. On reprend ensemble."
   spotify="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ"
+/>
+
+<Section
+  number="04"
+  eyebrow="Interactivité"
+  title="Sondages live"
+  highlight="live"
+  subtitle="QCM et nuage de mots avec QR code et graphique temps réel."
+/>
+
+<Poll
+  id="exemple-qcm"
+  question="Cette présentation t'a paru ?"
+  subtitle="Réponds depuis ton téléphone"
+  highlight="téléphone"
+  options={[
+    "Très claire",
+    "Claire",
+    "Confuse par moments",
+    "Très confuse",
+  ]}
+/>
+
+<WordCloud
+  id="exemple-mots-cles"
+  question="En un mot, qu'est-ce que tu retiens ?"
+  subtitle="Plusieurs réponses bienvenues"
+  highlight="Plusieurs"
 />
 
 <Closing variant="qa" />
