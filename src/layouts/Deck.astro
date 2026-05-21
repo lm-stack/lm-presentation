@@ -155,17 +155,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       import Reveal from 'reveal.js';
       import type { RevealApi } from 'reveal.js';
 
-      // Mode présentateur : active via ?presenter dans l'URL (param retire apres),
-      // stocke en sessionStorage. Les boutons admin (Demarrer, Figer, Reset) sont
-      // caches en mode viewer (par defaut) via la classe body.is-presenter.
+      // Mode présentateur : active via ?presenter=SECRET dans l'URL (param retire
+       // apres), stocke en sessionStorage. Le secret est envoye en header
+       // X-Presenter-Key sur init/freeze/reset, valide cote worker.
       const presenterUrl = new URL(window.location.href);
-      if (presenterUrl.searchParams.has('presenter')) {
-        sessionStorage.setItem('lm-presenter', '1');
+      const presenterParam = presenterUrl.searchParams.get('presenter');
+      if (presenterParam) {
+        sessionStorage.setItem('lm-presenter-key', presenterParam);
         presenterUrl.searchParams.delete('presenter');
         history.replaceState({}, '', presenterUrl.toString());
       }
-      if (sessionStorage.getItem('lm-presenter') === '1') {
+      const PRESENTER_KEY = sessionStorage.getItem('lm-presenter-key') || '';
+      if (PRESENTER_KEY) {
         document.body.classList.add('is-presenter');
+      }
+      // Helper pour clear le mode si auth invalide (le worker repond 403)
+      function clearPresenterMode() {
+        sessionStorage.removeItem('lm-presenter-key');
+        document.body.classList.remove('is-presenter');
       }
 
       // Le type RevealConfig v6 n'admet pas null pour scrollActivationWidth (type number)
@@ -565,9 +572,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
         const res = await fetch(`${LM_POLLS_URL}/api/poll/init`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(PRESENTER_KEY ? { 'X-Presenter-Key': PRESENTER_KEY } : {}),
+          },
           body: JSON.stringify(body),
         });
+        if (res.status === 403) {
+          console.error('Presenter auth invalide, clear le mode');
+          clearPresenterMode();
+          return;
+        }
         if (!res.ok) {
           console.error('Poll init failed', await res.text());
           return;
@@ -582,7 +597,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       async function onPollFreeze(s: PollSlideState) {
         if (!s.token) return;
-        const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/freeze`, { method: 'POST' });
+        const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/freeze`, {
+          method: 'POST',
+          headers: PRESENTER_KEY ? { 'X-Presenter-Key': PRESENTER_KEY } : {},
+        });
+        if (res.status === 403) {
+          console.error('Presenter auth invalide, clear le mode');
+          clearPresenterMode();
+          return;
+        }
         if (!res.ok) {
           console.error('Freeze failed');
           return;
@@ -594,7 +617,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       async function onPollReset(s: PollSlideState) {
         if (s.token) {
-          await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/reset`, { method: 'POST' });
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/reset`, {
+            method: 'POST',
+            headers: PRESENTER_KEY ? { 'X-Presenter-Key': PRESENTER_KEY } : {},
+          });
+          if (res.status === 403) {
+            console.error('Presenter auth invalide, clear le mode');
+            clearPresenterMode();
+            return;
+          }
           await refreshPoll(s);
           showPollState(s, 'live');
           startPollPolling(s);
