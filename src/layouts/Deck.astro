@@ -458,6 +458,242 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         openSearch();
       });
 
+      // ================================================================
+      // Sondages live : initialisation et polling des slides <Poll>/<WordCloud>
+      // ================================================================
+      import qrcode from 'qrcode-generator';
+
+      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || '';
+      const DECK_SLUG = window.location.pathname.split('/').filter(Boolean)[1] || 'unknown';
+
+      type PollSlideState = {
+        type: 'choice' | 'word';
+        question: string;
+        options?: string[];
+        pollId: string;
+        token: string | null;
+        pollingTimer: number | null;
+        section: HTMLElement;
+      };
+
+      const pollSlides = new Map<string, PollSlideState>();
+
+      function initPollSlides() {
+        const slides = document.querySelectorAll<HTMLElement>('section[data-layout="poll"], section[data-layout="wordcloud"]');
+        slides.forEach((section) => {
+          const pollId = section.dataset.pollId!;
+          const pollType = section.dataset.pollType as 'choice' | 'word';
+          const question = section.dataset.pollQuestion!;
+          const options = section.dataset.pollOptions ? JSON.parse(section.dataset.pollOptions) : undefined;
+
+          const slideState: PollSlideState = {
+            type: pollType, question, options, pollId, token: null, pollingTimer: null, section,
+          };
+          pollSlides.set(pollId, slideState);
+
+          wirePollSlide(slideState);
+          resolvePollInitialState(slideState);
+        });
+      }
+
+      function wirePollSlide(s: PollSlideState) {
+        const sec = s.section;
+        sec.querySelector<HTMLButtonElement>('[data-poll-start]')?.addEventListener('click', () => onPollStart(s));
+        sec.querySelector<HTMLButtonElement>('[data-poll-freeze]')?.addEventListener('click', () => onPollFreeze(s));
+        sec.querySelectorAll<HTMLButtonElement>('[data-poll-reset]').forEach((btn) => {
+          btn.addEventListener('click', () => onPollReset(s));
+        });
+      }
+
+      async function resolvePollInitialState(s: PollSlideState) {
+        const stored = sessionStorage.getItem(`poll-${s.pollId}-token`);
+        if (stored) {
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${stored}/info`);
+          if (res.ok) {
+            s.token = stored;
+            renderPollQR(s, stored);
+            await refreshPoll(s);
+            showPollState(s, 'live');
+            startPollPolling(s);
+            return;
+          }
+          if (res.status === 423) {
+            s.token = stored;
+            await refreshPoll(s);
+            showPollState(s, 'frozen');
+            return;
+          }
+          sessionStorage.removeItem(`poll-${s.pollId}-token`);
+        }
+
+        const snapRes = await fetch(`${LM_POLLS_URL}/api/snapshot/${DECK_SLUG}/${s.pollId}`);
+        if (snapRes.ok) {
+          const snap = await snapRes.json();
+          renderPollResults(s, snap.votes, sumVotes(snap.votes));
+          showPollState(s, 'archived');
+          return;
+        }
+
+        showPollState(s, 'initial');
+      }
+
+      async function onPollStart(s: PollSlideState) {
+        const body: any = {
+          deckSlug: DECK_SLUG,
+          pollId: s.pollId,
+          type: s.type,
+          question: s.question,
+        };
+        if (s.type === 'choice') body.options = s.options;
+
+        const res = await fetch(`${LM_POLLS_URL}/api/poll/init`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) {
+          console.error('Poll init failed', await res.text());
+          return;
+        }
+        const { token } = await res.json();
+        s.token = token;
+        sessionStorage.setItem(`poll-${s.pollId}-token`, token);
+        renderPollQR(s, token);
+        showPollState(s, 'live');
+        startPollPolling(s);
+      }
+
+      async function onPollFreeze(s: PollSlideState) {
+        if (!s.token) return;
+        const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/freeze`, { method: 'POST' });
+        if (!res.ok) {
+          console.error('Freeze failed');
+          return;
+        }
+        stopPollPolling(s);
+        await refreshPoll(s);
+        showPollState(s, 'frozen');
+      }
+
+      async function onPollReset(s: PollSlideState) {
+        if (s.token) {
+          await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/reset`, { method: 'POST' });
+          await refreshPoll(s);
+          showPollState(s, 'live');
+          startPollPolling(s);
+        } else {
+          await onPollStart(s);
+        }
+      }
+
+      function showPollState(s: PollSlideState, name: 'initial' | 'live' | 'frozen' | 'archived') {
+        const side = s.section.querySelector('[data-poll-side]')!;
+        side.querySelectorAll<HTMLElement>('[data-poll-state]').forEach((el) => {
+          el.hidden = el.dataset.pollState !== name;
+        });
+      }
+
+      function startPollPolling(s: PollSlideState) {
+        stopPollPolling(s);
+        s.pollingTimer = window.setInterval(() => refreshPoll(s), 1500);
+      }
+
+      function stopPollPolling(s: PollSlideState) {
+        if (s.pollingTimer) {
+          clearInterval(s.pollingTimer);
+          s.pollingTimer = null;
+        }
+      }
+
+      async function refreshPoll(s: PollSlideState) {
+        if (!s.token) return;
+        try {
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/results`, {
+            credentials: 'include',
+          });
+          if (!res.ok) return;
+          const { votes, total, frozen } = await res.json();
+          renderPollResults(s, votes, total);
+          if (frozen) {
+            stopPollPolling(s);
+            showPollState(s, 'frozen');
+          }
+        } catch (err) {
+          console.error('Polling error', err);
+        }
+      }
+
+      function renderPollResults(s: PollSlideState, votes: Record<string, number>, total: number) {
+        if (s.type === 'choice') {
+          renderPollBars(s, votes);
+        } else {
+          renderPollWordCloud(s, votes);
+        }
+        const liveCounter = s.section.querySelector<HTMLElement>('[data-poll-counter]');
+        const frozenCounter = s.section.querySelector<HTMLElement>('[data-poll-frozen-counter]');
+        const archivedCounter = s.section.querySelector<HTMLElement>('[data-poll-archived-counter]');
+        const unit = s.type === 'choice' ? 'votes' : 'mots';
+        const label = `${total} ${unit}`;
+        if (liveCounter) liveCounter.textContent = label;
+        if (frozenCounter) frozenCounter.textContent = label;
+        if (archivedCounter) archivedCounter.textContent = label;
+      }
+
+      function renderPollBars(s: PollSlideState, votes: Record<string, number>) {
+        const max = Math.max(1, ...Object.values(votes), 1);
+        s.section.querySelectorAll<HTMLElement>('[data-bar-index]').forEach((row) => {
+          const i = parseInt(row.dataset.barIndex!, 10);
+          const count = votes[String(i)] || 0;
+          const fill = row.querySelector<HTMLElement>('[data-bar-fill]')!;
+          const cntEl = row.querySelector<HTMLElement>('[data-bar-count]')!;
+          const newWidth = `${(count / max) * 100}%`;
+          const oldCount = parseInt(cntEl.textContent || '0', 10);
+          fill.style.width = newWidth;
+          cntEl.textContent = String(count);
+          if (count > oldCount) {
+            fill.classList.remove('is-flash');
+            void fill.offsetWidth;
+            fill.classList.add('is-flash');
+          }
+        });
+      }
+
+      function renderPollWordCloud(s: PollSlideState, votes: Record<string, number>) {
+        const chart = s.section.querySelector<HTMLElement>('[data-poll-chart]')!;
+        const sorted = Object.entries(votes).sort(([, a], [, b]) => b - a).slice(0, 30);
+        chart.innerHTML = '';
+        sorted.forEach(([word, count], i) => {
+          const span = document.createElement('span');
+          span.className = `wordcloud-slide__word wordcloud-slide__word--c${i % 3}`;
+          span.style.fontSize = `clamp(28px, calc(28px + ${count * 6}px), 96px)`;
+          span.textContent = word;
+          chart.appendChild(span);
+        });
+      }
+
+      function renderPollQR(s: PollSlideState, token: string) {
+        const url = `${window.location.origin}/v/${token}`;
+        const qr = qrcode(0, 'M');
+        qr.addData(url);
+        qr.make();
+        const svgString = qr.createSvgTag({ scalable: true, margin: 0 });
+        const qrEl = s.section.querySelector<HTMLElement>('[data-poll-qr]')!;
+        qrEl.innerHTML = svgString;
+        s.section.querySelector<HTMLElement>('[data-poll-code]')!.textContent = token;
+        s.section.querySelector<HTMLElement>('[data-poll-url]')!.textContent = url.replace(/^https?:\/\//, '');
+      }
+
+      function sumVotes(votes: Record<string, number>): number {
+        return Object.values(votes).reduce((s, n) => s + n, 0);
+      }
+
+      // Init quand DOM ready (la slide est rendue par Reveal apres init)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPollSlides);
+      } else {
+        initPollSlides();
+      }
+
       // Table des matières : auto-construite depuis toute slide marquee data-section-title.
       // Inclut le slide d'accueil (Cover) + les sections, et tout slide custom qui s'expose.
       const tocNav = document.getElementById('deck-menu-toc') as HTMLElement | null;
