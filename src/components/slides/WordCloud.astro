@@ -100,7 +100,11 @@ const { id, question, subtitle, highlight } = Astro.props;
     min-height: 600px;
     overflow: hidden;
     align-self: center;
+    border: 1px solid rgba(25, 25, 25, 0.12);
+    border-radius: 8px;
   }
+  /* Note : le padding visuel du wordcloud est gere en JS (renderPollWordCloud)
+     car les spans en position:absolute ignorent le CSS padding du container. */
 
   /* :global() requis car les spans sont crees en JS (document.createElement)
      et n'heritent pas du data-astro-cid de scoping. Sans :global(), ces rules

@@ -733,8 +733,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           fontSize: Math.min(96, Math.max(28, 28 + count * 6)),
         }));
 
-        const width = chart.clientWidth || 1000;
-        const height = chart.clientHeight || 600;
+        // Padding visuel autour du nuage (CSS padding ignore par position:absolute).
+        const WORDCLOUD_PADDING = 32;
+        const width = (chart.clientWidth || 1000) - WORDCLOUD_PADDING * 2;
+        const height = (chart.clientHeight || 600) - WORDCLOUD_PADDING * 2;
 
         const placements = packWords(words, width, height);
 
@@ -749,12 +751,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           span.style.lineHeight = '1';
           span.style.whiteSpace = 'nowrap';
           if (p.rotated) {
-            span.style.left = `${p.x}px`;
-            span.style.top = `${p.y + p.h}px`;
+            span.style.left = `${p.x + WORDCLOUD_PADDING}px`;
+            span.style.top = `${p.y + p.h + WORDCLOUD_PADDING}px`;
             span.style.transformOrigin = 'left top';
           } else {
-            span.style.left = `${p.x}px`;
-            span.style.top = `${p.y}px`;
+            span.style.left = `${p.x + WORDCLOUD_PADDING}px`;
+            span.style.top = `${p.y + WORDCLOUD_PADDING}px`;
           }
           chart.appendChild(span);
         });
@@ -884,9 +886,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       const tocNav = document.getElementById('deck-menu-toc') as HTMLElement | null;
       const tocList = document.getElementById('deck-menu-toc-list') as HTMLOListElement | null;
       if (tocNav && tocList) {
+        // ToC : exclure les slides interactifs (poll, wordcloud), garder uniquement
+        // les slides de titre / transition (Cover, Section, Closing, AboutMe, Timer).
         const tocSlides = Array.from(
           document.querySelectorAll<HTMLElement>('.slides > section[data-section-title]')
-        );
+        ).filter((s) => {
+          const layout = s.dataset.layout || '';
+          return layout !== 'poll' && layout !== 'wordcloud';
+        });
         if (tocSlides.length > 0) {
           tocNav.hidden = false;
           const slidesParent = tocSlides[0].parentElement;
