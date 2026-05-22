@@ -104,13 +104,17 @@ body.is-fullscreen .deck-footer {
    Si une slide laisse un grand blanc en bas, c'est un bug : le composant override
    probablement avec justify-content: flex-start, a retirer.
    Les slides "structurelles" (Cover, Section, Closing, AboutMe, AboutMeBullets,
-   Timer) gardent leur center !important pour battre cette regle si besoin. */
+   Timer) gardent leur center !important pour battre cette regle si besoin.
+
+   Pourquoi !important : Reveal.js applique sa regle .reveal .slides>section.present
+   { display:block } (spec 0,3,1) sur la slide active, qui casse notre flex.
+   Avec !important on garantit que TOUS les slides restent en flex column centre. */
 .reveal section {
   padding: 80px 96px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
 }
 
 /* :where(.reveal, .handout-doc) : 0-specificity wildcard pour que la meme regle */
@@ -831,16 +835,3 @@ body.is-fullscreen .deck-search {
   }
 }
 
-/* ============================================================ */
-/* Watermark logo lm en bas-droit des slides Poll/WordCloud.
-   Signature discrete, opacite 0.08, pas d'interaction (pointer-events:none). */
-.deck-logo-watermark {
-  position: absolute;
-  bottom: 32px;
-  right: 32px;
-  width: 80px;
-  height: auto;
-  opacity: 0.08;
-  pointer-events: none;
-  z-index: 0;
-}
