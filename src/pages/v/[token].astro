@@ -84,60 +84,54 @@ export function getStaticPaths() {
       .vote-option {
         display: block;
         width: 100%;
-        min-height: 64px;
         font-family: 'Hanken Grotesk', sans-serif;
         font-weight: 700;
         font-size: 18px;
         text-align: left;
-        background: #FFFFFF;
+        background: #FFD838;
         color: #191919;
-        border: 2px solid #191919;
-        border-radius: 40px;
-        padding: 20px 28px;
-        margin-bottom: 16px;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 24px;
+        margin-bottom: 12px;
         cursor: pointer;
         box-sizing: border-box;
-        transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+        transition: background-color 0.2s ease;
       }
       .vote-option:active,
       .vote-option.is-selected {
-        background: #FFD838;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(25, 25, 25, 0.12);
+        background: #191919;
+        color: #FFD838;
       }
 
       .vote-input {
         width: 100%;
-        height: 64px;
         font-family: 'Hanken Grotesk', sans-serif;
         font-size: 18px;
-        padding: 20px 28px;
+        padding: 14px 24px;
         box-sizing: border-box;
-        border: 2px solid #191919;
-        border-radius: 40px;
-        margin-bottom: 16px;
+        background: #FFD838;
+        color: #191919;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: 12px;
         outline: none;
       }
-      .vote-input:focus {
-        box-shadow: 0 0 0 4px rgba(255, 216, 56, 0.4);
+      .vote-input::placeholder {
+        color: rgba(25, 25, 25, 0.5);
       }
       .vote-submit {
         width: 100%;
-        height: 64px;
         font-family: 'Hanken Grotesk', sans-serif;
         font-weight: 800;
         font-size: 18px;
         background: #FFD838;
         color: #191919;
         border: none;
-        border-radius: 40px;
+        border-radius: 8px;
+        padding: 14px 24px;
         cursor: pointer;
-        box-shadow: 0 4px 16px rgba(25, 25, 25, 0.12);
-        transition: transform 0.15s ease, box-shadow 0.2s ease;
-      }
-      .vote-submit:not(:disabled):hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(25, 25, 25, 0.2);
+        transition: background-color 0.2s ease;
       }
       .vote-submit:disabled {
         opacity: 0.4;
@@ -171,18 +165,12 @@ export function getStaticPaths() {
         background: #FFD838;
         color: #191919;
         border: none;
-        border-radius: 40px;
-        padding: 16px 32px;
+        border-radius: 8px;
+        padding: 14px 24px;
         font-family: 'Hanken Grotesk', sans-serif;
         font-weight: 700;
         font-size: 16px;
         cursor: pointer;
-        box-shadow: 0 4px 16px rgba(25, 25, 25, 0.12);
-        transition: transform 0.15s ease, box-shadow 0.2s ease;
-      }
-      .vote-message__action:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(25, 25, 25, 0.2);
       }
     </style>
   </head>
