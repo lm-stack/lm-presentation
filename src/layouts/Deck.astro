@@ -496,6 +496,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         token: string | null;
         pollingTimer: number | null;
         section: HTMLElement;
+        lastWordCloudKey?: string;
       };
 
       const pollSlides = new Map<string, PollSlideState>();
@@ -708,11 +709,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       function renderPollWordCloud(s: PollSlideState, votes: Record<string, number>) {
         const chart = s.section.querySelector<HTMLElement>('[data-poll-chart]')!;
+        if (!chart.offsetParent) return; // slide hidden by Reveal, skip
         const sorted = Object.entries(votes).sort(([, a], [, b]) => b - a).slice(0, 30);
         if (sorted.length === 0) {
           chart.innerHTML = '';
           return;
         }
+
+        const key = JSON.stringify(sorted);
+        if (s.lastWordCloudKey === key) return;
+        s.lastWordCloudKey = key;
 
         const words: WordInput[] = sorted.map(([word, count]) => ({
           word,
