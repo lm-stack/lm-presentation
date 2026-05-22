@@ -100,21 +100,53 @@ body.is-fullscreen .deck-footer {
   text-align: left;
 }
 
-/* REGLE INTANGIBLE : le contenu d'une slide est CENTRE verticalement par defaut.
-   Si une slide laisse un grand blanc en bas, c'est un bug : le composant override
-   probablement avec justify-content: flex-start, a retirer.
-   Les slides "structurelles" (Cover, Section, Closing, AboutMe, AboutMeBullets,
-   Timer) gardent leur center !important pour battre cette regle si besoin.
+/* ============================================================ */
+/* REGLE ABSOLUE LAYOUT DES SLIDES                              */
+/* ============================================================ */
+/*
+   Le TITRE (SlideTitle = .slide-title : h2 + sous-titre + barre)
+   reste TOUJOURS en haut de la slide, en position fixe.
 
-   Pourquoi !important : Reveal.js applique sa regle .reveal .slides>section.present
-   { display:block } (spec 0,3,1) sur la slide active, qui casse notre flex.
-   Avec !important on garantit que TOUS les slides restent en flex column centre. */
+   Le CONTENU sous le titre (le body de la slide) est centre
+   verticalement dans l'espace restant (entre le bas du titre
+   et le bas de la slide, padding inclus).
+
+   PAS de "tout centre comme un bloc" : le titre doit etre dans
+   la meme position spatiale sur TOUTES les slides. Sinon Thomas
+   relit cette section pour la 16e fois.
+
+   Comment c'est implemente :
+   - .reveal section : flex column + height 100% + padding, MAIS
+     PAS de justify-content (defaut flex-start, titre en haut).
+   - .slide-title + * : le sibling juste apres le titre prend
+     flex: 1 pour occuper le reste de la hauteur.
+   - Chaque body de composant slide gere son centrage interne
+     (align-content: center si grid, justify-content: center
+     si flex column).
+
+   Pourquoi !important : Reveal.js applique
+   .reveal .slides>section.present { display:block } (spec 0,3,1)
+   sur la slide active, ce qui casse notre flex sans !important.
+
+   Slides "structurelles" (Cover, Section, Closing, AboutMe,
+   AboutMeBullets, Timer, Statement, Quote, BigImage, ImageGrid,
+   Title) : ces composants ont leur propre justify-content:center
+   !important pour centrer leur layout custom (h1 monumental,
+   watermark, etc.). Leur regle override la notre, c'est OK.
+*/
 .reveal section {
   padding: 80px 96px;
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: center !important;
+}
+
+/* Body de slide : le sibling juste apres .slide-title occupe
+   tout l'espace vertical restant. Le centrage du contenu DANS
+   le body est defini par chaque composant (.xxx-slide__body). */
+.reveal section > .slide-title + * {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
 }
 
 /* :where(.reveal, .handout-doc) : 0-specificity wildcard pour que la meme regle */

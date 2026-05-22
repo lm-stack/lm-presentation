@@ -57,9 +57,38 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - `Timer` : pause avec compte à rebours
 - `Statement`, `Quote` : citations / déclarations fortes
 
-### Centrage vertical du contenu
+### Centrage vertical du contenu — RÈGLE ABSOLUE (lis attentivement, Claude)
 
-Toutes les slides centrent leur contenu sur la hauteur par défaut (`.reveal section { justify-content: center }`). Si une slide laisse un blanc en bas, c'est qu'un composant override avec `justify-content: flex-start !important` — à retirer (sauf cas explicite type `Custom.astro` qui propose 3 variantes top/center/bottom).
+⚠️ **Le titre d'une slide reste TOUJOURS fixe en haut**, à la même position spatiale sur toutes les slides. Le contenu sous le titre est centré dans l'**espace restant** (entre le bas du titre et le bas de la slide). Il NE FAUT PAS centrer tout (titre + contenu) comme un bloc — sinon le titre dérive vers le milieu selon la hauteur du contenu, ce que Thomas a déjà signalé une dizaine de fois.
+
+**Comment c'est implémenté** (`src/styles/slides.css`) :
+
+```css
+.reveal section {
+  padding: 80px 96px;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  /* PAS de justify-content: center ! Le titre reste en haut (flex-start par défaut). */
+}
+
+.reveal section > .slide-title + * {
+  flex: 1 1 auto !important;   /* le body prend tout l'espace restant */
+  min-height: 0 !important;
+}
+```
+
+**Chaque composant slide** ajoute son centrage interne dans son `.xxx-slide__body` :
+- Si le body est `display: grid` → ajouter `align-content: center`
+- Si le body est `display: flex; flex-direction: column` → ajouter `justify-content: center`
+- Si le body est `display: flex; flex-direction: row` → ajouter `align-items: center`
+
+**Slides "structurelles"** (Cover, Section, Closing, AboutMe, AboutMeBullets, Statement, Quote, Timer, BigImage, ImageGrid, Title) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
+
+**Ne jamais** :
+- Ajouter `justify-content: center` sur `.reveal section` global → casse la position du titre
+- Oublier `align-content: center` (grid) ou `justify-content: center` (flex) sur le body d'une nouvelle slide → contenu collé sous le titre, blanc en bas
+- Centrer un titre par lui-même (genre `text-align` ou marges magiques) → utiliser SlideTitle
 
 ## Commandes
 
