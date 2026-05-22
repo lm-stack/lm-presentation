@@ -501,7 +501,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
       const pollSlides = new Map<string, PollSlideState>();
 
-      function initPollSlides() {
+      async function initPollSlides() {
+        // Attendre que Hanken Grotesk soit charge avant de mesurer les bbox du wordcloud
+        // via canvas.measureText. Sinon canvas fallback sur sans-serif (largeur differente)
+        // alors que le DOM rend en Hanken Grotesk -> overlap visuel des mots.
+        if (document.fonts?.ready) {
+          try { await document.fonts.ready; } catch {}
+        }
+
         const slides = document.querySelectorAll<HTMLElement>('section[data-layout="poll"], section[data-layout="wordcloud"]');
         slides.forEach((section) => {
           const pollId = section.dataset.pollId!;
