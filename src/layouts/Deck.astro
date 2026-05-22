@@ -709,12 +709,40 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       function renderPollWordCloud(s: PollSlideState, votes: Record<string, number>) {
         const chart = s.section.querySelector<HTMLElement>('[data-poll-chart]')!;
         const sorted = Object.entries(votes).sort(([, a], [, b]) => b - a).slice(0, 30);
+        if (sorted.length === 0) {
+          chart.innerHTML = '';
+          return;
+        }
+
+        const words: WordInput[] = sorted.map(([word, count]) => ({
+          word,
+          count,
+          fontSize: Math.min(96, Math.max(28, 28 + count * 6)),
+        }));
+
+        const width = chart.clientWidth || 1000;
+        const height = chart.clientHeight || 600;
+
+        const placements = packWords(words, width, height);
+
         chart.innerHTML = '';
-        sorted.forEach(([word, count], i) => {
+        placements.forEach((p) => {
           const span = document.createElement('span');
-          span.className = `wordcloud-slide__word wordcloud-slide__word--c${i % 3}`;
-          span.style.fontSize = `clamp(28px, calc(28px + ${count * 6}px), 96px)`;
-          span.textContent = word;
+          span.className = p.rotated ? 'wordcloud-slide__word wordcloud-slide__word--v' : 'wordcloud-slide__word';
+          span.textContent = p.word;
+          span.style.position = 'absolute';
+          span.style.fontSize = `${p.fontSize}px`;
+          span.style.color = p.color;
+          span.style.lineHeight = '1';
+          span.style.whiteSpace = 'nowrap';
+          if (p.rotated) {
+            span.style.left = `${p.x}px`;
+            span.style.top = `${p.y + p.h}px`;
+            span.style.transformOrigin = 'left top';
+          } else {
+            span.style.left = `${p.x}px`;
+            span.style.top = `${p.y}px`;
+          }
           chart.appendChild(span);
         });
       }
@@ -729,6 +757,102 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         qrEl.innerHTML = svgString;
         s.section.querySelector<HTMLElement>('[data-poll-code]')!.textContent = token;
         s.section.querySelector<HTMLElement>('[data-poll-url]')!.textContent = url.replace(/^https?:\/\//, '');
+      }
+
+      // ================================================================
+      // Spiral packing pour le wordcloud (custom, no lib).
+      // Algorithme Archimedien : on trie les mots par count desc, on place
+      // le premier au centre, les suivants spiralent depuis le centre en
+      // cherchant la premiere position sans collision (AABB + padding 4px).
+      // Rotation 0deg/90deg seedee par hash du mot pour stabilite au refresh.
+      // Top 3 toujours horizontaux pour lisibilite.
+      // ================================================================
+
+      const wordCloudMeasureCanvas = typeof document !== 'undefined' ? document.createElement('canvas') : null;
+      const wordCloudMeasureCtx = wordCloudMeasureCanvas?.getContext('2d') ?? null;
+
+      function hashStr(s: string): number {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) {
+          h = ((h << 5) - h) + s.charCodeAt(i);
+          h |= 0;
+        }
+        return Math.abs(h);
+      }
+
+      function shouldRotateWord(word: string, rank: number): boolean {
+        if (rank < 3) return false; // top 3 toujours horizontal
+        return hashStr(word) % 100 < 30;
+      }
+
+      function pickWordColor(rank: number): string {
+        if (rank === 0) return '#FFD838';
+        if (rank <= 2) return '#191919';
+        return '#6B6F84';
+      }
+
+      type WordInput = { word: string; count: number; fontSize: number };
+      type WordPlacement = {
+        word: string;
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+        rotated: boolean;
+        fontSize: number;
+        color: string;
+      };
+
+      function measureWordBbox(word: string, fontSize: number, rotated: boolean): { w: number; h: number } {
+        if (!wordCloudMeasureCtx) return { w: fontSize * word.length * 0.6, h: fontSize };
+        wordCloudMeasureCtx.font = `800 ${fontSize}px "Hanken Grotesk", sans-serif`;
+        const m = wordCloudMeasureCtx.measureText(word);
+        const textW = m.width;
+        const textH = fontSize * 1.0;
+        return rotated ? { w: textH, h: textW } : { w: textW, h: textH };
+      }
+
+      function packWords(words: WordInput[], width: number, height: number): WordPlacement[] {
+        const placed: WordPlacement[] = [];
+        const cx = width / 2;
+        const cy = height / 2;
+        const PADDING = 4;
+        const MAX_STEPS = 1000;
+
+        words.forEach((w, rank) => {
+          const rotated = shouldRotateWord(w.word, rank);
+          const color = pickWordColor(rank);
+          const bbox = measureWordBbox(w.word, w.fontSize, rotated);
+
+          for (let i = 0; i < MAX_STEPS; i++) {
+            const t = i * 0.15;
+            const r = t * 2;
+            const x = cx + r * Math.cos(t) - bbox.w / 2;
+            const y = cy + r * Math.sin(t) - bbox.h / 2;
+
+            if (x < 0 || y < 0 || x + bbox.w > width || y + bbox.h > height) continue;
+
+            let collide = false;
+            for (const p of placed) {
+              if (
+                x < p.x + p.w + PADDING &&
+                x + bbox.w + PADDING > p.x &&
+                y < p.y + p.h + PADDING &&
+                y + bbox.h + PADDING > p.y
+              ) {
+                collide = true;
+                break;
+              }
+            }
+
+            if (!collide) {
+              placed.push({ word: w.word, x, y, w: bbox.w, h: bbox.h, rotated, fontSize: w.fontSize, color });
+              break;
+            }
+          }
+        });
+
+        return placed;
       }
 
       function sumVotes(votes: Record<string, number>): number {
