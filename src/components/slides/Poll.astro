@@ -189,14 +189,16 @@ if (options.length < 2 || options.length > 6) {
     font-size: 28px;
     color: #191919;
     background: #FFD838;
-    border: 2px solid #191919;
-    border-radius: 12px;
+    border: none;
+    border-radius: 40px;
     padding: 24px 48px;
     cursor: pointer;
-    transition: transform 0.15s ease;
+    box-shadow: 0 4px 16px rgba(25, 25, 25, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .poll-slide__start-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 25, 25, 0.2);
   }
 
   .poll-slide__qr {
