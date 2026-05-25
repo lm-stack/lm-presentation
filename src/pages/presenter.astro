@@ -1,0 +1,204 @@
+---
+// src/pages/presenter.astro
+// Page de login presentateur : form password -> POST /api/presenter/auth ->
+// token signe stocke en sessionStorage -> redirect.
+//
+// Le password ne quitte jamais le body POST initial. Le token signe a une
+// duree de vie de 6h cote worker (HMAC-SHA256 + payload { iat, exp }).
+// Apres expiration, l'utilisateur doit revenir ici se relog.
+import FontsPreload from '@/components/FontsPreload.astro';
+---
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <FontsPreload />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <title>Présentateur : Lausanne Marketing</title>
+    <meta name="robots" content="noindex" />
+    <style is:global>
+      html {
+        font-size: 62.5%;
+      }
+      body {
+        margin: 0;
+        font-family: 'Hanken Grotesk', sans-serif;
+        background: #FAF8F3;
+        color: #191919;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .presenter-card {
+        background: #FFFFFF;
+        border: 1px solid rgba(25, 25, 25, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 12px 32px rgba(25, 25, 25, 0.08);
+        padding: 40px;
+        max-width: 420px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .presenter-eyebrow {
+        font-family: 'Space Grotesk', monospace;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: #6B6F84;
+        margin: 0 0 8px;
+      }
+      .presenter-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 24px;
+        color: #191919;
+      }
+      .presenter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .presenter-form label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #6B6F84;
+      }
+      .presenter-form input {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-size: 18px;
+        padding: 14px 16px;
+        background: #FFFFFF;
+        color: #191919;
+        border: 2px solid rgba(25, 25, 25, 0.12);
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 0.15s ease;
+      }
+      .presenter-form input:focus {
+        border-color: #191919;
+      }
+      .presenter-form button {
+        font-family: 'Hanken Grotesk', sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        background: #FFD838;
+        color: #191919;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 24px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        margin-top: 4px;
+      }
+      .presenter-form button:hover:not(:disabled) {
+        background: #FFE55A;
+      }
+      .presenter-form button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .presenter-error {
+        color: #C2410C;
+        font-size: 14px;
+        margin: 8px 0 0;
+        min-height: 1em;
+      }
+      .presenter-hint {
+        font-size: 12px;
+        color: #6B6F84;
+        margin: 16px 0 0;
+        text-align: center;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="presenter-card">
+      <p class="presenter-eyebrow">Lausanne Marketing</p>
+      <h1 class="presenter-title">Mode présentateur</h1>
+      <form class="presenter-form" id="presenter-form" autocomplete="off">
+        <label for="presenter-password">Mot de passe</label>
+        <input
+          id="presenter-password"
+          type="password"
+          required
+          autofocus
+          autocomplete="current-password"
+        />
+        <button type="submit" id="presenter-submit">Activer</button>
+        <p class="presenter-error" id="presenter-error" aria-live="polite"></p>
+      </form>
+      <p class="presenter-hint">Session valable 6 heures. Le mot de passe n'est jamais stocké.</p>
+    </main>
+
+    <script>
+      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || 'https://lm-polls.hello-cb2.workers.dev';
+      const form = document.getElementById('presenter-form') as HTMLFormElement;
+      const passwordInput = document.getElementById('presenter-password') as HTMLInputElement;
+      const submitBtn = document.getElementById('presenter-submit') as HTMLButtonElement;
+      const errorEl = document.getElementById('presenter-error') as HTMLElement;
+
+      // Sanitize le from= pour eviter open-redirect : on accepte uniquement les
+      // chemins internes commencant par / et sans `//` (qui pourrait etre une
+      // URL absolue via protocol-relative).
+      function safeFrom(raw: string | null): string {
+        if (!raw) return '/';
+        if (!raw.startsWith('/')) return '/';
+        if (raw.startsWith('//')) return '/';
+        if (!/^[a-z0-9/\-_?&=#.]+$/i.test(raw)) return '/';
+        return raw;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const target = safeFrom(params.get('from'));
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorEl.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Vérification...';
+
+        try {
+          const res = await fetch(`${LM_POLLS_URL}/api/presenter/auth`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: passwordInput.value }),
+          });
+
+          if (res.status === 401) {
+            errorEl.textContent = 'Mot de passe incorrect';
+            return;
+          }
+          if (res.status === 503) {
+            errorEl.textContent = 'Auth indisponible côté serveur';
+            return;
+          }
+          if (!res.ok) {
+            errorEl.textContent = `Erreur ${res.status}`;
+            return;
+          }
+
+          const { token, expiresAt } = await res.json() as { token: string; expiresAt: number };
+          if (!token) {
+            errorEl.textContent = 'Réponse serveur invalide';
+            return;
+          }
+          sessionStorage.setItem('lm-presenter-token', token);
+          // Stocke l'expiry pour debug eventuel cote browser
+          sessionStorage.setItem('lm-presenter-expires', String(expiresAt));
+          window.location.href = target;
+        } catch (err) {
+          console.error(err);
+          errorEl.textContent = 'Erreur réseau, vérifie la connexion';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Activer';
+        }
+      });
+    </script>
+  </body>
+</html>

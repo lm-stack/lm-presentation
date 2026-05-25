@@ -35,7 +35,7 @@ const WORDCLOUD_TOP_N = 30;
 export type PollsConfig = {
   lmPollsUrl: string;
   deckSlug: string;
-  presenterKey: string;
+  presenterToken: string;
 };
 
 export async function initPollSlides(config: PollsConfig): Promise<void> {
@@ -118,7 +118,7 @@ async function onPollStart(s: PollSlideState, config: PollsConfig): Promise<void
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...(config.presenterKey ? { 'X-Presenter-Key': config.presenterKey } : {}),
+      ...(config.presenterToken ? { 'X-Presenter-Token': config.presenterToken } : {}),
     },
     body: JSON.stringify(body),
   });
@@ -143,7 +143,7 @@ async function onPollFreeze(s: PollSlideState, config: PollsConfig): Promise<voi
   if (!s.token) return;
   const res = await fetch(`${config.lmPollsUrl}/api/poll/${s.token}/freeze`, {
     method: 'POST',
-    headers: config.presenterKey ? { 'X-Presenter-Key': config.presenterKey } : {},
+    headers: config.presenterToken ? { 'X-Presenter-Token': config.presenterToken } : {},
   });
   if (res.status === 403) {
     console.error('Presenter auth invalide, clear le mode');
@@ -163,7 +163,7 @@ async function onPollReset(s: PollSlideState, config: PollsConfig): Promise<void
   if (s.token) {
     const res = await fetch(`${config.lmPollsUrl}/api/poll/${s.token}/reset`, {
       method: 'POST',
-      headers: config.presenterKey ? { 'X-Presenter-Key': config.presenterKey } : {},
+      headers: config.presenterToken ? { 'X-Presenter-Token': config.presenterToken } : {},
     });
     if (res.status === 403) {
       console.error('Presenter auth invalide, clear le mode');
