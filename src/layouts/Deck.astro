@@ -499,6 +499,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         lastWordCloudKey?: string;
       };
 
+      type PollInitBody = {
+        deckSlug: string;
+        pollId: string;
+        type: 'choice' | 'word';
+        question: string;
+        options?: string[];
+      };
+
       const pollSlides = new Map<string, PollSlideState>();
 
       async function initPollSlides() {
@@ -570,7 +578,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       }
 
       async function onPollStart(s: PollSlideState) {
-        const body: any = {
+        const body: PollInitBody = {
           deckSlug: DECK_SLUG,
           pollId: s.pollId,
           type: s.type,
@@ -664,9 +672,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       async function refreshPoll(s: PollSlideState) {
         if (!s.token) return;
         try {
-          const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/results`, {
-            credentials: 'include',
-          });
+          // Pas de credentials: le worker lm-polls est sans cookie (auth par token
+          // dans l'URL + X-Presenter-Key). Inclure credentials forcerait le worker
+          // a renvoyer Access-Control-Allow-Credentials, ce qui ouvre CSRF si un
+          // jour il accepte des actions cote credentials. Mieux : token-based pur.
+          const res = await fetch(`${LM_POLLS_URL}/api/poll/${s.token}/results`);
           if (!res.ok) return;
           const { votes, total, frozen } = await res.json();
           renderPollResults(s, votes, total);

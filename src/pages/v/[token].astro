@@ -208,15 +208,31 @@ export function getStaticPaths() {
         statusLabel.textContent = label;
       }
 
+      // title et detail viennent en partie de la reponse worker (info.options[i]
+      // utilise comme label apres vote). On rend par createElement + textContent
+      // plutot que par innerHTML interpole, pour qu'aucune chaine cote worker ne
+      // puisse injecter de markup dans le DOM (defense in depth meme si le worker
+      // est sous notre controle).
       function showMessage(icon: string, title: string, detail: string, action?: { label: string; onClick: () => void }) {
-        body.innerHTML = '';
+        body.replaceChildren();
         const wrap = document.createElement('div');
         wrap.className = 'vote-message';
-        wrap.innerHTML = `
-          <div class="vote-message__icon">${icon}</div>
-          <h2 class="vote-message__title">${title}</h2>
-          <p class="vote-message__detail">${detail}</p>
-        `;
+
+        const iconEl = document.createElement('div');
+        iconEl.className = 'vote-message__icon';
+        iconEl.textContent = icon;
+        wrap.appendChild(iconEl);
+
+        const titleEl = document.createElement('h2');
+        titleEl.className = 'vote-message__title';
+        titleEl.textContent = title;
+        wrap.appendChild(titleEl);
+
+        const detailEl = document.createElement('p');
+        detailEl.className = 'vote-message__detail';
+        detailEl.textContent = detail;
+        wrap.appendChild(detailEl);
+
         if (action) {
           const btn = document.createElement('button');
           btn.type = 'button';
@@ -262,7 +278,9 @@ export function getStaticPaths() {
         }
       }
 
-      function renderForm(info: { type: 'choice' | 'word'; question: string; options?: string[] }) {
+      type PollInfo = { type: 'choice' | 'word'; question: string; options?: string[] };
+
+      function renderForm(info: PollInfo) {
         body.innerHTML = '';
         const h = document.createElement('h1');
         h.className = 'vote-question';
@@ -340,7 +358,7 @@ export function getStaticPaths() {
         }
       }
 
-      async function submitWord(word: string, info: any) {
+      async function submitWord(word: string, info: PollInfo) {
         try {
           const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
             method: 'POST',
