@@ -10,16 +10,7 @@ interface Props {
 
 const { text, author, role, image, highlight } = Astro.props;
 
-function splitHighlight(t: string, mot?: string) {
-  if (!mot) return null;
-  const idx = t.toLowerCase().indexOf(mot.toLowerCase());
-  if (idx === -1) return null;
-  return {
-    before: t.slice(0, idx),
-    match: t.slice(idx, idx + mot.length),
-    after: t.slice(idx + mot.length),
-  };
-}
+import { splitHighlight } from '@/utils/highlight';
 
 const textParts = splitHighlight(text, highlight);
 ---

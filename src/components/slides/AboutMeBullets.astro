@@ -27,16 +27,7 @@ const {
   bullets,
 } = Astro.props;
 
-function splitHighlight(text: string, mot?: string) {
-  if (!mot) return null;
-  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
-  if (idx === -1) return null;
-  return {
-    before: text.slice(0, idx),
-    match: text.slice(idx, idx + mot.length),
-    after: text.slice(idx + mot.length),
-  };
-}
+import { splitHighlight } from '@/utils/highlight';
 
 const lastNameParts = lastName ? splitHighlight(lastName, highlight) : null;
 const showHeader = Boolean(firstName || lastName);

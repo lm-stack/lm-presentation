@@ -48,16 +48,7 @@ const spotifyEmbed = spotifyParsed
   ? `https://open.spotify.com/embed/${spotifyParsed.type}/${spotifyParsed.id}?utm_source=generator&theme=0`
   : null;
 
-function splitHighlight(text: string, mot?: string) {
-  if (!mot) return null;
-  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
-  if (idx === -1) return null;
-  return {
-    before: text.slice(0, idx),
-    match: text.slice(idx, idx + mot.length),
-    after: text.slice(idx + mot.length),
-  };
-}
+import { splitHighlight } from '@/utils/highlight';
 
 const titleParts = splitHighlight(title, highlight);
 ---

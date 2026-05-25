@@ -35,16 +35,8 @@ const decksData = await Promise.all(
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
-function splitHighlight(text: string, mot?: string) {
-  if (!mot) return null;
-  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
-  if (idx === -1) return null;
-  return {
-    before: text.slice(0, idx),
-    match: text.slice(idx, idx + mot.length),
-    after: text.slice(idx + mot.length),
-  };
-}
+import { splitHighlight } from '@/utils/highlight';
+
 const titleParts = splitHighlight(data.title, data.highlight);
 ---
 <!DOCTYPE html>

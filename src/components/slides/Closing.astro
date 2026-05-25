@@ -37,16 +37,7 @@ const eyebrowLabel =
 
 const watermark = variant === 'qa' ? '?' : variant === 'thanks' ? '·' : '@';
 
-function splitHighlight(text: string, mot?: string) {
-  if (!mot) return null;
-  const idx = text.toLowerCase().indexOf(mot.toLowerCase());
-  if (idx === -1) return null;
-  return {
-    before: text.slice(0, idx),
-    match: text.slice(idx, idx + mot.length),
-    after: text.slice(idx + mot.length),
-  };
-}
+import { splitHighlight } from '@/utils/highlight';
 
 const titleParts = splitHighlight(title, highlight);
 ---
