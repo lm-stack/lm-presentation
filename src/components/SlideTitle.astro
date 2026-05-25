@@ -41,8 +41,12 @@ const subtitlePartsIsObject = subtitleParts !== undefined && typeof subtitlePart
 </div>
 
 <style>
+  /* L'espacement sous la zone titre est entièrement contrôlé par .slide-divider
+     (margin: 0 auto 48px dans slides.css), qui collapse à travers ce wrapper.
+     Un margin-bottom sur .slide-title ici serait redondant (max-collapse) ou,
+     pire, additionnerait du blanc en violation du rythme imposé par CLAUDE.md.
+     text-align reste défensif au cas où un sous-titre legacy oublie son centrage. */
   .slide-title {
     text-align: center;
-    margin-bottom: 32px;
   }
 </style>

@@ -1,12 +1,11 @@
 ---
 // src/components/slides/Statement.astro
 interface Props {
-  highlight?: string;
   image?: string;
   title?: string;
   subtitle?: string;
 }
-const { highlight, image, title, subtitle } = Astro.props;
+const { image, title, subtitle } = Astro.props;
 ---
 <section class="statement" data-layout="statement">
   {(title || subtitle) && (

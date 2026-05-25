@@ -104,7 +104,6 @@ const titleParts = splitHighlight(title, highlight);
         src={spotifyEmbed}
         width="100%"
         height="680"
-        frameborder="0"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
         title="Lecteur Spotify"
@@ -195,10 +194,14 @@ const titleParts = splitHighlight(title, highlight);
       }
     });
 
-    // Reveal.js : auto reset quand on quitte la slide, auto-start optionnel à l'entrée
+    // Reveal.js : auto reset quand on quitte la slide, auto-start optionnel à l'entrée.
+    // Reveal v6 expose les data DIRECTEMENT sur l'event (Util.extend dans reveal.js),
+    // pas dans event.detail. Accéder à e.currentSlide, sinon le check ci-dessous
+    // renvoie toujours false et le timer est juste stoppé à chaque slide change
+    // (auto-start et reset jamais appelés à l'entrée).
     document.addEventListener('slidechanged', (e: Event) => {
-      const detail = (e as CustomEvent).detail as { currentSlide?: HTMLElement } | undefined;
-      const isCurrent = detail?.currentSlide === slide || slide.contains(detail?.currentSlide ?? null);
+      const currentSlide = (e as Event & { currentSlide?: HTMLElement }).currentSlide;
+      const isCurrent = currentSlide === slide || slide.contains(currentSlide ?? null);
       if (!isCurrent) {
         stop();
         return;
@@ -387,10 +390,11 @@ const titleParts = splitHighlight(title, highlight);
   }
 
   /* Player Spotify vertical à droite, format carte (artwork + tracklist).
-     L'iframe a une taille logique réduite (le widget Spotify "pense" être plus
-     petit, donc utilise une typo proportionnellement plus grosse), puis on
-     applique transform: scale(1.25) pour la rendre visuellement à la taille
-     voulue. Le wrapper crop avec overflow:hidden. */
+     Iframe rendue à sa taille native (580×680) : Spotify utilise sa typo
+     "grand container", probablement plus fine que celle du mode compact, mais
+     en contrepartie le rendu reste net. L'ancienne approche (iframe réduite
+     puis transform: scale pour grossir) donnait du flou parce que le browser
+     interpolait un rendu déjà rasterisé. */
   .timer-slide__spotify {
     position: absolute;
     right: 128px;
@@ -413,10 +417,8 @@ const titleParts = splitHighlight(title, highlight);
   }
   .timer-slide__spotify iframe {
     display: block;
-    width: 387px;   /* 580 / 1.5 : taille logique du widget */
-    height: 454px;  /* 680 / 1.5 */
-    transform: scale(1.5);
-    transform-origin: top left;
+    width: 100%;
+    height: 100%;
     border: 0;
     border-radius: 16px;
   }

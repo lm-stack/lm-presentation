@@ -1,5 +1,10 @@
 // src/content.config.ts
-import { defineCollection, z } from 'astro:content';
+// `z` est déprécié dans astro:content depuis Astro 5+ (et astro:schema l'est
+// aussi en Astro 6, prévu pour suppression en Astro 7). Source officielle :
+// `astro/zod`, qui expose l'instance Zod bundlée avec Astro (cf. node_modules/
+// astro/client.d.ts -> declare module 'astro:schema' avec @deprecated).
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const presentations = defineCollection({

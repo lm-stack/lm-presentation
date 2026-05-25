@@ -53,7 +53,7 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
       <div id="handout-pages"></div>
     </main>
 
-    <script define:vars={{ mode, perPage }}>
+    <script is:inline define:vars={{ mode, perPage }}>
       // Post-mount : groupe les <section> sources par paquets, scale, pagine.
       const source = document.getElementById('handout-source');
       const target = document.getElementById('handout-pages');

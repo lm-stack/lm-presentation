@@ -111,7 +111,10 @@ const titleParts = splitHighlight(data.title, data.highlight);
               <a class="parcours-card__link" href={`/p/${deck.slug}?from=${parcoursSlug}`}>
                 <div class="parcours-card__media">
                   {deck.cover ? (
-                    <img src={deck.cover} alt="" loading="lazy" decoding="async" />
+                    /* Above-fold cards (3 par ligne sur desktop) : loading eager pour éviter */
+                    /* le CLS et l'audit Astro "Unoptimized loading attribute" qui flagge toute */
+                    /* image lazy potentiellement au-dessus du fold. */
+                    <img src={deck.cover} alt="" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
                   ) : (
                     <span class="parcours-card__placeholder" aria-hidden="true">
                       <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 256 256" fill="currentColor">
