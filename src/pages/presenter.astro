@@ -132,7 +132,7 @@ import FontsPreload from '@/components/FontsPreload.astro';
         <button type="submit" id="presenter-submit">Activer</button>
         <p class="presenter-error" id="presenter-error" aria-live="polite"></p>
       </form>
-      <p class="presenter-hint">Session valable 6 heures. Le mot de passe n'est jamais stocké.</p>
+      <p class="presenter-hint">Session valable 6 heures (multi-onglets). Le mot de passe n'est jamais stocké.</p>
     </main>
 
     <script>
@@ -187,9 +187,8 @@ import FontsPreload from '@/components/FontsPreload.astro';
             errorEl.textContent = 'Réponse serveur invalide';
             return;
           }
-          sessionStorage.setItem('lm-presenter-token', token);
-          // Stocke l'expiry pour debug eventuel cote browser
-          sessionStorage.setItem('lm-presenter-expires', String(expiresAt));
+          localStorage.setItem('lm-presenter-token', token);
+          localStorage.setItem('lm-presenter-expires', String(expiresAt));
           window.location.href = target;
         } catch (err) {
           console.error(err);
