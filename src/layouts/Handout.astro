@@ -36,8 +36,17 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
     <link rel="shortcut icon" href="/favicon.png" />
     <title>{`${title} : handout ${mode}up : Lausanne Marketing`}</title>
     <meta name="robots" content="noindex" />
-    {mode === '1' && <style>{`@page { size: 297mm 167mm; margin: 0; }`}</style>}
-    {mode !== '1' && <style>{`@page { size: 210mm 297mm; margin: 0; }`}</style>}
+    {/* IMPORTANT : <style>{`...`}</style> seul ne marche PAS dans Astro pour */}
+    {/* un @page rule : la syntaxe template literal est rendue litteralement */}
+    {/* dans le HTML produit (backticks et accolades inclus), le CSS parser */}
+    {/* silently ignore. Il faut is:inline + set:html pour injecter du CSS brut. */}
+    {/* Mode 1up : custom 297x167mm (ratio 16:9 exact). Mode 2up/3up : A4 portrait. */}
+    {mode === '1' && (
+      <style is:inline set:html="@page { size: 297mm 167mm; margin: 0; }" />
+    )}
+    {mode !== '1' && (
+      <style is:inline set:html="@page { size: 210mm 297mm; margin: 0; }" />
+    )}
   </head>
   <body>
     <main

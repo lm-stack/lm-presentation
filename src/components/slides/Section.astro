@@ -61,7 +61,12 @@ const titleParts = splitHighlight(title, highlight);
     z-index: 0;
   }
 
-  /* Watermark numerique gold a droite, fadant vers le bord */
+  /* Watermark numerique gold a droite, fadant vers le bord.
+     IMPORTANT : font-size en px absolu (pas vw) car les slides Reveal sont */
+  /* dans une box fixe 1920x1080. En mode handout PDF (zoom: 0.585/0.374), */
+  /* les vw resolvent au viewport reel Puppeteer (1440px) et donnent un */
+  /* watermark 3-4x plus petit que prevu : `60vw = 864px` rendu a 506px (1up) */
+  /* ou 323px (2up) au lieu des 880px attendus en fullscreen Reveal. */
   .slide-section__watermark {
     position: absolute;
     top: 50%;
@@ -69,7 +74,7 @@ const titleParts = splitHighlight(title, highlight);
     transform: translateY(-50%);
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 800;
-    font-size: clamp(420px, 60vw, 880px);
+    font-size: 880px;
     line-height: 0.78;
     letter-spacing: -0.06em;
     color: #FFD838;
