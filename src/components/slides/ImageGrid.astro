@@ -46,17 +46,16 @@ const hasHeader = Boolean(title || subtitle);
 </section>
 
 <style>
-  .image-grid {
-    justify-content: center !important;
-  }
-
+  /* Pas de justify-content: center sur la section : le titre reste fixe en
+     haut. La grille prend flex: 1 1 auto via .slide-title + * de slides.css
+     et se centre via align-content: center dans son espace residuel. */
   .image-grid__grid {
     display: grid;
     gap: 24px;
     max-width: 1700px;
     margin: 0 auto;
     width: 100%;
-    height: 720px;
+    align-content: center;
   }
 
   .image-grid__grid--2 {

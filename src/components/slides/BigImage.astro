@@ -23,14 +23,18 @@ const { title, subtitle, highlight, image, alt = '', caption, frame = true } = A
 </section>
 
 <style>
-  .big-image {
-    justify-content: center !important;
-  }
+  /* Pas de justify-content: center sur la section : le titre doit rester fixe
+     en haut. La figure prend flex: 1 1 auto via la regle .slide-title + * de
+     slides.css, et centre son image en son propre sein. */
   .big-image__figure {
     margin: 0 auto;
     max-width: 1600px;
     width: 100%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .big-image__figure--frame img {
     border-radius: 20px;
