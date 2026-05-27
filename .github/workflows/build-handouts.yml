@@ -58,6 +58,20 @@ jobs:
             exit 0
           fi
 
+          # fetch-depth: 2 ne couvre pas les pushs multi-commits : github.event.before
+          # peut pointer plus loin que HEAD~1. On tente un fetch cible avant de bailler.
+          # Si le commit reste introuvable, fallback --all (sur de detecter une regression
+          # globale plutot que de manquer un changement).
+          if ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            echo "Commit $BEFORE absent du clone, fetch cible..."
+            git fetch origin "$BEFORE" --depth=1 2>/dev/null || true
+          fi
+          if ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            echo "Commit $BEFORE toujours inaccessible -> rebuild all"
+            echo "args=--all" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" || true)
           echo "Fichiers modifies :"
           echo "$CHANGED"
