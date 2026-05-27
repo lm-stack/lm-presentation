@@ -62,6 +62,20 @@
   border-radius: 4px;
 }
 
+/* Outline gold sur fond gold = invisible. Pour les rares elements interactifs */
+/* a fond #FFD838 (boutons "Demarrer" des polls, lien retour parcours, "Retour */
+/* a la liste" du 404), on bascule l'outline en noir. Cascade : on s'aligne   */
+/* sur la specificite du rule global (0,1,0 via :where) et on profite de     */
+/* l'ordre source pour l'override. */
+:focus-visible:where(
+  .poll-slide__start-btn,
+  .wordcloud-slide__start-btn,
+  .deck-menu__back-parcours,
+  .back-home
+) {
+  outline-color: #191919;
+}
+
 /* Underline gold rotatif (signature LM, hors @layer pour battre Tailwind utility) */
 .underline {
   position: relative;

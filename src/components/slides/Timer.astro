@@ -209,10 +209,17 @@ const titleParts = splitHighlight(title, highlight);
     });
 
     render();
-    if (autoStart && document.readyState !== 'loading') {
-      // Si chargement direct sur la slide
-      if (slide.classList.contains('present')) start();
-    }
+
+    // AutoStart sur slide d'arrivee : Reveal ne fire pas slidechanged pour la
+    // slide initiale (post-init), donc le handler slidechanged ne couvre que
+    // les navigations. Deck.astro dispatch un evenement lm:deck-ready apres
+    // Reveal init avec currentSlide en detail. On l'ecoute pour declencher
+    // l'autoStart si cette Timer est la slide d'arrivee.
+    document.addEventListener('lm:deck-ready', (e) => {
+      if (!autoStart) return;
+      const current = (e as CustomEvent).detail?.currentSlide as HTMLElement | undefined;
+      if (current === slide && remaining === total) start();
+    }, { once: true });
   }
 
   document.querySelectorAll<HTMLElement>('[data-layout="timer"]').forEach(initTimer);

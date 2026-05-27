@@ -199,6 +199,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         // (Reveal ajoute la classe pendant initialize()), donc on peut decider
         // correctement quel poll doit tourner.
         syncPolling();
+        // Notifie les slides qui ont besoin de l'etat initial post-Reveal (ex:
+        // Timer en autoStart sur la slide initiale). Reveal ne fire pas
+        // slidechanged pour la slide d'arrivee, donc sans cet event les hooks
+        // d'entree manquent leur premier declenchement.
+        document.dispatchEvent(new CustomEvent('lm:deck-ready', {
+          detail: { currentSlide: deck.getCurrentSlide() },
+        }));
       });
 
       // Polls : independants de Reveal mais attendent que le DOM soit pret pour

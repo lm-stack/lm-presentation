@@ -145,8 +145,20 @@ export function initDeckSearch(deck: RevealApi): void {
 
   searchBtn?.addEventListener('click', openSearch);
   searchCloseBtn?.addEventListener('click', closeSearch);
+  // Debounce 150ms : sur un deck dense (50+ slides, plusieurs centaines de
+  // text nodes), runSearch fait un clearSearchHighlights complet + un new
+  // RegExp + un TreeWalker par slide a chaque frappe. Sans debounce, taper
+  // rapidement saccade visible (~30-80ms par run sur deck moyen). 150ms est
+  // sous le seuil de perception tout en permettant a un burst de frappe de
+  // se regrouper en un seul run.
+  let searchDebounceTimer: number | null = null;
   searchInput?.addEventListener('input', (e) => {
-    runSearch((e.target as HTMLInputElement).value);
+    const value = (e.target as HTMLInputElement).value;
+    if (searchDebounceTimer !== null) clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = window.setTimeout(() => {
+      searchDebounceTimer = null;
+      runSearch(value);
+    }, 150);
   });
   searchInput?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
