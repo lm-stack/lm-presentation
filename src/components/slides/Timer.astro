@@ -176,6 +176,13 @@ const titleParts = splitHighlight(title, highlight);
 
     document.addEventListener('keydown', (e) => {
       if (!isActive()) return;
+      // Garde-fou identique a deck-search : ne pas capter les touches quand le
+      // focus est dans un champ editable (recherche ouverte, MDX qui ajoute un
+      // <input>, etc.). Sans ca, 'R' tape dans la search bar resetait le timer
+      // alors que la slide etait .present.
+      const target = e.target as HTMLElement | null;
+      const isEditable = !!target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+      if (isEditable) return;
       if (e.code === 'Space') {
         e.preventDefault();
         running ? stop() : start();
