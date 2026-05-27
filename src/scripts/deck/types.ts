@@ -13,6 +13,10 @@ export type PollSlideState = {
   pollingTimer: number | null;
   section: HTMLElement;
   lastWordCloudKey?: string;
+  // shouldBePolling: intent du présentateur (Démarrer = true, Figer = false).
+  // pollingTimer: l'intervalle actif ou null s'il est suspendu (slide pas en
+  // avant-plan, ou tab hidden). syncPolling() réconcilie l'un avec l'autre.
+  shouldBePolling: boolean;
 };
 
 export type PollInitBody = {

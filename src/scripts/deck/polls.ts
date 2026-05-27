@@ -10,7 +10,16 @@
 // Le polling utilise setInterval cote browser, le worker lm-polls expose les
 // endpoints /api/poll/init, /api/poll/{token}/results, /api/poll/{token}/freeze,
 // /api/poll/{token}/reset. Les writes (init/freeze/reset) exigent le header
-// X-Presenter-Key valide cote worker.
+// X-Presenter-Token valide cote worker.
+//
+// LIFECYCLE DU POLLING — important :
+// Le polling ne tourne QUE si :
+//   - le presentateur a demarre la session (shouldBePolling = true)
+//   - la slide est l'active courante dans Reveal (section.classList.contains('present'))
+//   - le tab est visible (!document.hidden)
+// Sinon l'interval est suspendu pour eviter de spammer le worker depuis des onglets
+// en arriere-plan ou des slides hors vue. syncPolling() est appele a chaque
+// slidechanged (depuis Deck.astro) + visibilitychange (ici).
 
 import qrcode from 'qrcode-generator';
 import { packWords, type WordInput } from './wordcloud-packing';
@@ -38,7 +47,16 @@ export type PollsConfig = {
   presenterToken: string;
 };
 
+// Registre des polls actifs sur la page (un PollSlideState par slide poll/wordcloud).
+// Permet a syncPolling() de demarrer/stopper les intervals selon la slide courante
+// et la visibilite du tab, sans avoir a passer le registre explicitement.
+const activePollStates = new Map<string, PollSlideState>();
+let pollsConfig: PollsConfig | null = null;
+let visibilityHandlerAttached = false;
+
 export async function initPollSlides(config: PollsConfig): Promise<void> {
+  pollsConfig = config;
+
   // Attendre que Hanken Grotesk soit charge avant de mesurer les bbox du wordcloud
   // via canvas.measureText. Sinon canvas fallback sur sans-serif (largeur differente)
   // alors que le DOM rend en Hanken Grotesk -> overlap visuel des mots.
@@ -49,16 +67,50 @@ export async function initPollSlides(config: PollsConfig): Promise<void> {
   const slides = document.querySelectorAll<HTMLElement>('section[data-layout="poll"], section[data-layout="wordcloud"]');
   slides.forEach((section) => {
     const pollId = section.dataset.pollId!;
+    // Idempotence : si la slide a deja ete wired (hot-reload, re-init), on skip.
+    if (section.dataset.pollWired === '1') return;
+    section.dataset.pollWired = '1';
+
     const pollType = section.dataset.pollType as PollType;
     const question = section.dataset.pollQuestion!;
     const options = section.dataset.pollOptions ? JSON.parse(section.dataset.pollOptions) as string[] : undefined;
 
     const slideState: PollSlideState = {
-      type: pollType, question, options, pollId, token: null, pollingTimer: null, section,
+      type: pollType, question, options, pollId, token: null, pollingTimer: null, section, shouldBePolling: false,
     };
 
+    activePollStates.set(pollId, slideState);
     wirePollSlide(slideState, config);
     void resolvePollInitialState(slideState, config);
+  });
+
+  // Pause / resume global sur visibilitychange. Sans ca, un tab en arriere-plan
+  // ou cache continue de fetch /results toutes les 1.5s indefiniment.
+  if (!visibilityHandlerAttached) {
+    document.addEventListener('visibilitychange', syncPolling);
+    visibilityHandlerAttached = true;
+  }
+}
+
+// Reconcilie l'intervalle de chaque poll avec son etat (shouldBePolling) et le
+// contexte runtime (slide active + tab visible). Appele par :
+//   - les transitions internes (start/freeze/reset)
+//   - visibilitychange (registered ici)
+//   - slidechanged (registered dans Deck.astro)
+export function syncPolling(): void {
+  if (!pollsConfig) return;
+  const cfg = pollsConfig;
+  activePollStates.forEach((s) => {
+    const isPresent = s.section.classList.contains('present');
+    const shouldRun = s.shouldBePolling && isPresent && !document.hidden;
+    if (shouldRun && !s.pollingTimer) {
+      // Resume : un fetch immediat pour rattraper l'etat puis l'interval reprend.
+      void refreshPoll(s, cfg);
+      s.pollingTimer = window.setInterval(() => void refreshPoll(s, cfg), POLLING_INTERVAL_MS);
+    } else if (!shouldRun && s.pollingTimer) {
+      clearInterval(s.pollingTimer);
+      s.pollingTimer = null;
+    }
   });
 }
 
@@ -185,23 +237,21 @@ function showPollState(s: PollSlideState, name: PollState): void {
   });
 }
 
-function startPollPolling(s: PollSlideState, config: PollsConfig): void {
-  stopPollPolling(s);
-  s.pollingTimer = window.setInterval(() => void refreshPoll(s, config), POLLING_INTERVAL_MS);
+function startPollPolling(s: PollSlideState, _config: PollsConfig): void {
+  s.shouldBePolling = true;
+  syncPolling();
 }
 
 function stopPollPolling(s: PollSlideState): void {
-  if (s.pollingTimer) {
-    clearInterval(s.pollingTimer);
-    s.pollingTimer = null;
-  }
+  s.shouldBePolling = false;
+  syncPolling();
 }
 
 async function refreshPoll(s: PollSlideState, config: PollsConfig): Promise<void> {
   if (!s.token) return;
   try {
     // Pas de credentials: le worker lm-polls est sans cookie (auth par token
-    // dans l'URL + X-Presenter-Key). Inclure credentials forcerait le worker
+    // dans l'URL + X-Presenter-Token). Inclure credentials forcerait le worker
     // a renvoyer Access-Control-Allow-Credentials, ce qui ouvre CSRF si un
     // jour il accepte des actions cote credentials. Mieux : token-based pur.
     const res = await fetch(`${config.lmPollsUrl}/api/poll/${s.token}/results`);

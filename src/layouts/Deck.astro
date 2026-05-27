@@ -167,7 +167,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         initToc,
       } from '@/scripts/deck/deck-chrome';
       import { initDeckSearch } from '@/scripts/deck/deck-search';
-      import { initPollSlides } from '@/scripts/deck/polls';
+      import { initPollSlides, syncPolling } from '@/scripts/deck/polls';
 
       // Presenter d'abord : si un token est present en sessionStorage (emis par
       // /presenter), on pose la classe body.is-presenter pour afficher les
@@ -186,12 +186,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       initFullscreenToggle();
 
       // Reveal en arriere-plan : quand pret, on cable les inits qui dependent
-      // de l'instance deck (present button, TOC, recherche full-text).
+      // de l'instance deck (present button, TOC, recherche full-text). On branche
+      // aussi slidechanged sur syncPolling pour suspendre les polls hors-vue
+      // (cf. polls.ts pour le rationale).
       initReveal().then((deck) => {
         if (!deck) return;
         initPresentButton(deck);
         initToc(deck);
         initDeckSearch(deck);
+        deck.on('slidechanged', () => syncPolling());
+        // Premier sync apres l'init Reveal : la slide courante a maintenant .present
+        // (Reveal ajoute la classe pendant initialize()), donc on peut decider
+        // correctement quel poll doit tourner.
+        syncPolling();
       });
 
       // Polls : independants de Reveal mais attendent que le DOM soit pret pour

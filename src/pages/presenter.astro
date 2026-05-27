@@ -1,11 +1,12 @@
 ---
 // src/pages/presenter.astro
 // Page de login presentateur : form password -> POST /api/presenter/auth ->
-// token signe stocke en sessionStorage -> redirect.
+// token signe stocke en localStorage -> redirect.
 //
 // Le password ne quitte jamais le body POST initial. Le token signe a une
 // duree de vie de 6h cote worker (HMAC-SHA256 + payload { iat, exp }).
-// Apres expiration, l'utilisateur doit revenir ici se relog.
+// Apres expiration, l'utilisateur doit revenir ici se relog. Pourquoi
+// localStorage et pas sessionStorage : cf. src/scripts/deck/presenter.ts.
 import FontsPreload from '@/components/FontsPreload.astro';
 ---
 <!DOCTYPE html>
