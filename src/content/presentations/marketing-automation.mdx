@@ -12,13 +12,13 @@ import Section from '@/components/slides/Section.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import BigImage from '@/components/slides/BigImage.astro';
 import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
-import NumberedCards from '@/components/slides/NumberedCards.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 import Closing from '@/components/slides/Closing.astro';
 
-{/* Slide 1 : Cover */}
+{/* Slide 1 : Cover. Les conventions visuelles (echange / demo / workshop)
+    sont introduites dans le deck `introduction` du parcours, en amont. */}
 <Cover
   title="Marketing automation"
   subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
@@ -28,20 +28,7 @@ import Closing from '@/components/slides/Closing.astro';
   image="/decks/marketing-automation/cover-robot.jpg"
 />
 
-{/* Slide 2 : Conventions du support (ex symboles d'introduction) */}
-<NumberedCards
-  title="Conventions du support"
-  subtitle="Trois pictogrammes reviennent tout au long de la session."
-  highlight="pictogrammes"
-  cols={1}
-  items={[
-    { number: "01", title: "Échange", description: "Prenez la parole pour partager votre expérience quand le symbole de conversation apparaît." },
-    { number: "02", title: "Démo", description: "Une démonstration en direct va suivre, par exemple la présentation d'un outil en ligne." },
-    { number: "03", title: "Workshop", description: "Un atelier va être effectué, par exemple la création d'un workflow." },
-  ]}
-/>
-
-{/* Slide 3 : Chart ZHAW Technologies pertinentes */}
+{/* Slide 2 : Chart ZHAW Technologies pertinentes */}
 <BigImage
   title="Technologies marketing pertinentes"
   subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."

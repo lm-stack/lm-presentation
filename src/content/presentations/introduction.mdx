@@ -1,0 +1,45 @@
+---
+title: "Introduction"
+subtitle: "CRM, Data & Automation"
+short: "Introduction"
+date: 2026-06-01
+type: cours
+description: "Premier module du parcours CRM, Data & Automation. Cadrage du cours, conventions visuelles du support et amorce des trois modes pédagogiques : échange, démo, workshop."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Conventions from '@/components/slides/Conventions.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+<Cover
+  title="Introduction"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 1"
+  highlight="Introduction"
+  watermark="01"
+/>
+
+<Conventions />
+
+<Exchange
+  title="Partage d'expérience"
+  subtitle="Ce pictogramme vous invite à prendre la parole."
+  highlight="expérience"
+/>
+
+<Demo
+  title="Démonstration"
+  subtitle="Ce pictogramme annonce une démo live à observer."
+  highlight="Démonstration"
+/>
+
+<Workshop
+  title="Workshop"
+  subtitle="Ce pictogramme ouvre un atelier hands-on, seul ou en sous-groupes."
+  highlight="Workshop"
+/>
+
+<Closing variant="qa" />
