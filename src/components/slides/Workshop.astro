@@ -52,6 +52,10 @@ const { title, subtitle, highlight, subject, rows } = Astro.props;
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
+    /* Centre le tableau dans l'espace restant sous SlideTitle. */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .workshop__badge {
     position: absolute;

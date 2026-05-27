@@ -28,6 +28,11 @@ const hasHeader = Boolean(title || subtitle);
     font-size: 22px;
     line-height: 1.55;
     color: #6B6F84;
+    /* Centre le contenu MDX dans l'espace restant sous SlideTitle (regle */
+    /* intangible : titre fixe en haut, contenu centre dans le reste).   */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   /* Styles globaux pour le contenu MDX libre injecte via le slot */

@@ -36,36 +36,47 @@ const fixedRows: Row[] = [
 ---
 <section class="two-col-table" data-layout="two-col-table">
   <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
-  {intro && <p class="two-col-table__intro">{intro}</p>}
+  <div class="two-col-table__body">
+    {intro && <p class="two-col-table__intro">{intro}</p>}
 
-  <div class="two-col-table__frame">
-    <table class="two-col-table__table">
-      <colgroup>
-        <col class="two-col-table__col-idx" />
-        <col class="two-col-table__col-label" />
-        <col class="two-col-table__col-value" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="two-col-table__idx" aria-hidden="true">№</th>
-          <th>{headers[0]}</th>
-          <th>{headers[1]}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {fixedRows.map((row, i) => (
-          <tr class={row.label === '' ? 'is-empty' : ''}>
-            <td class="two-col-table__idx">{String(i + 1).padStart(2, '0')}</td>
-            <td class="two-col-table__label">{row.label}</td>
-            <td class="two-col-table__value">{row.value}</td>
+    <div class="two-col-table__frame">
+      <table class="two-col-table__table">
+        <colgroup>
+          <col class="two-col-table__col-idx" />
+          <col class="two-col-table__col-label" />
+          <col class="two-col-table__col-value" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="two-col-table__idx" aria-hidden="true">№</th>
+            <th>{headers[0]}</th>
+            <th>{headers[1]}</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {fixedRows.map((row, i) => (
+            <tr class={row.label === '' ? 'is-empty' : ''}>
+              <td class="two-col-table__idx">{String(i + 1).padStart(2, '0')}</td>
+              <td class="two-col-table__label">{row.label}</td>
+              <td class="two-col-table__value">{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
 <style>
+  /* Wrapper unique sous SlideTitle pour que le centrage vertical fonctionne */
+  /* meme avec intro present. Sans, intro prend tout l'espace flex et le    */
+  /* tableau passe sous le bord visible.                                     */
+  .two-col-table__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
   .two-col-table__intro {
     font-size: 20px;
     color: #6B6F84;

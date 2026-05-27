@@ -15,27 +15,38 @@ const { title, subtitle, highlight, intro, headers, rows, leftLabel } = Astro.pr
 ---
 <section class="table-slide" data-layout="table">
   <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
-  {intro && <p class="table-slide__intro">{intro}</p>}
-  <div class="table-slide__wrapper">
-    {leftLabel && <span class="table-slide__left-label">{leftLabel}</span>}
-    <table class="lm-table">
-      <thead>
-        <tr>
-          {headers.map((h) => <th>{h}</th>)}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
+  <div class="table-slide__body">
+    {intro && <p class="table-slide__intro">{intro}</p>}
+    <div class="table-slide__wrapper">
+      {leftLabel && <span class="table-slide__left-label">{leftLabel}</span>}
+      <table class="lm-table">
+        <thead>
           <tr>
-            {row.map((cell) => <td>{cell}</td>)}
+            {headers.map((h) => <th>{h}</th>)}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              {row.map((cell) => <td>{cell}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
 <style>
+  /* Wrapper unique sous SlideTitle. Sans ce wrap, le `.slide-title + *` de */
+  /* slides.css ne matche que le PREMIER sibling : si intro est present il */
+  /* prend tout l'espace flex et le tableau est rejete en bas hors-vue.    */
+  .table-slide__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
   .table-slide__intro {
     font-size: 22px;
     color: #6B6F84;
