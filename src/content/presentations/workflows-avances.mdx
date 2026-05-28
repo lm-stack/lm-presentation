@@ -1,0 +1,197 @@
+---
+title: "Workflows avancés"
+subtitle: "CRM, Data & Automation"
+short: "Workflows avancés"
+date: 2026-06-02
+type: cours
+description: "Workflows avancés : limites des workflows uniques, automatiser l'automatisation avec n8n, devenir flowgrammer et appliquer les six piliers d'une automation durable. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Suite directe du module Workflow (Jour 2). On part du
+    workflow unique pour aller vers l'industrialisation. Visuel fusee +
+    pipes : echelle et tuyauterie. */}
+<Cover
+  title="Workflows avancés"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 33"
+  highlight="avancés"
+  watermark="WA"
+  image="/decks/workflows-avances/cover-rocket.jpg"
+/>
+
+{/* Slide 2 : Calendrier Jour 3. Workflows avances creneau 13h15-14h45. */}
+<Calendar
+  title="Calendrier"
+  subtitle="Formation en Growth Marketing"
+  highlight="Calendrier"
+  day="Jour 3"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
+    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
+    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
+    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
+    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : Exchange - quelles sont les limites du workflow d'hier ?
+    Reprise du workflow Zapier construit en Jour 2 pour interpeller la classe. */}
+<Exchange
+  title="Quelles sont les limites du workflow d'hier ?"
+  subtitle="Reprenez le workflow Zapier construit lors du module précédent. Qu'est-ce qui pourrait mal se passer à l'échelle ?"
+  highlight="limites"
+/>
+
+{/* Slide 4 : Trois limites des workflows uniques. ImageGrid 3 cards. */}
+<ImageGrid
+  title="Trois limites des workflows uniques"
+  subtitle="Créer un workflow par processus entraîne des externalités négatives qu'il faut mitiger rapidement."
+  highlight="limites"
+  images={[
+    {
+      src: "/decks/workflows-avances/limite-risque-erreur.jpeg",
+      title: "Risque d'erreur",
+      text: "Trop d'actions manuelles et de duplications. Chaque copie d'un workflow réintroduit des occasions de divergence.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-scalabilite.jpeg",
+      title: "Scalabilité limitée",
+      text: "Un workflow par processus, donc une multiplication linéaire. Le coût de maintenance grandit avec le catalogue.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-usine-gaz.jpeg",
+      title: "Usine à gaz",
+      text: "Historicité compliquée, qui a fait quoi, quand, et pourquoi. Le debugging devient archéologique.",
+    },
+  ]}
+/>
+
+{/* Slide 5 : Le pivot conceptuel. Automatiser l'automatisation. */}
+<Statement
+  title="Automatiser l'automatisation"
+  subtitle="Construire un workflow qui reste valable à chaque nouvel événement, sans dupliquer ni reconfigurer."
+  image="/decks/workflows-avances/automatiser-lightbulb.jpeg"
+>
+  Le pivot conceptuel : on ne crée plus un workflow par événement, mais un workflow qui s'adapte à tous les événements. Le code est unique, la donnée est variable.
+</Statement>
+
+{/* Slide 6 : Exchange - modeliser un processus ensemble. */}
+<Exchange
+  title="Modélisons un processus BPMN ensemble"
+  subtitle="Choisissez un processus récurrent de votre organisation. On le modélise en direct, prêt pour n8n."
+  highlight="ensemble"
+/>
+
+{/* Slide 7 : Demonstration sur n8n. */}
+<Demo
+  title="Démonstration sur n8n"
+  subtitle="Construction live d'un workflow paramétrable qui orchestre plusieurs événements à partir d'une seule logique."
+  highlight="n8n"
+/>
+
+{/* Slide 8 : Section - Devenir flowgrammer. */}
+<Section
+  number="01"
+  eyebrow="Mindset"
+  title="Devenir flowgrammer"
+  highlight="flowgrammer"
+  subtitle="Ni développeur, ni utilisateur final. Le flowgrammer pense en flux : déclencheurs, conditions, branchements, données qui circulent."
+/>
+
+{/* Slide 9 : Cinq verites sur le flowgramming. */}
+<NumberedCards
+  title="Cinq vérités sur le flowgramming"
+  subtitle="C'est en testant que vous deviendrez flowgrammer. La pratique sur vos propres cas vaut mille tutoriels."
+  highlight="flowgramming"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Créer un workflow est à la portée de tous",
+      description: "Plus besoin de savoir coder. Les outils no-code rendent l'automation accessible à toute l'équipe métier.",
+    },
+    {
+      number: "02",
+      title: "Les workflows vont se multiplier",
+      description: "Tendance de fond, irréversible. Anticiper la gouvernance dès maintenant évite la dette technique.",
+    },
+    {
+      number: "03",
+      title: "Récupérer des workflows tout faits est contre-productif",
+      description: "Les templates publics ne connaissent ni vos données, ni votre stack, ni vos contraintes. Source de complexité.",
+    },
+    {
+      number: "04",
+      title: "Adapter les workflows à vous est la clé",
+      description: "Partir de votre processus réel, pas d'un modèle théorique. La valeur émerge de la spécificité.",
+    },
+    {
+      number: "05",
+      title: "Les workflows sans stratégie mènent au chaos",
+      description: "Sans cartographie d'ensemble, on accumule des automations qui se contredisent et se cannibalisent.",
+    },
+  ]}
+/>
+
+{/* Slide 10 : Section - Les six piliers. */}
+<Section
+  number="02"
+  eyebrow="Six piliers"
+  title="Les fondations d'une automation durable"
+  highlight="durable"
+  subtitle="Trop d'organisations tombent dans le piège d'automatiser sans réflexion. Six piliers pour ancrer la pratique."
+/>
+
+{/* Slide 11 : Les six piliers de l'automatisation. NumberedCards 2x3. */}
+<NumberedCards
+  title="Les six piliers de l'automatisation"
+  subtitle="Réussir une stratégie d'automatisation efficace et durable demande plus qu'un simple enchaînement d'actions."
+  highlight="piliers"
+  cols={2}
+  items={[
+    {
+      number: "01",
+      title: "Automatiser n'est pas complexifier",
+      description: "Un bon workflow simplifie l'expérience client et les processus. Trop d'automation mal pensée crée de la complexité supplémentaire.",
+    },
+    {
+      number: "02",
+      title: "La maintenance est essentielle",
+      description: "Un workflow ça se maintient, ça s'optimise. Sans owner identifié, il tombe en panne. Prévoyez qui maintient avant de mettre en production.",
+    },
+    {
+      number: "03",
+      title: "Prioriser la valeur",
+      description: "On n'automatise pas pour automatiser. On automatise ce qui génère de la valeur : gain de temps, qualité d'expérience, réactivité.",
+    },
+    {
+      number: "04",
+      title: "Data-first mindset",
+      description: "La qualité des workflows dépend de la qualité des données. Sans données propres, l'automatisation amplifie les problèmes.",
+    },
+    {
+      number: "05",
+      title: "Garder l'humain au bon endroit",
+      description: "On automatise les tâches répétitives, pas les relations. Bon équilibre humain plus automation égale meilleure expérience client.",
+    },
+    {
+      number: "06",
+      title: "Tester avant de scaler",
+      description: "Toujours valider sur un petit volume avant la production. Évite de propager massivement une erreur sur toute la base.",
+    },
+  ]}
+/>
+
+{/* Slide 12 : Questions et reponses. */}
+<Closing variant="qa" />
