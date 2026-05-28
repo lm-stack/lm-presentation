@@ -128,3 +128,36 @@ Decks à arbitrer :
   3. L'équipe parle le même langage
   4. Changer d'outil sans tout refaire
   5. Grossir sans casser
+
+### Module Collecte et qualité des données (Jour 1, sujet 2)
+
+- **Durée** : 120 min (2h)
+- **Fil rouge** : la landing page de **Cédric**, construite dans le module Growth Marketing qui précède celui-ci. Suite directe de leur travail de la semaine précédente. Ce fil rouge se prolonge ensuite dans les modules workflow (Jour 2) et workflows avancés (Jour 3) où on automatise SUR cette donnée propre.
+- **Thèse centrale** : "Ne demande que ce que tu ne peux pas déduire."
+- **Sources couvertes (5)** : formulaires web, achats/transactions, imports manuels, synchronisations API, saisie manuelle équipe.
+- **Cleaning (5 techniques)** : email (lowercase + MX validation), téléphone (E.164 via libphonenumber), nom/prénom (Title Case + trim emojis), doublons (strict + fuzzy), dates et codes postaux (format ISO).
+- **Enrichment (4 cas)** : Genderize.io (genre depuis prénom), Clearbit/Apollo (société depuis email pro), IPstack (géoloc depuis IP), Claude/GPT API (structuration de texte libre).
+- **Démo live** : pipeline n8n complet du formulaire de Cédric vers le CRM avec cleaning et enrichment automatisés.
+- **Workshop** : multi-groupes, chaque groupe reprend la landing page d'un de ses membres et conçoit le flow complet form → cleaning → enrichment → CRM. Bonus : critique IA du pipeline.
+- **Structure timing** :
+
+  | Bloc | Durée |
+  |------|-------|
+  | Cover + Calendar | 5 |
+  | Recap Growth Marketing (Cédric) | 5 |
+  | Section Sources et capture | 30s |
+  | 5 sources de données | 10 |
+  | 4 règles de bonne capture | 10 |
+  | Section Cleaning | 30s |
+  | 5 techniques de cleaning | 15 |
+  | Section Enrichment | 30s |
+  | 4 cas d'enrichment (Genderize central) | 15 |
+  | Statement pivot | 5 |
+  | Section Qualité comme processus | 30s |
+  | 3 piliers (métriques, routines, ownership) | 10 |
+  | Démo live (Cédric) | 12 |
+  | Workshop brief | 3 |
+  | Workshop multi-groupes | 17 |
+  | Restitution + débrief | 5 |
+
+- **Détails Cédric à confirmer** : métier, lead magnet précis, champs du formulaire, outil de construction. À oraliser sur la base des slides existantes du module Growth Marketing le jour J.
