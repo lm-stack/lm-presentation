@@ -1,0 +1,336 @@
+---
+title: "Protection des données"
+subtitle: "CRM, Data & Automation"
+short: "Protection des données"
+date: 2026-06-02
+type: cours
+description: "Protection des données : LPD, LPrD, RGPD, données personnelles et sensibles, sous-traitance Art 9 LPD. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Module court (30 min) sur le cadre legal qui s'applique au
+    marketing automation et a la sous-traitance des outils. */}
+<Cover
+  title="Protection des données"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 32"
+  highlight="données"
+  watermark="PD"
+  image="/decks/protection-donnees/cover-classified.jpg"
+/>
+
+{/* Slide 2 : Calendrier Jour 3. Protection des donnees creneau 11h45-12h15. */}
+<Calendar
+  title="Calendrier"
+  subtitle="Formation en Growth Marketing"
+  highlight="Calendrier"
+  day="Jour 3"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
+    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
+    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
+    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
+    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : Definition. La loi protege les individus, pas les donnees. */}
+<Statement
+  title="Protéger les individus, pas les données"
+  subtitle="La protection des données vise les droits fondamentaux et la personnalité des personnes dont les données sont traitées."
+  image="/decks/protection-donnees/definition-matrix.jpeg"
+>
+  Renversement de perspective : on ne protège pas un fichier, on protège la personne derrière le fichier. Tous les choix techniques en découlent.
+</Statement>
+
+{/* Slide 4 : Section 01 - Cadre legal. */}
+<Section
+  number="01"
+  eyebrow="Cadre légal"
+  title="Trois cadres législatifs"
+  highlight="législatifs"
+  subtitle="LPD fédérale, LPrD cantonale, RGPD européen. Trois textes qui se superposent selon l'organisation et le ciblage."
+/>
+
+{/* Slide 5 : Les trois legislations. ImageGrid 3 cards (Suisse, Vaud, Europe). */}
+<ImageGrid
+  title="LPD, LPrD, RGPD"
+  subtitle="Trois cadres législatifs essentiels encadrent l'utilisation des données personnelles dans le contexte suisse."
+  highlight="cadres"
+  images={[
+    {
+      src: "/decks/protection-donnees/legi-suisse.jpeg",
+      title: "Loi fédérale (LPD)",
+      text: "S'applique aux entreprises situées en Suisse. Refonte majeure entrée en vigueur le 1er septembre 2023, alignée sur les standards européens.",
+    },
+    {
+      src: "/decks/protection-donnees/legi-vaud.jpeg",
+      title: "Loi vaudoise (LPrD)",
+      text: "S'applique aux entités publiques et parapubliques vaudoises. Chaque canton dispose de sa propre loi cantonale équivalente.",
+    },
+    {
+      src: "/decks/protection-donnees/legi-europe.jpeg",
+      title: "Loi européenne (RGPD)",
+      text: "S'applique aux organisations européennes et extraterritorialement si vous ciblez ou trackez des résidents de l'UE.",
+    },
+  ]}
+/>
+
+{/* Slide 6 : Erreurs courantes RGPD vs consequences. TwoColumnTable. */}
+<TwoColumnTable
+  title="Mentionner le RGPD sans y être soumis vous expose"
+  subtitle="Erreur fréquente : aligner sa politique de confidentialité sur le RGPD par défaut, alors qu'on n'est soumis qu'à la LPD."
+  highlight="expose"
+  headers={["Erreurs courantes", "Conséquences"]}
+  rows={[
+    { label: "Ajouter la mention « Conforme au RGPD » même si pas obligatoire", value: "Droits exercés sous l'angle RGPD auto-déclaré au lieu de la LPD." },
+    { label: "Référencer le RGPD dans la politique de confidentialité par mimétisme", value: "Complexité accrue et incohérence avec certaines obligations suisses." },
+    { label: "Utiliser les standards de consentement RGPD", value: "Risque accru de sanction en cas de non-respect du RGPD auto-déclaré." },
+  ]}
+/>
+
+{/* Slide 7 : Exchange Qoqa - RGPD ou pas ? */}
+<Exchange
+  title="Qoqa est-elle soumise au RGPD ?"
+  subtitle="E-commerce suisse, site .ch, paiements en CHF. Qu'en dites-vous ?"
+  highlight="RGPD"
+/>
+
+{/* Slide 8 : Reponse Qoqa. Statement avec image loutre rose. */}
+<Statement
+  title="Pas soumis tant que..."
+  subtitle="L'extraterritorialité du RGPD se déclenche sur l'intention commerciale et le ciblage, pas sur l'accès technique au site."
+  image="/decks/protection-donnees/qoqa-otter.jpeg"
+>
+  Le site ne cible pas intentionnellement l'UE (pas de pub en France, pas de paiements en EUR, pas de livraison Europe, pas de site en .fr) et il n'y a pas de tracking publicitaire spécifique sur un public UE. Un frontalier qui commande ne suffit pas à déclencher l'obligation.
+</Statement>
+
+{/* Slide 9 : Section 02 - Donnees personnelles et sensibles. */}
+<Section
+  number="02"
+  eyebrow="Catégories"
+  title="Données personnelles et sensibles"
+  highlight="sensibles"
+  subtitle="Toute information qui identifie une personne, plus une protection renforcée pour certaines catégories."
+/>
+
+{/* Slide 10 : Donnees personnelles. ImageGrid 3 exemples. */}
+<ImageGrid
+  title="Une donnée personnelle identifie une personne"
+  subtitle="Directement (nom, prénom) ou indirectement (combinaison d'informations qui permettent l'identification)."
+  highlight="personnelle"
+  images={[
+    {
+      src: "/decks/protection-donnees/donnees-nom.jpeg",
+      title: "Nom et prénom",
+      text: "L'identification directe la plus évidente. Suffit à elle seule à constituer une donnée personnelle.",
+    },
+    {
+      src: "/decks/protection-donnees/donnees-ip.png",
+      title: "Adresse IP",
+      text: "Identification indirecte mais reconnue par la loi. Combinée à d'autres données, elle remonte à un individu.",
+    },
+    {
+      src: "/decks/protection-donnees/donnees-avs.jpg",
+      title: "Numéro AVS",
+      text: "Identifiant unique en Suisse. Sensible par nature, ne devrait jamais transiter sans précautions renforcées.",
+    },
+  ]}
+/>
+
+{/* Slide 11 : Donnees sensibles. NumberedCards 7 categories, cols=1. */}
+<NumberedCards
+  title="Sept catégories de données sensibles"
+  subtitle="Protection renforcée car leur utilisation peut porter atteinte aux droits fondamentaux ou à la vie privée."
+  highlight="sensibles"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Opinions et activités religieuses, philosophiques, politiques ou syndicales",
+      description: "Convictions personnelles et affiliations susceptibles d'exposer à la discrimination.",
+    },
+    {
+      number: "02",
+      title: "Données relatives à la santé",
+      description: "Diagnostics, traitements, antécédents, certificats médicaux. Protégées par le secret médical.",
+    },
+    {
+      number: "03",
+      title: "Sphère intime ou appartenance raciale et ethnique",
+      description: "Orientation sexuelle, vie de couple, origine. Données qui touchent à l'identité profonde.",
+    },
+    {
+      number: "04",
+      title: "Mesures d'aide sociale",
+      description: "Aides financières, accompagnement social, statut de bénéficiaire d'aides publiques.",
+    },
+    {
+      number: "05",
+      title: "Poursuites et sanctions pénales ou administratives",
+      description: "Casier judiciaire, sanctions administratives, contentieux en cours.",
+    },
+    {
+      number: "06",
+      title: "Données génétiques",
+      description: "Tout résultat d'analyse génétique, héréditaire ou non. Protégées par la LAGH en Suisse.",
+    },
+    {
+      number: "07",
+      title: "Données biométriques identifiantes",
+      description: "Empreintes digitales, reconnaissance faciale, iris : tout ce qui identifie de manière unique une personne physique.",
+    },
+  ]}
+/>
+
+{/* Slide 12 : Exchange - Salaire, CV, geolocalisation : personnelle ou sensible ? */}
+<Exchange
+  title="Salaire, CV, géolocalisation"
+  subtitle="Pour ces trois données, posez-vous la question : simplement personnelle ou également sensible ?"
+  highlight="sensible"
+/>
+
+{/* Slide 13 : Section 03 - Traitement et sous-traitance. */}
+<Section
+  number="03"
+  eyebrow="Article 9 LPD"
+  title="Traitement et sous-traitance"
+  highlight="sous-traitance"
+  subtitle="La loi contrôle ce qu'on fait des données, pas les données. Et la chaîne de sous-traitance engage votre responsabilité."
+/>
+
+{/* Slide 14 : Le traitement, c'est tout. */}
+<Statement
+  title="Ce que contrôle la loi, c'est le traitement"
+  subtitle="Collecte, enregistrement, stockage, utilisation, transmission, suppression : tout cycle de vie de la donnée."
+>
+  Ce n'est pas la donnée en elle-même qui pose problème. C'est la chaîne d'opérations qu'on réalise sur elle, du moment où elle entre dans le système jusqu'à sa destruction.
+</Statement>
+
+{/* Slide 15 : Les trois acteurs du traitement. NumberedCards 3 cards. */}
+<NumberedCards
+  title="Trois acteurs du traitement"
+  subtitle="Tout traitement de données personnelles implique au minimum deux acteurs, souvent trois avec un sous-traitant."
+  highlight="acteurs"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Personne concernée",
+      description: "Votre client, votre lead, votre utilisateur. Celle dont les données sont traitées et qui détient des droits sur ces données.",
+    },
+    {
+      number: "02",
+      title: "Responsable du traitement",
+      description: "Vous, en tant qu'organisation qui décide des finalités et des moyens du traitement. Vous portez la responsabilité légale.",
+    },
+    {
+      number: "03",
+      title: "Sous-traitant",
+      description: "Votre fournisseur d'outil qui traite les données pour votre compte. CRM, hébergeur, partenaire technique : tous concernés.",
+    },
+  ]}
+/>
+
+{/* Slide 16 : Exchange - Qui est sous-traitant ? */}
+<Exchange
+  title="Qui est sous-traitant ?"
+  subtitle="Hubspot, votre agence, Infomaniak. Lesquels sont des sous-traitants au sens de la LPD ?"
+  highlight="sous-traitant"
+/>
+
+{/* Slide 17 : Trois exemples de sous-traitants. ImageGrid. */}
+<ImageGrid
+  title="Trois exemples concrets"
+  subtitle="Dès qu'un fournisseur traite des données personnelles pour votre compte, il est sous-traitant au sens de la LPD."
+  highlight="concrets"
+  images={[
+    {
+      src: "/decks/protection-donnees/soustraitant-hubspot.png",
+      title: "Hubspot — votre CRM",
+      text: "Stockage et traitement des données clients. Sous-traitant typique, nécessite un DPA et l'identification du lieu d'hébergement.",
+    },
+    {
+      src: "/decks/protection-donnees/soustraitant-agence.jpeg",
+      title: "Agence ou développeur — votre partenaire",
+      text: "Dès qu'il accède à vos données pour développer ou opérer un outil, sous-traitant. Contrat obligatoire.",
+    },
+    {
+      src: "/decks/protection-donnees/soustraitant-infomaniak.jpeg",
+      title: "Infomaniak — votre hébergeur",
+      text: "Héberge vos serveurs et donc vos données. Sous-traitant infrastructure. Avantage : hébergement en Suisse.",
+    },
+  ]}
+/>
+
+{/* Slide 18 : Trois regles de l'Art 9 LPD. NumberedCards. */}
+<NumberedCards
+  title="Trois règles de l'Article 9 LPD"
+  subtitle="Le traitement peut être confié à un sous-traitant, mais sous conditions strictes."
+  highlight="règles"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Périmètre limité aux traitements autorisés",
+      description: "Le sous-traitant ne peut effectuer que les traitements que vous seriez vous-même autorisé à réaliser. Aucune obligation légale ou contractuelle ne doit l'interdire.",
+    },
+    {
+      number: "02",
+      title: "Vérification de la sécurité",
+      description: "Vous devez vérifier que le sous-traitant garantit la sécurité des données. Audit, certifications, clauses contractuelles.",
+    },
+    {
+      number: "03",
+      title: "Autorisation des sous-traitants secondaires",
+      description: "Si votre sous-traitant fait appel à un autre prestataire (cascade), il doit obtenir votre autorisation préalable.",
+    },
+  ]}
+/>
+
+{/* Slide 19 : Redflags pour identifier les sous-traitants problematiques. */}
+<NumberedCards
+  title="Trois redflags à connaître"
+  subtitle="Ce n'est pas au marketer de juger la conformité juridique, mais voici les signaux qui doivent alerter."
+  highlight="redflags"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Absence ou faiblesse du DPA",
+      description: "Aucun contrat de sous-traitance (Data Processing Agreement) formalisé, ou contrat qui ne couvre pas les principes essentiels : sécurité, confidentialité, limitation des finalités.",
+    },
+    {
+      number: "02",
+      title: "Hébergement hors Suisse ou pays non adéquat",
+      description: "Données stockées dans un pays sans niveau de protection adéquat selon la liste publique de la confédération. Garanties contractuelles supplémentaires nécessaires (SCC par exemple).",
+    },
+    {
+      number: "03",
+      title: "Liste opaque des sous-traitants secondaires",
+      description: "Pas de communication claire et à jour de la chaîne de sous-traitance. Impossible d'identifier les risques en cascade, effet papillon ingérable.",
+    },
+  ]}
+/>
+
+{/* Slide 20 : Conseil final. Statement avec livres juridiques. */}
+<Statement
+  title="En cas de doute, appelez un juriste"
+  subtitle="Chaque organisation obéit à des contraintes différentes : législation applicable, types de données, types d'outils, secteur d'activité."
+  image="/decks/protection-donnees/juriste-livres.jpeg"
+>
+  Un outil autorisé dans une organisation ne le sera pas forcément dans une autre. Avant d'installer un nouvel outil qui traite des données clients, consultez votre juriste ou avocat spécialisé en protection des données.
+</Statement>
+
+{/* Slide 21 : Questions et reponses. */}
+<Closing variant="qa" />
