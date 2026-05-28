@@ -97,7 +97,7 @@ Decks à arbitrer :
 - **Durée** : 120 min (2h)
 - **Idée centrale** : "Le schéma compte plus que l'outil."
 - **Schéma fil rouge** (démo et workshop) : Contact + Société + Affaire + Événement. Démontre la séparation Événement vs champs sur Contact (fix du piège #3).
-- **Outils démo (3) ** : Excel, Airtable, Brevo (cohérence avec le stack 50 CHF/mois de la conclusion).
+- **Outils démo (3)** : Excel (TPE et associations), Airtable (PME en croissance), Zoho (grande structure). Un par taille d'entreprise. L'angle "tool-agnostic" prend tout son sens : même schéma, trois véhicules calibrés sur trois échelles.
 - **Workshop** : multi-groupes de 3-4 personnes. Chaque groupe désigne une boîte parmi ses membres comme cas d'étude. ERD dessiné au feutre sur paperboard ou A3 papier. Restitution 1-2 min par groupe.
 - **IA dans le module** : étape bonus du workshop ("demande à Claude/GPT de critiquer ton ERD"). Pas de bloc IA séparé, l'IA aura son module Jour 3.
 - **Structure timing** :
