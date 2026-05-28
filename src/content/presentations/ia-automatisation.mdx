@@ -1,0 +1,131 @@
+---
+title: "IA & Automatisation"
+subtitle: "CRM, Data & Automation"
+short: "IA & Automatisation"
+date: 2026-06-02
+type: cours
+description: "IA & Automatisation : les quatre leviers de l'IA dans le marketing automation, génération de contenu, chatbots connectés aux données. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Avant-dernier module du parcours, on superpose l'IA sur
+    tout ce qui a ete vu : workflows, lead nurturing, funnel, scoring. */}
+<Cover
+  title="IA & Automatisation"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 34"
+  highlight="IA"
+  watermark="IA"
+  image="/decks/ia-automatisation/cover-ai-chip.jpg"
+/>
+
+{/* Slide 2 : Calendrier Jour 3. IA & Automatisation creneau 15h00-16h15. */}
+<Calendar
+  title="Calendrier"
+  subtitle="Formation en Growth Marketing"
+  highlight="Calendrier"
+  day="Jour 3"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
+    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
+    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
+    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
+    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : La combinaison ultime - introduction. Statement pose le cadre. */}
+<Statement
+  title="L'IA révolutionne le marketing automation"
+  subtitle="L'intelligence artificielle ouvre de nouveaux leviers d'automation. Les workflows deviennent capables de comprendre, générer et personnaliser à grande échelle."
+>
+  Hier, l'automation enchaînait des actions prédéfinies sur des données structurées. Aujourd'hui, l'IA permet de raisonner sur du contenu, d'adapter le message au contexte, et de tenir la conversation.
+</Statement>
+
+{/* Slide 4 : Quatre leviers de l'IA dans l'automation. ImageGrid 4 cards. */}
+<ImageGrid
+  title="Quatre leviers à exploiter"
+  subtitle="L'IA combinée à l'automation se déploie sur quatre axes complémentaires."
+  highlight="leviers"
+  images={[
+    {
+      src: "/decks/ia-automatisation/levier-contenu.jpeg",
+      title: "Contenu",
+      text: "Génération de textes, traductions, résumés, déclinaisons multicanales. L'IA produit, l'automation distribue.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-personnalisation.jpeg",
+      title: "Personnalisation",
+      text: "Adaptation du message au profil, au contexte, au moment. L'IA segmente plus finement que les règles déterministes.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-analyse.jpeg",
+      title: "Analyse",
+      text: "Détection de signaux faibles, classification de tickets, scoring prédictif. L'IA voit ce que les filtres ratent.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-chatbots.png",
+      title: "Chatbots",
+      text: "Conversation contextuelle 24/7, connectée au CRM et à la documentation. L'IA tient le dialogue, l'automation déclenche les actions.",
+    },
+  ]}
+/>
+
+{/* Slide 5 : Deux cas d'usage concrets a demontrer. ImageGrid 2 cards. */}
+<ImageGrid
+  title="Deux cas d'usage à explorer"
+  subtitle="Pour ancrer ces possibilités, deux scénarios que nous allons construire ensemble dans n8n."
+  highlight="usage"
+  images={[
+    {
+      src: "/decks/ia-automatisation/cas-blog.jpg",
+      title: "Génération automatique d'articles de blog",
+      text: "À partir d'un sujet ou d'un brief, l'IA rédige un article structuré, optimisé SEO, publié automatiquement sur le CMS.",
+    },
+    {
+      src: "/decks/ia-automatisation/cas-chatbot.png",
+      title: "Chatbot connecté aux données",
+      text: "Un assistant qui répond aux questions des prospects en s'appuyant sur le CRM, la documentation produit et l'historique client.",
+    },
+  ]}
+/>
+
+{/* Slide 6 : Demonstration sur n8n. */}
+<Demo
+  title="Démonstration sur n8n"
+  subtitle="Construction live des deux cas d'usage avec les nodes IA natifs de n8n et un modèle Claude ou GPT."
+  highlight="n8n"
+/>
+
+{/* Slide 7 : Workshop transition - applications pratiques IA. */}
+<Workshop
+  title="Applications pratiques de l'IA"
+  subtitle="À vous de réfléchir : quels cas d'usage IA seraient les plus impactants dans votre organisation ?"
+  highlight="IA"
+/>
+
+{/* Slide 8 : Brief du workshop court. */}
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Vingt minutes : dix en individuel, dix en peer-sharing. Format court, focus sur l'applicabilité."
+  highlight="workshop"
+  subject="Applications pratiques de l'IA"
+  rows={[
+    { label: "Temps", content: "20 minutes" },
+    { label: "Travail", content: ["10 minutes de manière individuelle", "10 minutes de peer-sharing"] },
+    { label: "Objectif", content: "Réfléchir à des applications pratiques de l'IA dans le marketing automation" },
+    { label: "Sujet", content: "Doit pouvoir être applicable à votre organisation, avec un cas concret identifié" },
+  ]}
+/>
+
+{/* Slide 9 : Questions et reponses. */}
+<Closing variant="qa" />
