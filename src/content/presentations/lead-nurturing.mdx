@@ -1,0 +1,463 @@
+---
+title: "Lead nurturing"
+subtitle: "CRM, Data & Automation"
+short: "Lead nurturing"
+date: 2026-06-02
+type: cours
+description: "Lead nurturing : du customer pipeline au funnel marketing, en passant par l'omnicanal et les KPIs. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import BigImage from '@/components/slides/BigImage.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Premier module du Jour 3, suite directe du Workshop Workflow
+    du Jour 2. La route d'automne file vers la lumiere : metaphore du parcours
+    du lead vers la conversion. */}
+<Cover
+  title="Lead nurturing"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 30"
+  highlight="nurturing"
+  watermark="LN"
+  image="/decks/lead-nurturing/cover-road-fall.jpg"
+/>
+
+{/* Slide 2 : Recap Jour 2 (WordCloud, remplace l'ecran AhaSlides original). */}
+<WordCloud
+  id="recap-jour-2"
+  question="Votre takeaway du Jour 2, en un mot ?"
+  subtitle="Plusieurs réponses bienvenues"
+/>
+
+{/* Slide 3 : Calendrier Jour 3. Le creneau Lead nurturing est mis en valeur via
+    nth-child(odd) du composant Calendar (ligne 09h00). */}
+<Calendar
+  title="Calendrier"
+  subtitle="Formation en Growth Marketing"
+  highlight="Calendrier"
+  day="Jour 3"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
+    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
+    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
+    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
+    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 4 : Definition centrale. Statement avec illustration WWW. */}
+<Statement
+  title="Stimulation des leads pour maintenir leur intérêt"
+  subtitle="Concerne tous les leads pas encore assez matures pour une conversion."
+  image="/decks/lead-nurturing/definition-www.png"
+>
+  Le lead nurturing entretient la relation et bâtit la confiance avec la marque, sur tous les touchpoints où le prospect se trouve.
+</Statement>
+
+{/* Slide 5 : Definition complementaire. Statement sans image, la formule porte
+    seule. */}
+<Statement
+  title="Créer une relation de confiance"
+  subtitle="Dans un monde où nous sommes tous ultra-sollicités, et où il faut toujours plus de touchpoints pour convertir."
+>
+  Un lead ne veut pas qu'on lui parle. Il veut qu'on l'écoute. Le lead nurturing est l'occasion de prouver cette écoute.
+</Statement>
+
+{/* Slide 6 : Section 01 - Pourquoi nourrir. */}
+<Section
+  number="01"
+  eyebrow="Les chiffres"
+  title="Pourquoi le lead nurturing"
+  highlight="Pourquoi"
+  subtitle="Deux statistiques qui résument l'enjeu : conversion perdue et coût d'acquisition."
+/>
+
+{/* Slide 7 : Stat 79%. Statement sans image, le chiffre porte la slide. */}
+<Statement
+  title="79% des leads marketing ne convertissent jamais"
+  subtitle="Source : MarketingSherpa."
+>
+  La cause principale : un manque de lead nurturing. La majorité des prospects collectés au début du funnel disparaissent silencieusement, faute de relance pertinente.
+</Statement>
+
+{/* Slide 8 : Stat 50%. Idem, focus sur l'economie d'acquisition. */}
+<Statement
+  title="50% des SQLs coûtent 33% moins chers"
+  subtitle="Source : Marketo."
+>
+  Grâce au lead nurturing, la moitié des Sales Qualified Leads sont obtenus pour un tiers de moins. ROI direct sur le coût d'acquisition.
+</Statement>
+
+{/* Slide 9 : Trois objectifs du lead nurturing. ImageGrid 3 cards. */}
+<ImageGrid
+  title="Trois objectifs du lead nurturing"
+  subtitle="Selon Marketo, la moitié des leads dans un système ne sont pas prêts à acheter. Dans l'intervalle, il faut les occuper."
+  highlight="objectifs"
+  images={[
+    {
+      src: "/decks/lead-nurturing/objectif-comprendre.jpg",
+      title: "Comprendre les besoins",
+      text: "Identifier ce que le lead cherche vraiment : sa motivation, son contexte, ses contraintes.",
+    },
+    {
+      src: "/decks/lead-nurturing/objectif-entretenir.jpg",
+      title: "Entretenir la relation",
+      text: "Rester présent sans être intrusif : contenus utiles, rythme adapté, ton humain.",
+    },
+    {
+      src: "/decks/lead-nurturing/objectif-qualifier.jpg",
+      title: "Qualifier les leads",
+      text: "Mesurer la maturité d'achat pour transmettre au commercial au bon moment, avec le bon contexte.",
+    },
+  ]}
+/>
+
+{/* Slide 10 : Section 02 - Customer pipeline. */}
+<Section
+  number="02"
+  eyebrow="Le parcours"
+  title="Le customer pipeline"
+  highlight="pipeline"
+  subtitle="Six étapes franchies par le lead, de l'inconnu au client. Chaque étape est un palier mesurable."
+/>
+
+{/* Slide 11 : Les six etapes du pipeline. NumberedCards 2 colonnes. */}
+<NumberedCards
+  title="Les six étapes du customer pipeline"
+  subtitle="Plus un lead est impliqué et convaincu, plus il est proche d'une décision d'achat."
+  highlight="six"
+  cols={2}
+  items={[
+    {
+      number: "01",
+      title: "Inconnu",
+      description: "Suspect non identifié. La marque n'a aucune donnée le concernant.",
+    },
+    {
+      number: "02",
+      title: "Visiteur curieux",
+      description: "Première interaction passive : visite du site, lecture d'un article.",
+    },
+    {
+      number: "03",
+      title: "Lead brut",
+      description: "Contact transmis : email ou téléphone capturé via formulaire ou inscription.",
+    },
+    {
+      number: "04",
+      title: "Lead qualifié",
+      description: "MQL impliqué : engagement répété, signaux comportementaux positifs.",
+    },
+    {
+      number: "05",
+      title: "Lead engagé",
+      description: "SQL convaincu : processus d'achat envisagé ou initié.",
+    },
+    {
+      number: "06",
+      title: "Client",
+      description: "Achat finalisé. Le pipeline se transforme alors en cycle de rétention.",
+    },
+  ]}
+/>
+
+{/* Slide 12 : MQL vs SQL. TwoColumnTable pour la distinction operationnelle. */}
+<TwoColumnTable
+  title="MQL et SQL, deux qualifications distinctes"
+  subtitle="Lorsqu'un visiteur fournit une information de contact, il devient lead brut. Notre objectif : le faire évoluer."
+  highlight="qualifications"
+  headers={["Qualification", "Définition"]}
+  rows={[
+    { label: "MQL — Marketing Qualified Lead", value: "Pris en charge par l'équipe marketing. Intérêt avéré pour la marque et ses produits, signaux d'engagement répétés." },
+    { label: "SQL — Sales Qualified Lead", value: "Transmis à l'équipe commerciale. Processus d'achat envisagé ou initié, budget et calendrier identifiés." },
+  ]}
+/>
+
+{/* Slide 13 : Exemple Digitec (1/2). Trois premieres etapes : Inconnu, Visiteur,
+    Lead brut. Captures reelles du parcours Digitec, le e-commerce suisse. */}
+<ImageGrid
+  title="L'exemple Digitec, du suspect au lead brut"
+  subtitle="Trois premières étapes du pipeline, illustrées par un acteur e-commerce suisse familier."
+  highlight="Digitec"
+  images={[
+    {
+      src: "/decks/lead-nurturing/digitec-1-inconnu.png",
+      title: "Inconnu",
+      text: "Recherche Google sur un sujet tech : la personne découvre Digitec parmi les résultats organiques.",
+    },
+    {
+      src: "/decks/lead-nurturing/digitec-2-visiteur.png",
+      title: "Visiteur curieux",
+      text: "Lecture d'un article du blog Digitec, première exposition au ton et à l'univers de la marque.",
+    },
+    {
+      src: "/decks/lead-nurturing/digitec-3-lead-brut.png",
+      title: "Lead brut",
+      text: "Création d'un compte client : Digitec capture le nom, l'email, et déclenche la séquence d'onboarding.",
+    },
+  ]}
+/>
+
+{/* Slide 14 : Exemple Digitec (2/2). Trois etapes de conversion : MQL, SQL,
+    Client. */}
+<ImageGrid
+  title="L'exemple Digitec, du MQL au client"
+  subtitle="Trois étapes de conversion : engagement, intention d'achat, transaction."
+  highlight="client"
+  images={[
+    {
+      src: "/decks/lead-nurturing/digitec-4-mql.jpeg",
+      title: "Lead qualifié (MQL)",
+      text: "Ouverture régulière de la newsletter avec catalogue produits. L'intérêt commercial est confirmé.",
+    },
+    {
+      src: "/decks/lead-nurturing/digitec-5-sql.png",
+      title: "Lead engagé (SQL)",
+      text: "Consultation de la fiche produit MacBook Pro avec exploration des services additionnels (garantie, assurance).",
+    },
+    {
+      src: "/decks/lead-nurturing/digitec-6-client.png",
+      title: "Client",
+      text: "Commande finalisée. Le pipeline bascule en cycle de rétention : up-sell, cross-sell, parrainage.",
+    },
+  ]}
+/>
+
+{/* Slide 15 : Section 03 - Funnel marketing. */}
+<Section
+  number="03"
+  eyebrow="TOFU - MOFU - BOFU"
+  title="Le funnel marketing"
+  highlight="funnel"
+  subtitle="Trois étages de funnel, trois intentions, trois familles de contenus à produire."
+/>
+
+{/* Slide 16 : TOFU concept. */}
+<Statement
+  title="Le TOFU est une étape de découverte"
+  subtitle="Top of the Funnel : les personnes au début de leur réflexion, qui se renseignent."
+>
+  L'objectif n'est pas de vendre, mais d'informer et de rassurer. On délivre de la valeur sans demander de contrepartie.
+</Statement>
+
+{/* Slide 17 : TOFU exemples - article, social, infographies. */}
+<ImageGrid
+  title="Trois contenus pour le TOFU"
+  subtitle="Le TOFU est non-invasif. On délivre des informations pertinentes sur les canaux où l'organisation est déjà présente."
+  highlight="TOFU"
+  images={[
+    {
+      src: "/decks/lead-nurturing/tofu-article.jpg",
+      title: "Article de blog",
+      text: "Contenu de référence, optimisé SEO, qui éduque sur le problème avant d'évoquer la solution.",
+    },
+    {
+      src: "/decks/lead-nurturing/tofu-social.jpg",
+      title: "Post réseaux sociaux",
+      text: "Format court, visuel, conversationnel. Réseaux choisis selon le persona : LinkedIn, TikTok, Instagram.",
+    },
+    {
+      src: "/decks/lead-nurturing/tofu-infographies.jpg",
+      title: "Infographies",
+      text: "Synthèse visuelle d'un sujet complexe. Très partagée, donc efficace pour étendre la portée organique.",
+    },
+  ]}
+/>
+
+{/* Slide 18 : MOFU concept. */}
+<Statement
+  title="Le MOFU est une étape de sélection"
+  subtitle="Middle of the Funnel : des personnes éclairées qui évaluent votre offre face au marché."
+>
+  L'objectif devient de se différencier. On met en avant les avantages concurrentiels, les preuves, les cas d'usage.
+</Statement>
+
+{/* Slide 19 : MOFU exemples - livre blanc, webinaire, quizz. */}
+<ImageGrid
+  title="Trois contenus pour le MOFU"
+  subtitle="Le MOFU cherche à apporter de la valeur ajoutée à des personnes déjà renseignées sur votre offre."
+  highlight="MOFU"
+  images={[
+    {
+      src: "/decks/lead-nurturing/mofu-livre-blanc.jpg",
+      title: "Livre blanc",
+      text: "Contenu long, expert, téléchargé contre un email. Premier acte d'engagement explicite du prospect.",
+    },
+    {
+      src: "/decks/lead-nurturing/mofu-webinaire.jpg",
+      title: "Webinaires",
+      text: "Présence en direct, démonstration produit, Q&R. Crée un lien humain et capture des leads chauds.",
+    },
+    {
+      src: "/decks/lead-nurturing/mofu-quizz.jpg",
+      title: "Quizz",
+      text: "Auto-évaluation interactive avec recommandations personnalisées. Engageant, viral, qualifiant.",
+    },
+  ]}
+/>
+
+{/* Slide 20 : BOFU concept. */}
+<Statement
+  title="Le BOFU est une étape de pré-conversion"
+  subtitle="Bottom of the Funnel : les personnes prêtes à choisir, qui ont fait le tour du marché."
+>
+  L'objectif est de rassurer sur la décision d'achat et d'inciter au passage à l'acte. La barrière à lever est la dernière hésitation.
+</Statement>
+
+{/* Slide 21 : BOFU exemples - essai, reduction, temoignage. */}
+<ImageGrid
+  title="Trois contenus pour le BOFU"
+  subtitle="Le BOFU conforte la personne dans son choix tout en l'incitant à passer à l'action."
+  highlight="BOFU"
+  images={[
+    {
+      src: "/decks/lead-nurturing/bofu-essai.jpg",
+      title: "Période d'essai",
+      text: "Test gratuit limité dans le temps ou en fonctionnalités. Lève la barrière de l'engagement financier initial.",
+    },
+    {
+      src: "/decks/lead-nurturing/bofu-reduction.jpg",
+      title: "Offre de réduction",
+      text: "Code promo, remise calendaire, offre limitée. Crée l'urgence et déclenche le passage à l'acte.",
+    },
+    {
+      src: "/decks/lead-nurturing/bofu-temoignage.jpg",
+      title: "Témoignage client",
+      text: "Preuve sociale ciblée par persona ou secteur. Rassure sur le choix par identification au pair.",
+    },
+  ]}
+/>
+
+{/* Slide 22 : Correlation MQL/SQL avec funnel. BigImage avec dashboard. */}
+<BigImage
+  title="MQLs au MOFU, SQLs au BOFU"
+  subtitle="On retrouve une corrélation entre les étages du funnel et les qualifications du customer pipeline."
+  highlight="corrélation"
+  image="/decks/lead-nurturing/funnel-correlation.jpeg"
+  alt="Dashboard analytics : courbes d'engagement et de conversion sur sept jours"
+/>
+
+{/* Slide 23 : Section 04 - Operationnalisation. */}
+<Section
+  number="04"
+  eyebrow="Mise en oeuvre"
+  title="Opérationnaliser le nurturing"
+  highlight="Opérationnaliser"
+  subtitle="Du calendrier d'actions au choix des canaux, en passant par les KPIs à suivre."
+/>
+
+{/* Slide 24 : Sequence type sur 95 jours. TwoColumnTable avec 10 lignes. */}
+<TwoColumnTable
+  title="Une séquence type sur 95 jours"
+  subtitle="Cycle d'achat de 3 mois : voici à quoi peut ressembler la liste d'actions opérationnelles."
+  highlight="séquence"
+  intro="Cadence proposée à titre indicatif. À calibrer selon votre cycle réel et la maturité de vos personas."
+  headers={["Jour", "Action"]}
+  rows={[
+    { label: "Jour 01", value: "Email de bienvenue avec ressources utiles pour démarrer." },
+    { label: "Jour 10", value: "Follow-up d'introduction de l'équipe et du contexte." },
+    { label: "Jour 15", value: "Email avec contenu ou activité reliée au persona." },
+    { label: "Jour 30", value: "Lien vers un rendez-vous en ligne, sans engagement." },
+    { label: "Jour 45", value: "Email avec un livre blanc thématique." },
+    { label: "Jour 60", value: "Retargeting social sur l'USP du produit." },
+    { label: "Jour 75", value: "Webinaire sur les nouveautés produit." },
+    { label: "Jour 85", value: "Email pour réserver une démo personnalisée." },
+    { label: "Jour 90", value: "Appel direct de l'équipe vente, contexte chaud." },
+    { label: "Jour 95", value: "Promo last chance avec deadline claire." },
+  ]}
+/>
+
+{/* Slide 25 : Approche omnicanale. ImageGrid 3 canaux. */}
+<ImageGrid
+  title="Intégrer une approche omnicanale"
+  subtitle="L'email reste le canal le plus facile à mettre en place. D'autres complètent utilement selon les données collectées."
+  highlight="omnicanale"
+  images={[
+    {
+      src: "/decks/lead-nurturing/omni-sms.jpeg",
+      title: "Envoi d'un SMS",
+      text: "Taux d'ouverture imbattable, idéal pour les rappels critiques. Attention à l'usage : opt-in explicite obligatoire.",
+    },
+    {
+      src: "/decks/lead-nurturing/omni-linkedin.jpeg",
+      title: "Messages LinkedIn",
+      text: "Pertinent en B2B, particulièrement pour les fonctions techniques ou managériales. Approche humaine et personnalisée.",
+    },
+    {
+      src: "/decks/lead-nurturing/omni-push.jpeg",
+      title: "Notification push",
+      text: "App mobile ou web. Excellent pour réengager des utilisateurs déjà installés, sur un événement ponctuel.",
+    },
+  ]}
+/>
+
+{/* Slide 26 : Cinq KPIs prioritaires. NumberedCards verticale. */}
+<NumberedCards
+  title="Cinq KPIs à suivre en priorité"
+  subtitle="Si vous n'avez pas le temps de couvrir l'intégralité du funnel, priorisez via des mesures quantitatives."
+  highlight="KPIs"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Taux de conversion leads bruts vers MQLs",
+      description: "Mesure la qualité de la base de leads et de la séquence de qualification marketing.",
+    },
+    {
+      number: "02",
+      title: "Nombre de SQLs rejetés par l'équipe commerciale",
+      description: "Indicateur clé d'alignement marketing-ventes. Trop élevé : la qualification est trop laxiste.",
+    },
+    {
+      number: "03",
+      title: "Durée moyenne du cycle de vie d'un lead",
+      description: "Du premier contact à la conversion finale. Permet de dimensionner la séquence de nurturing.",
+    },
+    {
+      number: "04",
+      title: "Taux de conversion final",
+      description: "Lead à client. La métrique nord qui synthétise toute la performance du funnel.",
+    },
+    {
+      number: "05",
+      title: "Ventes additionnelles et croisées",
+      description: "Up-sell et cross-sell sur la base client. Lifetime value et fidélisation se mesurent ici.",
+    },
+  ]}
+/>
+
+{/* Slide 27 : Workshop transition - identification des actions de nurturing. */}
+<Workshop
+  title="Identification des actions de nurturing"
+  subtitle="À vous de cartographier les actions applicables à votre organisation, persona par persona."
+  highlight="nurturing"
+/>
+
+{/* Slide 28 : Brief du workshop. */}
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Vingt-cinq minutes : quinze en individuel, dix en peer-sharing."
+  highlight="workshop"
+  subject="Actions de nurturing"
+  rows={[
+    { label: "Temps", content: "25 minutes" },
+    { label: "Travail", content: ["15 minutes de manière individuelle", "10 minutes de peer-sharing"] },
+    { label: "Objectif", content: "Création d'une liste d'actions de nurturing possibles" },
+    { label: "Sujet", content: "Doit pouvoir être applicable à votre organisation" },
+    { label: "Attentes", content: ["Toujours relié à un persona et une offre spécifique", "Doit être diversifié et apporter de la valeur ajoutée"] },
+  ]}
+/>
+
+{/* Slide 29 : Questions et reponses. */}
+<Closing variant="qa" />
