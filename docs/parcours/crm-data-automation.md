@@ -80,4 +80,51 @@ Decks à arbitrer :
 
 ## Choix structurants
 
-(À enrichir au fil du brainstorm en cours.)
+### Paramètres du cours (2026-05-28)
+
+- **3 sujets par jour, 2h par sujet** : 9 modules au total, mappés sur les 12 sujets de la brochure par fusion. Décisions de fusion prises module par module.
+- **Audience mixte** : associations à multinationales. Tous les contenus doivent parler aux deux extrêmes.
+- **Public non-dev** : pas de jargon DB. Toujours expliquer "pourquoi on fait ça" avant le "comment".
+
+### Messages-clés fil rouge (à tisser dans tous les modules)
+
+1. **Tool-agnostic** : un CRM, c'est une logique, pas un outil. Excel = Salesforce dans la pensée.
+2. **PME power** : ce qui était inaccessible il y a 5 ans est trivial aujourd'hui avec les bons outils.
+3. **IA fil rouge** : intégrée partout, pas en module isolé.
+
+### Module Architecture des données (Jour 1, sujet 1)
+
+- **Durée** : 120 min (2h)
+- **Idée centrale** : "Le schéma compte plus que l'outil."
+- **Schéma fil rouge** (démo et workshop) : Contact + Société + Affaire + Événement. Démontre la séparation Événement vs champs sur Contact (fix du piège #3).
+- **Outils démo (3) ** : Excel, Airtable, Brevo (cohérence avec le stack 50 CHF/mois de la conclusion).
+- **Workshop** : multi-groupes de 3-4 personnes. Chaque groupe désigne une boîte parmi ses membres comme cas d'étude. ERD dessiné au feutre sur paperboard ou A3 papier. Restitution 1-2 min par groupe.
+- **IA dans le module** : étape bonus du workshop ("demande à Claude/GPT de critiquer ton ERD"). Pas de bloc IA séparé, l'IA aura son module Jour 3.
+- **Structure timing** :
+
+  | Bloc | Durée |
+  |------|-------|
+  | Cover + Calendar | 5 |
+  | Exchange ouverture | 10 |
+  | Pourquoi l'architecture compte (5 raisons non-dev) | 15 |
+  | Vocabulaire de base | 15 |
+  | 5 pièges classiques | 25 |
+  | Pivot tool-agnostic | 5 |
+  | Démo 3 outils | 12 |
+  | Workshop brief | 3 |
+  | Workshop multi-groupes | 20 |
+  | Restitution + débrief | 10 |
+
+- **Les 5 pièges classiques** (bloc-clé du module) :
+  1. Trop de champs : "on va tout tracker" → CRM abandonné. Fix : "qu'est-ce que je vais filtrer/décider avec ce champ ?"
+  2. Pas de relations : tout dans une table fourre-tout. Fix : entités séparées avec liens.
+  3. Événements dans la fiche contact (`DerniereAction`, `ProchaineRelance`) : écrase l'historique. Fix : table Activités séparée.
+  4. Champ notes fourre-tout : "DOB 1985, allergique gluten" perdu. Fix : champs structurés pour le filtrable, notes pour le qualitatif.
+  5. Pas de single source of truth : la même donnée à plusieurs endroits divergents. Fix : un endroit qui fait foi.
+
+- **Les 5 raisons "pourquoi l'archi compte" (vue non-dev)** :
+  1. Retrouver l'info en 3 sec, pas 20 min
+  2. Permettre à l'IA de t'aider (un assistant IA ne vaut que ce que vaut ton schéma)
+  3. L'équipe parle le même langage
+  4. Changer d'outil sans tout refaire
+  5. Grossir sans casser
