@@ -161,3 +161,35 @@ Decks à arbitrer :
   | Restitution + débrief | 5 |
 
 - **Détails Cédric à confirmer** : métier, lead magnet précis, champs du formulaire, outil de construction. À oraliser sur la base des slides existantes du module Growth Marketing le jour J.
+
+### Module Segmentation et activation (Jour 1, sujet 3)
+
+- **Durée** : 120 min (2h)
+- **Thèse centrale** : "Segmenter sans activer, c'est perdre son temps."
+- **Articulation** : sujet 1 = schéma, sujet 2 = donnée propre, sujet 3 = USAGE de la donnée. Bascule de la matinée structurelle vers l'après-midi opérationnel.
+- **Cinq axes de segmentation** : démographique, comportemental, valeur (RFM), cycle de vie, prédictif (IA).
+- **Clarification vocabulaire** : persona (modèle mental, ne se filtre pas) vs segment (sous-ensemble filtrable et actionnable).
+- **Trois leviers IA** : clustering automatique (HubSpot Lists Auto / Einstein), lookalike (jumeaux statistiques pour ads et prospection), predictive scoring (propension / churn / LTV).
+- **Quatre modes d'activation** : séquence email automatisée, email transactionnel déclenché (chirurgical), audience publicitaire (retargeting Meta/LinkedIn/Google), handover commercial.
+- **Démo live** : reprise de la base Cédric du sujet 2, création de 3 segments distincts dans Zoho avec activations alignées.
+- **Workshop** : multi-groupes, reprise de la boîte désignée au sujet 2 (cohérence du fil rouge). Output : tableau segments × critères × activation × premier message.
+- **Structure timing** :
+
+  | Bloc | Durée |
+  |------|-------|
+  | Cover + Calendar | 5 |
+  | Recap (data propre, on l'utilise) | 5 |
+  | Section Pourquoi segmenter | 30s |
+  | Statement spray and pray | 8 |
+  | Section Axes de segmentation | 30s |
+  | 5 axes classiques | 15 |
+  | TwoColumnTable persona vs segment | 8 |
+  | 3 leviers IA | 12 |
+  | Section L'activation | 30s |
+  | Statement pivot | 5 |
+  | 4 modes d'activation | 12 |
+  | Section Mettre en pratique | 30s |
+  | Démo live (Cédric, 3 segments) | 15 |
+  | Workshop brief | 3 |
+  | Workshop multi-groupes | 17 |
+  | Restitution + débrief | 10 |
