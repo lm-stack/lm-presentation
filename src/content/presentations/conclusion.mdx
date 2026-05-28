@@ -1,0 +1,65 @@
+---
+title: "Conclusion"
+subtitle: "CRM, Data & Automation"
+short: "Conclusion"
+date: 2026-06-02
+type: cours
+description: "Conclusion du parcours CRM, Data & Automation : la stratégie avant les outils, un stack abordable pour petites structures, retour de feedback collectif. HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Statement from '@/components/slides/Statement.astro';
+import TableSlide from '@/components/slides/TableSlide.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Dernier module du parcours. Visuel sourire et smiley
+    pour clore sur une note positive. */}
+<Cover
+  title="Conclusion"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 35"
+  highlight="Conclusion"
+  watermark="C"
+  image="/decks/conclusion/cover-smile.jpg"
+/>
+
+{/* Slide 2 : Le message cle de la formation. La strategie avant les outils. */}
+<Statement
+  title="La stratégie avant les outils"
+  subtitle="Dans un monde où les outils se multiplient et évoluent sans cesse, ce n'est pas la technologie qui crée la différence."
+  image="/decks/conclusion/strategie-outils.jpeg"
+>
+  C'est la clarté de votre stratégie et la cohérence de vos actions qui font la différence. Les outils servent une vision, ils ne la remplacent jamais.
+</Statement>
+
+{/* Slide 3 : Stack pour petite structure. TableSlide 3 colonnes. Casse l'idee
+    que monter une stack coute cher. */}
+<TableSlide
+  title="Un stack complet pour moins de 50 CHF par mois"
+  subtitle="C'est une illusion de penser que les outils digitaux nécessitent des investissements élevés."
+  highlight="50 CHF"
+  intro="Proposition de stack pour petite structure sans budget. Huit briques pour couvrir CRM, données, automation, hébergement, comptabilité, design et IA."
+  headers={["Outil", "Fonction", "Prix mensuel"]}
+  rows={[
+    ["Brevo", "CRM, landing page, emailing, calendly-like", "13 CHF"],
+    ["Airtable", "Base de données", "Gratuit"],
+    ["Zapier", "Outil d'automatisation", "Gratuit"],
+    ["Infomaniak", "Hébergement, nom de domaine", "11 CHF"],
+    ["WordPress", "Site web", "Gratuit"],
+    ["Bexio", "Comptabilité et finance", "25 CHF"],
+    ["Canva", "Outil de design", "Gratuit"],
+    ["ChatGPT", "IA générative", "Gratuit"],
+  ]}
+/>
+
+{/* Slide 4 : Feedback de fin de formation. WordCloud collectif. */}
+<WordCloud
+  id="feedback-formation"
+  question="Votre takeaway principal de la formation, en un mot ?"
+  subtitle="Plusieurs réponses bienvenues, depuis votre téléphone"
+/>
+
+{/* Slide 5 : Closing variant thanks. Dernier slide de la formation, on remercie
+    plutot que de relancer sur Q&R. */}
+<Closing variant="thanks" />
