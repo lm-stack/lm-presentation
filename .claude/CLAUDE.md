@@ -12,6 +12,14 @@ Branding : Lausanne Marketing (charte calquée sur `lm/`). Pas de branding ExecE
 
 Spec : `docs/superpowers/specs/2026-05-07-lm-presentation-design.md`
 
+## Contexte par parcours
+
+Pour chaque parcours, un fichier `docs/parcours/<slug>.md` qui contient : public cible, source brochure, philosophie pédagogique, historique des éditions, choix structurants. À consulter avant de toucher un deck d'un parcours.
+
+Parcours documentés :
+
+- [crm-data-automation](../docs/parcours/crm-data-automation.md) : HEC Lausanne ExecEd, juin 2026
+
 ## Stack
 
 - Astro 6 (statique)
