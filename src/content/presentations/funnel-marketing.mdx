@@ -1,0 +1,301 @@
+---
+title: "Funnel marketing"
+subtitle: "CRM, Data & Automation"
+short: "Funnel marketing"
+date: 2026-06-02
+type: cours
+description: "Funnel marketing : du TOFU au BOFU, les workflows d'automatisation pour faire progresser les leads et le lead scoring. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import BigImage from '@/components/slides/BigImage.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import NumberedCardWithDetail from '@/components/slides/NumberedCardWithDetail.astro';
+import TableSlide from '@/components/slides/TableSlide.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Le funnel marketing est la colonne vertebrale du plan
+    d'action. La loupe sur l'autoroute symbolise la mise au point. */}
+<Cover
+  title="Funnel marketing"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Module 31"
+  highlight="Funnel"
+  watermark="F"
+  image="/decks/funnel-marketing/cover-magnifier-highway.jpg"
+/>
+
+{/* Slide 2 : Calendrier Jour 3. Funnel marketing en surbrillance (ligne 10h45). */}
+<Calendar
+  title="Calendrier"
+  subtitle="Formation en Growth Marketing"
+  highlight="Calendrier"
+  day="Jour 3"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
+    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
+    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
+    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
+    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : Definition principale. Le funnel comme colonne vertebrale du
+    plan d'action marketing. */}
+<Statement
+  title="La colonne vertébrale du plan d'action marketing"
+  subtitle="Le funnel marketing structure l'ensemble des actions que vous planifiez pour convaincre vos visiteurs de devenir clients."
+  image="/decks/funnel-marketing/definition-crystals.jpeg"
+>
+  Sans funnel, le marketing est un empilement d'actions isolées. Avec funnel, chaque action s'inscrit dans une logique de progression mesurable.
+</Statement>
+
+{/* Slide 4 : Definition complementaire. Processus evolutif, pas dogmatique. */}
+<Statement
+  title="C'est un processus évolutif"
+  subtitle="On commence par une visualisation initiale. Avec le temps, ce plan d'action s'améliore et se précise."
+  image="/decks/funnel-marketing/definition-sprinter.jpeg"
+>
+  Première version imparfaite, itérations successives à partir de la donnée réelle. Le funnel n'est jamais figé.
+</Statement>
+
+{/* Slide 5 : Section 01 - Les trois etages. */}
+<Section
+  number="01"
+  eyebrow="TOFU - MOFU - BOFU"
+  title="Les trois étages du funnel"
+  highlight="trois"
+  subtitle="Attirer, convertir, conclure. Trois objectifs distincts, trois familles d'actions et de KPIs."
+/>
+
+{/* Slide 6 : Les trois etages, version Funnel marketing (action-oriented).
+    Distinct de la version Lead nurturing (intention-oriented) ou l'angle
+    etait pedagogique cote prospect. */}
+<NumberedCards
+  title="Attirer, convertir, conclure"
+  subtitle="Le funnel marketing décline trois objectifs business : générer du trafic, transformer en leads, convertir en clients."
+  highlight="conclure"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "TOFU : Attirer",
+      description: "Générer du trafic qualifié vers vos canaux. SEO, Google Ads, réseaux sociaux, événements.",
+    },
+    {
+      number: "02",
+      title: "MOFU : Convertir",
+      description: "Transformer le trafic anonyme en leads identifiés. Lead magnet, e-book, newsletter, webinaire.",
+    },
+    {
+      number: "03",
+      title: "BOFU : Conclure",
+      description: "Transformer les leads engagés en clients. Démo produit, appel commercial, offre spéciale.",
+    },
+  ]}
+/>
+
+{/* Slide 7 : Tableau d'actions par etage du funnel. TableSlide pour le format
+    4 colonnes Etape / Objectif / Actions / KPIs. */}
+<TableSlide
+  title="Actions et KPIs par étage"
+  subtitle="Vue synthétique. Certains leads convertissent en quelques clics, d'autres viennent du dark funnel impossible à tracer."
+  highlight="KPIs"
+  intro="Le funnel structure les actions, mais ce n'est pas un dogme : le bouche à oreille et les conversions express existent toujours."
+  headers={["Étage", "Objectif", "Actions", "KPIs"]}
+  rows={[
+    ["TOFU", "Générer du trafic", "SEO, Google Ads, réseaux sociaux, événements", "Trafic, CTR, nouveaux leads"],
+    ["MOFU", "Convertir en lead", "Lead magnet, e-book, newsletter, webinaire", "Taux de conversion, leads qualifiés"],
+    ["BOFU", "Transformer en client", "Démo produit, appel commercial, offre spéciale", "Taux de closing, coût d'acquisition"],
+  ]}
+/>
+
+{/* Slide 8 : Section 02 - Faire progresser les prospects via automation. */}
+<Section
+  number="02"
+  eyebrow="Marketing automation"
+  title="Faire progresser les prospects"
+  highlight="progresser"
+  subtitle="Le funnel n'est pas statique. Quatre mécanismes d'automation suivent les signaux et déclenchent les bonnes actions."
+/>
+
+{/* Slide 9 : Les quatre mecanismes d'automation. NumberedCards 2x2. */}
+<NumberedCards
+  title="Quatre mécanismes pour faire progresser les leads"
+  subtitle="Le marketing automation suit en temps réel les signaux d'engagement et déclenche les bonnes actions."
+  highlight="quatre"
+  cols={2}
+  items={[
+    {
+      number: "01",
+      title: "Analyse d'engagement",
+      description: "Suivi des interactions avec vos contenus et offres. Visites, clics, ouvertures, téléchargements.",
+    },
+    {
+      number: "02",
+      title: "Lead nurturing",
+      description: "Communications régulières et personnalisées sur le bon canal, au bon moment, avec le bon message.",
+    },
+    {
+      number: "03",
+      title: "Analyse de correspondance",
+      description: "Matching avec le profil du client idéal. Données déclarées, données enrichies, signaux comportementaux.",
+    },
+    {
+      number: "04",
+      title: "Lead scoring",
+      description: "Notation des leads selon leurs comportements et leurs attributs. Priorisation pour l'équipe commerciale.",
+    },
+  ]}
+/>
+
+{/* Slide 10 : Workflow 01 - Analyse d'engagement. NumberedCardWithDetail avec
+    declencheur, prerequis, actions et image silhouette. */}
+<NumberedCardWithDetail
+  title="Workflow 01 : Analyse d'engagement"
+  subtitle="Détecter les signaux forts d'intérêt commercial pour déclencher l'offre au bon moment."
+  highlight="engagement"
+  number="01"
+  cardTitle="Analyse d'engagement"
+  cardDescription="Suivi des interactions avec vos contenus et offres."
+  details={[
+    {
+      label: "Déclencheur",
+      text: "Le lead X a visité la page pricing deux fois en trois jours.",
+    },
+    {
+      label: "Prérequis",
+      text: "Tracking des pages (Hubspot, ActiveCampaign, Brevo, ou équivalent).",
+    },
+    {
+      label: "Actions",
+      text: "Envoi d'une offre d'essai spéciale valable deux jours (FOMO).",
+    },
+  ]}
+  image="/decks/funnel-marketing/workflow-1-engagement.jpeg"
+/>
+
+{/* Slide 11 : Demonstration ActiveCampaign. Transition Demo. */}
+<Demo
+  title="Démonstration sur ActiveCampaign"
+  subtitle="Construction live d'un workflow d'engagement, du tracking de page à l'envoi conditionnel."
+  highlight="ActiveCampaign"
+/>
+
+{/* Slide 12 : Workflow 02 - Lead nurturing. */}
+<NumberedCardWithDetail
+  title="Workflow 02 : Lead nurturing"
+  subtitle="Capitaliser sur la chaleur d'un événement avec une séquence d'emails contextuelle."
+  highlight="nurturing"
+  number="02"
+  cardTitle="Lead nurturing"
+  cardDescription="Communications régulières et personnalisées."
+  details={[
+    {
+      label: "Déclencheur",
+      text: "Le lead X a participé à un webinaire.",
+    },
+    {
+      label: "Prérequis",
+      text: "Tracking de la participation au webinaire (automatique ou manuel).",
+    },
+    {
+      label: "Actions",
+      text: "Envoi d'une séquence de trois emails adaptés au contenu présenté.",
+    },
+  ]}
+  image="/decks/funnel-marketing/workflow-2-flowchart.png"
+/>
+
+{/* Slide 13 : Workflow 03 - Analyse de correspondance. */}
+<NumberedCardWithDetail
+  title="Workflow 03 : Analyse de correspondance"
+  subtitle="Classer les nouveaux leads selon leur fit avec le client idéal pour prioriser l'équipe commerciale."
+  highlight="correspondance"
+  number="03"
+  cardTitle="Analyse de correspondance"
+  cardDescription="Matching avec le profil d'un client idéal."
+  details={[
+    {
+      label: "Déclencheur",
+      text: "Le lead X remplit un formulaire de contact ou de téléchargement.",
+    },
+    {
+      label: "Prérequis",
+      text: "Enrichissement des données (Clearbit, Dropcontact, ou équivalent).",
+    },
+    {
+      label: "Actions",
+      text: "Classification du lead en fonction du matching avec le persona cible.",
+    },
+  ]}
+  image="/decks/funnel-marketing/workflow-3-target.jpeg"
+/>
+
+{/* Slide 14 : Workflow 04 - Lead scoring. */}
+<NumberedCardWithDetail
+  title="Workflow 04 : Lead scoring"
+  subtitle="Quantifier la chaleur d'un lead par un score qui évolue avec ses comportements."
+  highlight="scoring"
+  number="04"
+  cardTitle="Lead scoring"
+  cardDescription="Notation des leads selon leurs comportements."
+  details={[
+    {
+      label: "Déclencheur",
+      text: "Le lead X réalise des actions diverses (visites, clics, téléchargements, réponses).",
+    },
+    {
+      label: "Prérequis",
+      text: "Tracking complet et grille de scoring adaptée à votre organisation.",
+    },
+    {
+      label: "Actions",
+      text: "Ajout ou suppression de points selon les actions du lead. Seuils de bascule vers le commercial.",
+    },
+  ]}
+  image="/decks/funnel-marketing/workflow-4-scoring.png"
+/>
+
+{/* Slide 15 : Funnel complet en exemple. BigImage avec le diagramme persona
+    Couple sans enfants / Voyage Maldives. */}
+<BigImage
+  title="Un funnel complet, vu de bout en bout"
+  subtitle="Exemple appliqué à un persona Couple sans enfants pour un produit Voyage en plongée aux Maldives."
+  highlight="bout"
+  image="/decks/funnel-marketing/funnel-complet-persona.jpeg"
+  alt="Diagramme de funnel marketing complet : inbound et outbound, TOFU et MOFU, retargeting et nurturing"
+  caption="Objectif du funnel : obtenir des SQLs. Approche par étage, canal, touchpoint et lead magnet."
+/>
+
+{/* Slide 16 : Workshop transition. */}
+<Workshop
+  title="Construction d'un funnel"
+  subtitle="À vous de cartographier votre propre funnel sur un persona réel de votre organisation."
+  highlight="funnel"
+/>
+
+{/* Slide 17 : Brief du workshop. */}
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Trente minutes : dix en individuel, vingt en peer-sharing pour un funnel commun."
+  highlight="workshop"
+  subject="Funnel marketing"
+  rows={[
+    { label: "Temps", content: "30 minutes" },
+    { label: "Travail", content: ["10 minutes de manière individuelle", "20 minutes de peer-sharing"] },
+    { label: "Objectif", content: ["Identifier tout ou partie du funnel individuellement", "Partager avec la classe pour réaliser un funnel commun"] },
+    { label: "Sujet", content: "Business, objectif et persona d'un participant" },
+    { label: "Attentes", content: ["Faire le lien avec les sujets du cours (landing page, nurturing, scoring)", "Essayer de couvrir un maximum de canaux"] },
+  ]}
+/>
+
+{/* Slide 18 : Questions et reponses. */}
+<Closing variant="qa" />
