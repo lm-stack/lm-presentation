@@ -28,7 +28,7 @@ const {
   personName,
   personRole,
   personAvatar,
-  brand = 'Lausanne Marketing',
+  brand = 'Titre de la présentation',
   brandSub,
   tocLabel,
 } = Astro.props;
@@ -83,8 +83,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 64px 96px !important;
-    background: #191919;
-    color: #FAF8F3;
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
+    color: #191919;
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -92,7 +92,7 @@ const {
 
   .section-hero__header {
     padding-bottom: 24px;
-    border-bottom: 1px solid rgba(250, 248, 243, 0.18);
+    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
   }
   .section-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -101,7 +101,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #FAF8F3;
+    color: #191919;
   }
   .section-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -110,7 +110,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: rgba(250, 248, 243, 0.65);
+    color: #6B6F84;
   }
 
   .section-hero__body {
@@ -128,8 +128,10 @@ const {
     flex: 0 0 auto;
     width: 460px;
     aspect-ratio: 1 / 1;
-    background: #2a2a2a;
+    background: #FFFFFF;
     overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.10);
   }
   .section-hero__image img {
     width: 100%;
@@ -149,8 +151,9 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #FAF8F3;
+    color: #191919;
     text-wrap: balance;
+    text-align: left;
   }
   .section-hero__title-italic {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
@@ -169,7 +172,7 @@ const {
     height: 56px;
     border-radius: 50%;
     overflow: hidden;
-    background: rgba(250, 248, 243, 0.15);
+    background: rgba(25, 25, 25, 0.08);
     flex: 0 0 auto;
   }
   .section-hero__avatar img {
@@ -182,13 +185,13 @@ const {
     font-size: 22px;
     font-weight: 600;
     margin: 0;
-    color: #FAF8F3;
+    color: #191919;
   }
   .section-hero__person-role {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 16px;
     font-weight: 400;
     margin: 4px 0 0;
-    color: rgba(250, 248, 243, 0.65);
+    color: #6B6F84;
   }
 </style>

@@ -98,6 +98,46 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - Oublier `align-content: center` (grid) ou `justify-content: center` (flex) sur le body d'une nouvelle slide → contenu collé sous le titre, blanc en bas
 - Centrer un titre par lui-même (genre `text-align` ou marges magiques) → utiliser SlideTitle
 
+### Safe area top/bottom — RÈGLE ABSOLUE
+
+⚠️ **Tout contenu d'une slide doit respecter un espace minimum entre :**
+- le bord supérieur de la slide et le premier élément (header, titre, ligne de séparation, etc.)
+- le dernier élément (image, texte, card, item, etc.) et le bord inférieur de la slide
+
+**Minimum non négociable : 48px en haut ET en bas.**
+
+Implémentation : le `padding-top` et `padding-bottom` du conteneur `<section>` racine de chaque composant slide doit être ≥ 48px. La convention LM établie utilise `padding: 64px 96px !important` pour les composants ExecEd-style (`CoverHero`, `SectionHero`, `QuoteImage`, `AboutHero`, `ImageGridHero`, etc.), et 80px pour les slides à SlideTitle (`Default`, `BigImage`, etc.).
+
+Si un layout requiert plus d'air pour respirer, monter le padding (96px, 120px). **Ne jamais descendre sous 48px.**
+
+Concrètement pour les nouvelles grilles ou listes : les items doivent être contraints (`max-height` sur les `.xxx__item` quand ils grandissent en `1fr` rows) pour ne jamais venir coller le bord supérieur ou inférieur de la `<section>` racine.
+
+### Border-radius cards et images — RÈGLE ABSOLUE
+
+⚠️ **Toutes les cards et toutes les images encadrées d'un slide doivent utiliser `border-radius: 4px`.**
+
+Pas de 8px, 12px, 16px ou autre valeur arbitraire. Le 4px uniforme garantit un langage visuel cohérent à travers tous les composants : `InfoCardsGrid`, `PeopleCards`, `NumberedSplit`, `ImageGridHero`, `AboutHero` photo, `CoverHero` image-card, `SectionHero` image, `TitleSplitImage` image, etc.
+
+Exception unique : les cercles décoratifs (rond jaune `QuoteImage`, `Conventions__disc`, pastilles de profil avatars circulaires) qui utilisent `border-radius: 50%`.
+
+### Drop-shadow cards et images — RÈGLE ABSOLUE
+
+⚠️ **Dropshadows légères uniquement** sur les cards et images : convention LM `0 4px 12px -4px rgba(25, 25, 25, 0.08)` (ou tout au plus `0 6px 16px -6px rgba(25, 25, 25, 0.10)`).
+
+Pas de shadows monumentales `0 32px 64px -16px rgba(25, 25, 25, 0.18)` qui font « démo Webflow 2018 ». La hiérarchie visuelle vient des contrastes, pas de l'ombre.
+
+### Header ExecEd-style — RÈGLE ABSOLUE
+
+⚠️ **Le header ne change JAMAIS** entre les composants ExecEd-style. Format unique :
+
+- **Brand text à gauche** : `brand` en CAPS 22px bold + `brandSub` optionnel en 14px medium gris
+- **Logo LM cliquable à droite** : 48px de haut, lien `https://lausanne.marketing` `target="_blank"` `rel="noopener"` avec `aria-label="Lausanne Marketing"`
+- **Border-bottom full width** : `1px solid rgba(25, 25, 25, 0.12)` qui traverse toute la largeur de la slide (même pour les layouts split type `NumberedSplit`, `SectionSplit`, `ProgrammeHero` : le header est full-width, les colonnes commencent EN DESSOUS)
+- **Padding bottom** : 24px sous le brand + logo, avant la border
+- **align-items: center** sur le header pour aligner logo et brand text verticalement
+
+Vaut pour : `CoverHero`, `AboutHero`, `SectionHero`, `QuoteImage`, `BigImageHero`, `ClosingHero`, `NumberedSplit`, `SectionSplit`, `TitleSplitImage`, `InfoCardsGrid`, `PeopleCards`, `ImageGridHero`, `ProgrammeHero`, et tout futur composant ExecEd-style.
+
 ## Commandes
 
 - `npm run dev` : serveur local

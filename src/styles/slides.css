@@ -101,6 +101,22 @@ body.is-fullscreen .deck-footer {
 }
 
 /* ============================================================ */
+/* LIENS DANS LES SLIDES                                        */
+/* ============================================================ */
+/* Tous les <a> dans les slides (mode reveal ou handout) : couleur
+   héritée du parent, soulignement classique, hover discret. */
+:where(.reveal, .handout-doc) a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  transition: opacity 0.15s ease;
+}
+:where(.reveal, .handout-doc) a:hover {
+  color: #FFD838;
+}
+
+/* ============================================================ */
 /* REGLE ABSOLUE LAYOUT DES SLIDES                              */
 /* ============================================================ */
 /*

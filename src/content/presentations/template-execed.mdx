@@ -1,0 +1,301 @@
+---
+title: "Template ExecEd-style"
+subtitle: "Layouts inspirés HEC ExecEd, charte LM"
+short: "Template ExecEd"
+date: 2026-05-29
+type: cours
+unlisted: true
+description: "Catalogue des 10 layouts ExecEd-style transposés en charte Lausanne Marketing : 4 thèmes de fond switchables en direct via le widget à droite. Halo Gold par défaut."
+---
+
+import Closing from '@/components/slides/Closing.astro';
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import AboutHero from '@/components/slides/AboutHero.astro';
+import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import SectionHero from '@/components/slides/SectionHero.astro';
+import QuoteImage from '@/components/slides/QuoteImage.astro';
+import BigImageHero from '@/components/slides/BigImageHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import PeopleCards from '@/components/slides/PeopleCards.astro';
+import SectionSplit from '@/components/slides/SectionSplit.astro';
+import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
+
+<CoverHero
+  title="Titre de la présentation"
+  italicPart="présentation"
+  eyebrow="Sur-titre de la présentation"
+  footer="Sous-titre de la présentation"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop"
+/>
+
+<AboutHero
+  firstName="Thomas"
+  lastName="Rouaud"
+  photo="/assets/thomas-rouaud.jpg"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  sections={[
+    {
+      title: "Executive Education HEC Lausanne",
+      body: "Responsable Marketing et Ventes, intervenant régulier en formation continue.",
+      link: "https://execed.unil.ch/",
+    },
+    {
+      title: "Lausanne Marketing",
+      body: "Senior consultant en CRM, Data, IA et Automation pour PME et institutions.",
+      link: "https://lausanne.marketing/",
+    },
+    {
+      title: "Fun fact",
+      body: "N°2 du Marketing Digital en Suisse sur LinkedIn.",
+      link: "https://lausanne.marketing/publications/thomas-rouaud-2eme-meilleur-digital-marketer-linkedin-suisse/",
+    },
+  ]}
+/>
+
+<ProgrammeHero
+  title="Agenda"
+  italicPart="Agenda"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=1600&fit=crop"
+  items={[
+    { title: "À propos", description: "At vero eos et accusamus et iusto odio dignissimos." },
+    { title: "Formation", description: "At vero eos et accusamus et iusto odio dignissimos." },
+    { title: "Témoignages", description: "At vero eos et accusamus et iusto odio dignissimos." },
+    { title: "Teasing", description: "At vero eos et accusamus et iusto odio dignissimos." },
+    { title: "Conclusion", description: "At vero eos et accusamus et iusto odio dignissimos." },
+  ]}
+/>
+
+<ImageGridHero
+  title="Grille 1 image"
+  italicPart="1 image"
+  subtitle="Image hero unique"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1800&h=1200&fit=crop',
+      title: 'Lorem ipsum dolor sit amet',
+      text: 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
+  ]}
+/>
+
+<ImageGridHero
+  title="Grille 2 images"
+  italicPart="2 images"
+  subtitle="Comparatif ou diptyque"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=900&fit=crop',
+      title: 'Lorem ipsum dolor sit amet',
+      text: 'Consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=900&fit=crop',
+      title: 'Duis aute irure dolor',
+      text: 'In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa.',
+    },
+  ]}
+/>
+
+<ImageGridHero
+  title="Grille 3 images"
+  italicPart="3 images"
+  subtitle="Triptyque pédagogique"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=600&fit=crop',
+      title: 'Lorem ipsum dolor',
+      text: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=600&fit=crop',
+      title: 'Sit amet consectetur',
+      text: 'Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo nemo enim.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&h=600&fit=crop',
+      title: 'Adipiscing elit sed',
+      text: 'Ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.',
+    },
+  ]}
+/>
+
+<ImageGridHero
+  title="Grille 4 images"
+  italicPart="4 images"
+  subtitle="Mosaïque carrée"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
+      title: 'Lorem ipsum dolor',
+      text: 'Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop',
+      title: 'Sit amet consectetur',
+      text: 'Nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop',
+      title: 'Adipiscing elit',
+      text: 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&h=600&fit=crop',
+      title: 'Sed do eiusmod',
+      text: 'Et harum quidem rerum facilis est et expedita distinctio nam libero tempore.',
+    },
+  ]}
+/>
+
+<ImageGridHero
+  title="Grille 5 images"
+  italicPart="5 images"
+  subtitle="Cinq cartes côte à côte"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=450&fit=crop',
+      title: 'Élément un',
+      text: 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=450&fit=crop',
+      title: 'Élément deux',
+      text: 'Voluptas nulla pariatur, vel illum qui dolorem eum fugiat.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=450&fit=crop',
+      title: 'Élément trois',
+      text: 'Iusto odio dignissimos ducimus qui blanditiis praesentium.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=600&h=450&fit=crop',
+      title: 'Élément quatre',
+      text: 'Voluptatum deleniti atque corrupti quos dolores et quas.',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=450&fit=crop',
+      title: 'Élément cinq',
+      text: 'Molestias excepturi sint occaecati cupiditate non provident.',
+    },
+  ]}
+/>
+
+<SectionHero
+  title="Architecture des données"
+  italicPart="des données"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=900&fit=crop"
+  imageSide="left"
+  personName="Thomas Rouaud"
+  personRole="Senior consultant CRM, Data, IA"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<QuoteImage
+  text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine. Il faut maintenant penser data, automation et IA dès l'amont, pas en couche de vernis après coup, sinon on accumule de la dette opérationnelle qu'on paiera plus tard."
+  author="Thomas Rouaud"
+  role="Senior consultant CRM, Data, IA"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<BigImageHero
+  image="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1920&h=1080&fit=crop"
+  caption="Salle de workshop, HEC Lausanne"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<InfoCardsGrid
+  title="Informations clés"
+  italicPart="clés"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  cards={[
+    { icon: 'ph:certificate', label: 'Diplôme', value: "Certificate of Advanced Studies (CAS)" },
+    { icon: 'ph:calendar-blank', label: 'Jours de cours', value: "Jeudi, vendredi, samedi (9h-17h)" },
+    { icon: 'ph:clock', label: 'Durée', value: "6 mois (septembre à février)" },
+    { icon: 'ph:stack', label: 'Modules', value: "5 modules de 3 jours" },
+    { icon: 'ph:user-check', label: 'Présence', value: "15 jours de cours sur 6 mois" },
+    { icon: 'ph:tag', label: 'Tarif', value: "CHF 9'500" },
+  ]}
+/>
+
+<PeopleCards
+  title="L'équipe pédagogique"
+  italicPart="pédagogique"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  people={[
+    { firstName: "Thomas", lastName: "Rouaud", role: "Senior consultant CRM, Data, IA" },
+    { firstName: "Marie", lastName: "Dupont", role: "Data scientist senior" },
+    { firstName: "Lucas", lastName: "Bernard", role: "Spécialiste marketing automation" },
+  ]}
+/>
+
+<NumberedSplit
+  title="Public cible"
+  italicPart="cible"
+  subtitle="Trois profils prioritaires pour ce parcours"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  items={[
+    { text: "Responsables marketing digital et CRM managers qui pilotent une stack en croissance." },
+    { text: "Chefs d'entreprise PME qui veulent rationaliser leurs outils sans alourdir les coûts." },
+    { text: "Data analysts marketing qui cherchent à industrialiser leurs flux de captation et d'activation." },
+  ]}
+/>
+
+<SectionSplit
+  title="Titre de section"
+  italicPart="de section"
+  subtitle="Sous-titre ou accroche courte"
+  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<TitleSplitImage
+  title="Titre de slide"
+  italicPart="de slide"
+  subtitle="Sous-titre ou accroche courte"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  columns={[
+    { label: "Élément un", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+    { label: "Élément deux", text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+  ]}
+  image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&fit=crop"
+/>
+
+<ClosingHero
+  title="Merci beaucoup!"
+  highlight="beaucoup!"
+  tagline="et à bientôt!"
+  url="lausanne.marketing"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<Closing variant="qa" />
