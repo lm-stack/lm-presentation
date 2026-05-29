@@ -1,0 +1,206 @@
+---
+// src/components/slides/NumberedSplit.astro
+// Layout split half-half : moitié gauche fond noir LM avec titre serif
+// italique partiel + carré jaune sous-titre + liste numérotée en
+// cards arrondies ; moitié droite light texturée (motif damier subtil).
+// Inspiration slide 30 du PPTX ExecEd (Public cible).
+interface NumberedItem {
+  /** Texte ou titre de l'item. */
+  text: string;
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  items: NumberedItem[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  items,
+  brand = 'Lausanne Marketing',
+  brandSub,
+} = Astro.props;
+---
+<section class="numbered-split" data-layout="numbered-split">
+  <div class="numbered-split__bg-right" aria-hidden="true"></div>
+
+  <div class="numbered-split__left">
+    <header class="numbered-split__header">
+      <p class="numbered-split__brand-main">{brand}</p>
+      {brandSub && <p class="numbered-split__brand-sub">{brandSub}</p>}
+    </header>
+
+    <div class="numbered-split__body">
+      <h2 class="numbered-split__title">
+        {italicPart
+          ? <>{title.split(italicPart)[0]}<em class="numbered-split__title-italic">{italicPart}</em>{title.split(italicPart)[1]}</>
+          : title}
+      </h2>
+
+      {subtitle && (
+        <p class="numbered-split__subtitle">
+          <span class="numbered-split__subtitle-square" aria-hidden="true"></span>
+          {subtitle}
+        </p>
+      )}
+
+      <ol class="numbered-split__list">
+        {items.map((item, i) => (
+          <li class="numbered-split__item">
+            <span class="numbered-split__number">{String(i + 1).padStart(2, '0')}</span>
+            <p class="numbered-split__item-text">{item.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .numbered-split {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: #191919;
+    color: #FAF8F3;
+    display: block !important;
+  }
+
+  .numbered-split__bg-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 38%;
+    height: 100%;
+    background-color: #FAF8F3;
+    background-image:
+      linear-gradient(45deg, rgba(25, 25, 25, 0.04) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(25, 25, 25, 0.04) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(25, 25, 25, 0.04) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(25, 25, 25, 0.04) 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  }
+
+  .numbered-split__left {
+    position: relative;
+    z-index: 1;
+    width: 62%;
+    height: 100%;
+    padding: 64px 96px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .numbered-split__header {
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(250, 248, 243, 0.18);
+  }
+  .numbered-split__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #FAF8F3;
+  }
+  .numbered-split__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: rgba(250, 248, 243, 0.65);
+  }
+
+  .numbered-split__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-top: 32px;
+  }
+
+  .numbered-split__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(60px, 6vw, 96px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #FAF8F3;
+    text-wrap: balance;
+  }
+  .numbered-split__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .numbered-split__subtitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(250, 248, 243, 0.78);
+    margin: 24px 0 36px;
+  }
+  .numbered-split__subtitle-square {
+    width: 14px;
+    height: 14px;
+    background: #FFD838;
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  .numbered-split__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .numbered-split__item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 28px;
+    background: rgba(250, 248, 243, 0.06);
+    border: 1px solid rgba(250, 248, 243, 0.08);
+    border-radius: 4px;
+  }
+  .numbered-split__number {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 216, 56, 0.18);
+    color: #FFD838;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .numbered-split__item-text {
+    flex: 1 1 auto;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 20px;
+    line-height: 1.45;
+    color: rgba(250, 248, 243, 0.88);
+  }
+</style>

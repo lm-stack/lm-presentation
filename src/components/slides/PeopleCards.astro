@@ -1,0 +1,202 @@
+---
+// src/components/slides/PeopleCards.astro
+// Grille de cartes "personne" : prénom + nom (avec nom en italique serif)
+// + titre de poste + photo. Auto-fit selon le nombre de cartes : 2, 3 ou
+// 4 fonctionnent bien. Pour les profils d'intervenants, témoignages,
+// équipe pédagogique.
+// Inspiration slides 10/11/12 du PPTX ExecEd.
+interface Person {
+  /** Prénom (affiché en regular). */
+  firstName: string;
+  /** Nom (affiché en italique serif). */
+  lastName: string;
+  /** Titre de poste affiché sous le nom. */
+  role: string;
+  /** Photo portrait carrée idéalement. */
+  photo?: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  people: Person[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  people,
+  brand = 'Lausanne Marketing',
+  brandSub,
+} = Astro.props;
+---
+<section class="people-cards" data-layout="people-cards">
+  <header class="people-cards__header">
+    <div class="people-cards__brand">
+      <p class="people-cards__brand-main">{brand}</p>
+      {brandSub && <p class="people-cards__brand-sub">{brandSub}</p>}
+    </div>
+  </header>
+
+  <div class="people-cards__body">
+    {title && (
+      <h2 class="people-cards__title">
+        {italicPart
+          ? <>{title.split(italicPart)[0]}<em class="people-cards__title-italic">{italicPart}</em>{title.split(italicPart)[1]}</>
+          : title}
+      </h2>
+    )}
+
+    <div class={`people-cards__grid people-cards__grid--cols-${Math.min(people.length, 4)}`}>
+      {people.map((person) => (
+        <article class="people-cards__card">
+          <div class="people-cards__card-head">
+            <p class="people-cards__person-name">
+              <span class="people-cards__person-first">{person.firstName}</span>{' '}
+              <em class="people-cards__person-last">{person.lastName}</em>
+            </p>
+            <p class="people-cards__person-role">{person.role}</p>
+          </div>
+          <div class="people-cards__photo" aria-hidden="true">
+            {person.photo
+              ? <img src={person.photo} alt="" loading="lazy" decoding="async" />
+              : <span class="people-cards__photo-placeholder"></span>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .people-cards {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 64px 96px !important;
+    background: #FAF8F3;
+    color: #191919;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .people-cards__header {
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+  }
+  .people-cards__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #191919;
+  }
+  .people-cards__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: #6B6F84;
+  }
+
+  .people-cards__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-top: 32px;
+  }
+
+  .people-cards__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(48px, 5vw, 80px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 48px;
+    color: #191919;
+    text-wrap: balance;
+  }
+  .people-cards__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .people-cards__grid {
+    display: grid;
+    gap: 32px;
+    justify-content: center;
+    max-width: 1700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .people-cards__grid--cols-1 { grid-template-columns: minmax(260px, 380px); }
+  .people-cards__grid--cols-2 { grid-template-columns: repeat(2, minmax(260px, 420px)); }
+  .people-cards__grid--cols-3 { grid-template-columns: repeat(3, minmax(220px, 360px)); }
+  .people-cards__grid--cols-4 { grid-template-columns: repeat(4, minmax(200px, 320px)); }
+
+  .people-cards__card {
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px -16px rgba(25, 25, 25, 0.18);
+    display: flex;
+    flex-direction: column;
+  }
+  .people-cards__card-head {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid rgba(25, 25, 25, 0.08);
+    text-align: center;
+  }
+  .people-cards__person-name {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: #191919;
+  }
+  .people-cards__person-first { font-weight: 600; }
+  .people-cards__person-last {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .people-cards__person-role {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B6F84;
+    margin: 4px 0 0;
+  }
+  .people-cards__photo {
+    background: rgba(25, 25, 25, 0.06);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+  .people-cards__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .people-cards__photo-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(45deg, rgba(25, 25, 25, 0.04) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(25, 25, 25, 0.04) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(25, 25, 25, 0.04) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(25, 25, 25, 0.04) 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  }
+</style>

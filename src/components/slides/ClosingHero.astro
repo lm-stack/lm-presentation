@@ -1,0 +1,159 @@
+---
+// src/components/slides/ClosingHero.astro
+// Slide de clôture "ExecEd-style" : image pleine assombrie, "Merci"
+// avec mot italique souligné jaune (réutilise la classe globale
+// `.underline` du repo) + sous-message + URL.
+// Inspiration slide 43 du PPTX ExecEd.
+//
+// Différent du composant Closing existant : Closing affiche un Q&R
+// sobre sur fond crème avec watermark. ClosingHero produit un "Merci"
+// chaleureux sur image full-bleed.
+interface Props {
+  /** Mot d'accueil principal, défaut "Merci beaucoup!". */
+  title?: string;
+  /** Mot du titre à souligner avec l'underline jaune LM. */
+  highlight?: string;
+  /** Sous-message court, défaut "et à bientôt!". */
+  tagline?: string;
+  /** URL affichée en bas (sans http://). */
+  url?: string;
+  /** Image de fond pleine slide. */
+  image: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title = 'Merci beaucoup!',
+  highlight = 'beaucoup!',
+  tagline = 'et à bientôt!',
+  url,
+  image,
+  brand = 'Lausanne Marketing',
+  brandSub,
+} = Astro.props;
+
+import { splitHighlight } from '@/utils/highlight';
+const titleParts = splitHighlight(title, highlight);
+---
+<section class="closing-hero" data-layout="closing-hero">
+  <div class="closing-hero__bg" aria-hidden="true">
+    <img src={image} alt="" loading="lazy" decoding="async" />
+    <div class="closing-hero__overlay"></div>
+  </div>
+
+  <header class="closing-hero__header">
+    <p class="closing-hero__brand-main">{brand}</p>
+    {brandSub && <p class="closing-hero__brand-sub">{brandSub}</p>}
+  </header>
+
+  <div class="closing-hero__body">
+    <h2 class="closing-hero__title">
+      {titleParts
+        ? <>{titleParts.before}<em class="closing-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+        : title}
+    </h2>
+    {tagline && <p class="closing-hero__tagline">{tagline}</p>}
+    {url && <p class="closing-hero__url">{url}</p>}
+  </div>
+</section>
+
+<style>
+  .closing-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 64px 96px !important;
+    color: #FAF8F3;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .closing-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .closing-hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .closing-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(25, 25, 25, 0.78) 0%, rgba(25, 25, 25, 0.45) 100%);
+  }
+
+  .closing-hero__header,
+  .closing-hero__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .closing-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #FAF8F3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  .closing-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: rgba(250, 248, 243, 0.78);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .closing-hero__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1100px;
+  }
+
+  .closing-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(96px, 9.5vw, 156px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    margin: 0;
+    color: #FAF8F3;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+  .closing-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .closing-hero__tagline {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    margin: 32px 0 0;
+    color: rgba(250, 248, 243, 0.88);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  .closing-hero__url {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    margin: 24px 0 0;
+    color: rgba(250, 248, 243, 0.72);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+</style>

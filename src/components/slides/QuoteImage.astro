@@ -1,0 +1,178 @@
+---
+// src/components/slides/QuoteImage.astro
+// Citation centrée sur image de fond assombrie + attribution italique.
+// Variante optionnelle "logos row" (slide 6 ExecEd) pour afficher les
+// logos de marques sous l'attribution.
+// Inspiration slides 5 et 6 du PPTX ExecEd.
+//
+// Différent du composant Quote existant : Quote LM affiche une citation
+// centrée sur fond crème avec gros guillemet noir et avatar optionnel.
+// QuoteImage utilise une image plein-cadre assombrie en arrière-plan.
+interface LogoItem {
+  src: string;
+  alt: string;
+}
+interface Props {
+  text: string;
+  author: string;
+  role?: string;
+  /** Image de fond pleine slide, assombrie par overlay. */
+  image: string;
+  /** Logos affichés en bas (variante slide 6 ExecEd). */
+  logos?: LogoItem[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  text,
+  author,
+  role,
+  image,
+  logos,
+  brand = 'Lausanne Marketing',
+  brandSub,
+} = Astro.props;
+---
+<section class="quote-image" data-layout="quote-image">
+  <div class="quote-image__bg" aria-hidden="true">
+    <img src={image} alt="" loading="lazy" decoding="async" />
+    <div class="quote-image__overlay"></div>
+  </div>
+
+  <header class="quote-image__header">
+    <div class="quote-image__brand">
+      <p class="quote-image__brand-main">{brand}</p>
+      {brandSub && <p class="quote-image__brand-sub">{brandSub}</p>}
+    </div>
+  </header>
+
+  <div class="quote-image__body">
+    <blockquote class="quote-image__text">{text}</blockquote>
+    <p class="quote-image__author">
+      <span class="quote-image__author-name">{author}</span>
+      {role && <span class="quote-image__author-role">, {role}</span>}
+    </p>
+  </div>
+
+  {logos && logos.length > 0 && (
+    <div class="quote-image__logos">
+      {logos.map((logo) => (
+        <span class="quote-image__logo">
+          <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
+        </span>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .quote-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 64px 96px !important;
+    color: #FAF8F3;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .quote-image__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .quote-image__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .quote-image__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(25, 25, 25, 0.72), rgba(25, 25, 25, 0.62));
+    backdrop-filter: blur(2px);
+  }
+
+  .quote-image__header,
+  .quote-image__body,
+  .quote-image__logos {
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-image__header {
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(250, 248, 243, 0.22);
+  }
+  .quote-image__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #FAF8F3;
+  }
+  .quote-image__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: rgba(250, 248, 243, 0.72);
+  }
+
+  .quote-image__body {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .quote-image__text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(36px, 3.6vw, 56px);
+    font-weight: 400;
+    line-height: 1.35;
+    margin: 0 0 36px;
+    color: #FAF8F3;
+    text-wrap: balance;
+  }
+  .quote-image__author {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 22px;
+    margin: 0;
+    color: rgba(250, 248, 243, 0.85);
+  }
+  .quote-image__author-name {
+    font-weight: 500;
+  }
+  .quote-image__author-role {
+    font-weight: 400;
+    color: rgba(250, 248, 243, 0.68);
+  }
+
+  .quote-image__logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(250, 248, 243, 0.22);
+  }
+  .quote-image__logo {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.85;
+  }
+  .quote-image__logo img {
+    max-height: 36px;
+    max-width: 140px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+</style>

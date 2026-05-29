@@ -36,6 +36,16 @@ import TableSlide from '@/components/slides/TableSlide.astro';
 import Default from '@/components/slides/Default.astro';
 import Custom from '@/components/slides/Custom.astro';
 import IconCatalog from '@/components/slides/IconCatalog.astro';
+import CoverHero from '@/components/slides/CoverHero.astro';
+import SectionHero from '@/components/slides/SectionHero.astro';
+import QuoteImage from '@/components/slides/QuoteImage.astro';
+import BigImageHero from '@/components/slides/BigImageHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import PeopleCards from '@/components/slides/PeopleCards.astro';
+import SectionSplit from '@/components/slides/SectionSplit.astro';
+import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
 
 <Cover
   title="Template par défaut"
@@ -593,6 +603,123 @@ import IconCatalog from '@/components/slides/IconCatalog.astro';
     { name: 'ph:pencil-simple-line-bold', usedIn: 'Workshop, Conventions', color: '#2EC27E' },
     { name: 'ph:pencil-simple', usedIn: 'WorkshopBrief', color: '#6B6F84' },
   ]}
+/>
+
+<Section
+  number="12"
+  eyebrow="Variante ExecEd-style"
+  title="Layouts inspirés HEC ExecEd, en charte LM"
+  highlight="ExecEd"
+  subtitle="Dix nouveaux composants transposés du template HEC Executive Education (source/Slides Execed v1.0.pptx) avec les tokens LM : noir #191919 au lieu du navy, jaune #FFD838 au lieu du rouge, italique serif système pour le mot accentué, header marque Lausanne Marketing en lieu et place du logo HEC."
+/>
+
+<CoverHero
+  title="Nom du programme"
+  italicPart="programme"
+  eyebrow="CAS"
+  footer="Session d'information"
+  brand="Lausanne Marketing"
+  brandSub="Executive Communications"
+  rating={{ score: "4.9", count: "+1'500 retours" }}
+  image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop"
+/>
+
+<SectionHero
+  title="Titre de section"
+  italicPart="de section"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=900&fit=crop"
+  imageSide="left"
+  personName="Prénom Nom"
+  personRole="Titre de poste"
+  brand="Lausanne Marketing"
+  brandSub="Module pédagogique"
+/>
+
+<QuoteImage
+  text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine."
+  author="Thomas Rouaud"
+  role="Senior consultant CRM, Data, IA & Automation"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="Lausanne Marketing"
+/>
+
+<BigImageHero
+  image="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1920&h=1080&fit=crop"
+  caption="Salle de workshop, HEC Lausanne"
+  brand="Lausanne Marketing"
+  brandSub="Sessions en présentiel"
+/>
+
+<NumberedSplit
+  title="Public cible"
+  italicPart="cible"
+  subtitle="Trois profils prioritaires pour ce parcours"
+  items={[
+    { text: "Responsables marketing digital et CRM managers qui pilotent une stack en croissance." },
+    { text: "Chefs d'entreprise PME qui veulent rationaliser leurs outils sans alourdir les coûts." },
+    { text: "Data analysts marketing qui cherchent à industrialiser leurs flux de captation et d'activation." },
+  ]}
+  brand="Lausanne Marketing"
+  brandSub="Public visé"
+/>
+
+<InfoCardsGrid
+  title="Informations clés"
+  italicPart="clés"
+  brand="Lausanne Marketing"
+  brandSub="Modalités du parcours"
+  cards={[
+    { icon: 'ph:certificate', label: 'Diplôme', value: "Certificate of Advanced Studies (CAS)" },
+    { icon: 'ph:calendar-blank', label: 'Jours de cours', value: "Jeudi, vendredi, samedi (9h-17h)" },
+    { icon: 'ph:clock', label: 'Durée', value: "6 mois (septembre à février)" },
+    { icon: 'ph:stack', label: 'Modules', value: "5 modules de 3 jours" },
+    { icon: 'ph:user-check', label: 'Présence', value: "15 jours de cours sur 6 mois" },
+    { icon: 'ph:tag', label: 'Tarif', value: "CHF 9'500" },
+  ]}
+/>
+
+<PeopleCards
+  title="L'équipe pédagogique"
+  italicPart="pédagogique"
+  brand="Lausanne Marketing"
+  brandSub="Intervenants permanents"
+  people={[
+    { firstName: "Thomas", lastName: "Rouaud", role: "Senior consultant CRM, Data, IA" },
+    { firstName: "Marie", lastName: "Dupont", role: "Data scientist senior" },
+    { firstName: "Lucas", lastName: "Bernard", role: "Spécialiste marketing automation" },
+  ]}
+/>
+
+<SectionSplit
+  title="Titre de section"
+  italicPart="de section"
+  subtitle="Sous-titre ou accroche courte"
+  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  brand="Lausanne Marketing"
+  brandSub="Ouverture de chapitre"
+/>
+
+<TitleSplitImage
+  title="Titre de slide"
+  italicPart="de slide"
+  subtitle="Sous-titre ou accroche courte"
+  brand="Lausanne Marketing"
+  brandSub="Contenu de module"
+  columns={[
+    { label: "Élément un", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+    { label: "Élément deux", text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
+  ]}
+  image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&fit=crop"
+/>
+
+<ClosingHero
+  title="Merci beaucoup!"
+  highlight="beaucoup!"
+  tagline="et à bientôt!"
+  url="lausanne.marketing"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="Lausanne Marketing"
+  brandSub="Fin de présentation"
 />
 
 <Closing variant="qa" />

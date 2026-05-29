@@ -1,0 +1,220 @@
+---
+// src/components/slides/CoverHero.astro
+// Page de garde "ExecEd-style" : fond noir LM, header marque top-left,
+// social proof optionnel top-right, titre serif avec mot italique
+// partiel à gauche, image card à droite. Inspiration directe du
+// template HEC ExecEd (source/Slides Execed v1.0.pptx), transposée
+// avec accent jaune LM #FFD838 au lieu du rouge ExecEd.
+//
+// Différent du composant Cover existant : Cover utilise un fond jaune
+// avec watermark monumental et titre sans-serif gras. CoverHero utilise
+// un fond noir avec serif italique partiel et photo polaroïd droite.
+interface Props {
+  title: string;
+  /** Mot ou groupe de mots du titre à mettre en italique serif. */
+  italicPart?: string;
+  /** Eyebrow CAPS au-dessus du titre, ex: "CAS", "Atelier", "Webinaire". */
+  eyebrow?: string;
+  /** Footer CAPS sous le titre, ex: "INFORMATION SESSION", "JOUR 1 — SUJET 1". */
+  footer?: string;
+  /** Marque top-left ligne 1, défaut "Lausanne Marketing". */
+  brand?: string;
+  /** Marque top-left ligne 2 (sous-marque), défaut vide. */
+  brandSub?: string;
+  /** Image affichée en card à droite. */
+  image?: string;
+  /** Sociaux preuve top-right : score (ex: "4.9") + count (ex: "+1500 avis"). */
+  rating?: { score: string; count: string };
+  tocLabel?: string;
+}
+const {
+  title,
+  italicPart,
+  eyebrow,
+  footer,
+  brand = 'Lausanne Marketing',
+  brandSub,
+  image,
+  rating,
+  tocLabel = 'Accueil',
+} = Astro.props;
+---
+<section class="cover-hero" data-layout="cover-hero" data-section-title={tocLabel}>
+  <header class="cover-hero__header">
+    <div class="cover-hero__brand">
+      <p class="cover-hero__brand-main">{brand}</p>
+      {brandSub && <p class="cover-hero__brand-sub">{brandSub}</p>}
+    </div>
+    {rating && (
+      <div class="cover-hero__rating">
+        <span class="cover-hero__rating-score">{rating.score}</span>
+        <span class="cover-hero__rating-stars" aria-hidden="true">★★★★★</span>
+        <span class="cover-hero__rating-count">{rating.count}</span>
+      </div>
+    )}
+  </header>
+
+  <div class="cover-hero__body">
+    <div class="cover-hero__text">
+      {eyebrow && <p class="cover-hero__eyebrow">{eyebrow}</p>}
+      <h1 class="cover-hero__title">
+        {italicPart
+          ? <>{title.split(italicPart)[0]}<em class="cover-hero__title-italic">{italicPart}</em>{title.split(italicPart)[1]}</>
+          : title}
+      </h1>
+      {footer && (
+        <p class="cover-hero__footer">
+          <span class="cover-hero__footer-dot" aria-hidden="true"></span>
+          {footer}
+        </p>
+      )}
+    </div>
+
+    {image && (
+      <div class="cover-hero__image-card">
+        <img src={image} alt="" loading="eager" decoding="async" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .cover-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 64px 96px !important;
+    background: #191919;
+    color: #FAF8F3;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .cover-hero__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(250, 248, 243, 0.18);
+  }
+
+  .cover-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #FAF8F3;
+  }
+  .cover-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: rgba(250, 248, 243, 0.65);
+  }
+
+  .cover-hero__rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+  .cover-hero__rating-score {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FAF8F3;
+  }
+  .cover-hero__rating-stars {
+    color: #FFD838;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
+  .cover-hero__rating-count {
+    font-size: 14px;
+    color: rgba(250, 248, 243, 0.65);
+  }
+
+  .cover-hero__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    min-height: 0;
+  }
+
+  .cover-hero__text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .cover-hero__eyebrow {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: rgba(250, 248, 243, 0.72);
+    margin: 0 0 36px;
+  }
+
+  .cover-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(110px, 11vw, 188px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin: 0;
+    color: #FAF8F3;
+    text-wrap: balance;
+  }
+  /* Mot italique : serif système pour rapprocher de la typo ExecEd, tout en
+     restant dans le périmètre des polices LM (Hanken/Space/Qwitcher self-hosted).
+     Si une vraie serif LM est ajoutée plus tard, remplacer ici. */
+  .cover-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #FAF8F3;
+    letter-spacing: -0.015em;
+  }
+
+  .cover-hero__footer {
+    margin: 56px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: #FFD838;
+  }
+  .cover-hero__footer-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #FFD838;
+    display: inline-block;
+  }
+
+  .cover-hero__image-card {
+    flex: 0 0 auto;
+    width: 360px;
+    aspect-ratio: 4 / 5;
+    background: #2a2a2a;
+    padding: 16px;
+    box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.5);
+  }
+  .cover-hero__image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

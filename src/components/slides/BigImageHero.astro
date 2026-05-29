@@ -1,0 +1,130 @@
+---
+// src/components/slides/BigImageHero.astro
+// Image pleine slide en bleed total, header marque overlay top-left,
+// caption optionnel bottom-left. Pas de titre ni de cadre.
+// Inspiration slide 4 du PPTX ExecEd.
+//
+// Différent de BigImage existant : BigImage encadre une image sous un
+// SlideTitle standard avec divider jaune. BigImageHero est full-bleed
+// sans titre, conçu pour une image qui parle seule (ambiance, salle,
+// public).
+interface Props {
+  image: string;
+  alt?: string;
+  caption?: string;
+  brand?: string;
+  brandSub?: string;
+  /** Position du caption : "bottom-left" (défaut) ou "bottom-right". */
+  captionPosition?: 'bottom-left' | 'bottom-right';
+}
+const {
+  image,
+  alt = '',
+  caption,
+  brand = 'Lausanne Marketing',
+  brandSub,
+  captionPosition = 'bottom-left',
+} = Astro.props;
+---
+<section
+  class:list={['big-image-hero', `big-image-hero--caption-${captionPosition}`]}
+  data-layout="big-image-hero"
+>
+  <div class="big-image-hero__bg" aria-hidden={alt === ''}>
+    <img src={image} alt={alt} loading="eager" decoding="async" />
+  </div>
+
+  <header class="big-image-hero__header">
+    <p class="big-image-hero__brand-main">{brand}</p>
+    {brandSub && <p class="big-image-hero__brand-sub">{brandSub}</p>}
+  </header>
+
+  {caption && (
+    <p class="big-image-hero__caption">
+      <span class="big-image-hero__caption-dot" aria-hidden="true"></span>
+      {caption}
+    </p>
+  )}
+</section>
+
+<style>
+  .big-image-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: #191919;
+    color: #FAF8F3;
+    display: block !important;
+  }
+
+  .big-image-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .big-image-hero__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .big-image-hero__header {
+    position: absolute;
+    top: 56px;
+    left: 96px;
+    z-index: 1;
+    padding-right: 24px;
+  }
+  .big-image-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #FAF8F3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  .big-image-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: rgba(250, 248, 243, 0.85);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .big-image-hero__caption {
+    position: absolute;
+    bottom: 56px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: #FAF8F3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+  .big-image-hero--caption-bottom-left .big-image-hero__caption {
+    left: 96px;
+  }
+  .big-image-hero--caption-bottom-right .big-image-hero__caption {
+    right: 96px;
+  }
+  .big-image-hero__caption-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FFD838;
+    display: inline-block;
+  }
+</style>
