@@ -1,0 +1,217 @@
+---
+title: "Qualité des données"
+subtitle: "CRM, Data & Automation"
+short: "Qualité des données"
+date: 2026-06-01
+type: cours
+description: "Qualité des données : cleaning (email, téléphone, doublons), enrichment (Genderize, Clearbit, IA), qualité comme processus (métriques, routines, ownership). Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Deuxième module du Jour 1. Métaphore visuelle pour
+    "qualité" : un café filtré en cours de préparation. L'eau qui passe
+    lentement à travers un filtre, geste précis. L'image reste pertinente
+    après le split (filtrer = nettoyer, raffiner). */}
+<Cover
+  title="Qualité des données"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Jour 1 — Sujet 2"
+  highlight="Qualité"
+  watermark="QD"
+  image="/decks/qualite-donnees/cover-filter.jpg"
+/>
+
+{/* Slide 2 : Calendrier Jour 1. Qualité au créneau 10h45 - 12h15. */}
+<Calendar
+  title="Calendrier"
+  subtitle="CRM, Data & Automation"
+  highlight="Calendrier"
+  day="Jour 1"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
+    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
+    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
+    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : Recap pivot capture → qualité. La capture rigoureuse vue
+    au sujet 1 ne suffit pas : il reste à nettoyer ce qui est encore
+    sale et enrichir ce qui manque. */}
+<Statement
+  title="La donnée est entrée. Maintenant on la rend exploitable."
+  subtitle="Suite directe du sujet 1. Le formulaire de Cédric a fait son travail. Le job de ce module : transformer cette donnée brute en donnée propre, enrichie, prête à activer."
+>
+  Capter proprement, c'est la moitié du chemin. L'autre moitié : nettoyer ce qui est encore sale, enrichir ce qui peut se déduire, et installer les routines qui font tenir la qualité dans le temps.
+</Statement>
+
+{/* Slide 4 : Section 01 - Cleaning. Cinq techniques qui couvrent 90%
+    des cas, à automatiser une fois pour toutes (idéalement dès la
+    capture, ou à minima à l'entrée dans le CRM). */}
+<Section
+  number="01"
+  eyebrow="Mise au propre"
+  title="Le cleaning"
+  highlight="cleaning"
+  subtitle="Mettre la donnée brute en état d'être exploitée. Cinq techniques qui couvrent 90% des cas, à automatiser une fois pour toutes."
+/>
+
+{/* Slide 5 : Techniques de cleaning par type de donnée. TwoColumnTable
+    plus compact que des NumberedCards pour ce contenu tabulaire. */}
+<TwoColumnTable
+  title="Cinq techniques de cleaning qui couvrent 90% des cas"
+  subtitle="Pour chaque type de donnée, un réflexe simple à mettre en place une fois pour toutes."
+  highlight="cleaning"
+  intro="À automatiser idéalement dès la capture (côté formulaire), ou à minima à l'entrée dans le CRM via un workflow."
+  headers={["Donnée", "Cleaning typique et outil"]}
+  rows={[
+    { label: "Email", value: "Lowercase + trim + validation MX. Outils : NeverBounce, ZeroBounce, Hunter Email Verifier. Évite que JEAN@DUPONT.COM et jean@dupont.com soient comptés comme deux personnes." },
+    { label: "Téléphone", value: "Normalisation au format international E.164 (+41 79 ...). Outil : libphonenumber (intégré à Twilio Lookup, n8n, Make). Permet le dédoublonnage fiable et la compatibilité multi-pays." },
+    { label: "Nom et prénom", value: "Title Case + trim + retrait emojis et caractères invisibles (NBSP, ZWSP). Stop aux MARIE en majuscules qui s'affichent dans les emails personnalisés." },
+    { label: "Doublons", value: "Match strict sur email pour faibles volumes, fuzzy matching (Levenshtein) sur nom + société pour les imports massifs. Outils : Dedupe.io, natif Zoho/HubSpot/Salesforce." },
+    { label: "Dates et codes postaux", value: "Format ISO (2026-05-28) pour les dates. Codes postaux suisses sur 4 chiffres sans préfixe pays. Normalisation au moment de l'import, pas après." },
+  ]}
+/>
+
+{/* Slide 6 : Section 02 - Enrichment. Le principe-clé : ne demande
+    que ce que tu ne peux pas déduire. */}
+<Section
+  number="02"
+  eyebrow="Ne demande pas, déduis"
+  title="L'enrichment"
+  highlight="enrichment"
+  subtitle="Le formulaire le plus court est celui qui demande le moins. Tout ce que vous pouvez déduire, demandez-le à un service tiers ou à une IA."
+/>
+
+{/* Slide 7 : Quatre cas d'enrichment qui changent la donne. Genderize.io
+    en numéro 1, ancre pédagogique citée par Thomas : prédire le genre
+    pour éviter de le demander, tout en personnalisant. NumberedCards
+    verticale. */}
+<NumberedCards
+  title="Quatre cas d'enrichment qui changent la donne"
+  subtitle="Chacun épargne un champ au formulaire. Cumulés, ils peuvent diviser par deux la friction d'inscription tout en enrichissant le CRM en aval."
+  highlight="enrichment"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Genre prédit depuis le prénom",
+      description: "Service : Genderize.io (gratuit jusqu'à 1'000 appels par mois). Donne un genre plus un indice de confiance. Permet d'envoyer Cher ou Chère sans avoir demandé. Le champ Genre disparaît du formulaire, la conversion monte, la personnalisation reste.",
+    },
+    {
+      number: "02",
+      title: "Société depuis l'email professionnel",
+      description: "Services : Clearbit (intégré HubSpot), Apollo, Hunter. À partir de jean@acme.com, récupère nom de société, secteur, taille, URL, parfois LinkedIn. Le champ Société devient optionnel pour les emails pro.",
+    },
+    {
+      number: "03",
+      title: "Géolocalisation depuis l'IP",
+      description: "Services : IPstack, ipapi (gratuit jusqu'à 100 à 1'000 appels par jour). Pays et région du visiteur, capturé au moment du remplissage. Évite le menu déroulant pays qui est une friction inutile dans 95% des cas.",
+    },
+    {
+      number: "04",
+      title: "Structuration par IA",
+      description: "Services : Claude API, GPT API. Parse n'importe quel texte libre (titre de poste, description d'entreprise, message libre) en données structurées (séniorité, taille, secteur, intent). Avantage : pas besoin de service spécialisé, juste une instruction texte bien écrite.",
+    },
+  ]}
+/>
+
+{/* Slide 8 : Statement pivot. Deux idées combinées : "garbage in,
+    garbage out" + "ne demande pas, déduis". */}
+<Statement
+  title="Ne demande que ce que tu ne peux pas déduire"
+  subtitle="Le formulaire le plus court est celui qui convertit le mieux. La donnée la plus propre est celle qui entre déjà propre."
+>
+  Garbage in, garbage out. Si votre formulaire est mal construit, aucun cleaning ne sauvera la base. Si vous demandez ce qu'un service tiers peut déduire en 200 millisecondes, vous laissez de la conversion sur la table. La qualité d'un CRM est un système, pas un effort ponctuel : capture rigoureuse, cleaning automatisé, enrichment intelligent.
+</Statement>
+
+{/* Slide 9 : Section 03 - La qualité comme processus. Trois piliers
+    opérationnels : métriques, routines, ownership. */}
+<Section
+  number="03"
+  eyebrow="Dans la durée"
+  title="La qualité comme processus"
+  highlight="processus"
+  subtitle="Une base propre se dégrade naturellement avec le temps. Trois leviers pour que ça reste tenable sans vous y consacrer chaque jour."
+/>
+
+{/* Slide 10 : Trois piliers opérationnels de la qualité dans le temps.
+    NumberedCards 1x3. */}
+<NumberedCards
+  title="Trois piliers pour maintenir la qualité dans le temps"
+  subtitle="Sans ces trois, la base se dégrade en six mois et l'outil retombe en désuétude."
+  highlight="trois piliers"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Métriques de qualité visibles",
+      description: "Taux de complétion par champ critique, taux de doublons détectés, taux de bounces email, taux de désinscription. Affichés sur un dashboard, suivis chaque mois. Sans mesure, pas de pilotage.",
+    },
+    {
+      number: "02",
+      title: "Routines de nettoyage",
+      description: "Mensuelle : run de déduplication, validation des emails inactifs. Trimestrielle : audit des champs vides, revue des règles de capture. À calendariser comme tout processus métier critique.",
+    },
+    {
+      number: "03",
+      title: "Ownership clair",
+      description: "Une personne nommée, responsable de la qualité globale. Pas le commercial, pas le marketeur, pas l'IT : un rôle dédié (data steward) ou une partie du job d'un CRM manager. Sans propriétaire, personne n'est responsable.",
+    },
+  ]}
+/>
+
+{/* Slide 11 : Démo live. Reprise du fil rouge Cédric : son formulaire
+    de landing page envoie vers n8n, qui clean (lowercase, trim, format
+    téléphone), enrichit (Genderize, et Clearbit-like si email pro), et
+    pousse au CRM avec toutes les fields renseignées. Focus sur les
+    choix de design du pipeline. */}
+<Demo
+  title="Le pipeline cleaning + enrichment de Cédric"
+  subtitle="Construction live dans n8n : sortie du formulaire de Cédric (sujet 1) → cleaning (lowercase, trim, format téléphone) → enrichment (Genderize, société si email pro) → routing dans le CRM avec tous les champs renseignés."
+  highlight="Cédric"
+/>
+
+{/* Slide 12 : Workshop transition. Multi-groupes : chaque groupe
+    reprend son formulaire refondu du sujet 1 et conçoit le pipeline
+    cleaning + enrichment derrière. */}
+<Workshop
+  title="Le pipeline de votre boîte"
+  subtitle="En groupes, reprenez votre formulaire refondu du sujet 1 et concevez le pipeline cleaning + enrichment qui va derrière."
+  highlight="votre boîte"
+/>
+
+{/* Slide 13 : WorkshopBrief détaillé. Étapes chronométrées, output
+    pipeline diagramme, bonus IA. */}
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Vingt minutes en groupe, dix minutes de restitution collective."
+  highlight="workshop"
+  subject="Pipeline qualité d'un formulaire participant"
+  rows={[
+    { label: "Format", content: "Mêmes groupes qu'au sujet 1, même formulaire que celui que vous avez refondu." },
+    { label: "Temps", content: "20 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", content: [
+      "5 min : définir les règles de cleaning par champ (lowercase, trim, format, validation)",
+      "5 min : choisir 1 à 2 enrichments pertinents pour votre secteur",
+      "10 min : dessiner le pipeline complet form → cleaning → enrichment → CRM",
+    ] },
+    { label: "Output", content: "Un diagramme du pipeline sur paperboard, avec les champs finaux côté CRM annotés." },
+    { label: "Bonus IA", content: "Soumettez votre pipeline à Claude ou ChatGPT et demandez : qu'est-ce que j'oublie ? quels enrichments seraient pertinents pour mon secteur ?" },
+    { label: "Restitution", content: "1 à 2 minutes par groupe, focus sur les enrichments retenus et pourquoi." },
+  ]}
+/>
+
+{/* Slide 14 : Closing Q&R. Sert également à la restitution. */}
+<Closing variant="qa" />

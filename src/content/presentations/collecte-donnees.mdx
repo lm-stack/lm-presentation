@@ -1,0 +1,183 @@
+---
+title: "Collecte des données"
+subtitle: "CRM, Data & Automation"
+short: "Collecte des données"
+date: 2026-06-01
+type: cours
+description: "Collecte des données : sources d'entrée d'un CRM, règles de capture, formulaire minimum viable, captures cachées. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Section from '@/components/slides/Section.astro';
+import Statement from '@/components/slides/Statement.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import Closing from '@/components/slides/Closing.astro';
+
+{/* Slide 1 : Cover. Premier module du Jour 1 dans la nouvelle organisation
+    (Collecte → Qualité → Architecture → Segmentation). Image cover à
+    produire (suggestion : filet de pêche, entonnoir, ou main qui cueille,
+    pour rester dans la métaphore "capter ce qui arrive"). */}
+<Cover
+  title="Collecte des données"
+  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  eyebrow="Jour 1 — Sujet 1"
+  highlight="Collecte"
+  watermark="CD"
+/>
+
+{/* Slide 2 : Calendrier Jour 1. Quatre sujets de 1h30, suivis d'une
+    synthèse de 30 min. Nouvelle organisation décidée 2026-05-29 :
+    Collecte → Qualité → Architecture → Segmentation. */}
+<Calendar
+  title="Calendrier"
+  subtitle="CRM, Data & Automation"
+  highlight="Calendrier"
+  day="Jour 1"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
+    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
+    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
+    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
+  ]}
+/>
+
+{/* Slide 3 : Recap pont avec le module Growth Marketing. Fil rouge :
+    la landing page + lead magnet de Cédric, construits dans le module
+    Growth Marketing de la semaine précédente. Ce module trace le
+    chemin entre le clic et la fiche CRM brute. La mise au propre et
+    l'enrichissement viennent au sujet 2. */}
+<Statement
+  title="Vous avez la landing page de Cédric. Le lead arrive. Et maintenant ?"
+  subtitle="Suite directe du module Growth Marketing. Cette fois, on ne fait pas entrer le lead : on regarde ce qui se passe entre le clic et la fiche CRM."
+>
+  La qualité d'un CRM commence à la source. Une landing page bien construite mais mal connectée transforme votre travail Growth en données pourries. Ce module trace la première étape : capter proprement, dès le départ. Le sujet 2 prendra le relais sur le nettoyage et l'enrichissement.
+</Statement>
+
+{/* Slide 4 : Section 01 - Sources et capture. Le seul gros bloc de
+    contenu de ce module. La landing page n'est qu'une porte parmi
+    plusieurs : vue d'ensemble des cinq sources, puis quatre règles
+    de l'art pour la capture. */}
+<Section
+  number="01"
+  eyebrow="D'où viennent les données"
+  title="Sources et capture"
+  highlight="Sources"
+  subtitle="La landing page n'est qu'une porte d'entrée parmi plusieurs. Vue d'ensemble des sources, puis règles de l'art pour la capture."
+/>
+
+{/* Slide 5 : Les 5 sources de données typiques d'un CRM. NumberedCards
+    verticale, une source par carte. */}
+<NumberedCards
+  title="Cinq sources qui alimentent un CRM"
+  subtitle="Toutes convergent vers un seul système. C'est l'addition de leurs qualités respectives qui fait la qualité de l'ensemble."
+  highlight="cinq sources"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Formulaires web",
+      description: "Landing page, popup de capture, formulaire de contact, demande de devis. Le canal le plus contrôlable car vous concevez le formulaire de bout en bout.",
+    },
+    {
+      number: "02",
+      title: "Achats et transactions",
+      description: "E-commerce, devis signés, factures payées. Donnée de très haute qualité car validée par un acte commercial.",
+    },
+    {
+      number: "03",
+      title: "Imports manuels",
+      description: "Excel hérité, ancienne base, listes de salon. Donnée souvent sale, à nettoyer impérativement avant import.",
+    },
+    {
+      number: "04",
+      title: "Synchronisations API",
+      description: "Calendly, Stripe, Typeform, outils tiers connectés au CRM. Donnée propre par construction si l'intégration est bien faite.",
+    },
+    {
+      number: "05",
+      title: "Saisie manuelle équipe",
+      description: "Notes commerciales, ajout après un appel, après une visite. Source la plus variable en qualité, à encadrer par des règles claires.",
+    },
+  ]}
+/>
+
+{/* Slide 6 : Les 4 règles de l'art pour bien capturer dès le départ.
+    Prévention plutôt que réparation : la donnée la plus propre est
+    celle qu'on n'a pas eu besoin de nettoyer. NumberedCards 1x4. */}
+<NumberedCards
+  title="Quatre règles pour bien capturer dès le départ"
+  subtitle="La donnée la plus propre est celle qu'on n'a pas eu besoin de nettoyer. La prévention coûte dix fois moins cher que la réparation."
+  highlight="quatre règles"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Minimum viable de champs",
+      description: "Chaque champ supplémentaire fait baisser la conversion. Posez seulement ce qui sert à filtrer, segmenter ou personnaliser dans les jours qui suivent. Le reste se demande plus tard ou se déduit.",
+    },
+    {
+      number: "02",
+      title: "Validation côté formulaire",
+      description: "Regex pour l'email, format imposé pour le téléphone, champs obligatoires marqués. Un formulaire qui refuse une saisie incorrecte évite 100% des erreurs en aval.",
+    },
+    {
+      number: "03",
+      title: "Capture du contexte",
+      description: "UTM source/medium/campaign, URL d'origine, lead magnet précis (slug), timestamp, IP. Ces champs cachés sont l'or pour comprendre d'où vient le lead et calibrer la suite.",
+    },
+    {
+      number: "04",
+      title: "Consentement explicite",
+      description: "Case à cocher non pré-cochée, mention RGPD pour l'Europe, LPD pour la Suisse. Sans consentement clair, les séquences marketing en aval sont illégales et vos données ne valent rien.",
+    },
+  ]}
+/>
+
+{/* Slide 7 : Démo live. Décomposition du formulaire de Cédric : champs
+    visibles (minimum viable), champs cachés (UTM, lead magnet, timestamp,
+    IP), validation côté client. Pas de pipeline n8n ici (réservé au
+    sujet 2 Qualité), focus sur la structure du formulaire lui-même. */}
+<Demo
+  title="Le formulaire de Cédric, disséqué"
+  subtitle="Décomposition live du formulaire : champs visibles (minimum viable), champs cachés (UTM, lead magnet, timestamp, IP), validation côté client. Quinze minutes, focus sur les choix qui maximisent la qualité dès le clic."
+  highlight="formulaire"
+/>
+
+{/* Slide 8 : Workshop transition. Multi-groupes : chaque groupe reprend
+    un formulaire en production d'un membre et le reconçoit selon les
+    quatre règles. */}
+<Workshop
+  title="Le formulaire de votre boîte"
+  subtitle="En groupes de trois à quatre, reprenez un formulaire actif d'un membre et reconcevez-le selon les quatre règles."
+  highlight="votre boîte"
+/>
+
+{/* Slide 9 : WorkshopBrief détaillé. Format multi-groupes, étapes
+    chronométrées, output paperboard, bonus IA, restitution. */}
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Vingt-cinq minutes en groupe, dix minutes de restitution collective."
+  highlight="workshop"
+  subject="Refonte d'un formulaire de capture"
+  rows={[
+    { label: "Format", content: "Groupes de 3 à 4 personnes. Désignez un formulaire actif d'un membre (landing, contact, demande de devis)." },
+    { label: "Temps", content: "25 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", content: [
+      "5 min : lister les champs actuels et marquer ceux qui sont dispensables",
+      "5 min : identifier les champs cachés à ajouter (UTM, lead magnet, timestamp, IP)",
+      "10 min : redessiner le formulaire en appliquant les quatre règles",
+      "5 min : préparer la restitution (1 slide ou 1 paperboard avant/après)",
+    ] },
+    { label: "Output", content: "Un wireframe rapide du formulaire refondu sur paperboard, avec les champs visibles et cachés annotés." },
+    { label: "Bonus IA", content: "Soumettez votre formulaire à Claude ou ChatGPT : qu'est-ce qui crée de la friction inutile ? quels champs cachés manquent ?" },
+    { label: "Restitution", content: "1 à 2 minutes par groupe, focus sur les arbitrages champ par champ." },
+  ]}
+/>
+
+{/* Slide 10 : Closing Q&R. Sert également à la restitution collective. */}
+<Closing variant="qa" />

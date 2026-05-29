@@ -18,42 +18,43 @@ import Workshop from '@/components/slides/Workshop.astro';
 import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
 import Closing from '@/components/slides/Closing.astro';
 
-{/* Slide 1 : Cover. Troisieme et dernier module du Jour 1. Image : un
-    archer concentre, metaphore precision + activation (segmenter + tirer
-    juste). Cohere avec les covers Sujet 1 (architecte) et Sujet 2 (cafe)
-    sur l'angle "craft + precision". */}
+{/* Slide 1 : Cover. Quatrième et dernier module du Jour 1. Image : un
+    archer concentré, métaphore précision + activation (segmenter + tirer
+    juste). Cohérent avec les covers des sujets 1 à 3 sur l'angle "craft +
+    précision". */}
 <Cover
   title="Segmentation et activation"
   subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
-  eyebrow="Jour 1 — Sujet 3"
+  eyebrow="Jour 1 — Sujet 4"
   highlight="activation"
   watermark="SA"
   image="/decks/segmentation-activation/cover-archer.jpg"
 />
 
-{/* Slide 2 : Calendrier Jour 1. Segmentation et activation au creneau
-    14h15 - 16h15. */}
+{/* Slide 2 : Calendrier Jour 1. Segmentation et activation au créneau
+    15h00 - 16h30. Quatre sujets de 1h30 + synthèse de 30 min. */}
 <Calendar
   title="Calendrier"
   subtitle="CRM, Data & Automation"
   highlight="Calendrier"
   day="Jour 1"
   slots={[
-    { time: "09h00 – 11h00", subject: "Architecture des données", speaker: "Thomas" },
-    { time: "11h15 – 13h15", subject: "Données : collecte et qualité", speaker: "Thomas" },
-    { time: "14h15 – 16h15", subject: "Segmentation et activation", speaker: "Thomas" },
-    { time: "16h15 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
+    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
+    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
+    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
+    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
   ]}
 />
 
-{/* Slide 3 : Recap. Statement qui boucle les deux modules du matin et
-    ouvre le bascule dans l'usage : on a le schema et la donnee propre,
-    maintenant on s'en sert. */}
+{/* Slide 3 : Recap. Statement qui boucle les trois modules en amont
+    (Collecte, Qualité, Architecture) et ouvre le bascule dans l'usage :
+    on a capté, nettoyé, structuré, maintenant on s'en sert. */}
 <Statement
-  title="Vous avez la donnée propre. Maintenant, vous l'utilisez."
-  subtitle="Suite directe des deux modules de la matinée : le schéma (sujet 1) et la donnée propre et enrichie (sujet 2). Ce module bascule dans l'usage."
+  title="Vous avez la donnée propre et structurée. Maintenant, vous l'utilisez."
+  subtitle="Suite directe des trois modules en amont : la collecte (sujet 1), la qualité (sujet 2), l'architecture (sujet 3). Ce dernier module du jour bascule dans l'usage."
 >
-  À qui parler, comment, et avec quel geste derrière. Une base CRM bien tenue qui n'active rien, c'est une bibliothèque sans lecteurs. La valeur émerge quand le segment déclenche une action concrète. C'est l'objet des deux prochaines heures.
+  À qui parler, comment, et avec quel geste derrière. Une base CRM bien tenue qui n'active rien, c'est une bibliothèque sans lecteurs. La valeur émerge quand le segment déclenche une action concrète. C'est l'objet des quatre-vingt-dix prochaines minutes.
 </Statement>
 
 {/* Slide 4 : Section 01 - Pourquoi segmenter. Le cout du message
@@ -96,7 +97,7 @@ import Closing from '@/components/slides/Closing.astro';
     {
       number: "01",
       title: "Démographique",
-      description: "Âge, genre, localisation, langue, secteur d'activité, taille d'entreprise. Critères statiques, faciles à capter ou à enrichir (cf. sujet précédent). Souvent le premier niveau de segmentation, mais rarement suffisant seul.",
+      description: "Âge, genre, localisation, langue, secteur d'activité, taille d'entreprise. Critères statiques, faciles à capter ou à enrichir (cf. sujet 2 Qualité). Souvent le premier niveau de segmentation, mais rarement suffisant seul.",
     },
     {
       number: "02",
@@ -216,20 +217,22 @@ import Closing from '@/components/slides/Closing.astro';
   eyebrow="Démonstration et workshop"
   title="Mettre en pratique"
   highlight="pratique"
-  subtitle="Reprenons la base de Cédric (sujet 2). Trois segments concrets, trois activations alignées. Puis à vous de jouer."
+  subtitle="Reprenons la base de Cédric (nettoyée et enrichie au sujet 2). Trois segments concrets, trois activations alignées. Puis à vous de jouer."
 />
 
-{/* Slide 14 : Demo live. Reprend la base Cedric (du sujet 2) et cree
-    3 segments + 3 activations dans Zoho ou HubSpot. 15 min, focus sur
-    les choix de criteres et la coherence segment <-> activation. */}
+{/* Slide 14 : Démo live. Reprend la base Cédric (nettoyée et enrichie
+    au sujet 2 Qualité) et crée 3 segments + 3 activations dans Zoho ou
+    HubSpot. 15 min, focus sur les choix de critères et la cohérence
+    segment vers activation. */}
 <Demo
   title="Trois segments Cédric, trois activations"
-  subtitle="Live dans Zoho : création de trois segments distincts depuis la base nettoyée et enrichie du sujet précédent. Pour chacun, une activation cohérente déclenchée. Quinze minutes, focus sur les choix de critères et la cohérence segment vers activation."
+  subtitle="Live dans Zoho : création de trois segments distincts depuis la base nettoyée et enrichie au sujet 2 Qualité. Pour chacun, une activation cohérente déclenchée. Quinze minutes, focus sur les choix de critères et la cohérence segment vers activation."
   highlight="Cédric"
 />
 
-{/* Slide 15 : Workshop transition. Multi-groupes, reprise de la boite
-    designee au sujet 2 pour la coherence pedagogique. */}
+{/* Slide 15 : Workshop transition. Multi-groupes, reprise de la boîte
+    travaillée plus tôt dans la journée (formulaire au sujet 1, pipeline
+    au sujet 2, ERD au sujet 3) pour la cohérence pédagogique. */}
 <Workshop
   title="Vos segments, vos activations"
   subtitle="En groupes de trois à quatre, définissez 3 segments pertinents pour la boîte d'un membre, puis associez à chaque segment un mode d'activation et un premier message."
@@ -244,7 +247,7 @@ import Closing from '@/components/slides/Closing.astro';
   highlight="workshop"
   subject="Segmenter et activer la base d'une boîte participante"
   rows={[
-    { label: "Format", content: "Groupes de 3 à 4 personnes. Reprenez la boîte du sujet 2 pour la cohérence du fil rouge, ou changez si un autre cas est plus stimulant." },
+    { label: "Format", content: "Groupes de 3 à 4 personnes. Reprenez la boîte travaillée plus tôt dans la journée (formulaire, pipeline, ERD) pour la cohérence du fil rouge, ou changez si un autre cas est plus stimulant." },
     { label: "Temps", content: "20 minutes en groupe, 10 minutes de restitution en plénière." },
     { label: "Étapes", content: [
       "5 min : choisir 3 segments pertinents en croisant 2 axes minimum",

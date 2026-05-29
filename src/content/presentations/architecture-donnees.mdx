@@ -18,32 +18,35 @@ import Workshop from '@/components/slides/Workshop.astro';
 import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
 import Closing from '@/components/slides/Closing.astro';
 
-{/* Slide 1 : Cover. Premier module du Jour 1 du parcours CRM Data Automation.
-    Image evocatrice : structure, fondations, schema architectural. Le visuel
-    porte la metaphore "donnees = batiment, schema = plan". */}
+{/* Slide 1 : Cover. Troisième module du Jour 1 dans la nouvelle organisation
+    (Collecte → Qualité → Architecture → Segmentation). Image évocatrice :
+    structure, fondations, schéma architectural. Le visuel porte la métaphore
+    "données = bâtiment, schéma = plan". */}
 <Cover
   title="Architecture des données"
   subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
-  eyebrow="Jour 1 — Sujet 1"
+  eyebrow="Jour 1 — Sujet 3"
   highlight="Architecture"
   watermark="AD"
   image="/decks/architecture-donnees/cover-blueprint.jpg"
 />
 
-{/* Slide 2 : Calendrier Jour 1. Architecture des donnees creneau 09h00-11h00.
-    Trois sujets de 2h chacun, suivis d'une synthese en fin de journee.
-    Decisions de fusion brochure -> sujets documentees dans
-    docs/parcours/crm-data-automation.md. */}
+{/* Slide 2 : Calendrier Jour 1. Architecture des données au créneau
+    13h15 - 14h45. Quatre sujets de 1h30 + synthèse de 30 min. Nouvelle
+    organisation décidée 2026-05-29 : on commence par la pratique
+    (Collecte, Qualité) avant de monter en abstraction (Architecture)
+    puis bascule dans l'usage (Segmentation). */}
 <Calendar
   title="Calendrier"
   subtitle="CRM, Data & Automation"
   highlight="Calendrier"
   day="Jour 1"
   slots={[
-    { time: "09h00 – 11h00", subject: "Architecture des données", speaker: "Thomas" },
-    { time: "11h15 – 13h15", subject: "Données : collecte et qualité", speaker: "Thomas" },
-    { time: "14h15 – 16h15", subject: "Segmentation et activation", speaker: "Thomas" },
-    { time: "16h15 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
+    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
+    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
+    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
+    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
   ]}
 />
 
