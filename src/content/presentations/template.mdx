@@ -5,7 +5,7 @@ short: "Template"
 date: 2026-05-08
 type: cours
 unlisted: true
-description: "Deck modèle qui montre les layouts validés (Cover, Section, ImageGrid 2/3/4/5)."
+description: "Catalogue des layouts validés du repo : Cover, Section, ImageGrid, Statement, Quote, NumberedCards, transitions rituelles (Exchange, Demo, Workshop), Calendar, BigImage, TableSlide, échappatoires (Default, Custom)."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -20,6 +20,22 @@ import AgendaLight from '@/components/slides/AgendaLight.astro';
 import AgendaFull from '@/components/slides/AgendaFull.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Quote from '@/components/slides/Quote.astro';
+import NumberedCards from '@/components/slides/NumberedCards.astro';
+import NumberedCardWithDetail from '@/components/slides/NumberedCardWithDetail.astro';
+import Conventions from '@/components/slides/Conventions.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import Title from '@/components/slides/Title.astro';
+import BigImage from '@/components/slides/BigImage.astro';
+import TableSlide from '@/components/slides/TableSlide.astro';
+import Default from '@/components/slides/Default.astro';
+import Custom from '@/components/slides/Custom.astro';
+import IconCatalog from '@/components/slides/IconCatalog.astro';
 
 <Cover
   title="Template par défaut"
@@ -329,6 +345,254 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   id="exemple-mots-cles"
   question="En un mot, qu'est-ce que tu retiens ?"
   subtitle="Plusieurs réponses bienvenues"
+/>
+
+<Section
+  number="05"
+  eyebrow="Affirmations"
+  title="Statements et citations"
+  highlight="Statements"
+  subtitle="Pivots conceptuels et citations attribuées. Slides qui portent une idée forte, à l'oral comme à l'écran."
+/>
+
+<Statement
+  title="Le schéma compte plus que l'outil."
+  subtitle="Statement type pour porter une thèse forte au milieu d'un module."
+>
+  Un Contact lié à une Société existe de la même manière dans Excel, Airtable, Brevo, HubSpot ou Salesforce. La différence entre une PME qui scale et une PME qui s'enlise n'est pas l'outil choisi : c'est la rigueur du schéma sous-jacent.
+</Statement>
+
+<Quote
+  text="Si vous ne pouvez pas le mesurer, vous ne pouvez pas l'améliorer."
+  author="Peter Drucker"
+  role="Théoricien du management"
+  highlight="mesurer"
+/>
+
+<Section
+  number="06"
+  eyebrow="Listes"
+  title="Cartes numérotées"
+  highlight="numérotées"
+  subtitle="Trois variantes : 1 colonne pour la profondeur, 2 colonnes pour la balance, version détaillée pour zoomer sur un item."
+/>
+
+<NumberedCards
+  title="Trois piliers d'un CRM qui tient dans la durée"
+  subtitle="NumberedCards cols=1, idéale pour 3 à 5 items avec descriptions riches."
+  highlight="trois piliers"
+  cols={1}
+  items={[
+    {
+      number: "01",
+      title: "Métriques de qualité visibles",
+      description: "Taux de complétion par champ critique, taux de doublons détectés, taux de bounces email. Affichés sur un dashboard, suivis chaque mois. Sans mesure, pas de pilotage.",
+    },
+    {
+      number: "02",
+      title: "Routines de nettoyage",
+      description: "Mensuelle : run de déduplication, validation des emails inactifs. Trimestrielle : audit des champs vides, revue des règles de capture. À calendariser comme un processus métier critique.",
+    },
+    {
+      number: "03",
+      title: "Ownership clair",
+      description: "Une personne nommée, responsable de la qualité globale. Un rôle dédié (data steward) ou une part du job d'un CRM manager. Sans propriétaire, personne n'est responsable.",
+    },
+  ]}
+/>
+
+<NumberedCards
+  title="Quatre étapes du parcours client"
+  subtitle="NumberedCards cols=2, idéale pour 4 à 6 items au texte plus court."
+  highlight="quatre étapes"
+  cols={2}
+  items={[
+    {
+      number: "01",
+      title: "Découverte",
+      description: "Le prospect rencontre votre marque pour la première fois via une recherche, une pub ou une recommandation.",
+    },
+    {
+      number: "02",
+      title: "Considération",
+      description: "Il évalue votre offre face à la concurrence : démos, témoignages, articles comparatifs, échanges commerciaux.",
+    },
+    {
+      number: "03",
+      title: "Décision",
+      description: "Il choisit, négocie, signe. Le pic d'effort commercial culmine ici et la décision se joue souvent en quelques jours.",
+    },
+    {
+      number: "04",
+      title: "Fidélisation",
+      description: "Il devient client récurrent et ambassadeur si l'expérience post-achat tient ses promesses.",
+    },
+  ]}
+/>
+
+<NumberedCardWithDetail
+  title="Focus sur une étape précise"
+  subtitle="NumberedCardWithDetail pour zoomer sur un item avec une liste de détails et une image d'appui."
+  highlight="Focus"
+  number="03"
+  cardTitle="La phase de décision"
+  cardDescription="Le moment où le prospect bascule. C'est là que vous gagnez ou perdez la vente."
+  details={[
+    { label: "Signal d'achat", text: "Demande de devis chiffré, démo planifiée avec un décisionnaire dans la boucle, contact direct par un VP." },
+    { label: "Levier principal", text: "Cas client précis sur un profil similaire, garantie ou trial, plan d'onboarding cadré." },
+    { label: "Risque dominant", text: "Hésitation prolongée, demande de remise tardive, comparatif concurrence relancé." },
+    { label: "Closer", text: "Appel décisionnaire, proposition cadrée 1 page, deadline crédible avec contrepartie." },
+  ]}
+  image="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&h=1200&fit=crop"
+/>
+
+<Section
+  number="07"
+  eyebrow="Rituels"
+  title="Transitions pédagogiques"
+  highlight="Transitions"
+  subtitle="Cinq slides rituelles qui balisent les moments-clés d'un cours : conventions du support, échange, démo, workshop, brief workshop."
+/>
+
+<Conventions />
+
+<Exchange
+  title="Comment gérez-vous vos leads aujourd'hui ?"
+  subtitle="Tour de table express : outils, processus, frictions. La diversité dans la salle est la norme, pas l'exception."
+  highlight="vos leads"
+/>
+
+<Demo
+  title="Construction live d'un pipeline n8n"
+  subtitle="On part d'un formulaire web, on enchaîne validation, cleaning, enrichment Genderize, et écriture dans le CRM. Douze minutes, focus sur les choix de design à chaque maillon."
+  highlight="pipeline n8n"
+/>
+
+<Workshop
+  title="Votre première segmentation"
+  subtitle="En groupes de trois à quatre, définissez trois segments pertinents pour la boîte d'un membre, et associez à chaque segment un mode d'activation."
+  highlight="trois segments"
+/>
+
+<WorkshopBrief
+  title="Guidelines du workshop"
+  subtitle="Vingt minutes en groupe, dix minutes de restitution collective."
+  highlight="workshop"
+  subject="Conception d'un schéma CRM minimal pour une PME"
+  rows={[
+    { label: "Format", content: "Groupes de 3 à 4 personnes. Désignez une boîte d'un membre comme cas d'étude." },
+    { label: "Temps", content: "20 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", content: [
+      "5 min : lister les 3 à 5 entités principales du métier",
+      "5 min : pour chaque entité, identifier les 3 à 5 champs essentiels",
+      "10 min : tracer les relations entre entités et désigner la source de vérité",
+    ] },
+    { label: "Output", content: "Un schéma dessiné au feutre sur paperboard, prêt à présenter en plénière." },
+    { label: "Bonus IA", content: "Soumettez votre schéma à Claude ou ChatGPT et demandez : qu'est-ce qui manque ? quels risques ?" },
+    { label: "Restitution", content: "1 à 2 minutes par groupe, focus sur ce qui a coincé et ce qui a émergé." },
+  ]}
+/>
+
+<Section
+  number="08"
+  eyebrow="Programme"
+  title="Calendrier et titres de chapitre"
+  highlight="Calendrier"
+  subtitle="Slides structurelles pour orienter dans le temps : Calendar pour le déroulé d'une journée, Title pour ouvrir un chapitre majeur avec un titre monumental."
+/>
+
+<Calendar
+  title="Calendrier"
+  subtitle="Journée type formation continue"
+  highlight="Calendrier"
+  day="Jour 1"
+  slots={[
+    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
+    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
+    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
+    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
+    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
+  ]}
+/>
+
+<Title
+  title="Une stack data qui tient la route en 2026"
+  subtitle="De la captation à l'activation, sans rupture de chaîne."
+  chapter="Chapitre 2"
+  highlight="tient la route"
+/>
+
+<Section
+  number="09"
+  eyebrow="Génériques"
+  title="Images et tableaux libres"
+  highlight="libres"
+  subtitle="BigImage pour une image hero plein cadre avec titre standard. TableSlide pour un tableau générique aux en-têtes libres."
+/>
+
+<BigImage
+  title="Le tableau de bord CRM idéal"
+  subtitle="Quatre KPIs visibles en permanence, le reste à la demande."
+  highlight="quatre KPIs"
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=2000&h=1200&fit=crop"
+  alt="Capture d'écran d'un dashboard d'analyse"
+  caption="Exemple de mise en situation"
+/>
+
+<TableSlide
+  title="Comparatif outils CRM"
+  subtitle="Trois solutions courantes en Suisse romande"
+  highlight="Comparatif"
+  intro="Synthèse des forces et limites observées sur la dernière vague de déploiements."
+  headers={["Outil", "Forces", "Limites"]}
+  rows={[
+    ["HubSpot", "Onboarding rapide, marketing intégré, gratuit pour démarrer", "Coût qui explose à partir de 5 sièges, customisation limitée"],
+    ["Zoho CRM", "Très bon rapport qualité-prix, suite étendue (Books, Desk)", "UX moins lisse, courbe d'apprentissage plus raide"],
+    ["Salesforce", "Customisation infinie, écosystème énorme, marché de l'emploi", "Coût élevé, complexité, dépendance fréquente à un consultant"],
+  ]}
+/>
+
+<Section
+  number="10"
+  eyebrow="Échappatoires"
+  title="Quand aucun layout ne convient"
+  highlight="aucun layout"
+  subtitle="Default pour du contenu MDX libre avec titre standardisé. Custom pour de l'arbitraire total sans aucun cadre. À utiliser avec parcimonie : si la même mise en forme revient deux fois, créer un layout dédié."
+/>
+
+<Default
+  title="Slide Default"
+  subtitle="Titre standard plus contenu MDX libre dans le slot"
+  highlight="Default"
+>
+  Le composant `Default` reprend le SlideTitle standard et expose un slot MDX pour insérer du contenu arbitraire dessous.
+
+  Utile pour les slides qui ne tombent dans aucun layout spécialisé : prose longue, mélange de paragraphes et de listes, schéma SVG inline, embed YouTube ponctuel.
+
+  Reste sobre. Si la même mise en forme revient deux fois, créer un composant dédié plutôt que d'abuser de `Default`.
+</Default>
+
+<Custom align="center">
+  Composant escape-hatch sans SlideTitle ni structure imposée. Vous écrivez votre HTML ou Markdown directement dans le slot, avec le fond crème de la charte mais aucun cadre éditorial.
+
+  À réserver aux cas où aucun layout n'a de sens et où la réutilisation n'est pas anticipée. Si vous y revenez deux fois, c'est probablement le signal pour créer un layout dédié dans `src/components/slides/`.
+</Custom>
+
+<Section
+  number="11"
+  eyebrow="Iconographie"
+  title="Bibliothèque d'icônes"
+  highlight="Bibliothèque"
+  subtitle="Phosphor via astro-icon plus @iconify-json/ph. Inventaire de ce qui circule actuellement dans les slides du repo."
+/>
+
+<IconCatalog
+  items={[
+    { name: 'ph:chats-circle-fill', usedIn: 'Exchange, Conventions', color: '#E53E5E' },
+    { name: 'ph:cursor-click-fill', usedIn: 'Demo, Conventions', color: '#5BA8D6' },
+    { name: 'ph:pencil-simple-line-bold', usedIn: 'Workshop, Conventions', color: '#2EC27E' },
+    { name: 'ph:pencil-simple', usedIn: 'WorkshopBrief', color: '#6B6F84' },
+  ]}
 />
 
 <Closing variant="qa" />
