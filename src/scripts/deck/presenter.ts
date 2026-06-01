@@ -3,7 +3,7 @@
 // par l'endpoint POST /api/presenter/auth du worker lm-polls.
 //
 // Workflow : le presentateur va sur /presenter, tape son password. Le worker
-// valide vs env.PRESENTER_SECRET et retourne un token court-vie (6h). Le
+// valide vs env.PRESENTER_SECRET et retourne un token court-vie (10h). Le
 // token est ensuite envoye en header X-Presenter-Token sur init / freeze /
 // reset. Le worker verifie la signature HMAC + l'expiration. Si invalide,
 // le worker repond 403 et on clear le mode (forcer re-login).
@@ -12,7 +12,7 @@
 // tab et perdu a la fermeture du browser. Pour un presentateur qui ouvre
 // plusieurs decks dans des onglets ou ferme et reouvre le browser pendant
 // son cours, il faudrait re-saisir le password trop souvent. localStorage
-// persiste 6h jusqu'a l'expiration du token (verifiee cote client pour
+// persiste 10h jusqu'a l'expiration du token (verifiee cote client pour
 // clear automatiquement).
 //
 // Anciennement le secret circulait via ?presenter= puis #presenter= dans
