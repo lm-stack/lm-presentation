@@ -8,8 +8,6 @@ unlisted: true
 description: "Catalogue des 10 layouts ExecEd-style transposés en charte Lausanne Marketing : 4 thèmes de fond switchables en direct via le widget à droite. Halo Gold par défaut."
 ---
 
-import Closing from '@/components/slides/Closing.astro';
-
 import CoverHero from '@/components/slides/CoverHero.astro';
 import AboutHero from '@/components/slides/AboutHero.astro';
 import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
@@ -19,6 +17,9 @@ import QuoteImage from '@/components/slides/QuoteImage.astro';
 import BigImageHero from '@/components/slides/BigImageHero.astro';
 import ClosingHero from '@/components/slides/ClosingHero.astro';
 import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import ListImageHero from '@/components/slides/ListImageHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import PauseHero from '@/components/slides/PauseHero.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import PeopleCards from '@/components/slides/PeopleCards.astro';
 import SectionSplit from '@/components/slides/SectionSplit.astro';
@@ -201,17 +202,6 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<SectionHero
-  title="Architecture des données"
-  italicPart="des données"
-  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=900&h=900&fit=crop"
-  imageSide="left"
-  personName="Thomas Rouaud"
-  personRole="Senior consultant CRM, Data, IA"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-/>
-
 <QuoteImage
   text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine. Il faut maintenant penser data, automation et IA dès l'amont, pas en couche de vernis après coup, sinon on accumule de la dette opérationnelle qu'on paiera plus tard."
   author="Thomas Rouaud"
@@ -221,73 +211,57 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<BigImageHero
-  image="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=1920&h=1080&fit=crop"
-  caption="Salle de workshop, HEC Lausanne"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-/>
-
-<InfoCardsGrid
-  title="Informations clés"
-  italicPart="clés"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-  cards={[
-    { icon: 'ph:certificate', label: 'Diplôme', value: "Certificate of Advanced Studies (CAS)" },
-    { icon: 'ph:calendar-blank', label: 'Jours de cours', value: "Jeudi, vendredi, samedi (9h-17h)" },
-    { icon: 'ph:clock', label: 'Durée', value: "6 mois (septembre à février)" },
-    { icon: 'ph:stack', label: 'Modules', value: "5 modules de 3 jours" },
-    { icon: 'ph:user-check', label: 'Présence', value: "15 jours de cours sur 6 mois" },
-    { icon: 'ph:tag', label: 'Tarif', value: "CHF 9'500" },
-  ]}
-/>
-
-<PeopleCards
-  title="L'équipe pédagogique"
-  italicPart="pédagogique"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-  people={[
-    { firstName: "Thomas", lastName: "Rouaud", role: "Senior consultant CRM, Data, IA" },
-    { firstName: "Marie", lastName: "Dupont", role: "Data scientist senior" },
-    { firstName: "Lucas", lastName: "Bernard", role: "Spécialiste marketing automation" },
-  ]}
-/>
-
 <NumberedSplit
-  title="Public cible"
-  italicPart="cible"
-  subtitle="Trois profils prioritaires pour ce parcours"
+  title="Liste numérotée"
+  italicPart="numérotée"
+  subtitle="Lorem ipsum dolor sit amet consectetur"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1000&h=1400&fit=crop"
+  items={[
+    { text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore." },
+    { text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo." },
+    { text: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
+  ]}
+/>
+
+<ListImageHero
+  title="Aperçu complet"
+  italicPart="complet"
+  subtitle="Sous-titre ou accroche courte"
+  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1000&h=1400&fit=crop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
   items={[
-    { text: "Responsables marketing digital et CRM managers qui pilotent une stack en croissance." },
-    { text: "Chefs d'entreprise PME qui veulent rationaliser leurs outils sans alourdir les coûts." },
-    { text: "Data analysts marketing qui cherchent à industrialiser leurs flux de captation et d'activation." },
+    { label: "Module 1", title: "Stratégie Marketing", italicPart: "Stratégie" },
+    { label: "Module 2", title: "Stratégie de communication", italicPart: "Stratégie" },
+    { label: "Module 3", title: "Études de marché", italicPart: "Études" },
+    { label: "Module 4", title: "Branding", italicPart: "Branding" },
+    { label: "Module 5", title: "Communication personnelle", italicPart: "Communication" },
   ]}
 />
 
-<SectionSplit
-  title="Titre de section"
-  italicPart="de section"
-  subtitle="Sous-titre ou accroche courte"
-  body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+<WorkshopHero
+  title="Workshop"
+  italicPart="Workshop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
+  rows={[
+    { label: "Groupe", value: "3 à 4 personnes" },
+    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution" },
+    { label: "Output", value: "Architecture de données complète de votre organisation" },
+    { label: "Présentation", value: "2 minutes par groupe" },
+  ]}
 />
 
-<TitleSplitImage
-  title="Titre de slide"
-  italicPart="de slide"
-  subtitle="Sous-titre ou accroche courte"
+<PauseHero
+  title="Pause"
+  italicPart="Pause"
+  subtitle="Café, eau, étirements. On reprend ensemble."
+  spotify="https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
-  columns={[
-    { label: "Élément un", text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
-    { label: "Élément deux", text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-  ]}
-  image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&fit=crop"
 />
 
 <PollHero
@@ -316,5 +290,3 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
-
-<Closing variant="qa" />

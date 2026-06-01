@@ -117,6 +117,34 @@ body.is-fullscreen .deck-footer {
 }
 
 /* ============================================================ */
+/* HEADER EXECED-STYLE : BORDER-BOTTOM PLEINE LARGEUR           */
+/* ============================================================ */
+/* Règle absolue (cf. .claude/CLAUDE.md) : la border-bottom du header
+   traverse TOUTE la largeur de la slide. Les composants à header "inset"
+   (section padding 64px 96px, header enfant direct) voient leur header
+   étendu de -96px de chaque côté, avec padding interne pour réaligner
+   le brand et le logo. ProgrammeHero / NumberedSplit / WorkshopHero ne
+   sont PAS listés : leur header est déjà full-width (section padding 0,
+   header padding 96px). */
+.cover-hero__header,
+.about-hero__header,
+.image-grid-hero__header,
+.quote-image__header,
+.poll-hero__header,
+.wordcloud-hero__header,
+.closing-hero__header,
+.big-image-hero__header,
+.section-hero__header,
+.info-cards-grid__header,
+.people-cards__header,
+.section-split__header {
+  margin-left: -96px;
+  margin-right: -96px;
+  padding-left: 96px;
+  padding-right: 96px;
+}
+
+/* ============================================================ */
 /* REGLE ABSOLUE LAYOUT DES SLIDES                              */
 /* ============================================================ */
 /*

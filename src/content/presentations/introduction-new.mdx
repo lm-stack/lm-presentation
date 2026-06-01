@@ -1,0 +1,63 @@
+---
+title: "Introduction"
+subtitle: "CRM, Data & Automation"
+short: "Introduction"
+date: 2026-06-01
+type: cours
+unlisted: true
+cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop"
+description: "Ouverture du parcours CRM, Data & Automation : présentation de l'intervenant et vue d'ensemble des trois jours de formation."
+---
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import AboutHero from '@/components/slides/AboutHero.astro';
+import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
+
+<CoverHero
+  title="CRM, Data & Automation"
+  italicPart="Automation"
+  eyebrow="Formation continue"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  theme="halo-gold"
+/>
+
+<AboutHero
+  firstName="Thomas"
+  lastName="Rouaud"
+  photo="/assets/thomas-rouaud.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  sections={[
+    {
+      title: "Executive Education HEC Lausanne",
+      body: "Responsable Marketing et Ventes, intervenant régulier en formation continue.",
+      link: "https://execed.unil.ch/",
+    },
+    {
+      title: "Lausanne Marketing",
+      body: "Senior consultant en CRM, Data, IA et Automation pour PME et institutions.",
+      link: "https://lausanne.marketing/",
+    },
+    {
+      title: "Fun fact",
+      body: "N°2 du Marketing Digital en Suisse sur LinkedIn.",
+      link: "https://lausanne.marketing/publications/thomas-rouaud-2eme-meilleur-digital-marketer-linkedin-suisse/",
+    },
+  ]}
+/>
+
+<ProgrammeHero
+  title="Agenda"
+  italicPart="Agenda"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=1600&fit=crop"
+  items={[
+    { title: "Jour 1 : Les fondations data", description: "Collecter, nettoyer, structurer et activer la donnée client." },
+    { title: "Jour 2 : CRM et automation", description: "Protection des données, implémentation CRM, dashboards et marketing automation." },
+    { title: "Jour 3 : Industrialiser avec l'IA", description: "Lead nurturing, workflows avancés, IA et suivi des performances." },
+  ]}
+/>

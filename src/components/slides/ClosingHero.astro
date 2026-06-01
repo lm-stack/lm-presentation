@@ -42,8 +42,13 @@ const titleParts = splitHighlight(title, highlight);
   </div>
 
   <header class="closing-hero__header">
-    <p class="closing-hero__brand-main">{brand}</p>
-    {brandSub && <p class="closing-hero__brand-sub">{brandSub}</p>}
+    <div class="closing-hero__brand-text">
+      <p class="closing-hero__brand-main">{brand}</p>
+      {brandSub && <p class="closing-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="closing-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="closing-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
   </header>
 
   <div class="closing-hero__body">
@@ -94,6 +99,20 @@ const titleParts = splitHighlight(title, highlight);
   .closing-hero__body {
     position: relative;
     z-index: 1;
+  }
+
+  .closing-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+  }
+  .closing-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
   }
 
   .closing-hero__brand-main {

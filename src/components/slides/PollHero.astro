@@ -200,10 +200,19 @@ if (options.length < 2 || options.length > 6) {
     align-items: center;
   }
 
+  /* Toutes les réponses dans une carte blanche bordée, à la même hauteur que
+     wordcloud-hero__chart (min-height 560px), barres centrées verticalement. */
   .poll-hero__chart {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 20px;
+    min-height: 560px;
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.12);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    padding: 32px 36px;
   }
 
   .poll-hero__bar-row {
