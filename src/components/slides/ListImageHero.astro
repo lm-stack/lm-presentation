@@ -58,10 +58,7 @@ const {
           : title}
       </h2>
       {subtitle && (
-        <p class="list-image-hero__subtitle">
-          <span class="list-image-hero__subtitle-square" aria-hidden="true"></span>
-          {subtitle}
-        </p>
+        <p class="list-image-hero__subtitle">{subtitle}</p>
       )}
       {body && <p class="list-image-hero__body">{body}</p>}
     </div>
@@ -204,7 +201,7 @@ const {
     flex-direction: column;
     justify-content: center;
     gap: 16px;
-    padding: 40px 96px 40px 24px;
+    padding: 40px 56px;
     min-height: 0;
   }
   .list-image-hero__image {
@@ -250,7 +247,7 @@ const {
   .list-image-hero__card-label {
     display: block;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -260,7 +257,7 @@ const {
   .list-image-hero__card-title {
     display: block;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
     color: #191919;

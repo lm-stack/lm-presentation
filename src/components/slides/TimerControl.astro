@@ -15,8 +15,12 @@ interface Props {
   size?: 'large' | 'compact';
   /** Durée initiale en minutes : démarre directement en mode décompte. */
   defaultMinutes?: number;
+  /** Centre les textes (compteur, boutons, presets). */
+  center?: boolean;
+  /** Masque la barre de progression. */
+  hideProgress?: boolean;
 }
-const { presets = [5, 10, 15], allowCustom = true, size = 'large', defaultMinutes } = Astro.props;
+const { presets = [5, 10, 15], allowCustom = true, size = 'large', defaultMinutes, center = false, hideProgress = false } = Astro.props;
 function fmtMin(min: number) {
   const m = Math.floor(min);
   const s = Math.round((min - m) * 60);
@@ -30,7 +34,7 @@ function fmtSec(sec: number) {
 const defaultSeconds = defaultMinutes && defaultMinutes > 0 ? Math.round(defaultMinutes * 60) : 0;
 const hasDefault = defaultSeconds > 0;
 ---
-<div class:list={['timer-control', `timer-control--${size}`]} data-timer-control data-tc-default={defaultSeconds}>
+<div class:list={['timer-control', `timer-control--${size}`, { 'timer-control--center': center, 'timer-control--no-progress': hideProgress }]} data-timer-control data-tc-default={defaultSeconds}>
   <div class="timer-control__select" data-tc-select hidden={hasDefault}>
     <div class="timer-control__presets">
       {presets.map((m) => (
@@ -90,6 +94,7 @@ const hasDefault = defaultSeconds > 0;
       display!.textContent = fmt(remaining);
       const pct = total > 0 ? ((total - remaining) / total) * 100 : 0;
       progress!.style.width = `${pct}%`;
+      root.dispatchEvent(new CustomEvent('tc:tick', { detail: { pct } }));
       root.classList.toggle('is-done', total > 0 && remaining <= 0);
       toggleLabel!.textContent = running ? 'Pause' : remaining <= 0 ? 'Terminé' : remaining < total ? 'Reprendre' : 'Démarrer';
       toggleBtn!.disabled = remaining <= 0;
@@ -188,6 +193,13 @@ const hasDefault = defaultSeconds > 0;
      du bloc, donc pas de reflow du contenu de la slide autour. */
   .timer-control--large { min-height: 400px; }
   .timer-control--compact { min-height: 270px; }
+
+  /* Variantes : centrage des textes + masquage de la barre de progression. */
+  .timer-control--center { text-align: center; }
+  .timer-control--center .timer-control__presets { margin-left: auto; margin-right: auto; }
+  .timer-control--center .timer-control__custom { margin-left: auto; margin-right: auto; }
+  .timer-control--center .timer-control__controls { justify-content: center; }
+  .timer-control--no-progress .timer-control__progress { display: none; }
 
   /* ---- Sélection ---- */
   .timer-control__presets {

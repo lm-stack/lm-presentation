@@ -1,11 +1,9 @@
 ---
 // src/components/slides/WorkshopHero.astro
-// Slide "Workshop" ExecEd-style : header full-width standard, à gauche un tableau
-// label / valeur des infos clés + un minuteur (TimerControl) sous le tableau, à
-// droite une colonne (38%, comme NumberedSplit) remplie d'un matrix rain
-// "papier-pluie" (canvas, repris de CoverHero) surmonté d'un cercle jaune avec
-// une icône. Charte LM light.
-import { Icon } from 'astro-icon/components';
+// Slide "Workshop" ExecEd-style : header full-width standard, à gauche le titre +
+// un tableau label / valeur des infos clés, à droite une colonne (38%) avec un
+// matrix rain "papier-pluie" (canvas, repris de CoverHero) surmonté du minuteur
+// (TimerControl, centré, sans barre de progression). Charte LM light.
 import TimerControl from '@/components/slides/TimerControl.astro';
 
 interface WorkshopRow {
@@ -17,12 +15,10 @@ interface Props {
   italicPart?: string;
   subtitle?: string;
   rows: WorkshopRow[];
-  /** Icône Phosphor du cercle posé sur le matrix rain. */
-  icon?: string;
-  /** Durées proposées au minuteur, en minutes. */
-  presets?: number[];
   /** Durée par défaut du minuteur, en minutes (temps de l'atelier). */
   defaultMinutes?: number;
+  /** Durées proposées au minuteur, en minutes. */
+  presets?: number[];
   brand?: string;
   brandSub?: string;
 }
@@ -31,9 +27,8 @@ const {
   italicPart,
   subtitle,
   rows,
-  icon = 'ph:users-three-thin',
-  presets = [5, 10, 15],
   defaultMinutes = 20,
+  presets = [5, 10, 15],
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -52,9 +47,13 @@ const {
   <div class="workshop-hero__content">
     <div class="workshop-hero__rain-area">
       <canvas class="workshop-hero__rain" aria-hidden="true"></canvas>
-      <span class="workshop-hero__badge" aria-hidden="true">
-        <Icon name={icon} />
-      </span>
+      <svg class="workshop-hero__timer-circle" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="workshop-hero__ring-track" cx="50" cy="50" r="46" pathLength="100"></circle>
+        <circle class="workshop-hero__ring-fill" cx="50" cy="50" r="46" pathLength="100" data-ws-ring></circle>
+      </svg>
+      <div class="workshop-hero__timer">
+        <TimerControl size="compact" center hideProgress presets={presets} allowCustom={true} defaultMinutes={defaultMinutes} />
+      </div>
     </div>
 
     <div class="workshop-hero__main">
@@ -73,10 +72,6 @@ const {
           </div>
         ))}
       </dl>
-
-      <div class="workshop-hero__timer">
-        <TimerControl size="compact" presets={presets} allowCustom={true} defaultMinutes={defaultMinutes} />
-      </div>
     </div>
   </div>
 </section>
@@ -225,6 +220,26 @@ const {
   } else {
     initWorkshopRains();
   }
+
+  // Relie l'anneau de progression au minuteur : à chaque tick (event tc:tick
+  // émis par TimerControl), on met à jour l'offset de l'arc (100 = vide, 0 = plein).
+  function initWorkshopRings() {
+    document.querySelectorAll<HTMLElement>('[data-layout="workshop-hero"]').forEach((slide) => {
+      const ringFill = slide.querySelector<SVGCircleElement>('[data-ws-ring]');
+      const timer = slide.querySelector<HTMLElement>('[data-timer-control]');
+      if (!ringFill || !timer || timer.dataset.wsRingInit === 'true') return;
+      timer.dataset.wsRingInit = 'true';
+      timer.addEventListener('tc:tick', (e) => {
+        const pct = (e as CustomEvent).detail?.pct ?? 0;
+        ringFill.style.strokeDashoffset = String(Math.max(0, 100 - pct));
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWorkshopRings);
+  } else {
+    initWorkshopRings();
+  }
 </script>
 
 <style>
@@ -283,6 +298,7 @@ const {
     min-height: 0;
   }
 
+  /* Colonne droite : matrix rain en fond, minuteur centré dessus. */
   .workshop-hero__rain-area {
     position: absolute;
     top: 0;
@@ -291,6 +307,10 @@ const {
     height: 100%;
     z-index: 0;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
   }
   .workshop-hero__rain {
     position: absolute;
@@ -299,25 +319,41 @@ const {
     height: 100%;
     pointer-events: none;
   }
-  /* Cercle jaune + icône posé au centre du matrix rain. */
-  .workshop-hero__badge {
+  .workshop-hero__timer {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+    /* Minuteur légèrement plus bas que le centre de l'anneau. */
+    transform: translateY(34px);
+  }
+  /* Anneau jaune progressif autour du minuteur (piste + arc qui se remplit
+     comme la barre de la Pause), posé sur le matrix rain. */
+  .workshop-hero__timer-circle {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 230px;
-    height: 230px;
-    border-radius: 50%;
-    background: #FFD838;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #191919;
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.18);
+    width: min(540px, 92%);
+    aspect-ratio: 1;
+    z-index: 0;
+    overflow: visible;
   }
-  .workshop-hero__badge :global(svg) {
-    width: 130px;
-    height: 130px;
+  .workshop-hero__ring-track {
+    fill: none;
+    stroke: rgba(255, 216, 56, 0.25);
+    stroke-width: 1.6;
+  }
+  .workshop-hero__ring-fill {
+    fill: none;
+    stroke: #FFD838;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 0.9s linear;
   }
 
   .workshop-hero__main {
@@ -363,15 +399,15 @@ const {
   }
   .workshop-hero__row {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 250px 1fr;
     gap: 28px;
     align-items: baseline;
-    padding: 14px 0;
+    padding: 16px 0;
     border-bottom: 1px solid rgba(25, 25, 25, 0.12);
   }
   .workshop-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -380,13 +416,9 @@ const {
   .workshop-hero__value {
     margin: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 400;
     line-height: 1.4;
     color: #6B6F84;
-  }
-
-  .workshop-hero__timer {
-    margin-top: 56px;
   }
 </style>
