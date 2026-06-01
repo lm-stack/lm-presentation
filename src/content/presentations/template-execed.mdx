@@ -23,6 +23,8 @@ import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import PeopleCards from '@/components/slides/PeopleCards.astro';
 import SectionSplit from '@/components/slides/SectionSplit.astro';
 import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
+import PollHero from '@/components/slides/PollHero.astro';
+import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 
 <CoverHero
   title="Titre de la présentation"
@@ -286,6 +288,23 @@ import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
     { label: "Élément deux", text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
   ]}
   image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&fit=crop"
+/>
+
+<PollHero
+  id="template-execed-poll"
+  question="Cette session t'a paru claire ?"
+  italicPart="claire"
+  options={["Très claire", "Plutôt claire", "Mitigée", "Confuse"]}
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<WordCloudHero
+  id="template-execed-wordcloud"
+  question="Un mot pour résumer la séance ?"
+  italicPart="résumer"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <ClosingHero

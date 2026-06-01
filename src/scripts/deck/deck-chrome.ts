@@ -101,7 +101,7 @@ export function initToc(deck: RevealApi): void {
     document.querySelectorAll<HTMLElement>('.slides > section[data-section-title]')
   ).filter((s) => {
     const layout = s.dataset.layout || '';
-    return layout !== 'poll' && layout !== 'wordcloud';
+    return layout !== 'poll' && layout !== 'wordcloud' && layout !== 'poll-hero' && layout !== 'wordcloud-hero';
   });
   if (tocSlides.length === 0) return;
 
