@@ -50,7 +50,7 @@ if (options.length < 2 || options.length > 6) {
   <div class="poll-hero__body">
     <h2 class="poll-hero__title">
       {italicPart
-        ? <>{question.split(italicPart)[0]}<em class="poll-hero__title-italic">{italicPart}</em>{question.split(italicPart)[1]}</>
+        ? <>{question.split(italicPart)[0]}<em class="poll-hero__title-italic"><span class="underline">{italicPart}</span></em>{question.split(italicPart)[1]}</>
         : question}
     </h2>
 
@@ -124,7 +124,7 @@ if (options.length < 2 || options.length > 6) {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 64px 96px !important;
+    padding: 44px 96px 64px !important;
     background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
     color: #191919;
     display: flex !important;
@@ -136,7 +136,7 @@ if (options.length < 2 || options.length > 6) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 24px;
+    padding-bottom: 40px;
     border-bottom: 1px solid rgba(25, 25, 25, 0.12);
   }
   .poll-hero__brand-main {
