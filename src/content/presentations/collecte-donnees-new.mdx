@@ -1,0 +1,156 @@
+---
+title: "Collecte des données"
+subtitle: "CRM, Data & Automation"
+short: "Collecte des données"
+date: 2026-06-02
+type: cours
+unlisted: true
+cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop"
+description: "Collecte des données : les cinq sources d'entrée d'un CRM (formulaires, transactions, imports, API, saisie manuelle). Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import FormHero from '@/components/slides/FormHero.astro';
+import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
+import PollHero from '@/components/slides/PollHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
+
+<CoverHero
+  title="Collecte des données"
+  italicPart="données"
+  eyebrow="Jour 1 : Sujet 1"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  theme="halo-gold"
+/>
+
+<InfoCardsGrid
+  title="Vous collectez déjà"
+  italicPart="déjà"
+  subtitle="Sans même y penser, vous en gardez déjà des traces, un peu partout."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:identification-card', label: 'Carte de visite', value: "Un contact glissé dans la poche à un événement." },
+    { icon: 'ph:envelope-simple', label: 'Email reçu', value: "Un client qui vous écrit : son adresse, sa demande." },
+    { icon: 'ph:table', label: 'Fichier Excel', value: "Votre liste de clients, tenue à la main." },
+    { icon: 'ph:browser', label: 'Formulaire en ligne', value: "Quelqu'un remplit, vous recevez ses infos." },
+  ]}
+/>
+
+<StatementHero
+  eyebrow="Le problème"
+  title={"Collecter\nne suffit pas"}
+  italicPart="suffit pas"
+  body="Tout le monde collecte, presque personne n'exploite. Sans stratégie derrière, la donnée reste dormante."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<ImageGridHero
+  title="Cinq sources de données"
+  italicPart="Cinq sources"
+  subtitle="Vos données arrivent par plusieurs portes. Les repérer, c'est déjà reprendre la main."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=450&fit=crop',
+      alt: 'Formulaire en ligne',
+      title: 'Formulaires',
+      text: 'p.ex. Compte ou Contact',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=450&fit=crop',
+      alt: 'Paiement en ligne',
+      title: 'Transactions',
+      text: 'p.ex. Achat en ligne',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=450&fit=crop',
+      alt: 'Extraction de données web',
+      title: 'Scraping',
+      text: 'p.ex. RC (Zefix)',
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=600&h=450&fit=crop',
+      alt: 'Connexions API',
+      title: 'Intégrations',
+      text: "p.ex. Données de l'ERP",
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=450&fit=crop',
+      alt: 'Saisie au clavier',
+      title: 'Imports manuels',
+      text: 'p.ex. Saisie du commercial',
+    },
+  ]}
+/>
+
+<PollHero
+  id="collecte-source-la-plus-utilisee"
+  question="Quelle source utilisez-vous le plus ?"
+  italicPart="le plus"
+  options={["Formulaires", "Transactions", "Scraping", "Intégrations", "Imports manuels"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<DemoHero
+  title="Démonstration"
+  italicPart="Démonstration"
+  subtitle="Aller chercher de la donnée publique avec Apify."
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&h=1000&fit=crop"
+  caption="Apify : Google Maps Scraper (capture à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "Apify, acteur Google Maps Scraper (no-code)." },
+    { label: "Cible", value: "Les restaurants d'une ville sur Google Maps." },
+    { label: "Récolté", value: "Nom, adresse, téléphone, site, note." },
+    { label: "Règle", value: "Données publiques d'entreprises seulement (LPD/RGPD)." },
+  ]}
+/>
+
+<FormHero
+  title="Un formulaire"
+  italicPart="formulaire"
+  subtitle="La porte d'entrée la plus contrôlable : vous décidez quels champs demander."
+  fields={["Nom", "Prénom", "Email"]}
+  button="Envoyer"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<CompareColumnsHero
+  title="Quelles données demander ?"
+  italicPart="demander"
+  subtitle="La question qu'on me pose tout le temps. La règle : demander le moins possible."
+  left={{
+    heading: "À demander",
+    items: ["Email", "Prénom"],
+  }}
+  right={{
+    heading: "À inférer ou enrichir",
+    items: ["Nom complet", "Société (via l'email pro)", "Genre (via le prénom)", "Pays / ville (via l'IP)"],
+  }}
+  note="Chaque champ en plus fait baisser la conversion : ne demandez que ce que vous ne pouvez pas déduire."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<ClosingHero
+  title="Des questions ?"
+  highlight="questions ?"
+  tagline="Ensuite : nettoyer et enrichir la donnée."
+  url="lausanne.marketing"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

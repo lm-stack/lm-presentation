@@ -19,6 +19,11 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import ListImageHero from '@/components/slides/ListImageHero.astro';
 import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import FormHero from '@/components/slides/FormHero.astro';
+import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
 import PauseHero from '@/components/slides/PauseHero.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import PeopleCards from '@/components/slides/PeopleCards.astro';
@@ -254,6 +259,65 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
     { label: "Output", value: "Architecture de données complète de votre organisation" },
     { label: "Présentation", value: "2 minutes par groupe" },
   ]}
+/>
+
+<DemoHero
+  title="Démonstration"
+  italicPart="Démonstration"
+  subtitle="Une capture de l'outil, et les grandes lignes en tableau."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
+  caption="Capture d'écran de la démonstration"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  rows={[
+    { label: "Outil", value: "Le logiciel ou service montré en direct." },
+    { label: "Cible", value: "Sur quelles données on travaille." },
+    { label: "Étapes", value: "Les 3 ou 4 manipulations clés à observer." },
+    { label: "À retenir", value: "Le point pédagogique de la démonstration." },
+  ]}
+/>
+
+<StatementHero
+  eyebrow="Le problème"
+  title="Déclaration ou chiffre-clé"
+  italicPart="chiffre-clé"
+  body="Une phrase forte, et un chiffre à l'appui. Le footer source en bas à gauche cite l'étude."
+  stat="73%"
+  statCaption="légende courte du chiffre mis en avant."
+  source="Source ultra-quali, 2024"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<SubSectionHero
+  kicker="Collecte · Jour 1"
+  index="1.2"
+  title="Capter à la source"
+  italicPart="à la source"
+  subtitle="Intercalaire de sous-section : numéro géant + titre serif italique, reveal en cascade."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<FormHero
+  title="Un formulaire"
+  italicPart="formulaire"
+  subtitle="Maquette : champs + bouton (Nom, Prénom, Email)."
+  fields={["Nom", "Prénom", "Email"]}
+  button="Envoyer"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<CompareColumnsHero
+  title="Deux colonnes à opposer"
+  italicPart="opposer"
+  subtitle="Gauche neutre, droite accent jaune. Ex : à demander vs à inférer."
+  left={{ heading: "Colonne gauche", items: ["Élément un", "Élément deux"] }}
+  right={{ heading: "Colonne droite", items: ["Élément un", "Élément deux", "Élément trois"] }}
+  note="Phrase de synthèse optionnelle en bas."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <PauseHero
