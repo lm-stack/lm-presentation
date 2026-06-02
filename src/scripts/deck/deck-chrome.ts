@@ -106,19 +106,22 @@ export function initToc(deck: RevealApi): void {
   if (tocSlides.length === 0) return;
 
   tocNav.hidden = false;
-  const slidesParent = tocSlides[0].parentElement;
   const menuPanel = document.getElementById('deck-menu') as HTMLElement | null;
+  // Naviguer via l'index RÉEL de Reveal (getIndices), pas l'index DOM : robuste
+  // à tout décalage entre l'ordre DOM des <section> et l'indexation de Reveal.
+  // C'est ce qui faisait pointer une entrée de ToC vers la mauvaise slide.
+  const revealDeck = deck as RevealApi & {
+    getIndices(slide?: HTMLElement): { h: number; v: number };
+  };
 
   tocSlides.forEach((sec, i) => {
-    const indexInDeck = slidesParent
-      ? Array.from(slidesParent.children).indexOf(sec)
-      : 0;
-    const label = sec.dataset.sectionTitle ?? `Slide ${indexInDeck + 1}`;
+    const idx = revealDeck.getIndices(sec);
+    const label = sec.dataset.sectionTitle ?? `Slide ${i + 1}`;
     const li = document.createElement('li');
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'deck-menu__toc-btn';
-    btn.dataset.slideIndex = String(indexInDeck);
+    btn.dataset.slideIndex = String(idx.h);
     const num = document.createElement('span');
     num.className = 'deck-menu__toc-num';
     num.setAttribute('aria-hidden', 'true');
@@ -129,7 +132,7 @@ export function initToc(deck: RevealApi): void {
     btn.appendChild(num);
     btn.appendChild(text);
     btn.addEventListener('click', () => {
-      deck.slide(indexInDeck);
+      deck.slide(idx.h, idx.v);
       if (menuPanel) menuPanel.hidden = true;
     });
     li.appendChild(btn);
