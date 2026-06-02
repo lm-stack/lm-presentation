@@ -12,6 +12,9 @@ description: "Ouverture du parcours CRM, Data & Automation : présentation de l'
 import CoverHero from '@/components/slides/CoverHero.astro';
 import AboutHero from '@/components/slides/AboutHero.astro';
 import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import ListImageHero from '@/components/slides/ListImageHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 
 <CoverHero
   title="CRM, Data & Automation"
@@ -22,6 +25,37 @@ import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
   brandSub="Executive Education"
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
   theme="halo-gold"
+/>
+
+<ListImageHero
+  title="Le CAS en Marketing digital"
+  italicPart="Marketing digital"
+  subtitle="5 modules, 15 jours, 5 mois."
+  body="CRM, Data & Automation est le module 5 de ce parcours."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { label: "Module 01", title: "Stratégie digitale", objective: "Bâtir une stratégie omnicanale cohérente, du parcours client à l'acquisition." },
+    { label: "Module 02", title: "IA & content marketing", objective: "Concevoir une stratégie de contenu performante, outillée par l'IA." },
+    { label: "Module 03", title: "Réseaux sociaux", objective: "Déployer une présence cohérente sur les réseaux sociaux et en mesurer l'impact." },
+    { label: "Module 04", title: "Growth marketing", objective: "Activer une démarche d'expérimentation orientée croissance." },
+    { label: "Module 05", title: "CRM, data & automation", objective: "Structurer la donnée et automatiser le parcours client de bout en bout.", current: true },
+  ]}
+/>
+
+<NumberedSplit
+  title="Vos objectifs"
+  italicPart="objectifs"
+  subtitle="À l'issue des trois jours, vous serez capable de :"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1000&h=1400&fit=crop"
+  items={[
+    { text: "Appliquer des méthodes de collecte, structuration et intégration des données clients pour enrichir efficacement un CRM." },
+    { text: "Évaluer et maintenir des solutions CRM et d'automatisation en sélectionnant les outils les plus adaptés à vos besoins." },
+    { text: "Créer des workflows automatisés intégrant IA et low-code/no-code pour optimiser les parcours clients et la productivité marketing." },
+  ]}
 />
 
 <AboutHero
@@ -45,6 +79,23 @@ import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
       title: "Fun fact",
       body: "N°2 du Marketing Digital en Suisse sur LinkedIn.",
       link: "https://lausanne.marketing/publications/thomas-rouaud-2eme-meilleur-digital-marketer-linkedin-suisse/",
+    },
+  ]}
+/>
+
+<ImageGridHero
+  title="Tour de table"
+  italicPart="table"
+  subtitle="Faisons connaissance avant de plonger dans la donnée."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: 'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=1800&h=1200&fit=crop',
+      alt: 'Figurines Lego noir et blanc',
+      focal: 'center 80%',
+      title: 'À vous, en trois points',
+      text: 'Votre prénom, votre entreprise, et votre rapport actuel aux données.',
     },
   ]}
 />

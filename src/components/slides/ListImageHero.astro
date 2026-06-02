@@ -11,6 +11,10 @@ interface ListItem {
   title: string;
   /** Portion du titre rendue en italique serif. */
   italicPart?: string;
+  /** Ligne d'objectif affichée sous le titre de la card. */
+  objective?: string;
+  /** Met la card en avant (cadre jaune) + puce "Vous êtes ici". */
+  current?: boolean;
 }
 interface Props {
   title: string;
@@ -66,13 +70,19 @@ const {
     <div class="list-image-hero__right">
       <ol class="list-image-hero__cards">
         {items.map((item) => (
-          <li class="list-image-hero__card">
-            {item.label && <span class="list-image-hero__card-label">{item.label}</span>}
+          <li class={`list-image-hero__card${item.current ? ' is-current' : ''}`}>
+            {(item.label || item.current) && (
+              <span class="list-image-hero__card-label">
+                {item.label}
+                {item.current && <span class="list-image-hero__card-here">Vous êtes ici</span>}
+              </span>
+            )}
             <span class="list-image-hero__card-title">
               {item.italicPart
                 ? <>{item.title.split(item.italicPart)[0]}<em>{item.italicPart}</em>{item.title.split(item.italicPart)[1]}</>
                 : item.title}
             </span>
+            {item.objective && <span class="list-image-hero__card-obj">{item.objective}</span>}
           </li>
         ))}
       </ol>
@@ -266,5 +276,37 @@ const {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
     font-style: italic;
     font-weight: 400;
+  }
+
+  /* Objectif sous le titre de la card (un objectif par module). */
+  .list-image-hero__card-obj {
+    display: block;
+    margin-top: 8px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #6B6F84;
+  }
+
+  /* Card mise en avant : le module courant du parcours. */
+  .list-image-hero__card.is-current {
+    border-color: #FFD838;
+    background: #FFFCEC;
+    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.12);
+  }
+  .list-image-hero__card-here {
+    display: inline-block;
+    margin-left: 10px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #191919;
+    background: #FFD838;
+    border-radius: 4px;
+    padding: 2px 8px;
+    vertical-align: middle;
   }
 </style>

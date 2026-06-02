@@ -13,6 +13,11 @@ interface ImageItem {
   alt?: string;
   title?: string;
   text?: string;
+  // Point de focus de l'image : valeur CSS object-position (ex: 'center 80%',
+  // 'top', 'center bottom'). Par défaut 'center' (centre vertical), qui peut
+  // couper le sujet quand la carte est plus large que l'image (la carte fait
+  // ~3.2:1, l'image source souvent 3:2 : object-fit cover rogne le haut/bas).
+  focal?: string;
 }
 interface Props {
   title?: string;
@@ -62,7 +67,7 @@ const variantClass = `image-grid-hero__grid--${count}`;
       {images.map((img, i) => (
         <article class="image-grid-hero__item" style={`--i: ${i}`}>
           <div class="image-grid-hero__media">
-            <img src={img.src} alt={img.alt ?? ''} loading="lazy" decoding="async" />
+            <img src={img.src} alt={img.alt ?? ''} loading="lazy" decoding="async" style={img.focal ? `object-position: ${img.focal};` : undefined} />
           </div>
           {(img.title || img.text) && (
             <div class="image-grid-hero__card-body">
