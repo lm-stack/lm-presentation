@@ -43,6 +43,7 @@ Lire `template.mdx`, puis ce cheatsheet **intention → composant** (les props e
 - `italicPart` = **sous-chaîne exacte** du `title` (sinon rien ne s'italise).
 - `brand` / `brandSub` cohérents avec le reste du deck.
 - Image Unsplash : résoudre la page `unsplash.com/photos/...` vers l'**URL directe** `images.unsplash.com/photo-...` ; recadrer avec `focal` (valeur CSS `object-position`, ex `center 80%`) quand le sujet est coupé ; `alt` en français.
+- **Citer une étude** : sources **ultra-quali** uniquement (Gartner, McKinsey, IDC, Forrester, Wavestone/NewVantage, OCDE, institutions officielles, articles à comité de lecture), de préférence **récentes** (moins de 2 ans). Vérifier le chiffre à la source, pas un blog qui le recopie. Afficher la source **en bas à gauche** via le footer `.slide-source` (intégré au prop `source` de `StatementHero`).
 
 ### 3. Insérer
 Ajouter l'`import` du composant + poser le slide au bon endroit **narratif** (ex : moi → vous → programme). Garder le bloc d'imports propre.
@@ -66,3 +67,5 @@ Ajouter l'`import` du composant + poser le slide au bon endroit **narratif** (ex
 - Vérifier l'ordre des slides via un nom de classe CSS → faux négatif (classes hoistées). Utiliser le texte de corps.
 - Tester le rendu avec des mots accentués en PowerShell → faux négatif. Utiliser des sous-chaînes ASCII.
 - Coller une URL de page Unsplash au lieu de l'URL image directe.
+- Fond incohérent : un composant du catalogue peut traîner un fond différent (ex : `InfoCardsGrid` était en crème `#FAF8F3`). Chaque slide à contenu doit être sur le dégradé pearl (RÈGLE « Fond uniforme » du CLAUDE.md) ; seules `CoverHero` / `ClosingHero` diffèrent.
+- Header non conforme : un composant peut avoir oublié le logo LM (ex : `InfoCardsGrid`). Vérifier le header RÈGLE ABSOLUE (brand à gauche + logo LM cliquable à droite + border-bottom full-width) sur chaque slide à contenu ; corriger le composant si besoin.

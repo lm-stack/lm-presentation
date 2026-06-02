@@ -138,6 +138,16 @@ Pas de shadows monumentales `0 32px 64px -16px rgba(25, 25, 25, 0.18)` qui font 
 
 Vaut pour : `CoverHero`, `AboutHero`, `SectionHero`, `QuoteImage`, `BigImageHero`, `ClosingHero`, `NumberedSplit`, `SectionSplit`, `TitleSplitImage`, `InfoCardsGrid`, `PeopleCards`, `ImageGridHero`, `ProgrammeHero`, et tout futur composant ExecEd-style.
 
+### Fond uniforme des slides à contenu — RÈGLE ABSOLUE
+
+⚠️ **Toutes les slides à contenu ExecEd-style partagent le MÊME fond** : le dégradé pearl `linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%)`. Aucun saut de fond d'une slide à l'autre.
+
+Vaut pour : `ImageGridHero`, `NumberedSplit`, `SectionSplit`, `WorkshopHero`, `SectionHero`, `ListImageHero`, `InfoCardsGrid`, `PeopleCards`, `ProgrammeHero`, `AboutHero`, `QuoteImage`, et tout futur composant à contenu.
+
+Seules exceptions admises : les slides **structurelles** plein cadre qui ont leur propre identité visuelle, `CoverHero` (thème `--ch-bg`) et `ClosingHero` (image + voile). Elles ne sont pas soumises à l'uniformité.
+
+Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#FAF8F3`, créant un saut visible dans le deck `collecte-donnees-new`. Aligné sur le dégradé pearl.
+
 ## Commandes
 
 - `npm run dev` : serveur local
