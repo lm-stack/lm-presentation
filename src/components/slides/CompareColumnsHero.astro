@@ -1,0 +1,217 @@
+---
+// src/components/slides/CompareColumnsHero.astro
+// Slide "deux colonnes" ExecEd-style : header standard (brand + logo + border,
+// 44/40), une question/titre, puis deux colonnes (gauche neutre, droite accent
+// jaune) avec un en-tête + une liste chacune. Pour opposer deux ensembles, ex
+// "À demander" vs "À inférer / enrichir". Note optionnelle en bas.
+interface Column {
+  heading: string;
+  items: string[];
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  left: Column;
+  right: Column;
+  /** Principe / phrase de synthèse, optionnelle. */
+  note?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  left,
+  right,
+  note,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="compare-cols" data-layout="compare-columns">
+  <header class="compare-cols__header">
+    <div class="compare-cols__brand-text">
+      <p class="compare-cols__brand-main">{brand}</p>
+      {brandSub && <p class="compare-cols__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="compare-cols__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="compare-cols__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="compare-cols__body">
+    <div class="compare-cols__heading">
+      <h2 class="compare-cols__title">
+        {italicPart
+          ? <>{title.split(italicPart)[0]}<em class="compare-cols__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+          : title}
+      </h2>
+      {subtitle && <p class="compare-cols__subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="compare-cols__grid">
+      <div class="compare-cols__col">
+        <p class="compare-cols__col-head">{left.heading}</p>
+        <ul class="compare-cols__list">
+          {left.items.map((it) => <li>{it}</li>)}
+        </ul>
+      </div>
+      <div class="compare-cols__col compare-cols__col--accent">
+        <p class="compare-cols__col-head">{right.heading}</p>
+        <ul class="compare-cols__list">
+          {right.items.map((it) => <li>{it}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    {note && <p class="compare-cols__note">{note}</p>}
+  </div>
+</section>
+
+<style>
+  .compare-cols {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
+    color: #191919;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .compare-cols__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+  }
+  .compare-cols__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: #191919;
+    text-align: left;
+  }
+  .compare-cols__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: #6B6F84;
+    text-align: left;
+  }
+  .compare-cols__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .compare-cols__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    gap: 40px;
+    padding-top: 8px;
+  }
+  .compare-cols__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(44px, 4.2vw, 68px);
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #191919;
+    text-wrap: balance;
+    text-align: left;
+  }
+  .compare-cols__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .compare-cols__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    line-height: 1.45;
+    margin: 12px 0 0;
+    color: #6B6F84;
+    text-align: left;
+  }
+
+  .compare-cols__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .compare-cols__col {
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.08);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    padding: 32px 36px;
+  }
+  .compare-cols__col--accent {
+    background: #FFFCEC;
+    border-color: #FFD838;
+  }
+  .compare-cols__col-head {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #6B6F84;
+    margin: 0 0 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+  }
+  .compare-cols__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .compare-cols__list li {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 500;
+    color: #191919;
+    padding-left: 26px;
+    position: relative;
+  }
+  .compare-cols__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 10px;
+    height: 10px;
+    background: #FFD838;
+    border-radius: 2px;
+  }
+  .compare-cols__note {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #6B6F84;
+    margin: 0;
+    text-align: left;
+  }
+</style>
