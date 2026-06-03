@@ -17,6 +17,8 @@ interface Props {
   brand?: string;
   brandSub?: string;
   tocLabel?: string;
+  /** Autorise le sous-titre sur plusieurs lignes (défaut : une seule ligne). */
+  subtitleWrap?: boolean;
 }
 const {
   kicker,
@@ -27,6 +29,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
   tocLabel,
+  subtitleWrap = false,
 } = Astro.props;
 ---
 <section class="subsection-hero" data-layout="subsection-hero" data-section-title={tocLabel ?? title}>
@@ -51,7 +54,7 @@ const {
             ? <>{title.split(italicPart)[0]}<span class="underline">{italicPart}</span>{title.split(italicPart)[1]}</>
             : title}
         </h2>
-        {subtitle && <p class="subsection-hero__subtitle">{subtitle}</p>}
+        {subtitle && <p class:list={['subsection-hero__subtitle', subtitleWrap && 'subsection-hero__subtitle--wrap']}>{subtitle}</p>}
       </div>
     </div>
   </div>
@@ -190,6 +193,10 @@ const {
     white-space: nowrap;
     opacity: 0;
     animation: ss-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both;
+  }
+  .subsection-hero__subtitle--wrap {
+    white-space: normal;
+    max-width: 1100px;
   }
 
   @keyframes ss-scale-in {

@@ -11,6 +11,8 @@ interface Props {
   options: string[];
   /** Mot ou segment de la question rendu en italique serif. Optionnel. */
   italicPart?: string;
+  /** Sous-titre optionnel (consigne de vote, ex "Une seule réponse"). */
+  subtitle?: string;
   brand?: string;
   brandSub?: string;
 }
@@ -20,6 +22,7 @@ const {
   question,
   options,
   italicPart,
+  subtitle,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -48,11 +51,14 @@ if (options.length < 2 || options.length > 6) {
   </header>
 
   <div class="poll-hero__body">
-    <h2 class="poll-hero__title">
-      {italicPart
-        ? <>{question.split(italicPart)[0]}<em class="poll-hero__title-italic"><span class="underline">{italicPart}</span></em>{question.split(italicPart)[1]}</>
-        : question}
-    </h2>
+    <div class="poll-hero__heading">
+      <h2 class="poll-hero__title">
+        {italicPart
+          ? <>{question.split(italicPart)[0]}<em class="poll-hero__title-italic"><span class="underline">{italicPart}</span></em>{question.split(italicPart)[1]}</>
+          : question}
+      </h2>
+      {subtitle && <p class="poll-hero__subtitle">{subtitle}</p>}
+    </div>
 
     <div class="poll-hero__grid">
       <div class="poll-hero__chart" data-poll-chart>
@@ -191,6 +197,13 @@ if (options.length < 2 || options.length > 6) {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
     font-style: italic;
     font-weight: 400;
+  }
+  .poll-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #6B6F84;
+    margin: 16px 0 0;
   }
 
   .poll-hero__grid {
