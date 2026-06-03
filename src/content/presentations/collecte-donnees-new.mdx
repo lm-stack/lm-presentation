@@ -13,7 +13,7 @@ import CoverHero from '@/components/slides/CoverHero.astro';
 import SubSectionHero from '@/components/slides/SubSectionHero.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
 import FormHero from '@/components/slides/FormHero.astro';
 import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
@@ -53,15 +53,6 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
     { icon: 'ph:table', label: 'Fichier Excel', value: "Votre liste de clients, tenue à la main." },
     { icon: 'ph:browser', label: 'Formulaire en ligne', value: "Quelqu'un remplit, vous recevez ses infos." },
   ]}
-/>
-
-<StatementHero
-  eyebrow="Le problème"
-  title={"Collecter\nne suffit pas"}
-  italicPart="suffit pas"
-  body="Tout le monde collecte, presque personne n'exploite. Sans stratégie derrière, la donnée reste dormante."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />
 
 <ImageGridHero
@@ -113,20 +104,71 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   brandSub="Executive Education"
 />
 
+<SubSectionHero
+  kicker="Source de données"
+  index="1.1"
+  title="Scraping"
+  italicPart="Scraping"
+  subtitle="Aller chercher de la donnée publique sur le web, à grande échelle et dans les règles."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<NumberedSplit
+  title="Le scraping en clair"
+  italicPart="en clair"
+  subtitle="Récolter automatiquement de la donnée publique déjà structurée, sans la saisir à la main."
+  image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Registres officiels : Zefix et le registre du commerce (raison sociale, IDE, adresse, administrateurs)." },
+    { text: "Cartes et avis : Google Maps pour les commerces locaux (téléphone, horaires, site, note)." },
+    { text: "Annuaires et réseaux pro : sites sectoriels et pages entreprises (coordonnées, secteur d'activité)." },
+  ]}
+/>
+
+<CompareColumnsHero
+  title="Ce que dit la loi"
+  italicPart="la loi"
+  subtitle="La règle simple : données publiques d'entreprises, oui. Données personnelles, non sans base légale."
+  left={{
+    heading: "Autorisé",
+    items: ["Données d'entreprises publiques", "Coordonnées professionnelles", "Faits et informations légales"],
+  }}
+  right={{
+    heading: "Risqué ou interdit",
+    items: ["Données personnelles sans consentement", "Contournement de CGU ou de robots.txt", "Revente de bases scrapées"],
+  }}
+  note="En Suisse (LPD) comme en Europe (RGPD), finalité et base légale priment : scraper ne dispense jamais du respect des personnes."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 <DemoHero
   title="Démonstration"
   italicPart="Démonstration"
-  subtitle="Aller chercher de la donnée publique avec Apify."
+  subtitle="Récupérer de la donnée publique ouverte avec Apify, sur OpenStreetMap."
   image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&h=1000&fit=crop"
-  caption="Apify : Google Maps Scraper (capture à remplacer)"
+  caption="Apify : OpenStreetMap POI Extractor (capture à remplacer)"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
-    { label: "Outil", value: "Apify, acteur Google Maps Scraper (no-code)." },
-    { label: "Cible", value: "Les restaurants d'une ville sur Google Maps." },
-    { label: "Récolté", value: "Nom, adresse, téléphone, site, note." },
-    { label: "Règle", value: "Données publiques d'entreprises seulement (LPD/RGPD)." },
+    { label: "Outil", value: "Apify, acteur OpenStreetMap POI Extractor (no-code, via l'Overpass API)." },
+    { label: "Cible", value: "Les restaurants de Lausanne, dans un rayon de 5 km." },
+    { label: "Récolté", value: "Nom, adresse, téléphone, site web, horaires, coordonnées GPS." },
+    { label: "Règle", value: "Open data sous licence ODbL : réutilisable avec attribution OpenStreetMap." },
   ]}
+/>
+
+<SubSectionHero
+  kicker="Source de données"
+  index="1.2"
+  title="Formulaires"
+  italicPart="Formulaires"
+  subtitle="La source que vous maîtrisez de bout en bout : chaque champ demandé est un choix."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <FormHero
@@ -137,6 +179,20 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   button="Envoyer"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+<InfoCardsGrid
+  title="Quatre règles de bonne capture"
+  italicPart="bonne capture"
+  subtitle="La donnée la plus propre est celle qu'on n'a pas eu à nettoyer. Prévenir coûte dix fois moins que réparer."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:funnel', label: "Minimum de champs", value: "Ne demandez que ce qui sert à filtrer ou personnaliser. Chaque champ en plus fait chuter la conversion." },
+    { icon: 'ph:check-circle', label: "Validation à la source", value: "Email, téléphone, champs requis : un formulaire qui refuse une saisie fausse évite l'erreur en aval." },
+    { icon: 'ph:tag', label: "Capture du contexte", value: "UTM, lead magnet, page d'origine, timestamp, IP : des champs cachés précieux pour la suite." },
+    { icon: 'ph:shield-check', label: "Consentement explicite", value: "Case non pré-cochée, mention LPD/RGPD. Sans base légale, les séquences en aval sont illégales." },
+  ]}
 />
 
 <CompareColumnsHero
@@ -154,6 +210,22 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   note="Chaque champ en plus fait baisser la conversion : ne demandez que ce que vous ne pouvez pas déduire."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+<DemoHero
+  title="Le formulaire de Cédric, disséqué"
+  italicPart="disséqué"
+  subtitle="On reprend la landing du module Growth et on regarde ce qui se joue entre le clic et la fiche CRM."
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&h=1000&fit=crop"
+  caption="Formulaire de Cédric (capture à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Champs visibles", value: "Le strict minimum : prénom et email. Le reste se déduit ou se demande plus tard." },
+    { label: "Champs cachés", value: "UTM, slug du lead magnet, page d'origine, timestamp, IP, injectés sans friction." },
+    { label: "Validation", value: "Format email vérifié, champs requis, anti-bot, avant même l'envoi." },
+    { label: "À retenir", value: "Capter propre dès la source : aucune ligne à nettoyer derrière." },
+  ]}
 />
 
 <ClosingHero
