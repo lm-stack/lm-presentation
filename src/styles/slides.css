@@ -911,3 +911,28 @@ body.is-fullscreen .deck-search {
   }
 }
 
+/* ============================================================ */
+/* COMPOSANT SOURCE REUTILISABLE                                */
+/* ============================================================ */
+/* Footer "Source" activable sur N'IMPORTE QUEL slide (section avec data-layout) :
+   en bas a gauche, discret, cliquable quand un lien est fourni. Rendre dans le
+   composant : <p class="slide-source"> ou <a class="slide-source" href>. */
+[data-layout] .slide-source {
+  position: absolute;
+  left: 96px;
+  bottom: 40px;
+  margin: 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #9A9DAD;
+  letter-spacing: 0.01em;
+  z-index: 3;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+[data-layout] a.slide-source:hover {
+  color: #191919;
+  text-decoration: underline;
+}
+

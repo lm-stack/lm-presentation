@@ -1,0 +1,277 @@
+---
+// src/components/slides/MockupHero.astro
+// Mockup de device "ExecEd-style", 100% CSS. Encadre une image OU un faux site
+// web (mode webform) dans un cadre tablette, mobile ou laptop.
+//   - tablet / mobile : texte à gauche, device à droite.
+//   - desktop (laptop) : titre optionnel en haut, device centré (juste l'écran).
+// Pas de data-section-title : c'est un slide de contenu, il ne doit pas
+// apparaître dans la table des matières.
+interface WebForm {
+  /** Nom de domaine affiché dans la barre du navigateur (ex "cedric.ch"). */
+  url?: string;
+  /** Marque affichée dans la nav du faux site. */
+  siteName?: string;
+  /** Accroche du hero. */
+  headline?: string;
+  /** Sous-texte du hero. */
+  blurb?: string;
+  /** Champs du formulaire (labels). */
+  fields?: string[];
+  /** Libellé du bouton. */
+  button?: string;
+}
+interface Props {
+  device: 'tablet' | 'mobile' | 'desktop';
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  body?: string;
+  /** Image affichée plein écran dans le device. */
+  image?: string;
+  alt?: string;
+  /** Faux site web + formulaire dans l'écran (prioritaire sur image). */
+  webform?: WebForm;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  device,
+  title,
+  italicPart,
+  subtitle,
+  body,
+  image,
+  alt = '',
+  webform,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const isSplit = device === 'tablet' || device === 'mobile';
+const wf = webform ?? {};
+const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
+---
+<section class:list={['mockup-hero', `mockup-hero--${device}`]} data-layout="mockup-hero">
+  <header class="mockup-hero__header">
+    <div class="mockup-hero__brand-text">
+      <p class="mockup-hero__brand-main">{brand}</p>
+      {brandSub && <p class="mockup-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="mockup-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="mockup-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class:list={['mockup-hero__body', isSplit ? 'mockup-hero__body--split' : 'mockup-hero__body--stack']}>
+    {(title || subtitle || body) && (
+      <div class="mockup-hero__text">
+        {title && (
+          <h2 class="mockup-hero__title">
+            {italicPart
+              ? <>{title.split(italicPart)[0]}<em class="mockup-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="mockup-hero__subtitle">{subtitle}</p>}
+        {body && <p class="mockup-hero__text-body">{body}</p>}
+      </div>
+    )}
+
+    <div class="mockup-hero__stage">
+      <div class="mockup-hero__device">
+        <div class="mockup-hero__screen">
+          {webform ? (
+            <div class="mockup-hero__site">
+              <div class="mockup-hero__browser">
+                <span class="mockup-hero__dot"></span>
+                <span class="mockup-hero__dot"></span>
+                <span class="mockup-hero__dot"></span>
+                <span class="mockup-hero__url">{wf.url ?? 'cedric.ch'}</span>
+              </div>
+              <div class="mockup-hero__site-body">
+                <div class="mockup-hero__site-nav">
+                  <span class="mockup-hero__site-logo">{wf.siteName ?? 'Cédric'}</span>
+                  <span class="mockup-hero__site-links">
+                    <span></span><span></span><span></span>
+                  </span>
+                </div>
+                <h3 class="mockup-hero__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
+                <p class="mockup-hero__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
+                <form class="mockup-hero__form" onsubmit="return false">
+                  {fields.map((f) => (
+                    <label class="mockup-hero__field">
+                      <span class="mockup-hero__field-label">{f}</span>
+                      <span class="mockup-hero__field-input"></span>
+                    </label>
+                  ))}
+                  <span class="mockup-hero__submit">{wf.button ?? 'Envoyer'}</span>
+                </form>
+              </div>
+            </div>
+          ) : (
+            <img class="mockup-hero__img" src={image} alt={alt} loading="lazy" decoding="async" />
+          )}
+        </div>
+        {device === 'mobile' && <span class="mockup-hero__notch" aria-hidden="true"></span>}
+        {device === 'tablet' && <span class="mockup-hero__cam" aria-hidden="true"></span>}
+      </div>
+      {device === 'desktop' && <span class="mockup-hero__laptop-base" aria-hidden="true"></span>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mockup-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
+    color: #191919;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+  .mockup-hero__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 40px; border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+  }
+  .mockup-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em; margin: 0; color: #191919; text-align: left;
+  }
+  .mockup-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.18em; margin: 4px 0 0; color: #6B6F84; text-align: left;
+  }
+  .mockup-hero__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
+
+  .mockup-hero__body {
+    flex: 1 1 auto !important; min-height: 0; padding-top: 28px;
+    display: flex; gap: 72px;
+  }
+  .mockup-hero__body--split { flex-direction: row; align-items: center; }
+  .mockup-hero__body--stack { flex-direction: column; align-items: stretch; }
+
+  .mockup-hero__text { flex: 0 0 42%; max-width: 42%; }
+  .mockup-hero__body--stack .mockup-hero__text { flex: 0 0 auto; max-width: 1100px; }
+  .mockup-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: clamp(48px, 5vw, 88px);
+    line-height: 1.04; font-weight: 600; letter-spacing: -0.02em; margin: 0; color: #191919;
+    text-wrap: balance; text-align: left;
+  }
+  .mockup-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic; font-weight: 400;
+  }
+  .mockup-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 26px; line-height: 1.45;
+    font-weight: 500; color: #6B6F84; margin: 28px 0 0; max-width: 640px;
+  }
+  .mockup-hero__text-body {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; line-height: 1.5;
+    font-weight: 400; color: #6B6F84; margin: 20px 0 0; max-width: 640px;
+  }
+
+  /* Scène qui contient le device, centré. */
+  .mockup-hero__stage {
+    flex: 1 1 auto; min-width: 0; min-height: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+
+  /* ---- Cadre commun (bezel sombre) ---- */
+  .mockup-hero__device {
+    position: relative;
+    background: linear-gradient(150deg, #2c2c30 0%, #161618 60%, #0f0f10 100%);
+    box-shadow: 0 26px 60px -22px rgba(25, 25, 25, 0.45), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+  }
+  .mockup-hero__screen {
+    position: relative; width: 100%; height: 100%; overflow: hidden; background: #FFFFFF;
+  }
+  .mockup-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ---- Tablette (portrait 3:4) ---- */
+  .mockup-hero--tablet .mockup-hero__device {
+    height: min(100%, 760px); aspect-ratio: 3 / 4;
+    border-radius: 30px; padding: 20px 18px;
+  }
+  .mockup-hero--tablet .mockup-hero__screen { border-radius: 12px; }
+  .mockup-hero__cam {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #050506; box-shadow: inset 0 0 0 2px rgba(120, 130, 160, 0.4);
+  }
+
+  /* ---- Mobile (portrait 9:19) ---- */
+  .mockup-hero--mobile .mockup-hero__device {
+    height: min(100%, 760px); aspect-ratio: 9 / 19;
+    border-radius: 46px; padding: 11px;
+  }
+  .mockup-hero--mobile .mockup-hero__screen { border-radius: 36px; }
+  .mockup-hero__notch {
+    position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+    width: 36%; height: 24px; border-radius: 0 0 16px 16px; background: #0f0f10; z-index: 2;
+  }
+
+  /* ---- Desktop (laptop 16:10) ---- */
+  .mockup-hero--desktop .mockup-hero__device {
+    width: min(100%, 1180px); aspect-ratio: 16 / 10;
+    border-radius: 16px; padding: 16px;
+  }
+  .mockup-hero--desktop .mockup-hero__screen { border-radius: 6px; }
+  .mockup-hero__laptop-base {
+    width: min(100%, 1180px); height: 26px; margin-top: -2px;
+    background: linear-gradient(180deg, #d4d6dd 0%, #a9adba 100%);
+    clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%);
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 16px 28px -16px rgba(25, 25, 25, 0.4);
+    position: relative;
+  }
+  .mockup-hero__laptop-base::after {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 140px; height: 9px; border-radius: 0 0 9px 9px; background: #8d92a1;
+  }
+
+  /* ---- Faux site web (mode webform) ---- */
+  .mockup-hero__site { display: flex; flex-direction: column; height: 100%; background: #FBFBFD; }
+  .mockup-hero__browser {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
+    padding: 11px 14px; background: #ECEDF1; border-bottom: 1px solid rgba(25, 25, 25, 0.08);
+  }
+  .mockup-hero__dot { width: 10px; height: 10px; border-radius: 50%; background: #C7CAD3; }
+  .mockup-hero__url {
+    margin-left: 10px; flex: 1 1 auto; background: #FFFFFF; border-radius: 6px;
+    padding: 5px 12px; font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; color: #6B6F84;
+  }
+  .mockup-hero__site-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; padding: 26px 30px 30px; }
+  .mockup-hero__site-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .mockup-hero__site-logo {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+    letter-spacing: -0.01em; color: #191919;
+  }
+  .mockup-hero__site-links { display: flex; gap: 14px; }
+  .mockup-hero__site-links span { display: block; width: 36px; height: 8px; border-radius: 4px; background: rgba(25, 25, 25, 0.14); }
+  .mockup-hero__site-headline {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-style: italic; font-weight: 400; font-size: 34px; line-height: 1.15; margin: 0 0 8px; color: #191919;
+  }
+  .mockup-hero__site-blurb {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; line-height: 1.45;
+    color: #6B6F84; margin: 0 0 22px; max-width: 90%;
+  }
+  .mockup-hero__form { display: flex; flex-direction: column; gap: 14px; }
+  .mockup-hero__field { display: flex; flex-direction: column; gap: 6px; }
+  .mockup-hero__field-label {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em; color: #6B6F84;
+  }
+  .mockup-hero__field-input {
+    display: block; height: 40px; border-radius: 6px; background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.16);
+  }
+  .mockup-hero__submit {
+    margin-top: 8px; align-self: flex-start; background: #FFD838; color: #191919;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; font-weight: 700;
+    padding: 12px 26px; border-radius: 6px;
+  }
+</style>
