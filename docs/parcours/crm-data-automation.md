@@ -106,11 +106,16 @@ Historique des splits et réorganisations :
 - **Durée** : 90 min (1h30)
 - **Idée centrale** : "Capter proprement, dès la source. La donnée la plus propre est celle qu'on n'a pas eu besoin de nettoyer."
 - **Fil rouge** : la landing page de **Cédric**, construite dans le module Growth Marketing qui précède le parcours. Suite directe de leur travail de la semaine précédente. Le fil rouge se prolonge dans Qualité (sujet 2), puis dans les modules workflow (Jour 2) et workflows avancés (Jour 3) qui automatisent sur cette donnée propre.
-- **Sources couvertes (5)** : formulaires web, achats/transactions, imports manuels, synchronisations API, saisie manuelle équipe.
+- **Sources couvertes (5)** : formulaires, transactions, scraping, intégrations (API), imports manuels.
+- **Organisation du deck `-new` (révisée 2026-06-03)** : vue d'ensemble, puis deep dives par source.
+  - **1.0 Source de données** : intercalaire d'ouverture, les 5 portes d'entrée (ImageGridHero) + sondage "quelle source utilisez-vous le plus ?".
+  - **1.1 Scraping** : le concept (registres officiels Zefix/RC, Google Maps, annuaires pro), le cadre légal (données publiques d'entreprises oui, données personnelles non sans base légale : LPD/RGPD), démo Apify (Google Maps Scraper).
+  - **1.2 Formulaires** : maquette, les 4 règles de bonne capture, "quelles données demander" (à demander vs à inférer/enrichir), démo du formulaire de Cédric disséqué.
 - **Quatre règles de bonne capture** : minimum viable de champs, validation côté formulaire, capture du contexte (UTM, lead magnet, timestamp, IP), consentement explicite.
-- **Démo live** : décomposition du formulaire de Cédric (champs visibles, champs cachés, validation côté client). Pas de pipeline n8n ici (réservé au sujet 2 Qualité).
-- **Workshop** : multi-groupes, chaque groupe reprend un formulaire actif d'un membre et le reconçoit selon les 4 règles. Output : wireframe avant/après sur paperboard, champs visibles + cachés annotés.
-- **Structure timing** :
+- **Démos live (2)** : Apify Google Maps Scraper (section Scraping) et décomposition du formulaire de Cédric, champs visibles / cachés / validation (section Formulaires). Pas de pipeline n8n ici (réservé au sujet 2 Qualité).
+- **Workshop** : retiré du deck `-new` (décision 2026-06-03, "pas de refonte de formulaire"). Le module n'a pas de workshop pour l'instant. L'ancien workshop (refonte d'un formulaire selon les 4 règles, wireframe avant/après) reste documenté dans l'ancien deck `collecte-donnees.mdx` si besoin de le réintégrer.
+- **Slide "Collecter ne suffit pas"** : déplacé vers le nouveau deck `qualite-donnees-new` (pivot d'ouverture du module Qualité) le 2026-06-03.
+- **Structure timing** (plan initial 2026-05-29, à réviser : workshop retiré et scraping ajouté le 2026-06-03) :
 
   | Bloc | Durée |
   |------|-------|
