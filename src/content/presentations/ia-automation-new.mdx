@@ -1,18 +1,19 @@
 ---
-title: "Marketing automation"
+title: "IA & Automation"
 subtitle: "CRM, Data & Automation"
-short: "Marketing automation"
+short: "IA & Automation"
 date: 2026-06-03
 type: cours
 unlisted: true
 cover: "/decks/marketing-automation/cover-robot.jpg"
-description: "Marketing automation : pourquoi automatiser, les APIs, le JSON, le no-code. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "IA & Automation : pourquoi automatiser, les APIs, le JSON, le no-code, et la place de l'IA. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import CoverHero from '@/components/slides/CoverHero.astro';
 import SubSectionHero from '@/components/slides/SubSectionHero.astro';
 import ImageGridHero from '@/components/slides/ImageGridHero.astro';
 import MediaHero from '@/components/slides/MediaHero.astro';
+import BarChartHero from '@/components/slides/BarChartHero.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import PollHero from '@/components/slides/PollHero.astro';
 import WordCloudHero from '@/components/slides/WordCloudHero.astro';
@@ -26,8 +27,8 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 
 {/* Slide 1 : Cover */}
 <CoverHero
-  title="Marketing automation"
-  italicPart="automation"
+  title="IA & Automation"
+  italicPart="Automation"
   eyebrow="Module 23"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
@@ -322,6 +323,25 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
     "Pas de soutien de la direction",
     "Données trop dispersées",
   ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 23b : Les vrais freins a l'IA (chart reconstruit, ZHAW 2024) */}
+<BarChartHero
+  title="Les vrais freins à l'IA"
+  italicPart="freins"
+  subtitle="Ce qui bloque l'adoption de l'IA en marketing, selon les entreprises."
+  items={[
+    { label: "Ressources et compétences limitées", value: 72, emphasis: true },
+    { label: "Craintes sur la protection des données", value: 28 },
+    { label: "Pas de vue d'ensemble, ne sait pas par où commencer", value: 28 },
+    { label: "Limites technologiques", value: 21 },
+    { label: "Pas une priorité de la direction", value: 21 },
+    { label: "Manque de prise de conscience", value: 20 },
+  ]}
+  source="ZHAW, Marketing Automation & AI Report 2024 (n=253), plusieurs réponses possibles"
+  sourceUrl="https://www.zhaw.ch/storage/sml/upload/Zumstein-et-al_Marketing-Automation-AI-Report_2024.pdf"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

@@ -15,7 +15,7 @@ import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import ImageGridHero from '@/components/slides/ImageGridHero.astro';
 import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
-import FormHero from '@/components/slides/FormHero.astro';
+import MockupHero from '@/components/slides/MockupHero.astro';
 import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
 import PollHero from '@/components/slides/PollHero.astro';
 import ClosingHero from '@/components/slides/ClosingHero.astro';
@@ -171,12 +171,19 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   brandSub="Executive Education"
 />
 
-<FormHero
-  title="Un formulaire"
+<MockupHero
+  device="tablet"
+  title="Exemple de formulaire"
   italicPart="formulaire"
   subtitle="La porte d'entrée la plus contrôlable : vous décidez quels champs demander."
-  fields={["Nom", "Prénom", "Email"]}
-  button="Envoyer"
+  webform={{
+    url: "cedric.ch",
+    siteName: "Cédric",
+    headline: "Recevez le guide gratuit",
+    blurb: "Laissez vos coordonnées, on vous envoie tout par email.",
+    fields: ["Nom", "Prénom", "Email"],
+    button: "Recevoir le guide",
+  }}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

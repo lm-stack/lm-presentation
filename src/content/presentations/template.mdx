@@ -5,7 +5,7 @@ short: "Template"
 date: 2026-05-29
 type: cours
 unlisted: true
-description: "Catalogue de référence des layouts ExecEd-style transposés en charte Lausanne Marketing : les composants de slide du repo."
+description: "Catalogue de référence des layouts ExecEd-style transposés en charte Lausanne Marketing : les composants de slide du repo, organisés par famille."
 ---
 
 import CoverHero from '@/components/slides/CoverHero.astro';
@@ -31,6 +31,8 @@ import SectionSplit from '@/components/slides/SectionSplit.astro';
 import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
 import PollHero from '@/components/slides/PollHero.astro';
 import WordCloudHero from '@/components/slides/WordCloudHero.astro';
+import BarChartHero from '@/components/slides/BarChartHero.astro';
+import MockupHero from '@/components/slides/MockupHero.astro';
 
 <CoverHero
   title="Titre de la présentation"
@@ -41,6 +43,16 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Titre du parcours ou de l'événement"
   image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop"
   theme="halo-gold"
+/>
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="1"
+  title="Couvertures et sections"
+  italicPart="sections"
+  subtitle="Page de garde, intervenant, agenda, citation et intercalaires de section."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <AboutHero
@@ -81,6 +93,25 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
     { title: "Teasing", description: "At vero eos et accusamus et iusto odio dignissimos." },
     { title: "Conclusion", description: "At vero eos et accusamus et iusto odio dignissimos." },
   ]}
+/>
+
+<QuoteImage
+  text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine. Il faut maintenant penser data, automation et IA dès l'amont, pas en couche de vernis après coup, sinon on accumule de la dette opérationnelle qu'on paiera plus tard."
+  author="Thomas Rouaud"
+  role="Senior consultant CRM, Data, IA"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="2"
+  title="Grilles"
+  italicPart="Grilles"
+  subtitle="Cards image + titre + texte, de 1 à 5 colonnes selon le nombre d'images."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <ImageGridHero
@@ -208,11 +239,12 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<QuoteImage
-  text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine. Il faut maintenant penser data, automation et IA dès l'amont, pas en couche de vernis après coup, sinon on accumule de la dette opérationnelle qu'on paiera plus tard."
-  author="Thomas Rouaud"
-  role="Senior consultant CRM, Data, IA"
-  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
+<SubSectionHero
+  kicker="Catalogue"
+  index="3"
+  title="Listes"
+  italicPart="Listes"
+  subtitle="Liste numérotée, liste sur image, et deux colonnes à opposer."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
@@ -248,17 +280,81 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<WorkshopHero
-  title="Workshop"
-  italicPart="Workshop"
+<CompareColumnsHero
+  title="Deux colonnes à opposer"
+  italicPart="opposer"
+  subtitle="Gauche neutre, droite accent jaune. Ex : à demander vs à inférer."
+  left={{ heading: "Colonne gauche", items: ["Élément un", "Élément deux"] }}
+  right={{ heading: "Colonne droite", items: ["Élément un", "Élément deux", "Élément trois"] }}
+  note="Phrase de synthèse optionnelle en bas."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
-  rows={[
-    { label: "Groupe", value: "3 à 4 personnes" },
-    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution" },
-    { label: "Output", value: "Architecture de données complète de votre organisation" },
-    { label: "Présentation", value: "2 minutes par groupe" },
+/>
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="4"
+  title="Graphiques"
+  italicPart="Graphiques"
+  subtitle="Barres reconstruites en CSS, sondage live et nuage de mots."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<BarChartHero
+  title="Graphique en barres"
+  italicPart="barres"
+  subtitle="Valeurs et barres à gauche, descriptions à droite. Une barre peut être mise en avant."
+  items={[
+    { label: "Première catégorie, la plus citée par les répondants", value: 72, emphasis: true },
+    { label: "Deuxième catégorie", value: 54 },
+    { label: "Troisième catégorie", value: 38 },
+    { label: "Quatrième catégorie", value: 25 },
+    { label: "Cinquième catégorie", value: 14 },
   ]}
+  source="Étude exemple, 2024 (n=000), plusieurs réponses possibles"
+  sourceUrl="https://lausanne.marketing"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="5"
+  title="Sondages"
+  italicPart="Sondages"
+  subtitle="Sondage à choix (barres) et nuage de mots, en direct depuis le téléphone."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<PollHero
+  id="template-poll"
+  question="Cette session t'a paru claire ?"
+  italicPart="claire"
+  subtitle="Une seule réponse, depuis ton téléphone"
+  options={["Très claire", "Plutôt claire", "Mitigée", "Confuse"]}
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<WordCloudHero
+  id="template-wordcloud"
+  question="Un mot pour résumer la séance ?"
+  italicPart="résumer"
+  subtitle="Plusieurs réponses bienvenues"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="6"
+  title="Démo, atelier et média"
+  italicPart="atelier"
+  subtitle="Démonstration, déclaration chiffrée, workshop minuté, formulaire et pause."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <DemoHero
@@ -289,14 +385,17 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
-  kicker="Collecte · Jour 1"
-  index="1.2"
-  title="Capter à la source"
-  italicPart="à la source"
-  subtitle="Intercalaire de sous-section : numéro géant + titre serif italique, reveal en cascade."
+<WorkshopHero
+  title="Workshop"
+  italicPart="Workshop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
+  rows={[
+    { label: "Groupe", value: "3 à 4 personnes" },
+    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution" },
+    { label: "Output", value: "Architecture de données complète de votre organisation" },
+    { label: "Présentation", value: "2 minutes par groupe" },
+  ]}
 />
 
 <FormHero
@@ -305,17 +404,6 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   subtitle="Maquette : champs + bouton (Nom, Prénom, Email)."
   fields={["Nom", "Prénom", "Email"]}
   button="Envoyer"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-/>
-
-<CompareColumnsHero
-  title="Deux colonnes à opposer"
-  italicPart="opposer"
-  subtitle="Gauche neutre, droite accent jaune. Ex : à demander vs à inférer."
-  left={{ heading: "Colonne gauche", items: ["Élément un", "Élément deux"] }}
-  right={{ heading: "Colonne droite", items: ["Élément un", "Élément deux", "Élément trois"] }}
-  note="Phrase de synthèse optionnelle en bas."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
@@ -329,19 +417,44 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<PollHero
-  id="template-poll"
-  question="Cette session t'a paru claire ?"
-  italicPart="claire"
-  options={["Très claire", "Plutôt claire", "Mitigée", "Confuse"]}
+<SubSectionHero
+  kicker="Catalogue"
+  index="7"
+  title="Mockups"
+  italicPart="Mockups"
+  subtitle="Encadrer une image ou un faux site dans une tablette, un mobile ou un laptop."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<WordCloudHero
-  id="template-wordcloud"
-  question="Un mot pour résumer la séance ?"
-  italicPart="résumer"
+<MockupHero
+  device="tablet"
+  title="Mockup tablette"
+  italicPart="tablette"
+  subtitle="Device à droite (image ou faux site), contenu à gauche."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=1200&fit=crop"
+  alt="Exemple de contenu dans une tablette"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<MockupHero
+  device="mobile"
+  title="Mockup mobile"
+  italicPart="mobile"
+  subtitle="Pour une app ou un site responsive : device à droite, contenu à gauche."
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=1300&fit=crop"
+  alt="Exemple de contenu dans un mobile"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<MockupHero
+  device="desktop"
+  title="Mockup desktop"
+  italicPart="desktop"
+  image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1600&h=1000&fit=crop"
+  alt="Exemple de contenu dans un laptop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
