@@ -73,3 +73,4 @@ Chargés automatiquement à chaque session. À respecter pour tout travail sur l
 | `slides.md` | Règles visuelles INTANGIBLES : zone titre `SlideTitle`, centrage vertical (titre fixe en haut), safe area 48px, border-radius 4px, drop-shadows légères, header ExecEd, fond pearl uniforme, sous-titre `SubSectionHero` sur une ligne |
 | `conventions.md` | UTF-8, pas d'em-dash dans les slides, nombres CHF suisses (`2'250 CHF`), pas d'emojis, nommage PascalCase / kebab-case |
 | `polls.md` | Sondages live `<Poll>` / `<WordCloud>` : workflow présentateur, Cloudflare KV, variable `PUBLIC_LM_POLLS_URL` |
+| `themes.md` | Tokens de couleur (schémas LM / ExecEd), règle « pas de hex en dur », frontmatter `scheme` |
