@@ -99,8 +99,8 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -113,7 +113,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     align-items: center;
     justify-content: space-between;
     padding: 44px 96px 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .pause-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -122,7 +122,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .pause-hero__brand-sub {
@@ -132,7 +132,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .pause-hero__brand-logo {
@@ -165,7 +165,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0 0 32px;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .pause-hero__title-italic {
@@ -178,7 +178,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     font-size: 24px;
     font-weight: 500;
     line-height: 1.4;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 0 0 32px;
     max-width: 900px;
   }
@@ -194,7 +194,7 @@ const showSpotify = !!spotifyEmbed && !isHandout;
     margin-right: 40px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 12px 32px -12px rgba(25, 25, 25, 0.25);
+    box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--c-ink) 25%, transparent);
   }
   .pause-hero__spotify iframe {
     display: block;

@@ -93,8 +93,8 @@ const hasEmphasis = items.some((it) => it.emphasis);
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -104,17 +104,17 @@ const hasEmphasis = items.some((it) => it.emphasis);
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .bar-chart-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 22px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.12em; margin: 0; color: #191919; text-align: left;
+    letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
   }
   .bar-chart-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 14px; font-weight: 500; text-transform: uppercase;
-    letter-spacing: 0.18em; margin: 4px 0 0; color: #6B6F84; text-align: left;
+    letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
   }
   .bar-chart-hero__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
 
@@ -132,7 +132,7 @@ const hasEmphasis = items.some((it) => it.emphasis);
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: clamp(40px, 4vw, 64px);
     line-height: 1.06; font-weight: 600; letter-spacing: -0.02em;
-    margin: 0; color: #191919; text-wrap: balance; text-align: left;
+    margin: 0; color: var(--c-ink); text-wrap: balance; text-align: left;
   }
   .bar-chart-hero__title-italic {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
@@ -140,7 +140,7 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px; line-height: 1.4; font-weight: 500; color: #6B6F84;
+    font-size: 24px; line-height: 1.4; font-weight: 500; color: var(--c-muted);
     margin: 12px 0 0; max-width: 1200px;
   }
 
@@ -157,15 +157,15 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__value {
     font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
-    font-size: 26px; font-weight: 700; color: #191919;
+    font-size: 26px; font-weight: 700; color: var(--c-ink);
     font-variant-numeric: tabular-nums; text-align: right;
   }
   .bar-chart-hero__track {
-    height: 44px; background: rgba(25, 25, 25, 0.06);
+    height: 44px; background: color-mix(in srgb, var(--c-ink) 6%, transparent);
     border-radius: 4px; overflow: hidden; position: relative;
   }
   .bar-chart-hero__fill {
-    display: block; height: 100%; background: #FFD838; border-radius: 4px;
+    display: block; height: 100%; background: var(--c-accent); border-radius: 4px;
     transform-origin: left center;
     animation: bar-chart-hero-grow 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(var(--i, 0) * 0.09s);
@@ -173,11 +173,11 @@ const hasEmphasis = items.some((it) => it.emphasis);
   .bar-chart-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 24px; font-weight: 600; line-height: 1.25;
-    color: #191919; text-align: left;
+    color: var(--c-ink); text-align: left;
   }
-  .bar-chart-hero__row.is-dim .bar-chart-hero__fill { background: rgba(255, 216, 56, 0.34); }
+  .bar-chart-hero__row.is-dim .bar-chart-hero__fill { background: color-mix(in srgb, var(--c-accent) 34%, transparent); }
   .bar-chart-hero__row.is-dim .bar-chart-hero__value,
-  .bar-chart-hero__row.is-dim .bar-chart-hero__label { color: #6B6F84; }
+  .bar-chart-hero__row.is-dim .bar-chart-hero__label { color: var(--c-muted); }
 
   @keyframes bar-chart-hero-grow {
     from { transform: scaleX(0); }

@@ -186,7 +186,7 @@ const hasDefault = defaultSeconds > 0;
 <style>
   .timer-control {
     font-family: 'Hanken Grotesk', sans-serif;
-    color: #191919;
+    color: var(--c-ink);
     width: 100%;
   }
   /* Hauteur réservée : le passage sélection <-> décompte ne change pas la hauteur
@@ -214,23 +214,23 @@ const hasDefault = defaultSeconds > 0;
     font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
-    color: #191919;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.16);
+    color: var(--c-ink);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
   .timer-control--large .timer-control__preset { font-size: 32px; padding: 20px 0; }
   .timer-control--compact .timer-control__preset { font-size: 26px; padding: 16px 0; }
   .timer-control__preset:hover {
-    background: #FFD838;
-    border-color: #FFD838;
+    background: var(--c-accent);
+    border-color: var(--c-accent);
   }
   .timer-control__preset--custom {
     border-style: dashed;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .timer-control__custom {
@@ -246,17 +246,17 @@ const hasDefault = defaultSeconds > 0;
     font-family: 'Space Grotesk', monospace;
     font-size: 20px;
     padding: 12px 16px;
-    border: 1px solid rgba(25, 25, 25, 0.2);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 20%, transparent);
     border-radius: 4px;
-    background: #FFFFFF;
-    color: #191919;
+    background: var(--c-surface);
+    color: var(--c-ink);
   }
   .timer-control__custom-ok {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 700;
     font-size: 18px;
-    color: #191919;
-    background: #FFD838;
+    color: var(--c-ink);
+    background: var(--c-accent);
     border: none;
     border-radius: 4px;
     padding: 12px 24px;
@@ -271,17 +271,17 @@ const hasDefault = defaultSeconds > 0;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     letter-spacing: -0.04em;
-    color: #191919;
+    color: var(--c-ink);
   }
   .timer-control--large .timer-control__time { font-size: clamp(150px, 17vw, 280px); }
   .timer-control--compact .timer-control__time { font-size: clamp(84px, 8.5vw, 140px); }
-  .timer-control.is-done .timer-control__time { color: #6B6F84; }
+  .timer-control.is-done .timer-control__time { color: var(--c-muted); }
 
   .timer-control__progress {
     display: block;
     width: 100%;
     height: 6px;
-    background: rgba(25, 25, 25, 0.12);
+    background: color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 999px;
     margin-top: 20px;
     overflow: hidden;
@@ -292,7 +292,7 @@ const hasDefault = defaultSeconds > 0;
     display: block;
     height: 100%;
     width: 0;
-    background: #FFD838;
+    background: var(--c-accent);
     border-radius: 999px;
     transition: width 0.9s linear;
   }
@@ -307,9 +307,9 @@ const hasDefault = defaultSeconds > 0;
   .timer-control__btn {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 700;
-    color: #191919;
+    color: var(--c-ink);
     background: transparent;
-    border: 1px solid rgba(25, 25, 25, 0.3);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 30%, transparent);
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
@@ -317,15 +317,15 @@ const hasDefault = defaultSeconds > 0;
   .timer-control--large .timer-control__btn { font-size: 20px; padding: 14px 28px; }
   .timer-control--compact .timer-control__btn { font-size: 18px; padding: 12px 24px; }
   .timer-control__btn:hover:not(:disabled) {
-    background: rgba(25, 25, 25, 0.05);
-    border-color: #191919;
+    background: color-mix(in srgb, var(--c-ink) 5%, transparent);
+    border-color: var(--c-ink);
   }
   .timer-control__btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .timer-control__btn--primary {
-    background: #FFD838;
-    border-color: #FFD838;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
-  .timer-control__btn--primary:hover:not(:disabled) { background: #FFE15C; border-color: #FFE15C; }
-  .timer-control__btn--ghost { color: #6B6F84; }
+  .timer-control__btn--primary:hover:not(:disabled) { background: var(--c-accent-soft); border-color: var(--c-accent-soft); }
+  .timer-control__btn--ghost { color: var(--c-muted); }
 </style>

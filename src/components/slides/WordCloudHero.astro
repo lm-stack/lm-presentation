@@ -117,8 +117,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -129,7 +129,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .wordcloud-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -138,7 +138,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .wordcloud-hero__brand-sub {
@@ -148,7 +148,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .wordcloud-hero__brand-logo {
@@ -175,7 +175,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -188,7 +188,7 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 24px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 16px 0 0;
   }
 
@@ -204,10 +204,10 @@ const {
     width: 100%;
     min-height: 560px;
     overflow: hidden;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.12);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 4px;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
   /* Note : le padding visuel du wordcloud est géré en JS (renderPollWordCloud)
      car les spans en position:absolute ignorent le CSS padding du container. */
@@ -261,23 +261,23 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 700;
     font-size: 24px;
-    color: #191919;
-    background: #FFD838;
+    color: var(--c-ink);
+    background: var(--c-accent);
     border: none;
     border-radius: 4px;
     padding: 14px 28px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
 
   .wordcloud-hero__qr {
     width: 380px;
     height: 380px;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.12);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 4px;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -290,7 +290,7 @@ const {
     font-weight: 700;
     font-size: 64px;
     letter-spacing: 0.15em;
-    color: #191919;
+    color: var(--c-ink);
     font-variant-numeric: tabular-nums;
   }
 
@@ -298,24 +298,24 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 500;
     font-size: 18px;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .wordcloud-hero__counter {
     font-family: 'Space Grotesk', monospace;
     font-weight: 700;
     font-size: 16px;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin-top: 4px;
   }
 
   .wordcloud-hero__actions {
     display: flex;
     gap: 8px;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.12);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 4px;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
     padding: 6px;
     margin-top: 12px;
   }
@@ -327,26 +327,26 @@ const {
     align-items: center;
     justify-content: center;
     background: transparent;
-    color: #191919;
+    color: var(--c-ink);
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.15s ease;
   }
   @media (hover: hover) {
-    .wordcloud-hero__action-btn:hover { background: #FFD838; }
+    .wordcloud-hero__action-btn:hover { background: var(--c-accent); }
   }
 
   .wordcloud-hero__frozen-badge {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 700;
     font-size: 28px;
-    color: #191919;
-    background: #FFD838;
+    color: var(--c-ink);
+    background: var(--c-accent);
     padding: 18px 36px;
-    border: 1px solid rgba(25, 25, 25, 0.12);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 4px;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
     text-align: center;
   }
 </style>
