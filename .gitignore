@@ -8,12 +8,8 @@ dist/
 # OneDrive desktop.ini
 desktop.ini
 
-# Source archive (PDF, PPTX, RAW) - trop lourd pour git, conservé en local
-source/**/*.pptx
-source/**/*.pdf
-source/**/*.arw
-source/**/*.png
-source/**/*.jpg
+# Source archive (PDF, PPTX, RAW, unzips) - trop lourd pour git, conservé en local
+source/
 
 # Fichiers Cloudflare
 .wrangler/

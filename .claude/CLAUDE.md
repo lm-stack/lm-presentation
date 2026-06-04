@@ -49,6 +49,7 @@ Parcours documentés :
 - Ajouter Sveltia CMS (édition directe en code).
 - Mettre des assets PPT/PDF/RAW dans le repo (toujours `source/` gitignored).
 - Modifier les slides en mode présentation directement (toujours via MDX + composants).
+- Lancer `npm run build` pendant qu'`astro dev` tourne : les deux écrivent dans `.astro/`, le watcher Vite part en boucle de reload (`Failed to load url astro:server-app.js`). Stopper le dev avant un build. Garde-fou en place : `vite.server.watch.ignored` dans `astro.config.mjs`.
 
 ## Cache Cloudflare Pages (rename ou suppression de deck)
 
