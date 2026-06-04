@@ -57,7 +57,7 @@
 /* Focus visible global : keyboard navigation reste visible sur tous interactifs. */
 /* Outline gold sur fond clair = signature LM, ressort sans casser le rythme. */
 :focus-visible {
-  outline: 2px solid #FFD838;
+  outline: 2px solid var(--c-accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -73,7 +73,7 @@
   .deck-menu__back-parcours,
   .back-home
 ) {
-  outline-color: #191919;
+  outline-color: var(--c-ink);
 }
 
 /* Underline gold rotatif (signature LM, hors @layer pour battre Tailwind utility) */
@@ -90,7 +90,7 @@
   left: -5px;
   width: 100%;
   height: 100%;
-  border-bottom: 10px solid #FFD838;
+  border-bottom: 10px solid var(--c-accent);
   transform: rotate(-3deg);
   pointer-events: none;
   background-color: transparent;

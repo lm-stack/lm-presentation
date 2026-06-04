@@ -8,7 +8,7 @@
    chaque slide repose visuellement sur le meme aplat. Les decos internes
    (washes gold, watermarks) restent assumees comme accents locaux. */
 :root {
-  --slide-bg: #FAF8F3;
+  --slide-bg: var(--c-cream);
 }
 
 body {
@@ -59,8 +59,8 @@ body.is-fullscreen {
   background: transparent;
   overflow: hidden;
   z-index: 1;
-  border: 1px solid rgba(25, 25, 25, 0.1);
-  box-shadow: 0 1px 2px rgba(25, 25, 25, 0.04);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--c-ink) 4%, transparent);
 }
 
 html:has(:fullscreen) .deck-stage,
@@ -94,7 +94,7 @@ body.is-fullscreen .deck-footer {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 28px;
   background: transparent;
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 
 .reveal .slides {
@@ -114,7 +114,7 @@ body.is-fullscreen .deck-footer {
   transition: opacity 0.15s ease;
 }
 :where(.reveal, .handout-doc) a:hover {
-  color: #FFD838;
+  color: var(--c-accent);
 }
 
 /* ============================================================ */
@@ -200,7 +200,7 @@ body.is-fullscreen .deck-footer {
 /* jaune disparait completement en handout.                                       */
 :where(.reveal, .handout-doc) h1, :where(.reveal, .handout-doc) h2 {
   font-weight: 700;
-  color: #191919;
+  color: var(--c-ink);
   margin: 0;
   text-align: center;
 }
@@ -216,7 +216,7 @@ body.is-fullscreen .deck-footer {
 
 :where(.reveal, .handout-doc) h2 + .slide-subtitle {
   font-size: 24px;
-  color: #6B6F84;
+  color: var(--c-muted);
   text-align: center;
   margin-bottom: 32px;
 }
@@ -231,7 +231,7 @@ body.is-fullscreen .deck-footer {
   display: block;
   width: 80px;
   height: 3px;
-  background: #FFD838;
+  background: var(--c-accent);
   margin: 0 auto 48px;
 }
 
@@ -383,7 +383,7 @@ body.is-fullscreen .presenter-badge { display: none !important; }
   font-family: 'Hanken Grotesk', sans-serif;
   font-weight: 500;
   font-size: 22px;
-  color: #6B6F84;
+  color: var(--c-muted);
   text-align: center;
   padding: 24px;
 }
@@ -479,15 +479,15 @@ body.is-fullscreen .deck-search {
 /* Highlight des matches dans les slides. mark est neutralise par defaut
    pour eviter le surlignage hideux jaune fluo des UA stylesheets. */
 .search-hit {
-  background: rgba(255, 216, 56, 0.45);
+  background: color-mix(in srgb, var(--c-accent) 45%, transparent);
   color: inherit;
   border-radius: 2px;
   padding: 0 2px;
   margin: 0 -2px;
 }
 .search-hit--current {
-  background: #FFD838;
-  outline: 2px solid #191919;
+  background: var(--c-accent);
+  outline: 2px solid var(--c-ink);
   outline-offset: 0;
 }
 
