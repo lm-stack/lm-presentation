@@ -50,6 +50,20 @@ Parcours documentés :
 - Mettre des assets PPT/PDF/RAW dans le repo (toujours `source/` gitignored).
 - Modifier les slides en mode présentation directement (toujours via MDX + composants).
 
+## Cache Cloudflare Pages (rename ou suppression de deck)
+
+Les pages HTML de `slides.lausanne.marketing` sont servies avec `Cache-Control: public, s-maxage=604800` : cache **edge Cloudflare Pages de 7 jours**, avec `cf-cache-status=DYNAMIC` (c'est la couche Pages, PAS le cache CDN de zone).
+
+Conséquence quand un deck est renommé ou supprimé : son ancienne URL `/p/<ancien-slug>/` continue de renvoyer **200 avec l'ancienne page jusqu'à 7 jours**, alors même que :
+
+- l'origine renvoie déjà 404 (le vérifier en ajoutant `?cb=<random>` à l'URL : le query bypass le cache et révèle le vrai statut origine) ;
+- on a redéployé : un nouveau build ne purge PAS les URLs déjà en cache edge ;
+- on fait un « Purge by URL » de zone (dashboard ou API) : ça n'atteint pas la couche Pages, et le token `CF_TOKEN_LM` n'a de toute façon pas le scope Cache Purge.
+
+Options : (1) **laisser expirer** (le plus simple, 7 j max depuis la mise en cache) ; (2) **Redirect Rule de zone** (Rules > Redirect Rules) `/p/<ancien-slug>*` vers la nouvelle URL : elle s'exécute AVANT le cache, donc court-circuite immédiatement la copie périmée.
+
+Constaté 2026-06-04 : `/p/template-execed/` (renommé `template`, commit `c1be3d0`) servait encore l'ancienne page ~2,5 j après le rename.
+
 ## Fichiers de règles (`.claude/rules/`)
 
 Chargés automatiquement à chaque session. À respecter pour tout travail sur les decks.
