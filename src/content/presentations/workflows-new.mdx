@@ -1,0 +1,399 @@
+---
+title: "Workflow"
+subtitle: "CRM, Data & Automation"
+short: "Workflow"
+date: 2026-06-04
+type: cours
+unlisted: true
+cover: "/decks/workflow/cover-whiteboard.jpg"
+description: "Workflow : modéliser les processus, choisir les outils, construire des automatisations no-code et low-code. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import PollHero from '@/components/slides/PollHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import MediaHero from '@/components/slides/MediaHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import ExchangeHero from '@/components/slides/ExchangeHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
+
+{/* Reprise du deck workflow (ancien format SlideTitle) en ExecEd-style. Images
+    réutilisées telles quelles depuis public/decks/workflow/.
+    Mapping : Cover->CoverHero, Poll->PollHero, ImageGrid->ImageGridHero,
+    Demo->DemoHero, Section->SubSectionHero, BigImage/Statement->MediaHero,
+    NumberedCards (2 col)/TwoColumnTable->InfoCardsGrid, NumberedCards (1 col)->
+    NumberedSplit, Statement sans image->StatementHero, Exchange->ExchangeHero
+    (nouveau composant), Workshop+WorkshopBrief->WorkshopHero, Closing->ClosingHero.
+    Décisions de migration :
+    - Calendrier du Jour 2 supprimé (comme collecte/qualité/IA : il vit dans Introduction).
+    - Démo Zoho : capture placeholder (à remplacer) ; démo Zapier fusionnée avec
+      son slide "Résultat" (capture zapier-workflow-result.png).
+    - NumberedCardWithDetail (Données à collecter) condensé en MediaHero. */}
+
+{/* Slide 1 : Cover */}
+<CoverHero
+  title="Workflow"
+  italicPart="Workflow"
+  eyebrow="Module 24"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="/decks/workflow/cover-whiteboard.jpg"
+  theme="halo-gold"
+/>
+
+{/* Slide 2 : Vos pratiques (Poll, warmup interactif) */}
+<PollHero
+  id="workflow-pratique"
+  question="Avez-vous déjà mis en place une automatisation complexe ?"
+  italicPart="complexe"
+  subtitle="Une seule réponse, depuis votre téléphone"
+  options={[
+    "Oui, plusieurs en production",
+    "Une ou deux, en pilote",
+    "Pas encore, mais c'est dans les cartons",
+    "Non, je découvre le sujet",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : Trois exemples d'automatisations complexes */}
+<ImageGridHero
+  title="Automatisations complexes"
+  italicPart="complexes"
+  subtitle="Interfacer plusieurs outils. Seules limites : votre imagination et quelques contraintes techniques."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflow/complexe-abandon-panier.jpeg",
+      alt: "Abandon de panier",
+      title: "Abandon de panier",
+      text: "Relancer un acheteur qui n'a pas finalisé sa commande, avec un email et un code promo conditionnel.",
+    },
+    {
+      src: "/decks/workflow/complexe-email-bienvenue.jpg",
+      alt: "Email de bienvenue",
+      title: "Email de bienvenue",
+      text: "Souhaiter la bienvenue, segmenter selon le canal d'acquisition et déclencher le bon onboarding.",
+    },
+    {
+      src: "/decks/workflow/complexe-rendez-vous.jpg",
+      alt: "Rendez-vous automatisé",
+      title: "Rendez-vous automatisé",
+      text: "Planifier un rendez-vous, envoyer un rappel SMS et bloquer l'agenda du commercial concerné.",
+    },
+  ]}
+/>
+
+{/* Slide 4 : Démonstration live Zoho (capture placeholder à remplacer) */}
+<DemoHero
+  title="Démonstration sur Zoho"
+  italicPart="Zoho"
+  subtitle="Bascule sur la console Zoho CRM pour observer un workflow en production."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
+  caption="Capture Zoho CRM (à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "Zoho CRM, moteur de workflows natif : règles, conditions, actions." },
+    { label: "Cible", value: "Un processus déjà en production : lead entrant, qualification, relances." },
+    { label: "Étapes", value: "Déclencheur sur création de lead, conditions de routage, actions et notifications." },
+    { label: "À retenir", value: "Beaucoup d'automatisations vivent déjà dans le CRM, sans outil tiers." },
+  ]}
+/>
+
+{/* Slide 5 : Section 01 - Identifier les besoins */}
+<SubSectionHero
+  kicker="Avant les outils"
+  index="01"
+  title="Identifier les besoins"
+  italicPart="besoins"
+  subtitle="Modéliser les processus avant de les automatiser, comme pour tout projet CRM."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Identifier avant d'automatiser (Statement + image chaos) */}
+<MediaHero
+  title="Identifiez les processus avant de les automatiser"
+  italicPart="avant"
+  subtitle="Comme lors de l'implémentation d'un CRM ou de n'importe quel outil digital."
+  body="Sans cartographie, on automatise du chaos et on accélère le désordre. Modéliser reste une étape cruciale."
+  image="/decks/workflow/besoins-chaos.jpg"
+  alt="Bureau en désordre, métaphore du chaos opérationnel"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 7 : BPMN, l'exemple de référence (gros schéma Trisotech) */}
+<MediaHero
+  title="Business Process Model and Notation"
+  italicPart="Notation"
+  subtitle="Le standard mondial pour modéliser un processus métier, plus communément appelé BPMN."
+  image="/decks/workflow/bpmn-exemple.jpg"
+  alt="Diagramme BPMN du processus de nomination du prix Nobel, modélisé sur Trisotech"
+  caption="Source : Trisotech. Exemple appliqué au processus de nomination du prix Nobel."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 8 : Les quatre notions clés du BPMN */}
+<InfoCardsGrid
+  title="Les quatre notions clés du BPMN"
+  italicPart="quatre notions clés"
+  subtitle="Quelques éléments simples suffisent pour modéliser un processus."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:rows", label: "Swimlane", value: "Les voies qui représentent les acteurs ou les départements impliqués dans le processus." },
+    { icon: "ph:flag", label: "Événements", value: "Les points de départ, intermédiaires ou de fin qui ponctuent le déroulement." },
+    { icon: "ph:check-square", label: "Activités", value: "Les tâches concrètes à effectuer, souvent par un acteur identifié." },
+    { icon: "ph:git-branch", label: "Gateways", value: "Les points de décision qui orientent le flux selon des conditions." },
+  ]}
+/>
+
+{/* Slide 9 : Échange - modéliser ensemble (nouveau composant ExchangeHero) */}
+<ExchangeHero
+  title="Modélisons ensemble un processus métier"
+  italicPart="ensemble"
+  subtitle="Choisissez un processus de votre organisation. On le cartographie en direct avec la notation BPMN."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 10 : Section 02 - Identifier les outils */}
+<SubSectionHero
+  kicker="Les briques"
+  index="02"
+  title="Identifier les outils"
+  italicPart="outils"
+  subtitle="Du BPMN au no-code : choisir les bonnes briques pour modéliser et automatiser."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 11 : Outils d'édition BPMN, focus MIRO */}
+<MediaHero
+  title="Beaucoup d'outils peuvent éditer des processus BPMN"
+  italicPart="éditer"
+  subtitle="Le plus connu, popularisé par le télétravail, reste MIRO. Lucidchart en est une alternative robuste."
+  body="MIRO et Lucidchart abaissent la barrière d'entrée : édition collaborative en temps réel, templates BPMN prêts à l'emploi, partage par URL."
+  image="/decks/workflow/outils-miro.png"
+  alt="Capture de l'outil MIRO avec un tableau BPMN collaboratif"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 12 : Trois outils no-code de référence */}
+<InfoCardsGrid
+  title="Trois outils no-code pour créer des workflows"
+  italicPart="no-code"
+  subtitle="En plus des automatisations natives, plusieurs plateformes connectent les applications entre elles."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:lightning", label: "Zapier", value: "Pionnier du no-code. Catalogue d'apps massif, prise en main immédiate, tarification qui grimpe vite à l'échelle." },
+    { icon: "ph:puzzle-piece", label: "Make (ex-Integromat)", value: "Éditeur visuel puissant, gestion fine des branchements et des erreurs, courbe d'apprentissage moyenne." },
+    { icon: "ph:tree-structure", label: "n8n", value: "Open-source, auto-hébergement possible, communauté active en Suisse romande. Notre choix par défaut chez Lausanne Marketing." },
+  ]}
+/>
+
+{/* Slide 13 : Section 03 - Construire un workflow */}
+<SubSectionHero
+  kicker="Pas-à-pas"
+  index="03"
+  title="Construire un workflow"
+  italicPart="Construire"
+  subtitle="Des objectifs au déclenchement, en passant par les actions et les données."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 14 : Formuler vos objectifs (liste numérotée) */}
+<NumberedSplit
+  title="Formuler vos objectifs"
+  italicPart="objectifs"
+  subtitle="Une fois le processus modélisé, on liste tous les objectifs avant de toucher au moindre outil."
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Notifier : être averti lorsqu'une personne remplit le questionnaire de satisfaction." },
+    { text: "Remercier : confirmer la réception de son opinion via un email personnalisé." },
+    { text: "Synchroniser : ajouter ou mettre à jour la personne dans le CRM avec son score de satisfaction." },
+    { text: "Activer : intégrer la personne dans l'outil de mailing si le consentement a été donné." },
+  ]}
+/>
+
+{/* Slide 15 : Tout commence par les applications (Statement sans image) */}
+<StatementHero
+  eyebrow="Les applications"
+  title="Tout commence d'abord avec des applications"
+  italicPart="applications"
+  body="Des milliers d'applications peuvent être connectées entre elles, encore faut-il choisir les bonnes. Google Forms, Slack, HubSpot, MailChimp, Gmail : avant le workflow, on identifie celles qui hébergent vos données et vos actions."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 16 : Le trigger (Statement + capture Google Forms) */}
+<MediaHero
+  title="Pour connecter des applications, il faut un trigger"
+  italicPart="trigger"
+  subtitle="Le trigger est l'événement qui déclenche un workflow. Il en existe des milliers de différents."
+  body="Exemple concret : un nouveau formulaire reçu via Google Forms déclenche la chaîne d'actions en aval."
+  image="/decks/workflow/trigger-forms.png"
+  alt="Capture Google Forms : un nouveau formulaire reçu sert de trigger"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 17 : Les actions (Statement + capture Slack) */}
+<MediaHero
+  title="Puis on paramètre l'ensemble des actions"
+  italicPart="actions"
+  subtitle="Une action est le résultat qu'on souhaite obtenir après le déclenchement du trigger."
+  body="Exemple concret : informer l'équipe sur le bon canal Slack, avec un message formaté à partir des données du formulaire."
+  image="/decks/workflow/action-slack.jpg"
+  alt="Capture Slack : message automatique formaté depuis les données du formulaire"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 18 : Actions spéciales pour affiner le workflow */}
+<InfoCardsGrid
+  title="Affiner le workflow avec des actions spéciales"
+  italicPart="spéciales"
+  subtitle="Trois briques transversales qu'on retrouve dans tous les outils no-code."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:funnel", label: "Filtrer", value: "Continuer uniquement lorsque les conditions sont remplies. Évite les exécutions inutiles et les faux positifs." },
+    { icon: "ph:text-aa", label: "Formatter", value: "Modifier le formatage des données reçues : majuscules, dates, numéros de téléphone, montants." },
+    { icon: "ph:hourglass", label: "Retarder", value: "Interrompre les actions pendant un certain temps. Indispensable pour les relances et les séquences." },
+  ]}
+/>
+
+{/* Slide 19 : Finaliser le workflow (Statement + whiteboard) */}
+<MediaHero
+  title="L'ensemble d'étapes constitue un workflow"
+  italicPart="workflow"
+  subtitle="Sur Zapier on appelle ça un Zap, sur Make un scénario, sur n8n un workflow. Même concept, branding différent."
+  body="Trigger plus actions plus actions spéciales : la séquence devient lisible, reproductible, mesurable."
+  image="/decks/workflow/finaliser-whiteboard.jpeg"
+  alt="Schéma whiteboard d'un workflow complet : trigger, actions et actions spéciales"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 20 : Différence entre workflow et modélisation */}
+<ImageGridHero
+  title="Différence entre workflow et modélisation"
+  italicPart="modélisation"
+  subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflow/diff-process-bpmn.jpeg",
+      alt: "Schéma d'un processus métier en BPMN",
+      title: "Schéma d'un processus",
+      text: "Vue stratégique : qui fait quoi, dans quel ordre, avec quelles règles métier. C'est le BPMN.",
+    },
+    {
+      src: "/decks/workflow/diff-workflow-whiteboard.jpeg",
+      alt: "Schéma d'un workflow d'exécution",
+      title: "Schéma d'un workflow",
+      text: "Vue opérationnelle : trigger, actions, branchements, données. C'est ce qu'on configure dans Zapier ou n8n.",
+    },
+  ]}
+/>
+
+{/* Slide 21 : Données à collecter à chaque étape (NumberedCardWithDetail condensé) */}
+<MediaHero
+  title="Données à collecter à chaque étape"
+  italicPart="données"
+  subtitle="Au-delà du design du workflow, lister les données collectées à chaque étape est crucial."
+  body="Cas typique, un formulaire Lead Ads (campagne Facebook). Champs par défaut : nom, prénom, email, téléphone, entreprise. Champs personnalisés : texte libre, choix multiples, questions conditionnelles, prise de rendez-vous."
+  image="/decks/workflow/donnees-lead-ads.jpeg"
+  alt="Formulaire Facebook Lead Ads avec champs par défaut et champs personnalisés"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 22 : Application maison ou pas intégrée (Statement + Doc Brown) */}
+<MediaHero
+  title="Et si j'utilise une application in-house ?"
+  italicPart="in-house"
+  subtitle="De plus en plus d'applications sont intégrées aux outils no-code. Certaines ne le sont pas encore."
+  body="Dans ce cas, on a recours aux webhooks : la solution universelle pour brancher une application sans connecteur natif."
+  image="/decks/workflow/inhouse-scientist.jpeg"
+  alt="Illustration façon savant fou, métaphore de l'application maison"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 23 : Définition du webhook (Statement sans image) */}
+<StatementHero
+  eyebrow="Webhook"
+  title="Un webhook est une requête qui envoie des données"
+  italicPart="webhook"
+  body="À la différence d'une API interrogée à intervalle régulier, un webhook est déclenché par un événement. Exemple : Stripe pousse un événement « nouveau paiement » à l'instant où la transaction réussit. Pas de polling, pas de latence."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 24 : Démonstration Zapier + résultat fusionnés */}
+<DemoHero
+  title="Démonstration sur Zapier"
+  italicPart="Zapier"
+  subtitle="Construction live d'un workflow Google Forms vers Slack, HubSpot, MailChimp et Gmail."
+  image="/decks/workflow/zapier-workflow-result.png"
+  caption="Capture Zapier : cinq étapes, du trigger Google Forms aux actions Slack, HubSpot, Mailchimp, Gmail."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "Zapier, éditeur no-code de workflows (Zaps)." },
+    { label: "Trigger", value: "Nouveau formulaire reçu via Google Forms." },
+    { label: "Actions", value: "Slack (notifier), HubSpot (créer ou mettre à jour), MailChimp (activer), Gmail (remercier)." },
+    { label: "Résultat", value: "Cinq étapes chaînées, du trigger aux quatre actions en aval." },
+  ]}
+/>
+
+{/* Slide 25 : Workshop (transition + brief fusionnés) */}
+<WorkshopHero
+  title="Création d'un workflow"
+  italicPart="workflow"
+  subtitle="À vous de jouer : modélisez et concevez un workflow applicable à votre organisation."
+  defaultMinutes={45}
+  presets={[15, 30, 45]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Temps", value: "45 minutes : 30 en individuel, 15 en peer-sharing." },
+    { label: "Objectif", value: "Un workflow de 8 étapes minimum." },
+    { label: "Sujet", value: "Applicable à votre organisation." },
+    { label: "Attentes", value: "Au moins une action spéciale (filtre, format, délai) et les données utilisées à chaque étape." },
+  ]}
+/>
+
+{/* Slide 26 : Questions et réponses */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="Merci pour votre attention."
+  url="lausanne.marketing"
+  image="/decks/workflow/cover-whiteboard.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
