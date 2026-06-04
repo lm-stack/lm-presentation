@@ -21,7 +21,8 @@ interface WebForm {
   button?: string;
 }
 interface Props {
-  device: 'tablet' | 'mobile' | 'desktop';
+  /** 'iphone' : mockup photoréaliste (asset PNG détouré) ; les autres sont 100% CSS. */
+  device: 'tablet' | 'mobile' | 'desktop' | 'iphone';
   title?: string;
   italicPart?: string;
   subtitle?: string;
@@ -46,7 +47,8 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
-const isSplit = device === 'tablet' || device === 'mobile';
+const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone';
+const isPhoto = device === 'iphone';
 const wf = webform ?? {};
 const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
 ---
@@ -77,7 +79,8 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     )}
 
     <div class="mockup-hero__stage">
-      <div class="mockup-hero__device">
+      <div class:list={['mockup-hero__device', isPhoto && 'mockup-hero__device--photo']}>
+        {isPhoto && <img class="mockup-hero__photo" src="/decks/mockups/iphone16-front.png" alt="" aria-hidden="true" decoding="async" />}
         <div class="mockup-hero__screen">
           {webform ? (
             <div class="mockup-hero__site">
@@ -178,6 +181,15 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     flex: 1 1 auto; min-width: 0; min-height: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
+  /* Tablette / mobile : ancrés EN HAUT (on voit le haut du device), décalés un
+     peu vers le bas, et le bas du device plonge hors de la slide. Desktop reste
+     centré. */
+  .mockup-hero--tablet .mockup-hero__stage,
+  .mockup-hero--mobile .mockup-hero__stage,
+  .mockup-hero--iphone .mockup-hero__stage {
+    align-self: stretch;
+    justify-content: flex-start;
+  }
 
   /* ---- Cadre commun (bezel sombre) ---- */
   .mockup-hero__device {
@@ -192,7 +204,7 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
 
   /* ---- Tablette (portrait 3:4) ---- */
   .mockup-hero--tablet .mockup-hero__device {
-    height: min(100%, 760px); aspect-ratio: 3 / 4;
+    height: 980px; flex-shrink: 0; margin-top: 40px; aspect-ratio: 3 / 4;
     border-radius: 30px; padding: 20px 18px;
   }
   .mockup-hero--tablet .mockup-hero__screen { border-radius: 12px; }
@@ -204,7 +216,7 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
 
   /* ---- Mobile (portrait 9:19) ---- */
   .mockup-hero--mobile .mockup-hero__device {
-    height: min(100%, 760px); aspect-ratio: 9 / 19;
+    height: 1120px; flex-shrink: 0; margin-top: 40px; aspect-ratio: 9 / 19;
     border-radius: 46px; padding: 11px;
   }
   .mockup-hero--mobile .mockup-hero__screen { border-radius: 36px; }
@@ -212,6 +224,43 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
     width: 36%; height: 24px; border-radius: 0 0 16px 16px; background: #0f0f10; z-index: 2;
   }
+
+  /* ---- iPhone photoréaliste (asset PNG détouré) ---- */
+  /* Le châssis vient de l'image (boutons, antennes, reflets bakés). On pose
+     l'écran (le faux site) en absolu, calé sur la zone vitre du smart object
+     d'origine, sous le châssis qui le borde. */
+  .mockup-hero__device--photo {
+    position: relative;
+    height: 1000px; flex-shrink: 0; margin-top: 28px;
+    aspect-ratio: 1046 / 2159;
+    background: none; padding: 0; box-shadow: none;
+    filter: drop-shadow(0 30px 48px rgba(25, 25, 25, 0.30));
+  }
+  .mockup-hero__photo {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: block; z-index: 1; pointer-events: none;
+  }
+  /* Écran (faux site) AU-DESSUS du châssis, calé sur la zone vitre du PNG
+     (coords du smart object d'origine). Le châssis borde tout autour. */
+  .mockup-hero__device--photo .mockup-hero__screen {
+    position: absolute;
+    left: 3.54%; top: 1.16%; width: 93.40%; height: 97.82%;
+    border-radius: 52px; overflow: hidden; z-index: 2; background: #FFFFFF;
+  }
+
+  /* Chrome navigateur version mobile (pas de pastilles macOS, URL centrée). */
+  .mockup-hero--iphone .mockup-hero__browser { justify-content: center; padding: 10px 14px 12px; }
+  .mockup-hero--iphone .mockup-hero__dot { display: none; }
+  .mockup-hero--iphone .mockup-hero__url { margin-left: 0; flex: 0 1 auto; text-align: center; font-size: 16px; }
+  /* Contenu du site adapté à la largeur étroite de l'écran. */
+  .mockup-hero--iphone .mockup-hero__site-body { padding: 22px 24px 26px; }
+  .mockup-hero--iphone .mockup-hero__site-nav { margin-bottom: 24px; }
+  .mockup-hero--iphone .mockup-hero__site-logo { font-size: 20px; }
+  .mockup-hero--iphone .mockup-hero__site-headline { font-size: 28px; margin-bottom: 10px; }
+  .mockup-hero--iphone .mockup-hero__site-blurb { font-size: 16px; margin-bottom: 22px; max-width: 100%; }
+  .mockup-hero--iphone .mockup-hero__form { gap: 16px; }
+  .mockup-hero--iphone .mockup-hero__field-input { height: 42px; }
+  .mockup-hero--iphone .mockup-hero__submit { font-size: 17px; padding: 13px 26px; margin-top: 10px; }
 
   /* ---- Desktop (laptop 16:10) ---- */
   .mockup-hero--desktop .mockup-hero__device {
