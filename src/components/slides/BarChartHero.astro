@@ -6,6 +6,7 @@
 // italique partiel + sous-titre. Barres jaunes animees en cascade au reveal.
 // Source citee via le footer global .slide-source (defini dans src/styles/slides.css,
 // activable sur tout slide), cliquable si `sourceUrl` fourni. Data-driven via `items`.
+import { splitHighlight } from '@/utils/highlight';
 interface BarItem {
   label: string;
   value: number;
@@ -41,6 +42,7 @@ const {
   brandSub,
   tocLabel,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 const hasEmphasis = items.some((it) => it.emphasis);
 ---
 <section class="bar-chart-hero" data-layout="bar-chart-hero">
@@ -57,8 +59,8 @@ const hasEmphasis = items.some((it) => it.emphasis);
   <div class="bar-chart-hero__body">
     <div class="bar-chart-hero__heading">
       <h2 class="bar-chart-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="bar-chart-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="bar-chart-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {subtitle && <p class="bar-chart-hero__subtitle">{subtitle}</p>}

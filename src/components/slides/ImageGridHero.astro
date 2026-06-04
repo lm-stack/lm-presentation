@@ -27,6 +27,7 @@ interface Props {
   brand?: string;
   brandSub?: string;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   title,
   italicPart,
@@ -35,6 +36,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 const count = Math.min(Math.max(images.length, 1), 5);
 const variantClass = `image-grid-hero__grid--${count}`;
 ---
@@ -54,8 +56,8 @@ const variantClass = `image-grid-hero__grid--${count}`;
       <div class="image-grid-hero__heading">
         {title && (
           <h2 class="image-grid-hero__title">
-            {italicPart
-              ? <>{title.split(italicPart)[0]}<em class="image-grid-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+            {titleParts
+              ? <>{titleParts.before}<em class="image-grid-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
               : title}
           </h2>
         )}

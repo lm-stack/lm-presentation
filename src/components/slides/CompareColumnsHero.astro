@@ -19,6 +19,7 @@ interface Props {
   brand?: string;
   brandSub?: string;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   title,
   italicPart,
@@ -29,6 +30,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="compare-cols" data-layout="compare-columns">
   <header class="compare-cols__header">
@@ -44,8 +46,8 @@ const {
   <div class="compare-cols__body">
     <div class="compare-cols__heading">
       <h2 class="compare-cols__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="compare-cols__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="compare-cols__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {subtitle && <p class="compare-cols__subtitle">{subtitle}</p>}

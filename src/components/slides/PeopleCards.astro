@@ -5,6 +5,7 @@
 // 4 fonctionnent bien. Pour les profils d'intervenants, témoignages,
 // équipe pédagogique.
 // Inspiration slides 10/11/12 du PPTX ExecEd.
+import { splitHighlight } from '@/utils/highlight';
 interface Person {
   /** Prénom (affiché en regular). */
   firstName: string;
@@ -29,6 +30,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="people-cards" data-layout="people-cards">
   <header class="people-cards__header">
@@ -41,8 +43,8 @@ const {
   <div class="people-cards__body">
     {title && (
       <h2 class="people-cards__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="people-cards__title-italic">{italicPart}</em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="people-cards__title-italic">{titleParts.match}</em>{titleParts.after}</>
           : title}
       </h2>
     )}

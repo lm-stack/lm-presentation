@@ -24,6 +24,7 @@ interface Props {
   theme?: 'cream-mist' | 'warm-blush' | 'pearl-stone' | 'halo-gold';
   tocLabel?: string;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   title,
   italicPart,
@@ -36,6 +37,7 @@ const {
   theme = 'pearl-stone',
   tocLabel = 'Accueil',
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section
   class:list={['cover-hero', `cover-hero--${theme}`]}
@@ -57,8 +59,8 @@ const {
     <div class="cover-hero__text">
       {eyebrow && <p class="cover-hero__eyebrow">{eyebrow}</p>}
       <h1 class="cover-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="cover-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="cover-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h1>
       {footer && <p class="cover-hero__footer">{footer}</p>}

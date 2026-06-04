@@ -20,6 +20,7 @@ interface Props {
   /** Autorise le sous-titre sur plusieurs lignes (défaut : une seule ligne). */
   subtitleWrap?: boolean;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   kicker,
   index,
@@ -31,6 +32,7 @@ const {
   tocLabel,
   subtitleWrap = false,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="subsection-hero" data-layout="subsection-hero" data-section-title={tocLabel ?? title}>
   <header class="subsection-hero__header">
@@ -50,8 +52,8 @@ const {
       <div class="subsection-hero__text">
         {kicker && <p class="subsection-hero__kicker">{kicker}</p>}
         <h2 class="subsection-hero__title">
-          {italicPart
-            ? <>{title.split(italicPart)[0]}<span class="underline">{italicPart}</span>{title.split(italicPart)[1]}</>
+          {titleParts
+            ? <>{titleParts.before}<span class="underline">{titleParts.match}</span>{titleParts.after}</>
             : title}
         </h2>
         {subtitle && <p class:list={['subsection-hero__subtitle', subtitleWrap && 'subsection-hero__subtitle--wrap']}>{subtitle}</p>}

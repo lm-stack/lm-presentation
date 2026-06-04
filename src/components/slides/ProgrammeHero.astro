@@ -6,6 +6,7 @@
 // illustrative floutée à droite). Numéros 80px style AboutHero.
 // Inspiration : slide « Index » du PPTX HEC ExecEd, transposée light.
 import '@fontsource/bungee-outline/latin.css';
+import { splitHighlight } from '@/utils/highlight';
 
 interface AgendaItem {
   title: string;
@@ -27,6 +28,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="programme-hero" data-layout="programme-hero">
   {image && (
@@ -48,8 +50,8 @@ const {
 
   <div class="programme-hero__main">
     <h2 class="programme-hero__title">
-      {italicPart
-        ? <>{title.split(italicPart)[0]}<em class="programme-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+      {titleParts
+        ? <>{titleParts.before}<em class="programme-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
         : title}
     </h2>
 

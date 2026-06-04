@@ -6,6 +6,7 @@
 // volontairement sur l'image (ou le motif damier) à droite.
 // Inspiration slide 30 du PPTX ExecEd (Public cible).
 import '@fontsource/bungee-outline/latin.css';
+import { splitHighlight } from '@/utils/highlight';
 
 interface NumberedItem {
   /** Texte ou titre de l'item. */
@@ -30,6 +31,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="numbered-split" data-layout="numbered-split">
   {image
@@ -49,8 +51,8 @@ const {
   <div class="numbered-split__content">
     <div class="numbered-split__main">
       <h2 class="numbered-split__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="numbered-split__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="numbered-split__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
 

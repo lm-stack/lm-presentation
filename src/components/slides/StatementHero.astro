@@ -21,6 +21,7 @@ interface Props {
   brand?: string;
   brandSub?: string;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   eyebrow,
   title,
@@ -33,6 +34,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="statement-hero" data-layout="statement-hero">
   <header class="statement-hero__header">
@@ -53,8 +55,8 @@ const {
         </p>
       )}
       <h2 class="statement-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="statement-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="statement-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {body && <p class="statement-hero__body">{body}</p>}

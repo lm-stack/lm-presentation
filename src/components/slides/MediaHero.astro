@@ -23,6 +23,7 @@ interface Props {
   brandSub?: string;
   tocLabel?: string;
 }
+import { splitHighlight } from '@/utils/highlight';
 const {
   title,
   italicPart,
@@ -36,6 +37,7 @@ const {
   brandSub,
   tocLabel,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="media-hero" data-layout="media-hero">
   <header class="media-hero__header">
@@ -51,8 +53,8 @@ const {
   <div class="media-hero__body">
     <div class="media-hero__heading">
       <h2 class="media-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="media-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="media-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {subtitle && <p class="media-hero__subtitle">{subtitle}</p>}

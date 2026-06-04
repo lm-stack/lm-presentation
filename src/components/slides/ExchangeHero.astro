@@ -10,6 +10,7 @@
 // un temps d'échange devient un slide de contenu cohérent avec la famille Hero
 // (même header, même fond, même grammaire typographique que Demo/Workshop/Statement).
 import { Icon } from 'astro-icon/components';
+import { splitHighlight } from '@/utils/highlight';
 
 interface Props {
   title: string;
@@ -37,6 +38,7 @@ const {
   brandSub,
   tocLabel,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="exchange-hero" data-layout="exchange-hero" data-section-title={tocLabel ?? title}>
   <header class="exchange-hero__header">
@@ -55,8 +57,8 @@ const {
         <span class="exchange-hero__eyebrow-square" aria-hidden="true"></span>{eyebrow}
       </p>
       <h2 class="exchange-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="exchange-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="exchange-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {subtitle && <p class="exchange-hero__subtitle">{subtitle}</p>}

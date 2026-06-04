@@ -4,6 +4,7 @@
 // italique partiel, puis un TimerControl (sélection de durée -> compteur géant).
 // Lecteur Spotify optionnel à droite (logique reprise de Timer.astro).
 import TimerControl from '@/components/slides/TimerControl.astro';
+import { splitHighlight } from '@/utils/highlight';
 
 interface Props {
   title?: string;
@@ -29,6 +30,7 @@ const {
   brandSub,
 } = Astro.props;
 
+const titleParts = splitHighlight(title, italicPart);
 // Pas de Spotify en mode handout (PDF) : l'iframe n'a pas de sens imprimée.
 const isHandout = Astro.url.pathname.includes('/handout/');
 
@@ -66,8 +68,8 @@ const showSpotify = !!spotifyEmbed && !isHandout;
   <div class:list={['pause-hero__body', { 'pause-hero__body--spotify': showSpotify }]}>
     <div class="pause-hero__main">
       <h2 class="pause-hero__title">
-        {italicPart
-          ? <>{title.split(italicPart)[0]}<em class="pause-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+        {titleParts
+          ? <>{titleParts.before}<em class="pause-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
       {subtitle && <p class="pause-hero__subtitle">{subtitle}</p>}

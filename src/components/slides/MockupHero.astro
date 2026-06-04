@@ -6,6 +6,7 @@
 //   - desktop (laptop) : titre optionnel en haut, device centré (juste l'écran).
 // Pas de data-section-title : c'est un slide de contenu, il ne doit pas
 // apparaître dans la table des matières.
+import { splitHighlight } from '@/utils/highlight';
 interface WebForm {
   /** Nom de domaine affiché dans la barre du navigateur (ex "cedric.ch"). */
   url?: string;
@@ -47,6 +48,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone';
 const isPhoto = device === 'iphone';
 const wf = webform ?? {};
@@ -68,8 +70,8 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
       <div class="mockup-hero__text">
         {title && (
           <h2 class="mockup-hero__title">
-            {italicPart
-              ? <>{title.split(italicPart)[0]}<em class="mockup-hero__title-italic"><span class="underline">{italicPart}</span></em>{title.split(italicPart)[1]}</>
+            {titleParts
+              ? <>{titleParts.before}<em class="mockup-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
               : title}
           </h2>
         )}
