@@ -1,0 +1,50 @@
+/* src/styles/themes.css
+   Tokens de couleur des deux schémas. LM = défaut (:root). ExecEd via
+   [data-scheme="execed"] posé sur <body> par Deck.astro (frontmatter `scheme`).
+   Les composants de slide n'utilisent QUE ces tokens (jamais de hex en dur)
+   et color-mix() pour les teintes semi-transparentes. */
+
+:root,
+[data-scheme="lm"] {
+  --c-ink: #191919;
+  --c-muted: #6B6F84;
+  --c-faint: #9A9DAD;
+  --c-accent: #FFD838;
+  --c-accent-soft: #FEE487;
+  --c-secondary: #191919;
+  --c-bg-start: #FFFFFF;
+  --c-bg-end: #EFEFF2;
+  --c-cream: #FAF8F3;
+  --c-surface: #FFFFFF;
+  --logo-url: url("/assets/lm-logo.svg");
+  --logo-url-white: url("/assets/lm-logo-white-letter.svg");
+}
+
+[data-scheme="execed"] {
+  --c-ink: #1E2B3E;
+  --c-muted: #5A6678;
+  --c-faint: #97A0B0;
+  --c-accent: #E73952;
+  --c-accent-soft: #F8C9D0;
+  --c-secondary: #3578B4;
+  --c-bg-start: #FFFFFF;
+  --c-bg-end: #ECEFF4;
+  --c-cream: #F7F9FB;
+  --c-surface: #FFFFFF;
+  --logo-url: url("/assets/execed-logo.svg");
+  --logo-url-white: url("/assets/execed-logo-white.svg");
+}
+
+/* ---- Logo : suit le schéma. Le src="" du markup sert de fallback. ---- */
+[class$="__brand-logo"] { content: var(--logo-url); }
+
+/* Composants à logo blanc (colonnes image / fonds sombres) : variante blanche.
+   Placé APRÈS la règle générale (spécificité égale → gagne par ordre source). */
+.list-image-hero__brand-logo,
+.numbered-split__brand-logo,
+.programme-hero__brand-logo { content: var(--logo-url-white); }
+
+/* Le wordmark ExecEd est large (ratio ~6.8:1) : on réduit sa hauteur dans le
+   header (le logo LM reste à 48px via le style scopé des composants).
+   !important pour battre la spécificité du style scopé Astro. */
+[data-scheme="execed"] [class$="__brand-logo"] { height: 34px !important; }

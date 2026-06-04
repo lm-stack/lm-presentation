@@ -11,9 +11,10 @@ interface Props {
   description?: string;
   cover?: string;
   updated?: string;
+  scheme?: 'lm' | 'execed';
 }
 
-const { title, subtitle, short, description, cover, updated } = Astro.props;
+const { title, subtitle, short, description, cover, updated, scheme = 'lm' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <!DOCTYPE html>
@@ -36,7 +37,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="fr_FR" />
   </head>
-  <body>
+  <body data-scheme={scheme}>
     <button type="button" class="deck-menu-pill" id="deck-menu-pill" title="Informations du cours" aria-label="Afficher les informations du cours" aria-expanded="false">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
         <path d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8M40 72h176a8 8 0 0 0 0-16H40a8 8 0 0 0 0 16m176 112H40a8 8 0 0 0 0 16h176a8 8 0 0 0 0-16" />

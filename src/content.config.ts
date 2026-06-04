@@ -19,6 +19,7 @@ const presentations = defineCollection({
     unlisted: z.boolean().default(false),
     cover: z.string().optional(),
     description: z.string().optional(),
+    scheme: z.enum(['lm', 'execed']).default('lm'),
   }),
 });
 

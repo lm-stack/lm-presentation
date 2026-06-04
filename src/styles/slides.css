@@ -1,6 +1,7 @@
 /* Theme LM pour Reveal.js : layout de Reveal + override visuels LM */
 @import 'reveal.js/reveal.css';
 @import './global.css';
+@import './themes.css';
 
 /* Fond unique creme pour tout le deck : body + slides partagent --slide-bg.
    Plus de mecanique seamless (JS qui suit la couleur de la slide courante) :
