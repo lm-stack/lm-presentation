@@ -224,14 +224,14 @@ const {
 
 <style>
   .cover-hero {
-    --ch-bg: #FAF8F3;
-    --ch-text: #191919;
-    --ch-text-muted: #6B6F84;
-    --ch-divider: rgba(25, 25, 25, 0.12);
-    --ch-eyebrow: #6B6F84;
-    --ch-accent: #FFD838;
-    --ch-image-frame: #FFFFFF;
-    --ch-image-shadow: rgba(25, 25, 25, 0.18);
+    --ch-bg: var(--c-cream);
+    --ch-text: var(--c-ink);
+    --ch-text-muted: var(--c-muted);
+    --ch-divider: color-mix(in srgb, var(--c-ink) 12%, transparent);
+    --ch-eyebrow: var(--c-muted);
+    --ch-accent: var(--c-accent);
+    --ch-image-frame: var(--c-surface);
+    --ch-image-shadow: color-mix(in srgb, var(--c-ink) 18%, transparent);
 
     position: relative;
     width: 100%;
@@ -247,21 +247,21 @@ const {
 
   /* ====== Variantes de fond light ====== */
   .cover-hero--cream-mist {
-    --ch-bg: linear-gradient(180deg, #FAF8F3 0%, #FFFFFF 100%);
+    --ch-bg: linear-gradient(180deg, var(--c-cream) 0%, var(--c-bg-start) 100%);
   }
   .cover-hero--warm-blush {
-    --ch-bg: linear-gradient(135deg, #FAF8F3 0%, #FEE487 100%);
+    --ch-bg: linear-gradient(135deg, var(--c-cream) 0%, var(--c-accent-soft) 100%);
   }
   .cover-hero--pearl-stone {
-    --ch-bg: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    --ch-divider: rgba(25, 25, 25, 0.10);
-    --ch-image-frame: #FFFFFF;
-    --ch-image-shadow: rgba(25, 25, 25, 0.14);
+    --ch-bg: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    --ch-divider: color-mix(in srgb, var(--c-ink) 10%, transparent);
+    --ch-image-frame: var(--c-surface);
+    --ch-image-shadow: color-mix(in srgb, var(--c-ink) 14%, transparent);
   }
   .cover-hero--halo-gold {
     --ch-bg:
-      radial-gradient(120% 90% at 95% 5%, #FEE487 0%, rgba(254, 228, 135, 0) 55%),
-      linear-gradient(180deg, #FAF8F3 0%, #F4F1E8 100%);
+      radial-gradient(120% 90% at 95% 5%, var(--c-accent-soft) 0%, color-mix(in srgb, var(--c-accent-soft) 0%, transparent) 55%),
+      linear-gradient(180deg, var(--c-cream) 0%, var(--c-bg-end) 100%);
   }
 
   .cover-hero__header {
@@ -415,7 +415,7 @@ const {
     aspect-ratio: 4 / 5;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.10);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
   }
   .cover-hero__image-card img {
     width: 100%;

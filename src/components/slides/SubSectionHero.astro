@@ -69,9 +69,9 @@ const {
     padding: 44px 96px 64px !important;
     /* Lumière chaude éditoriale + halo jaune doux côté numéro. */
     background:
-      radial-gradient(120% 72% at 13% 56%, rgba(255, 216, 56, 0.16) 0%, rgba(255, 216, 56, 0) 46%),
-      linear-gradient(176deg, #FCFBF7 0%, #EEEBE3 100%);
-    color: #191919;
+      radial-gradient(120% 72% at 13% 56%, color-mix(in srgb, var(--c-accent) 16%, transparent) 0%, color-mix(in srgb, var(--c-accent) 0%, transparent) 46%),
+      linear-gradient(176deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -83,7 +83,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .subsection-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -92,7 +92,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .subsection-hero__brand-sub {
@@ -102,7 +102,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .subsection-hero__brand-logo {
@@ -134,8 +134,8 @@ const {
     font-weight: 700;
     line-height: 0.82;
     letter-spacing: -0.045em;
-    color: #FFD838;
-    text-shadow: 0 8px 30px rgba(255, 216, 56, 0.25);
+    color: var(--c-accent);
+    text-shadow: 0 8px 30px color-mix(in srgb, var(--c-accent) 25%, transparent);
     opacity: 0;
     animation: ss-scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
   }
@@ -146,7 +146,7 @@ const {
     width: 1px;
     align-self: stretch;
     max-height: 420px;
-    background: linear-gradient(180deg, rgba(25, 25, 25, 0) 0%, rgba(25, 25, 25, 0.22) 18%, rgba(25, 25, 25, 0.22) 82%, rgba(25, 25, 25, 0) 100%);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c-ink) 0%, transparent) 0%, color-mix(in srgb, var(--c-ink) 22%, transparent) 18%, color-mix(in srgb, var(--c-ink) 22%, transparent) 82%, color-mix(in srgb, var(--c-ink) 0%, transparent) 100%);
     transform-origin: center;
     opacity: 0;
     animation: ss-grow-y 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
@@ -163,7 +163,7 @@ const {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.34em;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 0 0 28px;
     opacity: 0;
     animation: ss-fade-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
@@ -176,7 +176,7 @@ const {
     line-height: 1.0;
     letter-spacing: -0.015em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
     opacity: 0;
@@ -187,7 +187,7 @@ const {
     font-size: 27px;
     line-height: 1.45;
     font-weight: 400;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 32px 0 0;
     max-width: 1280px;
     white-space: nowrap;

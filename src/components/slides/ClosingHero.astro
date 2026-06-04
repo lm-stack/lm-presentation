@@ -69,11 +69,11 @@ const titleParts = splitHighlight(title, highlight);
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    color: #191919;
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
-    background: #FAF8F3;
+    background: var(--c-cream);
   }
 
   .closing-hero__bg {
@@ -106,7 +106,7 @@ const titleParts = splitHighlight(title, highlight);
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .closing-hero__brand-logo {
     height: 48px;
@@ -122,7 +122,7 @@ const titleParts = splitHighlight(title, highlight);
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
   }
   .closing-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -131,7 +131,7 @@ const titleParts = splitHighlight(title, highlight);
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .closing-hero__body {
@@ -150,7 +150,7 @@ const titleParts = splitHighlight(title, highlight);
     letter-spacing: -0.02em;
     font-weight: 600;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .closing-hero__title-italic {
@@ -164,7 +164,7 @@ const titleParts = splitHighlight(title, highlight);
     font-size: 36px;
     font-weight: 400;
     margin: 32px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
   .closing-hero__url {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -173,6 +173,6 @@ const titleParts = splitHighlight(title, highlight);
     text-transform: uppercase;
     letter-spacing: 0.32em;
     margin: 24px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 </style>

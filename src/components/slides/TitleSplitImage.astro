@@ -75,8 +75,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -84,7 +84,7 @@ const {
 
   .title-split-image__header {
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .title-split-image__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -93,7 +93,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
   }
   .title-split-image__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -102,7 +102,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .title-split-image__body {
@@ -125,7 +125,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -142,13 +142,13 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 18px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 20px 0 36px;
   }
   .title-split-image__subtitle-square {
     width: 14px;
     height: 14px;
-    background: #FFD838;
+    background: var(--c-accent);
     display: inline-block;
     flex: 0 0 auto;
   }
@@ -163,7 +163,7 @@ const {
     font-size: 16px;
     font-weight: 700;
     margin: 0 0 8px;
-    color: #191919;
+    color: var(--c-ink);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -171,7 +171,7 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 16px;
     line-height: 1.55;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 0;
   }
 
@@ -179,10 +179,10 @@ const {
     flex: 0 0 auto;
     width: 400px;
     aspect-ratio: 4 / 5;
-    background: #FFFFFF;
+    background: var(--c-surface);
     overflow: hidden;
     border-radius: 4px;
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.10);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
   }
   .title-split-image__image img {
     width: 100%;
