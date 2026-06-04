@@ -242,16 +242,16 @@ body.is-fullscreen .deck-footer {
   left: 16px;
   right: 16px;
   height: 56px;
-  background: #FFFFFF;
-  color: #191919;
+  background: var(--c-surface);
+  color: var(--c-ink);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
   font-size: 14px;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
   z-index: 10;
 }
 
@@ -259,26 +259,26 @@ body.is-fullscreen .deck-footer {
   display: flex;
   align-items: center;
   gap: 16px;
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 
 .deck-footer .deck-brand {
   font-weight: 700;
-  color: #191919;
+  color: var(--c-ink);
 }
 
 .deck-footer .deck-title {
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 
 .deck-footer .deck-sep {
-  color: rgba(25, 25, 25, 0.18);
+  color: color-mix(in srgb, var(--c-ink) 18%, transparent);
 }
 
 .deck-footer .deck-counter {
   font-family: 'Space Grotesk', monospace;
   font-weight: 700;
-  color: #191919;
+  color: var(--c-ink);
 }
 
 .deck-nav-btn {
@@ -287,11 +287,11 @@ body.is-fullscreen .deck-footer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #FFFFFF;
-  color: #191919;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
   cursor: pointer;
   transition: background-color 0.2s ease;
   padding: 0;
@@ -302,14 +302,15 @@ body.is-fullscreen .deck-footer {
 /* tape reste affiche en jaune apres relachement. */
 @media (hover: hover) {
   .deck-nav-btn:hover {
-    background: #FFD838;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
   }
 }
 
 .deck-nav-btn:disabled {
   cursor: not-allowed;
   opacity: 0.4;
-  background: #FFFFFF;
+  background: var(--c-surface);
 }
 
 /* Toolbar haut-droite : Telecharger PDF + Lecture (calque sur diagram-toolbar lm-diagrams) */
@@ -328,11 +329,11 @@ body.is-fullscreen .deck-footer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #FFFFFF;
-  color: #191919;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
   cursor: pointer;
   transition: background-color 0.2s ease;
   padding: 0;
@@ -341,7 +342,8 @@ body.is-fullscreen .deck-footer {
 
 @media (hover: hover) {
   .deck-icon-btn:hover {
-    background: #FFD838;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
   }
 }
 
@@ -364,8 +366,8 @@ body.is-presenter .viewer-only { display: none !important; }
   display: none;
   align-items: center;
   padding: 4px 12px;
-  background: #191919;
-  color: #FFD838;
+  background: var(--c-ink);
+  color: var(--c-accent);
   border-radius: 6px;
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
@@ -373,6 +375,7 @@ body.is-presenter .viewer-only { display: none !important; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+[data-scheme="execed"] .presenter-badge { color: #FFFFFF; }
 body.is-presenter .presenter-badge { display: inline-flex; }
 html:has(:fullscreen) .presenter-badge,
 body.is-fullscreen .presenter-badge { display: none !important; }
@@ -401,10 +404,10 @@ body.is-fullscreen .presenter-badge { display: none !important; }
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #FFFFFF;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  background: var(--c-surface);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(25, 25, 25, 0.12);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--c-ink) 12%, transparent);
   padding: 6px 8px;
   width: 380px;
   max-width: calc(100vw - 32px);
@@ -415,7 +418,7 @@ body.is-fullscreen .presenter-badge { display: none !important; }
 }
 
 .deck-search__icon {
-  color: #6B6F84;
+  color: var(--c-muted);
   flex-shrink: 0;
   margin: 0 4px 0 6px;
 }
@@ -428,18 +431,18 @@ body.is-fullscreen .presenter-badge { display: none !important; }
   background: transparent;
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 15px;
-  color: #191919;
+  color: var(--c-ink);
   padding: 6px 4px;
 }
 .deck-search__input::placeholder {
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 
 .deck-search__count {
   font-family: 'Space Grotesk', monospace;
   font-size: 12px;
   font-weight: 700;
-  color: #6B6F84;
+  color: var(--c-muted);
   flex-shrink: 0;
   min-width: 36px;
   text-align: right;
@@ -454,7 +457,7 @@ body.is-fullscreen .presenter-badge { display: none !important; }
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: #6B6F84;
+  color: var(--c-muted);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -465,8 +468,8 @@ body.is-fullscreen .presenter-badge { display: none !important; }
 @media (hover: hover) {
   .deck-search__nav:hover,
   .deck-search__close:hover {
-    background: #FFD838;
-    color: #191919;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
   }
 }
 
@@ -502,11 +505,11 @@ body.is-fullscreen .deck-search {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #FFFFFF;
-  color: #191919;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
   cursor: pointer;
   transition: background-color 0.2s ease;
   padding: 0;
@@ -514,7 +517,8 @@ body.is-fullscreen .deck-search {
 
 @media (hover: hover) {
   .deck-menu-pill:hover {
-    background: #FFD838;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
   }
 }
 
@@ -524,11 +528,11 @@ body.is-fullscreen .deck-search {
   left: 16px;
   z-index: 101;
   max-width: 380px;
-  background: #FFFFFF;
-  color: #191919;
-  border: 1px solid rgba(25, 25, 25, 0.08);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(25, 25, 25, 0.12);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--c-ink) 12%, transparent);
   padding: 24px;
 }
 
@@ -542,7 +546,7 @@ body.is-fullscreen .deck-search {
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: #6B6F84;
+  color: var(--c-muted);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -551,15 +555,15 @@ body.is-fullscreen .deck-search {
 }
 
 .deck-menu__close:hover {
-  background: rgba(25, 25, 25, 0.06);
-  color: #191919;
+  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+  color: var(--c-ink);
 }
 
 .deck-menu__eyebrow {
   display: block;
   font-size: 18px;
   font-weight: 700;
-  color: #191919;
+  color: var(--c-ink);
   margin-bottom: 4px;
   margin-right: 24px;
 }
@@ -582,18 +586,18 @@ body.is-fullscreen .deck-search {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: #191919;
+  color: var(--c-on-accent);
   text-decoration: none;
   padding: 8px 12px;
   margin: 0 0 20px;
-  background: #FFD838;
+  background: var(--c-accent);
   border-radius: 6px;
   transition: background-color 0.15s ease, transform 0.15s ease;
   align-self: flex-start;
   width: fit-content;
 }
 .deck-menu__back-parcours:hover {
-  background: #FFE55A;
+  background: color-mix(in srgb, var(--c-accent) 82%, white);
   transform: translateX(-2px);
 }
 
@@ -601,27 +605,27 @@ body.is-fullscreen .deck-search {
   font-size: 24px;
   line-height: 1.3;
   font-weight: 700;
-  color: #191919;
+  color: var(--c-ink);
   margin: 0 0 8px;
 }
 
 .deck-menu__subtitle {
   font-size: 14px;
   line-height: 1.5;
-  color: #6B6F84;
+  color: var(--c-muted);
   margin: 0 0 12px;
 }
 
 .deck-menu__meta {
   font-size: 12px;
-  color: #6B6F84;
+  color: var(--c-muted);
   margin: 0;
 }
 
 .deck-menu__toc {
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid rgba(25, 25, 25, 0.08);
+  border-top: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
 }
 
 .deck-menu__toc-label {
@@ -630,7 +634,7 @@ body.is-fullscreen .deck-search {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: #6B6F84;
+  color: var(--c-muted);
   margin: 0 0 8px;
 }
 
@@ -659,7 +663,7 @@ body.is-fullscreen .deck-search {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: #191919;
+  color: var(--c-ink);
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -669,19 +673,19 @@ body.is-fullscreen .deck-search {
   font-family: 'Space Grotesk', monospace;
   font-size: 12px;
   font-weight: 700;
-  color: #6B6F84;
+  color: var(--c-muted);
   flex-shrink: 0;
   min-width: 18px;
   transition: color 0.15s ease;
 }
 
 .deck-menu__toc-btn:hover {
-  background: #FFD838;
-  color: #191919;
+  background: var(--c-accent);
+  color: var(--c-on-accent);
 }
 
 .deck-menu__toc-btn:hover .deck-menu__toc-num {
-  color: #191919;
+  color: var(--c-on-accent);
 }
 
 /* ============================================================ */
@@ -767,7 +771,7 @@ body.is-fullscreen .deck-search {
 .deck-reading section {
   display: block;
   margin-bottom: 80px;
-  border-bottom: 1px solid rgba(25, 25, 25, 0.08);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
   padding-bottom: 64px;
 }
 
@@ -779,8 +783,8 @@ body.is-fullscreen .deck-search {
   border: none;
   border-radius: 12px;
   padding: 0;
-  background: #FFFFFF;
-  color: #191919;
+  background: var(--c-surface);
+  color: var(--c-ink);
   max-width: 720px;
   width: calc(100vw - 32px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -803,11 +807,11 @@ body.is-fullscreen .deck-search {
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 4px;
-  color: #191919;
+  color: var(--c-ink);
 }
 .pdf-modal__hint {
   font-size: 14px;
-  color: #6B6F84;
+  color: var(--c-muted);
   margin: 0 0 20px;
 }
 .pdf-modal__cards {
@@ -823,17 +827,17 @@ body.is-fullscreen .deck-search {
   padding: 16px 12px;
   border: 2px solid #E5E7EB;
   border-radius: 8px;
-  background: #FFFFFF;
-  color: #191919;
+  background: var(--c-surface);
+  color: var(--c-ink);
   font-family: 'Hanken Grotesk', sans-serif;
   cursor: pointer;
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 .pdf-modal__card:hover:not(:disabled) {
-  border-color: #191919;
+  border-color: var(--c-ink);
 }
 .pdf-modal__card:focus-visible {
-  outline: 2px solid #191919;
+  outline: 2px solid var(--c-ink);
   outline-offset: 2px;
 }
 .pdf-modal__card:disabled {
@@ -841,7 +845,7 @@ body.is-fullscreen .deck-search {
   cursor: not-allowed;
 }
 .pdf-modal__card--loading {
-  border-color: #191919;
+  border-color: var(--c-ink);
 }
 /* Etat erreur transitoire : 4s apres l'echec final, la classe est retiree. */
 .pdf-modal__card--error {
@@ -877,7 +881,7 @@ body.is-fullscreen .deck-search {
 .pdf-modal__preview {
   width: 80px;
   height: 64px;
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 .pdf-modal__card-title {
   font-size: 14px;
@@ -885,7 +889,7 @@ body.is-fullscreen .deck-search {
 }
 .pdf-modal__card-sub {
   font-size: 12px;
-  color: #6B6F84;
+  color: var(--c-muted);
 }
 .pdf-modal__close {
   position: absolute;
@@ -896,7 +900,7 @@ body.is-fullscreen .deck-search {
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: #6B6F84;
+  color: var(--c-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -926,14 +930,14 @@ body.is-fullscreen .deck-search {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: 16px;
   font-weight: 500;
-  color: #9A9DAD;
+  color: var(--c-faint);
   letter-spacing: 0.01em;
   z-index: 3;
   text-decoration: none;
   transition: color 0.15s ease;
 }
 [data-layout] a.slide-source:hover {
-  color: #191919;
+  color: var(--c-ink);
   text-decoration: underline;
 }
 
