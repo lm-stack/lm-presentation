@@ -76,8 +76,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -89,7 +89,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding: 44px 96px 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -98,7 +98,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .demo-hero__brand-sub {
@@ -108,7 +108,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .demo-hero__brand-logo {
@@ -141,7 +141,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -155,14 +155,14 @@ const {
     font-size: 26px;
     font-weight: 500;
     line-height: 1.45;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 16px 0 0;
   }
 
   /* Tableau label / valeur, style WorkshopHero (un peu compacté). */
   .demo-hero__table {
     margin: 44px 0 0;
-    border-top: 1px solid rgba(25, 25, 25, 0.12);
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo-hero__row {
     display: grid;
@@ -170,7 +170,7 @@ const {
     gap: 24px;
     align-items: baseline;
     padding: 14px 0;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -178,7 +178,7 @@ const {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #191919;
+    color: var(--c-ink);
   }
   .demo-hero__value {
     margin: 0;
@@ -186,7 +186,7 @@ const {
     font-size: 22px;
     font-weight: 400;
     line-height: 1.4;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   /* Capture d'écran encadrée. */
@@ -201,9 +201,9 @@ const {
   .demo-hero__screenshot {
     border-radius: 4px;
     overflow: hidden;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.08);
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.12);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo-hero__screenshot img {
     width: 100%;
@@ -217,7 +217,7 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 16px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: center;
   }
 </style>

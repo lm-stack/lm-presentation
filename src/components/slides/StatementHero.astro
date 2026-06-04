@@ -80,8 +80,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -92,7 +92,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .statement-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -101,7 +101,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .statement-hero__brand-sub {
@@ -111,7 +111,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .statement-hero__brand-logo {
@@ -141,13 +141,13 @@ const {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 0 0 24px;
   }
   .statement-hero__eyebrow-square {
     width: 14px;
     height: 14px;
-    background: #FFD838;
+    background: var(--c-accent);
     display: inline-block;
     flex: 0 0 auto;
   }
@@ -158,7 +158,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     white-space: pre-line;
     text-align: left;
   }
@@ -172,7 +172,7 @@ const {
     font-size: 26px;
     line-height: 1.45;
     font-weight: 400;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 28px 0 0;
     max-width: 760px;
   }
@@ -191,14 +191,14 @@ const {
     line-height: 0.95;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: #191919;
+    color: var(--c-ink);
   }
   .statement-hero__stat-caption {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 24px;
     line-height: 1.35;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin-top: 12px;
     max-width: 420px;
     text-align: center;
@@ -217,14 +217,14 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 16px;
     font-weight: 500;
-    color: #9A9DAD;
+    color: var(--c-faint);
     letter-spacing: 0.01em;
     z-index: 3;
     text-decoration: none;
     transition: color 0.15s ease;
   }
   [data-layout] a.slide-source:hover {
-    color: #191919;
+    color: var(--c-ink);
     text-decoration: underline;
   }
 </style>

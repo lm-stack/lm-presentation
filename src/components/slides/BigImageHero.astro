@@ -54,8 +54,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    background: #FAF8F3;
-    color: #191919;
+    background: var(--c-cream);
+    color: var(--c-ink);
     display: block !important;
   }
 
@@ -85,7 +85,7 @@ const {
     left: 96px;
     z-index: 1;
     padding: 14px 20px;
-    background: rgba(250, 248, 243, 0.88);
+    background: color-mix(in srgb, var(--c-cream) 88%, transparent);
     backdrop-filter: blur(8px);
     border-radius: 4px;
   }
@@ -96,7 +96,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
   }
   .big-image-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -105,7 +105,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .big-image-hero__caption {
@@ -117,7 +117,7 @@ const {
     gap: 12px;
     margin: 0;
     padding: 12px 20px;
-    background: rgba(250, 248, 243, 0.88);
+    background: color-mix(in srgb, var(--c-cream) 88%, transparent);
     backdrop-filter: blur(8px);
     border-radius: 4px;
     font-family: 'Hanken Grotesk', sans-serif;
@@ -125,7 +125,7 @@ const {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.32em;
-    color: #191919;
+    color: var(--c-ink);
   }
   .big-image-hero--caption-bottom-left .big-image-hero__caption {
     left: 96px;
@@ -137,7 +137,7 @@ const {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #FFD838;
+    background: var(--c-accent);
     display: inline-block;
   }
 </style>

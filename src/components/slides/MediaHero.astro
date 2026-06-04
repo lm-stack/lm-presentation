@@ -74,8 +74,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -87,7 +87,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .media-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -96,7 +96,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .media-hero__brand-sub {
@@ -106,7 +106,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .media-hero__brand-logo {
@@ -135,7 +135,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -149,7 +149,7 @@ const {
     font-size: 24px;
     line-height: 1.4;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 12px 0 0;
     max-width: 1500px;
   }
@@ -158,7 +158,7 @@ const {
     font-size: 22px;
     line-height: 1.5;
     font-weight: 400;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 12px 0 0;
     max-width: 1200px;
   }
@@ -170,9 +170,9 @@ const {
     margin: 0;
     border-radius: 4px;
     overflow: hidden;
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.06);
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
   .media-hero__figure img {
     width: 100%;
@@ -190,7 +190,7 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 16px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 0;
     text-align: left;
   }

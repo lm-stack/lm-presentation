@@ -76,10 +76,10 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 44px 96px 64px !important;
-    color: #191919;
+    color: var(--c-ink);
     display: grid !important;
     grid-template-rows: auto 1fr auto;
-    background: #FAF8F3;
+    background: var(--c-cream);
   }
 
   .quote-image__bg {
@@ -100,7 +100,7 @@ const {
   .quote-image__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(239, 239, 242, 0.7) 100%);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c-bg-start) 60%, transparent) 0%, color-mix(in srgb, var(--c-bg-end) 70%, transparent) 100%);
   }
 
   .quote-image__header,
@@ -116,7 +116,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .quote-image__brand-logo {
     height: 48px;
@@ -131,7 +131,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .quote-image__brand-sub {
@@ -141,7 +141,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
 
@@ -166,12 +166,12 @@ const {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: #FFD838;
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.10);
+    background: var(--c-accent);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #191919;
+    color: var(--c-ink);
     flex: 0 0 auto;
   }
   .quote-image__mark :global(svg) {
@@ -185,7 +185,7 @@ const {
     line-height: 1.35;
     margin: 0;
     max-width: 1380px;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: center;
   }
@@ -196,7 +196,7 @@ const {
     font-style: italic;
     font-size: 22px;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: center;
   }
   .quote-image__author-name {
@@ -204,7 +204,7 @@ const {
   }
   .quote-image__author-role {
     font-weight: 400;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   .quote-image__logos {
@@ -213,7 +213,7 @@ const {
     justify-content: space-between;
     gap: 48px;
     padding-top: 32px;
-    border-top: 1px solid rgba(25, 25, 25, 0.12);
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .quote-image__logo {
     flex: 1 1 0;

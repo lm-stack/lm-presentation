@@ -249,8 +249,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -263,7 +263,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding: 44px 96px 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .workshop-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -272,7 +272,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .workshop-hero__brand-sub {
@@ -282,7 +282,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .workshop-hero__brand-logo {
@@ -341,12 +341,12 @@ const {
   }
   .workshop-hero__ring-track {
     fill: none;
-    stroke: rgba(255, 216, 56, 0.25);
+    stroke: color-mix(in srgb, var(--c-accent) 25%, transparent);
     stroke-width: 1.6;
   }
   .workshop-hero__ring-fill {
     fill: none;
-    stroke: #FFD838;
+    stroke: var(--c-accent);
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-dasharray: 100;
@@ -375,7 +375,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -388,14 +388,14 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 26px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 16px 0 0;
   }
 
   /* Tableau label / valeur. */
   .workshop-hero__table {
     margin: 80px 0 0;
-    border-top: 1px solid rgba(25, 25, 25, 0.12);
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .workshop-hero__row {
     display: grid;
@@ -403,7 +403,7 @@ const {
     gap: 28px;
     align-items: baseline;
     padding: 16px 0;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .workshop-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -411,7 +411,7 @@ const {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #191919;
+    color: var(--c-ink);
   }
   .workshop-hero__value {
     margin: 0;
@@ -419,6 +419,6 @@ const {
     font-size: 28px;
     font-weight: 400;
     line-height: 1.4;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 </style>

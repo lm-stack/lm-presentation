@@ -97,8 +97,8 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    background: linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%);
-    color: #191919;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
@@ -112,7 +112,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding: 44px 96px 40px;
-    border-bottom: 1px solid rgba(25, 25, 25, 0.12);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .list-image-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -121,7 +121,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-align: left;
   }
   .list-image-hero__brand-sub {
@@ -131,7 +131,7 @@ const {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     margin: 4px 0 0;
-    color: #6B6F84;
+    color: var(--c-muted);
     text-align: left;
   }
   .list-image-hero__brand-logo {
@@ -167,7 +167,7 @@ const {
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
-    color: #191919;
+    color: var(--c-ink);
     text-wrap: balance;
     text-align: left;
   }
@@ -183,13 +183,13 @@ const {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: 26px;
     font-weight: 500;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 28px 0 0;
   }
   .list-image-hero__subtitle-square {
     width: 14px;
     height: 14px;
-    background: #FFD838;
+    background: var(--c-accent);
     display: inline-block;
     flex: 0 0 auto;
   }
@@ -198,7 +198,7 @@ const {
     font-size: 24px;
     font-weight: 400;
     line-height: 1.5;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin: 28px 0 0;
     max-width: 760px;
   }
@@ -247,10 +247,10 @@ const {
     gap: 16px;
   }
   .list-image-hero__card {
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.08);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
     border-radius: 4px;
-    box-shadow: 0 4px 12px -4px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
     padding: 16px 24px;
     text-align: center;
   }
@@ -261,7 +261,7 @@ const {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #6B6F84;
+    color: var(--c-muted);
     margin-bottom: 4px;
   }
   .list-image-hero__card-title {
@@ -270,7 +270,7 @@ const {
     font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
-    color: #191919;
+    color: var(--c-ink);
   }
   .list-image-hero__card-title em {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
@@ -286,14 +286,14 @@ const {
     font-size: 17px;
     font-weight: 400;
     line-height: 1.35;
-    color: #6B6F84;
+    color: var(--c-muted);
   }
 
   /* Card mise en avant : le module courant du parcours. */
   .list-image-hero__card.is-current {
-    border-color: #FFD838;
-    background: #FFFCEC;
-    box-shadow: 0 6px 16px -6px rgba(25, 25, 25, 0.12);
+    border-color: var(--c-accent);
+    background: color-mix(in srgb, var(--c-accent) 8%, var(--c-surface));
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .list-image-hero__card-here {
     display: inline-block;
@@ -303,8 +303,8 @@ const {
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #191919;
-    background: #FFD838;
+    color: var(--c-ink);
+    background: var(--c-accent);
     border-radius: 4px;
     padding: 2px 8px;
     vertical-align: middle;
