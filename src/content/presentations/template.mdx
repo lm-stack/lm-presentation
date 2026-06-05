@@ -33,6 +33,7 @@ import PollHero from '@/components/slides/PollHero.astro';
 import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import MockupHero from '@/components/slides/MockupHero.astro';
+import TableHero from '@/components/slides/TableHero.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
@@ -241,6 +242,20 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
+<InfoCardsGrid
+  title="Grille de cartes info"
+  italicPart="cartes info"
+  subtitle="Icône Phosphor, label en capitales, courte valeur. Deux colonnes, idéal pour 2 ou 4 cartes."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  cards={[
+    { icon: 'ph:identification-card', label: "Première carte", value: "Une valeur ou une description courte, une à deux phrases." },
+    { icon: 'ph:envelope-simple', label: "Deuxième carte", value: "Une valeur ou une description courte, une à deux phrases." },
+    { icon: 'ph:table', label: "Troisième carte", value: "Une valeur ou une description courte, une à deux phrases." },
+    { icon: 'ph:shield-check', label: "Quatrième carte", value: "Une valeur ou une description courte, une à deux phrases." },
+  ]}
+/>
+
 <SubSectionHero
   kicker="Catalogue"
   index="3"
@@ -318,6 +333,23 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   sourceUrl="https://lausanne.marketing"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
+/>
+
+<TableHero
+  title="Tableau comparatif"
+  italicPart="comparatif"
+  subtitle="Jusqu'à quatre colonnes et environ huit lignes. Première colonne en gras, lignes zébrées, source optionnelle."
+  headers={["Colonne", "Donnée A", "Donnée B", "Donnée C"]}
+  caption="Légende optionnelle sous le tableau."
+  source="Étude exemple, 2024 (n=000)"
+  sourceUrl="https://lausanne.marketing"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  rows={[
+    ["Première ligne", "Valeur", "Valeur", "Valeur"],
+    ["Deuxième ligne", "Valeur", "Valeur", "Valeur"],
+    ["Troisième ligne", "Valeur", "Valeur", "Valeur"],
+  ]}
 />
 
 <SubSectionHero
