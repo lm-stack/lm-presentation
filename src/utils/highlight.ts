@@ -4,8 +4,11 @@
 // la plupart des composants slides (Cover, Section, Closing, Timer, Title, Quote,
 // AboutMe, AboutMeBullets) et dans la page parcours.
 //
-// Match case-insensitive sur la premiere occurrence, retourne null si mot absent
-// ou si mot non fourni : l'appelant choisit alors de rendre le texte simple.
+// Match case-insensitive sur la premiere occurrence, retourne null si le texte
+// ou le mot n'est pas fourni, ou si le mot est absent du texte : l'appelant
+// choisit alors de rendre le texte simple. `text` accepte undefined pour les
+// composants ou le titre est une prop optionnelle (ImageGridHero, MockupHero,
+// PeopleCards) : pas d'erreur de type au call site, et pas de crash a l'execution.
 
 export type HighlightParts = {
   before: string;
@@ -13,8 +16,8 @@ export type HighlightParts = {
   after: string;
 };
 
-export function splitHighlight(text: string, mot?: string): HighlightParts | null {
-  if (!mot) return null;
+export function splitHighlight(text: string | undefined, mot?: string): HighlightParts | null {
+  if (!text || !mot) return null;
   const idx = text.toLowerCase().indexOf(mot.toLowerCase());
   if (idx === -1) return null;
   return {
