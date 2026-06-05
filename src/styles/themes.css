@@ -2,7 +2,10 @@
    Tokens de couleur des deux schémas. LM = défaut (:root). ExecEd via
    [data-scheme="execed"] posé sur <body> par Deck.astro (frontmatter `scheme`).
    Les composants de slide n'utilisent QUE ces tokens (jamais de hex en dur)
-   et color-mix() pour les teintes semi-transparentes. */
+   et color-mix() pour les teintes semi-transparentes.
+   Chargé globalement par global.css (toute page sur global.css a les tokens) et
+   par slides.css (decks). Pas d'import par page : il suffit de poser data-scheme
+   sur <body> pour activer un schéma. */
 
 :root,
 [data-scheme="lm"] {

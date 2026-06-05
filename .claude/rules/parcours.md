@@ -19,3 +19,9 @@ Un parcours (`src/content/parcours/<slug>.mdx`) est un portail qui agrège plusi
 - `scheme: "lm" | "execed"` = thème par défaut du parcours. **Modifiable à tout moment** (contrairement aux decks, figés une fois validés).
 - `switcher: true` affiche le sélecteur LM/ExecEd sur la page (preview). **Défaut `false`** (masqué, production). Quand masqué, aucun script de preview ne tourne : le `scheme` du frontmatter fait loi.
 - `template-parcours` garde `switcher: true` (vitrine des thèmes). Les parcours clients sont en général masqués.
+- Tokens de thème : `themes.css` est chargé via `global.css` (pas d'import par page), il suffit de poser `data-scheme` sur `<body>`. Voir `themes.md`.
+
+## Pièges (gotchas)
+
+- **Alignement hero ↔ contenu** : `.parcours-hero__inner` et `.parcours-main` doivent partager le MÊME modèle de boîte (même `max-width`, padding **à l'intérieur** de la boîte, `box-sizing: border-box`). Mélanger « padding sur le conteneur externe » et « padding interne » décale tout horizontalement de la valeur du padding.
+- **« Trop de marge sur les côtés »** vient du `max-width` (espace latéral sur grand écran), pas du `padding` : pour élargir, augmenter `max-width`, pas réduire le padding.

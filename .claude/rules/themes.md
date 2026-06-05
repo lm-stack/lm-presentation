@@ -3,6 +3,11 @@
 Deux schémas : **LM** (jaune/encre noire/pearl) et **ExecEd** (rouge/navy/clair).
 Source de vérité : `src/styles/themes.css` (`:root` = LM, `[data-scheme="execed"]`).
 
+Chargement : `themes.css` est importé par `global.css` (donc **toute page sur
+`global.css` a les tokens**) et par `slides.css` (decks). Une page themée n'a
+**aucun import** à faire : il suffit de poser `data-scheme` sur `<body>` pour
+activer un schéma.
+
 ## Règle pour tout composant de slide
 
 - **Aucune couleur hex en dur.** Utiliser les tokens : `var(--c-ink)`, `--c-muted`,
