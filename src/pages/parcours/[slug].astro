@@ -1,11 +1,18 @@
 ---
 // src/pages/parcours/[slug].astro
-// Portail d'un parcours : page d'accueil qui agrege plusieurs decks sous un theme.
-// Acces direct uniquement par lien (pas d'index global volontairement, pour
-// reserver l'acces a ceux qui ont l'URL).
+// Portail d'un parcours : hero + barre de filtre (recherche + chips par jour) +
+// liste editoriale des decks, themable LM/ExecEd via les tokens themes.css.
+// Acces direct par lien (pas d'index global volontaire).
 import { getCollection, getEntry } from 'astro:content';
 import '@/styles/global.css';
+import '@/styles/themes.css';
 import FontsPreload from '@/components/FontsPreload.astro';
+import ParcoursSchemeSwitcher from '@/components/ParcoursSchemeSwitcher.astro';
+import { splitHighlight } from '@/utils/highlight';
+
+// Passer a false pour masquer le selecteur de theme (le scheme du frontmatter
+// fait alors loi : aucun script de preview ne tourne).
+const SHOW_SCHEME_SWITCHER = true;
 
 export async function getStaticPaths() {
   const all = await getCollection('parcours');
@@ -20,6 +27,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const data = entry.data;
 const parcoursSlug = entry.id;
+const scheme = data.scheme;
 
 const decksData = await Promise.all(
   data.decks.map(async (slug) => {
@@ -33,10 +41,29 @@ const decksData = await Promise.all(
   })
 );
 
+// Mapping slug -> label de jour (+ validation : chaque slug de `days` doit etre
+// dans `decks`). Decks hors `days` (housekeeping) : pas de tag, visibles sous "Tous".
+const deckSlugSet = new Set(data.decks);
+const dayOf = new Map<string, string>();
+const dayChips: { label: string; count: number }[] = [];
+if (data.days) {
+  for (const day of data.days) {
+    let count = 0;
+    for (const dslug of day.decks) {
+      if (!deckSlugSet.has(dslug)) {
+        throw new Error(
+          `Parcours "${parcoursSlug}" : le jour "${day.label}" reference le deck "${dslug}" absent de la liste "decks".`
+        );
+      }
+      dayOf.set(dslug, day.label);
+      count++;
+    }
+    dayChips.push({ label: day.label, count });
+  }
+}
+const hasDays = dayChips.length > 0;
+
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
-
-import { splitHighlight } from '@/utils/highlight';
-
 const titleParts = splitHighlight(data.title, data.highlight);
 ---
 <!DOCTYPE html>
@@ -59,7 +86,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
   </head>
-  <body class="parcours-body">
+  <body class="parcours-body" data-scheme={scheme}>
     <header class="parcours-hero">
       <span class="parcours-hero__noise" aria-hidden="true"></span>
       <span class="parcours-hero__wash" aria-hidden="true"></span>
@@ -82,7 +109,13 @@ const titleParts = splitHighlight(data.title, data.highlight);
         </h1>
         {data.description && <p class="parcours-hero__description">{data.description}</p>}
         <p class="parcours-hero__meta">
-          <span class="parcours-hero__count">{decksData.length} {decksData.length > 1 ? 'présentations' : 'présentation'}</span>
+          <span class="parcours-hero__count">{decksData.length} {decksData.length > 1 ? 'modules' : 'module'}</span>
+          {hasDays && (
+            <>
+              <span class="parcours-hero__sep" aria-hidden="true">·</span>
+              <span>{dayChips.length} jours</span>
+            </>
+          )}
           {data.updated && (
             <>
               <span class="parcours-hero__sep" aria-hidden="true">·</span>
@@ -95,43 +128,73 @@ const titleParts = splitHighlight(data.title, data.highlight);
     </header>
 
     <main class="parcours-main">
-      <ol class="parcours-grid">
+      <div class="parcours-filter" role="search">
+        <div class="parcours-filter__search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M229.66 218.34 179.6 168.28a88.21 88.21 0 1 0-11.32 11.32l50.06 50.06a8 8 0 0 0 11.32-11.32ZM40 112a72 72 0 1 1 72 72 72.08 72.08 0 0 1-72-72Z" />
+          </svg>
+          <label class="sr-only" for="parcours-search">Rechercher un module</label>
+          <input id="parcours-search" type="search" placeholder="Rechercher un module…" autocomplete="off" />
+        </div>
+        {hasDays && (
+          <div class="parcours-filter__chips" role="group" aria-label="Filtrer par jour">
+            <button type="button" class="parcours-chip is-active" data-day-chip="" aria-pressed="true">Tous</button>
+            {dayChips.map((d) => (
+              <button type="button" class="parcours-chip" data-day-chip={d.label} aria-pressed="false">
+                {d.label}<span class="parcours-chip__count">{d.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        <button type="button" id="parcours-reset" class="parcours-filter__reset" title="Réinitialiser">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M224 128a96 96 0 0 1-94.71 96H128a95.38 95.38 0 0 1-65.9-26.2 8 8 0 0 1 11-11.63A80 80 0 1 0 71 75.5l-3.7 3.34H92a8 8 0 0 1 0 16H48a8 8 0 0 1-8-8V42.83a8 8 0 0 1 16 0v18.93l3.56-3.22A96 96 0 0 1 224 128Z" />
+          </svg>
+          <span>Reset</span>
+        </button>
+      </div>
+
+      <p id="parcours-count" class="parcours-count" aria-live="polite">{decksData.length} {decksData.length > 1 ? 'modules' : 'module'}</p>
+
+      <ol class="parcours-list">
         {decksData.map((deck, i) => {
           const num = String(i + 1).padStart(2, '0');
+          const dayLabel = dayOf.get(deck.slug) ?? '';
+          const desc = deck.description ?? deck.short ?? '';
+          const searchBlob = `${deck.title} ${desc} ${deck.slug}`.toLowerCase();
           return (
-            <li class="parcours-card" style={`--stagger-i: ${i}`}>
-              <a class="parcours-card__link" href={`/p/${deck.slug}?from=${parcoursSlug}`}>
-                <div class="parcours-card__media">
+            <li class="module-row" data-day={dayLabel} data-search={searchBlob} style={`--stagger-i: ${i}`}>
+              <a class="module-row__link" href={`/p/${deck.slug}?from=${parcoursSlug}`}>
+                <span class="module-row__num" aria-hidden="true">{num}</span>
+                <span class="module-row__thumb">
                   {deck.cover ? (
-                    /* Above-fold cards (3 par ligne sur desktop) : loading eager pour éviter */
-                    /* le CLS et l'audit Astro "Unoptimized loading attribute" qui flagge toute */
-                    /* image lazy potentiellement au-dessus du fold. */
-                    <img src={deck.cover} alt="" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+                    <img src={deck.cover} alt="" loading={i < 4 ? 'eager' : 'lazy'} decoding="async" />
                   ) : (
-                    <span class="parcours-card__placeholder" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 256 256" fill="currentColor">
-                        <path d="M164.44 105.34 108.32 67.92A8 8 0 0 0 96 74.59v74.83a8 8 0 0 0 12.32 6.66l56.12-37.41a8 8 0 0 0 0-13.31ZM112 134.49V89.51l33.74 22.49Z" />
+                    <span class="module-row__thumb-ph" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 256" fill="currentColor">
+                        <path d="M164.44 105.34 108.32 67.92A8 8 0 0 0 96 74.59v74.83a8 8 0 0 0 12.32 6.66l56.12-37.41a8 8 0 0 0 0-13.31Z" />
                         <path d="M232 32H24a8 8 0 0 0-8 8v144a8 8 0 0 0 8 8h208a8 8 0 0 0 8-8V40a8 8 0 0 0-8-8m-8 144H32V48h192Z" />
                       </svg>
                     </span>
                   )}
-                  <span class="parcours-card__num" aria-hidden="true">{num}</span>
-                </div>
-                <div class="parcours-card__body">
-                  <h2 class="parcours-card__title">{deck.title}</h2>
-                  {deck.description && <p class="parcours-card__desc">{deck.description}</p>}
-                  <span class="parcours-card__cta" aria-hidden="true">
-                    Ouvrir
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor">
-                      <path d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z" />
-                    </svg>
-                  </span>
-                </div>
+                </span>
+                <span class="module-row__body">
+                  <span class="module-row__title">{deck.title}</span>
+                  {desc && <span class="module-row__desc">{desc}</span>}
+                </span>
+                {dayLabel && <span class="module-row__day">{dayLabel}</span>}
+                <span class="module-row__arrow" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor">
+                    <path d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z" />
+                  </svg>
+                </span>
               </a>
             </li>
           );
         })}
       </ol>
+
+      <p id="parcours-empty" class="parcours-empty">Aucun module ne correspond à la recherche.</p>
     </main>
 
     <footer class="parcours-footer">
@@ -140,329 +203,254 @@ const titleParts = splitHighlight(data.title, data.highlight);
       <span class="parcours-footer__short">{data.short ?? data.title}</span>
     </footer>
 
+    {SHOW_SCHEME_SWITCHER && <ParcoursSchemeSwitcher slug={parcoursSlug} />}
+
     <style>
+      .sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+      }
+
       .parcours-body {
         margin: 0;
         font-family: 'Hanken Grotesk', sans-serif;
-        background: #FFFFFF;
-        color: #191919;
+        background: var(--c-bg-start);
+        color: var(--c-ink);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
       }
 
-      .parcours-hero {
-        position: relative;
-        overflow: hidden;
-        padding: 56px 64px 40px;
-      }
-
+      .parcours-hero { position: relative; overflow: hidden; padding: 56px 64px 40px; }
       .parcours-hero__noise {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        opacity: 0.18;
-        mix-blend-mode: multiply;
+        position: absolute; inset: 0; pointer-events: none; opacity: 0.18; mix-blend-mode: multiply;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
       }
-
       .parcours-hero__wash {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background: radial-gradient(circle at 0% 100%, rgba(255, 216, 56, 0.32) 0%, rgba(255, 216, 56, 0) 55%);
+        position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--c-accent) 32%, transparent) 0%, transparent 55%);
       }
-
       .parcours-hero__inner {
-        position: relative;
-        z-index: 1;
-        max-width: 1152px;
-        margin: 0 auto;
+        position: relative; z-index: 1; max-width: 1152px; margin: 0 auto;
         animation: parcours-stagger 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
-
       .parcours-hero__head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 20px;
+        display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px;
       }
-
       .parcours-hero__eyebrow {
-        display: inline-block;
-        font-family: 'Space Grotesk', monospace;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.32em;
-        color: #191919;
-        margin: 0;
-        padding: 6px 14px;
-        background: #FFD838;
-        border: 2px solid #191919;
-        border-radius: 4px;
+        display: inline-block; font-family: 'Space Grotesk', monospace; font-size: 13px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.32em; color: var(--c-on-accent); margin: 0;
+        padding: 6px 14px; background: var(--c-accent); border: 2px solid var(--c-ink); border-radius: 4px;
       }
-
       .parcours-hero__icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        background: #191919;
-        color: #FFD838;
-        flex-shrink: 0;
+        display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px;
+        border-radius: 50%; background: var(--c-ink); color: var(--c-accent); flex-shrink: 0;
       }
-
       .parcours-hero__title {
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-weight: 800;
-        font-size: clamp(40px, 5.5vw, 72px);
-        line-height: 0.98;
-        letter-spacing: -0.035em;
-        color: #191919;
-        margin: 0 0 16px;
-        text-wrap: balance;
+        font-family: 'Hanken Grotesk', sans-serif; font-weight: 800; font-size: clamp(40px, 5.5vw, 72px);
+        line-height: 0.98; letter-spacing: -0.035em; color: var(--c-ink); margin: 0 0 16px; text-wrap: balance;
       }
-
-      .parcours-hero__mark {
-        position: relative;
-        display: inline-block;
-        white-space: nowrap;
-      }
+      .parcours-hero__mark { position: relative; display: inline-block; white-space: nowrap; }
       .parcours-hero__mark::after {
-        content: '';
-        position: absolute;
-        left: -6px;
-        right: -6px;
-        bottom: 4px;
-        height: 9px;
-        background: #191919;
-        z-index: -1;
-        transform: rotate(-1.5deg);
+        content: ''; position: absolute; left: -6px; right: -6px; bottom: 4px; height: 9px;
+        background: var(--c-accent); z-index: -1; transform: rotate(-1.5deg);
       }
-
       .parcours-hero__description {
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-size: 17px;
-        font-weight: 500;
-        line-height: 1.5;
-        color: rgba(25, 25, 25, 0.72);
-        margin: 0 0 16px;
-        max-width: 720px;
+        font-size: 17px; font-weight: 500; line-height: 1.5; color: var(--c-muted);
+        margin: 0 0 16px; max-width: 720px;
       }
-
       .parcours-hero__meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 10px;
-        font-family: 'Space Grotesk', monospace;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: rgba(25, 25, 25, 0.55);
-        margin: 0;
+        display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+        font-family: 'Space Grotesk', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--c-faint); margin: 0;
       }
-      .parcours-hero__count { color: #191919; }
-      .parcours-hero__sep { color: rgba(25, 25, 25, 0.25); }
-
-      .parcours-hero__rule {
-        display: block;
-        width: 64px;
-        height: 5px;
-        background: #FFD838;
-        margin-top: 24px;
-      }
+      .parcours-hero__count { color: var(--c-ink); }
+      .parcours-hero__sep { color: color-mix(in srgb, var(--c-ink) 25%, transparent); }
+      .parcours-hero__rule { display: block; width: 64px; height: 5px; background: var(--c-accent); margin-top: 24px; }
 
       .parcours-main {
-        flex: 1;
-        max-width: 1280px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 48px 64px 64px;
-        box-sizing: border-box;
+        flex: 1; max-width: 1024px; width: 100%; margin: 0 auto; padding: 40px 64px 64px; box-sizing: border-box;
       }
 
-      .parcours-grid {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+      /* ---- Barre de filtre ---- */
+      .parcours-filter {
+        display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;
+      }
+      .parcours-filter__search { position: relative; flex: 1 1 260px; min-width: 200px; }
+      .parcours-filter__search svg {
+        position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+        width: 16px; height: 16px; color: var(--c-faint); pointer-events: none;
+      }
+      .parcours-filter__search input {
+        width: 100%; box-sizing: border-box; padding: 11px 16px 11px 40px;
+        border: 1px solid color-mix(in srgb, var(--c-ink) 14%, transparent); border-radius: 999px;
+        font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; color: var(--c-ink);
+        background: var(--c-surface); transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+      .parcours-filter__search input::placeholder { color: var(--c-faint); }
+      .parcours-filter__search input:focus {
+        outline: none; border-color: var(--c-accent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 25%, transparent);
+      }
+      .parcours-filter__chips { display: flex; gap: 8px; flex-wrap: wrap; }
+      .parcours-chip {
+        font-family: 'Space Grotesk', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+        padding: 8px 14px; border-radius: 999px; cursor: pointer;
+        border: 1px solid color-mix(in srgb, var(--c-ink) 14%, transparent);
+        background: var(--c-surface); color: var(--c-ink);
+        transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      }
+      .parcours-chip:hover { border-color: color-mix(in srgb, var(--c-ink) 32%, transparent); }
+      .parcours-chip.is-active {
+        background: var(--c-accent); color: var(--c-on-accent);
+        border-color: var(--c-accent);
+      }
+      .parcours-chip__count { opacity: 0.55; margin-left: 5px; font-variant-numeric: tabular-nums; }
+      .parcours-filter__reset {
+        display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Grotesk', monospace;
+        font-size: 12px; font-weight: 700; padding: 9px 14px; border-radius: 999px; cursor: pointer;
+        border: 1px solid color-mix(in srgb, var(--c-ink) 14%, transparent);
+        background: var(--c-surface); color: var(--c-muted);
+        transition: color 0.18s ease, border-color 0.18s ease;
+      }
+      .parcours-filter__reset:hover { color: var(--c-ink); border-color: color-mix(in srgb, var(--c-ink) 32%, transparent); }
+      .parcours-filter__reset svg { width: 14px; height: 14px; }
+
+      .parcours-count {
+        font-family: 'Space Grotesk', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+        text-transform: uppercase; color: var(--c-faint); margin: 0 0 16px;
       }
 
-      .parcours-card {
-        animation: parcours-card-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-        animation-delay: calc(var(--stagger-i, 0) * 0.05s + 0.05s);
+      /* ---- Liste editoriale ---- */
+      .parcours-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+      .module-row {
+        animation: parcours-row-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(var(--stagger-i, 0) * 0.04s + 0.05s);
       }
-
-      .parcours-card__link {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-        background: #FFFFFF;
-        border: 1px solid rgba(25, 25, 25, 0.08);
-        border-radius: 14px;
-        overflow: hidden;
-        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
-        height: 100%;
+      .module-row__link {
+        display: flex; align-items: center; gap: 18px; text-decoration: none; color: inherit;
+        background: var(--c-surface); border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+        border-radius: 12px; padding: 14px 18px;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
       }
-      .parcours-card__link:hover {
-        transform: translateY(-4px);
-        border-color: rgba(255, 216, 56, 0.7);
-        box-shadow: 0 24px 48px -12px rgba(25, 25, 25, 0.18);
+      .module-row__link:hover {
+        transform: translateX(3px);
+        border-color: color-mix(in srgb, var(--c-accent) 60%, transparent);
+        box-shadow: 0 12px 28px -16px color-mix(in srgb, var(--c-ink) 22%, transparent);
       }
-      .parcours-card__link:hover .parcours-card__media img {
-        transform: scale(1.04);
+      .module-row__num {
+        font-family: 'Space Grotesk', monospace; font-weight: 800; font-variant-numeric: tabular-nums;
+        font-size: 20px; color: var(--c-ink); width: 32px; text-align: center; flex-shrink: 0;
       }
-      .parcours-card__link:hover .parcours-card__cta {
-        color: #191919;
-        gap: 10px;
+      .module-row__thumb {
+        position: relative; width: 88px; height: 56px; border-radius: 6px; overflow: hidden;
+        flex-shrink: 0; background: var(--c-ink);
       }
-
-      .parcours-card__media {
-        position: relative;
-        aspect-ratio: 16 / 10;
-        background: #191919;
-        overflow: hidden;
-      }
-      .parcours-card__media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      .module-row__thumb img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
-      /* Voile sombre subtil sur l'image pour rendre le numero gold lisible
-         quelle que soit la photo. */
-      .parcours-card__media::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgba(25, 25, 25, 0.55) 0%, rgba(25, 25, 25, 0) 50%);
-        pointer-events: none;
+      .module-row__link:hover .module-row__thumb img { transform: scale(1.05); }
+      .module-row__thumb-ph {
+        position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+        color: var(--c-accent);
       }
-      .parcours-card__placeholder {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #FFD838;
-        background: linear-gradient(135deg, #1F1F1F 0%, #191919 100%);
+      .module-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+      .module-row__title {
+        font-weight: 800; font-size: 16.5px; line-height: 1.2; color: var(--c-ink);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       }
+      .module-row__desc {
+        font-size: 13px; line-height: 1.4; color: var(--c-muted);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+      .module-row__day {
+        flex-shrink: 0; font-family: 'Space Grotesk', monospace; font-size: 11px; font-weight: 700;
+        letter-spacing: 0.04em; padding: 4px 11px; border-radius: 999px;
+        background: var(--c-accent); color: var(--c-on-accent);
+      }
+      .module-row__arrow {
+        flex-shrink: 0; display: inline-flex; color: var(--c-faint); transition: transform 0.2s ease, color 0.2s ease;
+      }
+      .module-row__link:hover .module-row__arrow { transform: translateX(3px); color: var(--c-ink); }
 
-      /* Gros numero monumental signature LM : Hanken Black, ancre bottom-left de
-         la zone media. Stroke noir simule via text-shadow multi-direction (compat
-         universelle, contrairement a -webkit-text-stroke qui peut buger). */
-      .parcours-card__num {
-        position: absolute;
-        bottom: 8px;
-        left: 16px;
-        z-index: 2;
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-weight: 800;
-        font-variant-numeric: tabular-nums;
-        font-size: clamp(64px, 9vw, 96px);
-        line-height: 0.84;
-        letter-spacing: -0.04em;
-        color: #FFD838;
-        text-shadow:
-          -2px -2px 0 #191919,
-          2px -2px 0 #191919,
-          -2px 2px 0 #191919,
-          2px 2px 0 #191919,
-          0 6px 20px rgba(25, 25, 25, 0.5);
-        user-select: none;
-        pointer-events: none;
-      }
-
-      .parcours-card__body {
-        padding: 22px 22px 24px;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-      }
-
-      .parcours-card__title {
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-size: 21px;
-        font-weight: 800;
-        line-height: 1.2;
-        color: #191919;
-        margin: 0 0 8px;
-        text-wrap: balance;
-      }
-
-      .parcours-card__desc {
-        font-family: 'Hanken Grotesk', sans-serif;
-        font-size: 14.5px;
-        font-weight: 400;
-        color: rgba(25, 25, 25, 0.62);
-        line-height: 1.5;
-        margin: 0 0 16px;
-        flex: 1;
-      }
-
-      .parcours-card__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-family: 'Space Grotesk', monospace;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: rgba(25, 25, 25, 0.55);
-        margin-top: auto;
-        transition: color 0.2s ease, gap 0.2s ease;
+      .parcours-empty {
+        display: none; text-align: center; padding: 48px 20px; margin: 0;
+        font-size: 15px; color: var(--c-muted);
       }
 
       .parcours-footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        padding: 24px 32px 32px;
-        font-family: 'Space Grotesk', monospace;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: rgba(25, 25, 25, 0.45);
-        border-top: 1px solid rgba(25, 25, 25, 0.06);
+        display: flex; justify-content: center; align-items: center; gap: 12px; padding: 24px 32px 32px;
+        font-family: 'Space Grotesk', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--c-faint);
+        border-top: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
       }
-      .parcours-footer__brand { color: #191919; }
-      .parcours-footer__sep { color: rgba(25, 25, 25, 0.25); }
+      .parcours-footer__brand { color: var(--c-ink); }
+      .parcours-footer__sep { color: color-mix(in srgb, var(--c-ink) 25%, transparent); }
 
-      @keyframes parcours-stagger {
-        from { opacity: 0; transform: translateY(16px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes parcours-card-in {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
+      @keyframes parcours-stagger { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes parcours-row-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-      @media (max-width: 1024px) {
-        .parcours-grid { grid-template-columns: repeat(2, 1fr); }
-      }
-      @media (max-width: 640px) {
-        .parcours-grid { grid-template-columns: 1fr; }
-      }
       @media (max-width: 768px) {
         .parcours-hero { padding: 40px 24px 32px; }
         .parcours-hero__rule { width: 48px; margin-top: 16px; }
         .parcours-hero__icon { width: 48px; height: 48px; }
         .parcours-hero__icon svg { width: 28px; height: 28px; }
-        .parcours-main { padding: 32px 20px 56px; }
-        .parcours-grid { gap: 16px; }
+        .parcours-main { padding: 28px 20px 56px; }
+        .module-row__link { gap: 12px; padding: 12px 14px; }
+        .module-row__thumb { width: 64px; height: 42px; }
+        .module-row__desc { display: none; }
       }
     </style>
+
+    <script>
+      (function () {
+        const search = document.getElementById('parcours-search') as HTMLInputElement | null;
+        const chips = Array.from(document.querySelectorAll<HTMLElement>('[data-day-chip]'));
+        const reset = document.getElementById('parcours-reset');
+        const count = document.getElementById('parcours-count');
+        const empty = document.getElementById('parcours-empty');
+        const items = Array.from(document.querySelectorAll<HTMLElement>('.module-row'));
+        let activeDay = '';
+
+        function apply() {
+          const q = (search?.value || '').trim().toLowerCase();
+          let shown = 0;
+          items.forEach((li) => {
+            const okQ = !q || (li.dataset.search || '').includes(q);
+            const okD = !activeDay || li.dataset.day === activeDay;
+            const visible = okQ && okD;
+            li.style.display = visible ? '' : 'none';
+            if (visible) shown++;
+          });
+          if (count) count.textContent = shown + (shown > 1 ? ' modules' : ' module');
+          if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+        }
+
+        search?.addEventListener('input', apply);
+        chips.forEach((chip) => {
+          chip.addEventListener('click', () => {
+            activeDay = chip.dataset.dayChip || '';
+            chips.forEach((c) => {
+              const on = c === chip;
+              c.classList.toggle('is-active', on);
+              c.setAttribute('aria-pressed', String(on));
+            });
+            apply();
+          });
+        });
+        reset?.addEventListener('click', () => {
+          if (search) search.value = '';
+          activeDay = '';
+          chips.forEach((c) => {
+            const on = (c.dataset.dayChip || '') === '';
+            c.classList.toggle('is-active', on);
+            c.setAttribute('aria-pressed', String(on));
+          });
+          apply();
+          search?.focus();
+        });
+      })();
+    </script>
   </body>
 </html>
