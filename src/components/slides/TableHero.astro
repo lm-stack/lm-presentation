@@ -144,6 +144,8 @@ const titleParts = splitHighlight(title, italicPart);
     min-height: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 40px;
     padding-top: 28px;
   }
   .table-hero__heading {
@@ -186,12 +188,10 @@ const titleParts = splitHighlight(title, italicPart);
 
   /* Zone tableau : prend l'espace restant, centre le tableau verticalement. */
   .table-hero__table-area {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin-top: 24px;
     gap: 16px;
   }
   .table-hero__wrapper {
@@ -207,8 +207,8 @@ const titleParts = splitHighlight(title, italicPart);
     font-family: 'Hanken Grotesk', sans-serif;
   }
   .table-hero__table thead th {
-    background: var(--c-ink);
-    color: #FFFFFF;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
     text-align: left;
     padding: 18px 28px;
     font-size: 21px;
