@@ -45,6 +45,9 @@ const parcours = defineCollection({
     // Theme par defaut du parcours. Modifiable a tout moment (contrairement aux
     // decks, figes). Le selecteur (ParcoursSchemeSwitcher) peut le surcharger en preview.
     scheme: z.enum(['lm', 'execed']).default('lm'),
+    // Affiche le selecteur de theme LM/ExecEd sur la page (preview). Masque par
+    // defaut (production) : le `scheme` du frontmatter fait alors loi.
+    switcher: z.boolean().default(false),
     // Groupement optionnel des decks par jour (active les chips de filtre).
     // Chaque slug doit appartenir a `decks` (valide au rendu dans [slug].astro).
     // Absent => barre de filtre en recherche seule (pas de chips).

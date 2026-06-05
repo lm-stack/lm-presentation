@@ -8,11 +8,8 @@ import '@/styles/global.css';
 import '@/styles/themes.css';
 import FontsPreload from '@/components/FontsPreload.astro';
 import ParcoursSchemeSwitcher from '@/components/ParcoursSchemeSwitcher.astro';
+import ParcoursMatrixRain from '@/components/ParcoursMatrixRain.astro';
 import { splitHighlight } from '@/utils/highlight';
-
-// Passer a false pour masquer le selecteur de theme (le scheme du frontmatter
-// fait alors loi : aucun script de preview ne tourne).
-const SHOW_SCHEME_SWITCHER = true;
 
 export async function getStaticPaths() {
   const all = await getCollection('parcours');
@@ -60,6 +57,15 @@ if (data.days) {
     }
     dayChips.push({ label: day.label, count });
   }
+  // Regle parcours (.claude/rules/parcours.md) : chaque deck doit appartenir a un
+  // jour, introduction et conclusion inclus. Un deck orphelin fait echouer le build.
+  for (const dslug of data.decks) {
+    if (!dayOf.has(dslug)) {
+      throw new Error(
+        `Parcours "${parcoursSlug}" : le deck "${dslug}" n'est associe a aucun jour. Chaque deck doit appartenir a un jour (introduction et conclusion inclus).`
+      );
+    }
+  }
 }
 const hasDays = dayChips.length > 0;
 
@@ -88,26 +94,18 @@ const titleParts = splitHighlight(data.title, data.highlight);
   </head>
   <body class="parcours-body" data-scheme={scheme}>
     <header class="parcours-hero">
-      <span class="parcours-hero__noise" aria-hidden="true"></span>
-      <span class="parcours-hero__wash" aria-hidden="true"></span>
-
+      <ParcoursMatrixRain />
       <div class="parcours-hero__inner">
-        <div class="parcours-hero__head">
-          <p class="parcours-hero__eyebrow">{data.eyebrow ?? 'Parcours'}</p>
-          <span class="parcours-hero__icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M32 64 128 32l96 32-96 32z" />
-              <path d="M32 64v72" />
-              <path d="M64 80v52a64 64 0 0 0 128 0V80" />
-            </svg>
-          </span>
-        </div>
+        <p class="parcours-hero__eyebrow">
+          <span class="parcours-hero__dot" aria-hidden="true"></span>
+          {data.eyebrow ?? 'Parcours'}
+        </p>
         <h1 class="parcours-hero__title">
           {titleParts
             ? <>{titleParts.before}<span class="parcours-hero__mark">{titleParts.match}</span>{titleParts.after}</>
             : data.title}
         </h1>
-        {data.description && <p class="parcours-hero__description">{data.description}</p>}
+        {data.description && <p class="parcours-hero__lede">{data.description}</p>}
         <p class="parcours-hero__meta">
           <span class="parcours-hero__count">{decksData.length} {decksData.length > 1 ? 'modules' : 'module'}</span>
           {hasDays && (
@@ -123,7 +121,6 @@ const titleParts = splitHighlight(data.title, data.highlight);
             </>
           )}
         </p>
-        <span class="parcours-hero__rule" aria-hidden="true"></span>
       </div>
     </header>
 
@@ -203,7 +200,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
       <span class="parcours-footer__short">{data.short ?? data.title}</span>
     </footer>
 
-    {SHOW_SCHEME_SWITCHER && <ParcoursSchemeSwitcher slug={parcoursSlug} />}
+    {data.switcher && <ParcoursSchemeSwitcher slug={parcoursSlug} />}
 
     <style>
       .sr-only {
@@ -221,43 +218,37 @@ const titleParts = splitHighlight(data.title, data.highlight);
         flex-direction: column;
       }
 
-      .parcours-hero { position: relative; overflow: hidden; padding: 56px 64px 40px; }
-      .parcours-hero__noise {
-        position: absolute; inset: 0; pointer-events: none; opacity: 0.18; mix-blend-mode: multiply;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-      }
-      .parcours-hero__wash {
-        position: absolute; inset: 0; pointer-events: none;
-        background: radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--c-accent) 32%, transparent) 0%, transparent 55%);
+      .parcours-hero {
+        position: relative; overflow: hidden; padding: 0;
+        background: var(--c-bg-start);
+        border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
       }
       .parcours-hero__inner {
-        position: relative; z-index: 1; max-width: 1152px; margin: 0 auto;
+        position: relative; z-index: 2; max-width: 1600px; margin: 0 auto;
+        padding: clamp(48px, 6vw, 76px) 32px 44px; box-sizing: border-box;
         animation: parcours-stagger 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
-      .parcours-hero__head {
-        display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px;
-      }
       .parcours-hero__eyebrow {
-        display: inline-block; font-family: 'Space Grotesk', monospace; font-size: 13px; font-weight: 700;
-        text-transform: uppercase; letter-spacing: 0.32em; color: var(--c-on-accent); margin: 0;
-        padding: 6px 14px; background: var(--c-accent); border: 2px solid var(--c-ink); border-radius: 4px;
+        display: inline-flex; align-items: center; gap: 9px;
+        font-family: 'Space Grotesk', monospace; font-size: 12px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.22em; color: var(--c-muted); margin: 0 0 18px;
       }
-      .parcours-hero__icon {
-        display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px;
-        border-radius: 50%; background: var(--c-ink); color: var(--c-accent); flex-shrink: 0;
+      .parcours-hero__dot {
+        width: 7px; height: 7px; border-radius: 50%; background: var(--c-accent); flex-shrink: 0;
       }
       .parcours-hero__title {
-        font-family: 'Hanken Grotesk', sans-serif; font-weight: 800; font-size: clamp(40px, 5.5vw, 72px);
-        line-height: 0.98; letter-spacing: -0.035em; color: var(--c-ink); margin: 0 0 16px; text-wrap: balance;
+        font-family: 'Space Grotesk', 'Hanken Grotesk', sans-serif; font-weight: 700;
+        font-size: clamp(38px, 5vw, 64px); line-height: 1.04; letter-spacing: -0.025em;
+        color: var(--c-ink); margin: 0 0 18px; text-wrap: balance;
       }
       .parcours-hero__mark { position: relative; display: inline-block; white-space: nowrap; }
       .parcours-hero__mark::after {
-        content: ''; position: absolute; left: -6px; right: -6px; bottom: 4px; height: 9px;
-        background: var(--c-accent); z-index: -1; transform: rotate(-1.5deg);
+        content: ''; position: absolute; left: -3px; right: -3px; bottom: 0; height: 100%;
+        border-bottom: 9px solid var(--c-accent); transform: rotate(-1.5deg); z-index: -1; pointer-events: none;
       }
-      .parcours-hero__description {
-        font-size: 17px; font-weight: 500; line-height: 1.5; color: var(--c-muted);
-        margin: 0 0 16px; max-width: 720px;
+      .parcours-hero__lede {
+        font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; font-weight: 500; line-height: 1.55;
+        color: var(--c-muted); margin: 0 0 20px; max-width: 600px;
       }
       .parcours-hero__meta {
         display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
@@ -266,10 +257,9 @@ const titleParts = splitHighlight(data.title, data.highlight);
       }
       .parcours-hero__count { color: var(--c-ink); }
       .parcours-hero__sep { color: color-mix(in srgb, var(--c-ink) 25%, transparent); }
-      .parcours-hero__rule { display: block; width: 64px; height: 5px; background: var(--c-accent); margin-top: 24px; }
 
       .parcours-main {
-        flex: 1; max-width: 1024px; width: 100%; margin: 0 auto; padding: 40px 64px 64px; box-sizing: border-box;
+        flex: 1; max-width: 1600px; width: 100%; margin: 0 auto; padding: 40px 32px 64px; box-sizing: border-box;
       }
 
       /* ---- Barre de filtre ---- */
@@ -392,10 +382,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
       @keyframes parcours-row-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
       @media (max-width: 768px) {
-        .parcours-hero { padding: 40px 24px 32px; }
-        .parcours-hero__rule { width: 48px; margin-top: 16px; }
-        .parcours-hero__icon { width: 48px; height: 48px; }
-        .parcours-hero__icon svg { width: 28px; height: 28px; }
+        .parcours-hero__inner { padding: 40px 20px 32px; }
         .parcours-main { padding: 28px 20px 56px; }
         .module-row__link { gap: 12px; padding: 12px 14px; }
         .module-row__thumb { width: 64px; height: 42px; }
