@@ -343,7 +343,7 @@ const WALL_HTML = `<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
-<title>Acces aux presentations : Lausanne Marketing</title>
+<title>Accès aux présentations : Lausanne Marketing</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
@@ -428,8 +428,8 @@ const WALL_HTML = `<!DOCTYPE html>
     </div>
 
     <section id="step-email">
-      <h1>Acces aux presentations</h1>
-      <p class="sub">Entre ton adresse email pour recevoir un code d'acces a usage unique.</p>
+      <h1>Accès aux présentations</h1>
+      <p class="sub">Entre ton adresse email pour recevoir un code d'accès à usage unique.</p>
       <form id="form-email" autocomplete="on" novalidate>
         <label for="email">Adresse email</label>
         <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@entreprise.com" required autofocus />
@@ -440,11 +440,11 @@ const WALL_HTML = `<!DOCTYPE html>
 
     <section id="step-code" hidden>
       <h1>Entre ton code</h1>
-      <p class="sub">Nous avons envoye un code a <strong id="email-echo"></strong>. Il est valable 10 minutes.</p>
+      <p class="sub">Nous avons envoyé un code à <strong id="email-echo"></strong>. Il est valable 10 minutes.</p>
       <form id="form-code" autocomplete="off" novalidate>
-        <label for="code">Code a 6 caracteres</label>
+        <label for="code">Code à 6 caractères</label>
         <input id="code" name="code" type="text" inputmode="text" autocomplete="one-time-code" maxlength="9" placeholder="K7Q2MX" required />
-        <button type="submit" id="btn-code">Acceder</button>
+        <button type="submit" id="btn-code">Accéder</button>
         <p class="msg" id="msg-code" aria-live="polite"></p>
       </form>
       <div class="linkrow">
@@ -452,7 +452,7 @@ const WALL_HTML = `<!DOCTYPE html>
       </div>
     </section>
 
-    <p class="hint">Les adresses email jetables ne sont pas acceptees. Une fois validee, ta session reste active 30 jours sur cet appareil.</p>
+    <p class="hint">Les adresses email jetables ne sont pas acceptées. Une fois validée, ta session reste active 30 jours sur cet appareil.</p>
   </main>
 
   <script>
@@ -494,12 +494,12 @@ const WALL_HTML = `<!DOCTYPE html>
           codeInput.focus();
           return;
         }
-        if (res.status === 422) { setMsg(msgEmail, 'Les adresses email jetables ne sont pas acceptees. Utilise une adresse professionnelle ou personnelle.', 'error'); return; }
+        if (res.status === 422) { setMsg(msgEmail, 'Les adresses email jetables ne sont pas acceptées. Utilise une adresse professionnelle ou personnelle.', 'error'); return; }
         if (res.status === 400) { setMsg(msgEmail, 'Cette adresse email semble invalide.', 'error'); return; }
-        if (res.status === 503) { setMsg(msgEmail, 'Le service n\\'est pas encore configure. Reessaie plus tard.', 'error'); return; }
-        setMsg(msgEmail, 'Envoi impossible pour le moment. Reessaie dans un instant.', 'error');
+        if (res.status === 503) { setMsg(msgEmail, 'Le service n\\'est pas encore configuré. Réessaie plus tard.', 'error'); return; }
+        setMsg(msgEmail, 'Envoi impossible pour le moment. Réessaie dans un instant.', 'error');
       } catch (err) {
-        setMsg(msgEmail, 'Erreur reseau. Verifie ta connexion.', 'error');
+        setMsg(msgEmail, 'Erreur réseau. Vérifie ta connexion.', 'error');
       } finally {
         btnEmail.disabled = false;
         btnEmail.textContent = 'Recevoir le code';
@@ -510,9 +510,9 @@ const WALL_HTML = `<!DOCTYPE html>
       e.preventDefault();
       setMsg(msgCode, '');
       var code = codeInput.value.trim();
-      if (!code) { setMsg(msgCode, 'Merci de saisir le code recu par email.', 'error'); return; }
+      if (!code) { setMsg(msgCode, 'Merci de saisir le code reçu par email.', 'error'); return; }
       btnCode.disabled = true;
-      btnCode.textContent = 'Verification...';
+      btnCode.textContent = 'Vérification...';
       try {
         var res = await fetch('/api/access/verify', {
           method: 'POST',
@@ -520,18 +520,18 @@ const WALL_HTML = `<!DOCTYPE html>
           body: JSON.stringify({ email: emailInput.value.trim(), code: code })
         });
         if (res.status === 200) {
-          setMsg(msgCode, 'Acces confirme, chargement...', 'ok');
+          setMsg(msgCode, 'Accès confirmé, chargement...', 'ok');
           window.location.reload();
           return;
         }
-        if (res.status === 401) { setMsg(msgCode, 'Code incorrect ou expire. Verifie ou demande un nouveau code.', 'error'); return; }
+        if (res.status === 401) { setMsg(msgCode, 'Code incorrect ou expiré. Vérifie ou demande un nouveau code.', 'error'); return; }
         if (res.status === 400) { setMsg(msgCode, 'Le format du code est invalide.', 'error'); return; }
-        setMsg(msgCode, 'Verification impossible pour le moment.', 'error');
+        setMsg(msgCode, 'Vérification impossible pour le moment.', 'error');
       } catch (err) {
-        setMsg(msgCode, 'Erreur reseau. Verifie ta connexion.', 'error');
+        setMsg(msgCode, 'Erreur réseau. Vérifie ta connexion.', 'error');
       } finally {
         btnCode.disabled = false;
-        btnCode.textContent = 'Acceder';
+        btnCode.textContent = 'Accéder';
       }
     });
 
