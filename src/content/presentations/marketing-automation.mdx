@@ -4,6 +4,7 @@ subtitle: "CRM, Data & Automation"
 short: "Marketing automation"
 date: 2026-06-03
 type: cours
+scheme: "execed"
 unlisted: true
 cover: "/decks/marketing-automation/cover-robot.jpg"
 description: "Marketing automation : pourquoi automatiser, les APIs, le JSON, le no-code, et la place de l'IA. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
@@ -13,6 +14,8 @@ import CoverHero from '@/components/slides/CoverHero.astro';
 import SubSectionHero from '@/components/slides/SubSectionHero.astro';
 import ImageGridHero from '@/components/slides/ImageGridHero.astro';
 import MediaHero from '@/components/slides/MediaHero.astro';
+import BigImageHero from '@/components/slides/BigImageHero.astro';
+import DefinitionHero from '@/components/slides/DefinitionHero.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import PollHero from '@/components/slides/PollHero.astro';
@@ -35,6 +38,71 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   brandSub="Executive Education"
   image="/decks/marketing-automation/cover-robot.jpg"
   theme="halo-gold"
+/>
+
+{/* État des lieux : intercalaire d'ouverture, juste avant le comparatif */}
+<SubSectionHero
+  index="01"
+  title="État des lieux"
+  italicPart="lieux"
+  subtitle="Comment l'IA générative a rebattu les cartes de l'automation."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Définition : c'est quoi un outil d'automation (introduit la notion avant la comparaison) */}
+<DefinitionHero
+  eyebrow="Définition"
+  term="Outil d'automation"
+  termItalicPart="automation"
+  definition="Un logiciel qui exécute des tâches répétitives à votre place en connectant vos applications entre elles : un déclencheur, une suite d'actions, sans écrire de code."
+  image="/decks/marketing-automation/cover-bg-lights.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Comparatif automation avant / après 2024 (grille deux images).
+    TODO images à fournir dans public/decks/marketing-automation/ :
+    - etat-avant-2024-n8n.png : capture d'un workflow n8n
+    - etat-apres-2024-ia.jpg  : visuel outils d'automation + outils IA */}
+<ImageGridHero
+  title="Avant et après 2024"
+  italicPart="2024"
+  subtitle="L'arrivée de l'IA générative a élargi la boîte à outils."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/etat-avant-2024-n8n.png", alt: "Workflow n8n : l'automation avant 2024", title: "Avant 2024", text: "Outils d'automation" },
+    { src: "/decks/marketing-automation/etat-apres-2024-ia.jpg", alt: "Outils d'automation et outils IA depuis 2024", title: "Après 2024", text: "Outils d'automation + outils IA" },
+  ]}
+/>
+
+{/* Les outils d'automation : grille 4 images (logos/captures à fournir) */}
+<ImageGridHero
+  title="Les outils d'automation"
+  italicPart="automation"
+  subtitle="Du no-code grand public à l'open-source, jusqu'à l'écosystème Microsoft."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/outil-zapier.jpeg", alt: "Zapier", title: "Zapier", text: "Le plus accessible, no-code. 6000+ apps connectées." },
+    { src: "/decks/marketing-automation/outil-make.jpeg", alt: "Make", title: "Make", text: "Scénarios visuels avancés (ex-Integromat)." },
+    { src: "/decks/marketing-automation/outil-n8n.png", alt: "n8n", title: "n8n", text: "Open-source et auto-hébergeable, très flexible." },
+    { src: "/decks/marketing-automation/outil-power-automate.png", alt: "Power Automate", title: "Power Automate", text: "Intégré à l'écosystème Microsoft 365." },
+  ]}
+/>
+
+{/* Le spectre de l'automation IA (diagramme Zapier) : image plein cadre, sans titre ni cadre.
+    L'attribution Zapier est déjà visible dans l'image. */}
+<BigImageHero
+  image="/decks/marketing-automation/automation-spectrum.jpg"
+  alt="Le spectre de l'automation IA : workflow, AI workflow, agentic workflow, agent (source Zapier)"
+  hideBrand
+  captionTitle="Après 2024 : l'IA dans les workflows"
+  caption="De gauche à droite, l'IA prend de plus en plus de décisions : du workflow figé à l'agent autonome."
+  captionPosition="bottom-left"
+  source="Zapier"
+  sourceUrl="https://zapier.com"
 />
 
 {/* Slide 2 : Chart ZHAW Technologies pertinentes */}
@@ -79,7 +147,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 5 : Section 01 */}
 <SubSectionHero
   kicker="Idée reçue"
-  index="01"
+  index="02"
   title="C'est moins compliqué qu'il n'y paraît"
   italicPart="compliqué"
   subtitle="Le marketing automation est souvent perçu comme un processus très technique. C'est avant tout du marketing structuré."
@@ -183,7 +251,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 13 : Section 02 */}
 <SubSectionHero
   kicker="Pourquoi"
-  index="02"
+  index="03"
   title="Pourquoi le marketing automation ?"
   italicPart="automation"
   subtitle="Quatre dynamiques convergentes : données, outils, contenus, touchpoints."
@@ -349,7 +417,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 24 : Section 03 */}
 <SubSectionHero
   kicker="Sous le capot"
-  index="03"
+  index="04"
   title="Les APIs, la colonne vertébrale"
   italicPart="vertébrale"
   subtitle="Au-delà des données, des outils et des contenus, le marketing automation existe grâce à une technologie clé : l'API."
