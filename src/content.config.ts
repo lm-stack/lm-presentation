@@ -42,6 +42,20 @@ const parcours = defineCollection({
     // Liste ordonnee des slugs de decks. Chaque entree doit correspondre a un fichier
     // existant dans src/content/presentations/<slug>.mdx (validation au build).
     decks: z.array(z.string()).min(1),
+    // Theme par defaut du parcours. Modifiable a tout moment (contrairement aux
+    // decks, figes). Le selecteur (ParcoursSchemeSwitcher) peut le surcharger en preview.
+    scheme: z.enum(['lm', 'execed']).default('lm'),
+    // Groupement optionnel des decks par jour (active les chips de filtre).
+    // Chaque slug doit appartenir a `decks` (valide au rendu dans [slug].astro).
+    // Absent => barre de filtre en recherche seule (pas de chips).
+    days: z
+      .array(
+        z.object({
+          label: z.string(),
+          decks: z.array(z.string()).min(1),
+        })
+      )
+      .optional(),
   }),
 });
 
