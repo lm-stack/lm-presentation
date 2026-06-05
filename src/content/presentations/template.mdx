@@ -21,6 +21,7 @@ import ListImageHero from '@/components/slides/ListImageHero.astro';
 import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
 import StatementHero from '@/components/slides/StatementHero.astro';
+import DefinitionHero from '@/components/slides/DefinitionHero.astro';
 import FormHero from '@/components/slides/FormHero.astro';
 import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
 import SubSectionHero from '@/components/slides/SubSectionHero.astro';
@@ -354,7 +355,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   index="6"
   title="Démo, atelier et média"
   italicPart="atelier"
-  subtitle="Démonstration, déclaration chiffrée, workshop minuté, formulaire et pause."
+  subtitle="Démonstration, image plein cadre, déclaration chiffrée, workshop, formulaire et pause."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
@@ -375,6 +376,23 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
+{/* Image plein cadre : full-bleed sans titre ni cadre. Pour une image 16:9.
+    Légende optionnelle en box blanche (captionTitle + caption + source/sourceUrl),
+    à poser dans le coin le plus vide (vérification visuelle) : captionPosition =
+    "top-left" | "top-right" | "bottom-left" | "bottom-right" (défaut "bottom-left").
+    hideBrand masque le bandeau marque si l'image doit parler seule. */}
+<BigImageHero
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=1080&fit=crop"
+  alt="Exemple d'image plein cadre 16:9"
+  captionTitle="Titre de la légende"
+  caption="Description optionnelle sous le titre, dans une box, au coin le plus vide."
+  source="Nom de la source"
+  sourceUrl="https://lausanne.marketing"
+  captionPosition="bottom-left"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
 <StatementHero
   eyebrow="Le problème"
   title="Déclaration ou chiffre-clé"
@@ -383,6 +401,19 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   stat="73%"
   statCaption="légende courte du chiffre mis en avant."
   source="Source ultra-quali, 2024"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+{/* Définition : introduit un concept. Terme en grand serif italique + définition
+    en gros texte (tout calé à gauche). image optionnelle en fond, floutée + voile
+    clair façon QuoteImage. */}
+<DefinitionHero
+  eyebrow="Définition"
+  term="Le terme à définir"
+  termItalicPart="définir"
+  definition="La définition en gros texte : une phrase claire qui pose le concept avant de l'utiliser dans la suite du deck."
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />

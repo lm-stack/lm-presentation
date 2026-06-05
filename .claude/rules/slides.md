@@ -115,3 +115,26 @@ Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#F
 - Densité visée : remplir la ligne (~85 caractères), pas une phrase courte.
 - Au-delà de ~90 caractères (~1260px à 27px), le texte est **coupé à droite** (overflow caché de la section), pas renvoyé à la ligne. Calibrer le texte en conséquence.
 - Le grand numéro (`index`) est l'ancre graphique : un chiffre court (`1.0`, `2.1`) rend mieux qu'un long nombre.
+
+## Numérotation des slides de section — RÈGLE ABSOLUE
+
+⚠️ **Tout slide de section / intercalaire (`SubSectionHero`, `SectionHero`) DOIT porter un numéro** via la prop `index` (le grand chiffre coloré, ancre graphique de l'intercalaire). Jamais d'intercalaire sans numéro.
+
+- Numéro court : `00`, `01`, `1.2`. Un chiffre court rend mieux qu'un long nombre.
+- Pour un intercalaire d'ouverture placé **avant** la section `01` (mise en contexte, état des lieux), utiliser `00` plutôt que de renuméroter toutes les sections suivantes.
+
+## Image plein cadre (`BigImageHero`) + légende en box — RÈGLE
+
+`BigImageHero` affiche une image en **bleed total** (1920×1080), **sans titre ni cadre**. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.
+
+Légende optionnelle rendue dans une **box blanche à bordure légère** — style card global : `var(--c-surface)`, bordure `color-mix(in srgb, var(--c-ink) 8%, transparent)`, `border-radius: 4px`, drop-shadow légère. Champs : `captionTitle` (titre gras), `caption` (description), et `source` + `sourceUrl` (ligne **source cliquable tout en bas de la box**, au format `.slide-source` : 16px, `--c-faint`). Positionnable dans un des **4 coins** via `captionPosition` : `"top-left" | "top-right" | "bottom-left" | "bottom-right"` (défaut `bottom-left`).
+
+Le bandeau marque peut être **masqué** (`hideBrand`) dans les cas exceptionnels où l'image doit parler seule.
+
+⚠️ **Toujours vérifier visuellement** quel coin de l'image est le plus vide **avant** de poser la box, pour ne jamais recouvrir un élément important. Le coin **haut-gauche est occupé par le bandeau marque** (la box top-left est décalée dessous) : préférer un autre coin quand c'est possible.
+
+## Taille de texte minimum — RÈGLE
+
+⚠️ **Le texte de contenu d'une slide ne descend jamais sous 22px** : titres, sous-titres, corps, items de liste, titres et descriptions de cards et de légendes. À 1920×1080 projeté en salle, en dessous ça devient illisible au fond.
+
+Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes de source / attribution (16–18px), watermarks décoratifs.
