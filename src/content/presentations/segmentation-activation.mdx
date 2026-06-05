@@ -2,263 +2,287 @@
 title: "Segmentation et activation"
 subtitle: "CRM, Data & Automation"
 short: "Segmentation et activation"
-date: 2026-06-01
+date: 2026-06-04
 type: cours
+unlisted: true
+cover: "/decks/segmentation-activation/cover-archer.jpg"
 description: "Segmentation et activation : 5 axes de segmentation, persona vs segment, leviers IA, 4 modes d'activation. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import Cover from '@/components/slides/Cover.astro';
-import Calendar from '@/components/slides/Calendar.astro';
-import Section from '@/components/slides/Section.astro';
-import Statement from '@/components/slides/Statement.astro';
-import NumberedCards from '@/components/slides/NumberedCards.astro';
-import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
-import Demo from '@/components/slides/Demo.astro';
-import Workshop from '@/components/slides/Workshop.astro';
-import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
-import Closing from '@/components/slides/Closing.astro';
+import CoverHero from '@/components/slides/CoverHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import MediaHero from '@/components/slides/MediaHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
 
-{/* Slide 1 : Cover. Quatrième et dernier module du Jour 1. Image : un
-    archer concentré, métaphore précision + activation (segmenter + tirer
-    juste). Cohérent avec les covers des sujets 1 à 3 sur l'angle "craft +
-    précision". */}
-<Cover
+{/*
+  MIGRATION segmentation-activation.mdx -> segmentation-activation-new.mdx
+  Format source : anciens composants (Cover, Calendar, Section, Statement,
+  NumberedCards, TwoColumnTable, Demo, Workshop, WorkshopBrief, Closing).
+  Format cible  : ExecEd-style Hero (charte Lausanne Marketing).
+
+  MAPPING slide par slide :
+  - Slide 1  Cover                   -> CoverHero
+  - Slide 2  Calendar                -> SUPPRIMÉ (vit dans Introduction, cf. workflows-new.mdx)
+  - Slide 3  Statement (sans image)  -> StatementHero
+  - Slide 4  Section 01              -> SubSectionHero
+  - Slide 5  Statement "spray/pray" (sans image) -> StatementHero
+  - Slide 6  Section 02              -> SubSectionHero
+  - Slide 7  NumberedCards 1 col ×5  -> NumberedSplit (séquence; image: cover-archer.jpg réutilisée; 5 items)
+  - Slide 8  TwoColumnTable 2 lignes -> InfoCardsGrid (2 cards: Persona / Segment)
+  - Slide 9  NumberedCards 1 col ×3  -> NumberedSplit (séquence; image Unsplash placeholder)
+  - Slide 10 Section 03              -> SubSectionHero
+  - Slide 11 Statement (sans image)  -> StatementHero
+  - Slide 12 NumberedCards 1 col ×4  -> NumberedSplit (séquence; image Unsplash placeholder)
+  - Slide 13 Section 04              -> SubSectionHero
+  - Slide 14 Demo (sans screenshot)  -> DemoHero (image placeholder Unsplash + rows rédigés; à remplacer)
+  - Slide 15 Workshop                -> fusionné avec Slide 16 WorkshopBrief -> WorkshopHero (1 slide)
+  - Slide 16 WorkshopBrief           -> fusionné dans WorkshopHero ci-dessus
+  - Slide 17 Closing variant="qa"    -> ClosingHero
+
+  TOTAL : 17 slides source -> 15 slides cible (Calendar supprimé, Workshop+WorkshopBrief fusionnés)
+
+  DÉCISIONS ET PLACEHOLDERS :
+  1. Calendar (slide 2) supprimé : convention workspace (cf. workflows-new.mdx commentaire).
+  2. NumberedCards 1 col : mappé sur NumberedSplit car c'est une liste séquencée.
+     Items à 5 (axes de segmentation) -> NumberedSplit supporte N items; image: cover-archer.jpg
+     (unique image locale disponible) réutilisée pour éviter un placeholder.
+  3. NumberedCards IA (3 items, slide 9) -> NumberedSplit avec image Unsplash
+     (https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1000&h=1400&fit=crop)
+     "réseau neuronal" conceptuel. Caption : "(à remplacer)".
+  4. NumberedCards activation (4 items, slide 12) -> NumberedSplit avec image Unsplash
+     (https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1000&h=1400&fit=crop)
+     "email marketing / activation". Caption : "(à remplacer)".
+  5. TwoColumnTable Persona/Segment (slide 8) : 2 lignes de définition -> InfoCardsGrid 2 cards.
+     Icons : ph:user-circle (Persona) et ph:funnel (Segment).
+     Les valeurs reprennent le texte source, condensé pour tenir dans une card.
+  6. Demo (slide 14) : le source était un <Demo> sans screenshot ni image fournie.
+     Conformément à la règle "DemoHero REQUIRES image + rows", on utilise une image
+     Unsplash placeholder (Zoho CRM dashboard concept) + rows rédigés à partir du
+     contexte du slide source. Caption : "Zoho CRM : création de segments (à remplacer)".
+  7. Workshop+WorkshopBrief fusionnés (slides 15+16) en un seul WorkshopHero.
+     Les rows du WorkshopBrief sont aplatis : le champ "Étapes" (tableau) est converti
+     en une seule string, les sous-items reliés par " / ".
+     defaultMinutes=30 (20 min groupe + 10 min restitution, total WorkshopBrief).
+     presets=[15, 20, 30].
+  8. Closing variant="qa" -> ClosingHero (title="Questions & réponses", highlight="réponses").
+     Image : cover-archer.jpg (seule image locale disponible).
+  9. Tous les SubSectionHero.subtitle calibrés à ~85 caractères (règle white-space nowrap).
+  10. italicPart vérifié : toujours sous-chaîne exacte du title.
+  11. Aucun em-dash ni en-dash dans le contenu des slides.
+  12. Accents complets conservés partout.
+*/}
+
+{/* Slide 1 : Cover */}
+<CoverHero
   title="Segmentation et activation"
-  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
-  eyebrow="Jour 1 — Sujet 4"
-  highlight="activation"
-  watermark="SA"
+  italicPart="activation"
+  eyebrow="Jour 1 : Sujet 4"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   image="/decks/segmentation-activation/cover-archer.jpg"
+  theme="halo-gold"
 />
 
-{/* Slide 2 : Calendrier Jour 1. Segmentation et activation au créneau
-    15h00 - 16h30. Quatre sujets de 1h30 + synthèse de 30 min. */}
-<Calendar
-  title="Calendrier"
-  subtitle="CRM, Data & Automation"
-  highlight="Calendrier"
-  day="Jour 1"
-  slots={[
-    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
-    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
-    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
-    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
-    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
-  ]}
-/>
-
-{/* Slide 3 : Recap. Statement qui boucle les trois modules en amont
-    (Collecte, Qualité, Architecture) et ouvre le bascule dans l'usage :
-    on a capté, nettoyé, structuré, maintenant on s'en sert. */}
-<Statement
+{/* Slide 2 : StatementHero - recap des trois modules précédents + pivot vers l'usage.
+    Source : Statement sans image (slide 3). Le titre long est gardé tel quel (il est
+    le message principal). Body = fusion subtitle + children du Statement source. */}
+<StatementHero
+  eyebrow="Récapitulatif"
   title="Vous avez la donnée propre et structurée. Maintenant, vous l'utilisez."
-  subtitle="Suite directe des trois modules en amont : la collecte (sujet 1), la qualité (sujet 2), l'architecture (sujet 3). Ce dernier module du jour bascule dans l'usage."
->
-  À qui parler, comment, et avec quel geste derrière. Une base CRM bien tenue qui n'active rien, c'est une bibliothèque sans lecteurs. La valeur émerge quand le segment déclenche une action concrète. C'est l'objet des quatre-vingt-dix prochaines minutes.
-</Statement>
+  italicPart="l'utilisez."
+  body="Suite directe des trois modules en amont : collecte (sujet 1), qualité (sujet 2), architecture (sujet 3). Ce dernier module du jour bascule dans l'usage. À qui parler, comment, et avec quel geste derrière. Une base CRM bien tenue qui n'active rien, c'est une bibliothèque sans lecteurs. La valeur émerge quand le segment déclenche une action concrète."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 4 : Section 01 - Pourquoi segmenter. Le cout du message
-    generique. */}
-<Section
-  number="01"
-  eyebrow="Le bénéfice"
+{/* Slide 3 : SubSectionHero - Section 01 Pourquoi segmenter */}
+<SubSectionHero
+  kicker="Le bénéfice"
+  index="01"
   title="Pourquoi segmenter"
-  highlight="Pourquoi"
-  subtitle="Le message générique adressé à tout le monde n'atteint personne. La segmentation est le premier acte de respect du destinataire."
+  italicPart="segmenter"
+  subtitle="Le message générique adressé à tout le monde n'atteint personne. Premier acte de respect."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 5 : Statement "spray and pray". Le cout du message generique.
-    Sans image, la formule porte seule. */}
-<Statement
+{/* Slide 4 : StatementHero - "Spray and pray". Source : Statement sans image (slide 5).
+    Body = fusion subtitle + children du Statement source. */}
+<StatementHero
+  eyebrow="Spray and pray"
   title="Spray and pray, le luxe qu'on ne peut plus s'offrir"
-  subtitle="Envoyer le même message à toute votre base, c'est traiter le CEO d'une start-up tech comme la directrice administrative d'une association. Aucun des deux ne se reconnaît, les deux se désinscrivent."
->
-  Coût du message générique : taux d'ouverture qui s'effondre, désinscriptions qui montent, base qui se brûle, réputation domaine qui flanche. Segmenter, c'est l'inverse : moins d'envois, meilleur ROI, base qui s'engage durablement. La segmentation est devenue une condition pour rester pertinent, pas un luxe d'équipe mature.
-</Statement>
+  italicPart="Spray and pray"
+  body="Envoyer le même message à toute votre base, c'est traiter le CEO d'une start-up tech comme la directrice administrative d'une association. Aucun des deux ne se reconnaît, les deux se désinscrivent. Coût du message générique : taux d'ouverture qui s'effondre, désinscriptions qui montent, base qui se brûle, réputation domaine qui flanche. Segmenter, c'est l'inverse : moins d'envois, meilleur ROI, base qui s'engage durablement."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 6 : Section 02 - Les axes de segmentation. Cinq angles
-    classiques qui couvrent l'essentiel. */}
-<Section
-  number="02"
-  eyebrow="Les critères"
+{/* Slide 5 : SubSectionHero - Section 02 Les axes de segmentation */}
+<SubSectionHero
+  kicker="Les critères"
+  index="02"
   title="Les axes de segmentation"
-  highlight="axes"
-  subtitle="Cinq angles classiques qui couvrent 95% des cas. À combiner intelligemment, pas à appliquer en silos."
+  italicPart="axes"
+  subtitle="Cinq angles classiques couvrent 95 % des cas. À combiner intelligemment, pas en silos."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 7 : Cinq axes classiques de segmentation. NumberedCards
-    verticale, une description riche par carte avec exemple concret. */}
-<NumberedCards
+{/* Slide 6 : NumberedSplit - Cinq axes classiques. Source : NumberedCards 1 col ×5.
+    Image : cover-archer.jpg réutilisée (seule image locale disponible).
+    5 items séquencés. Le composant NumberedSplit supporte N items. */}
+<NumberedSplit
   title="Cinq axes de segmentation classiques"
-  subtitle="Le plus puissant, c'est de croiser deux ou trois axes. Pas tous à la fois : la finesse vient de la combinaison choisie, pas de la complexité accumulée."
-  highlight="cinq axes"
-  cols={1}
+  italicPart="cinq axes"
+  subtitle="Le plus puissant : croiser deux ou trois axes. La finesse vient de la combinaison choisie."
+  image="/decks/segmentation-activation/cover-archer.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Démographique",
-      description: "Âge, genre, localisation, langue, secteur d'activité, taille d'entreprise. Critères statiques, faciles à capter ou à enrichir (cf. sujet 2 Qualité). Souvent le premier niveau de segmentation, mais rarement suffisant seul.",
-    },
-    {
-      number: "02",
-      title: "Comportemental",
-      description: "Pages visitées, emails ouverts, ressources téléchargées, événements en personne. Capté automatiquement via tracking et CRM. C'est le critère le plus prédictif d'intention d'achat, et le plus actionnable à court terme.",
-    },
-    {
-      number: "03",
-      title: "Valeur (RFM)",
-      description: "Récence du dernier achat, Fréquence sur l'année, Montant moyen. Cadre classique du e-commerce, mais applicable à toute activité avec transactions. Identifie les clients de tête, ceux qui dorment, ceux qui partent.",
-    },
-    {
-      number: "04",
-      title: "Cycle de vie",
-      description: "Prospect, lead chaud, client actif, client dormant, ambassadeur, perdu. Chaque étape appelle un message différent. Souvent matérialisé par un champ Statut sur la fiche Contact, calculé ou manuel.",
-    },
-    {
-      number: "05",
-      title: "Prédictif (IA)",
-      description: "Score de propension d'achat, risque de churn, valeur vie estimée. Calculé par un modèle ML entraîné sur l'historique. Disponible nativement dans HubSpot, Salesforce, Zoho. Détaillé deux cartes plus loin.",
-    },
+    { text: "Démographique : âge, genre, localisation, langue, secteur d'activité, taille d'entreprise. Critères statiques, faciles à capter ou enrichir. Souvent le premier niveau, rarement suffisant seul." },
+    { text: "Comportemental : pages visitées, emails ouverts, ressources téléchargées, événements. Capté automatiquement via tracking et CRM. Le critère le plus prédictif d'intention d'achat." },
+    { text: "Valeur (RFM) : récence du dernier achat, fréquence sur l'année, montant moyen. Applicable à toute activité avec transactions. Identifie clients de tête, dormants et partants." },
+    { text: "Cycle de vie : prospect, lead chaud, client actif, dormant, ambassadeur, perdu. Chaque étape appelle un message différent. Souvent matérialisé par un champ Statut sur la fiche Contact." },
+    { text: "Prédictif (IA) : score de propension d'achat, risque de churn, valeur vie estimée. Calculé par un modèle ML entraîné sur l'historique. Natif dans HubSpot, Salesforce, Zoho." },
   ]}
 />
 
-{/* Slide 8 : Persona vs Segment. Confusion classique dans les equipes,
-    clarification operationnelle. TwoColumnTable pour la mise en regard. */}
-<TwoColumnTable
+{/* Slide 7 : InfoCardsGrid - Persona vs Segment. Source : TwoColumnTable 2 lignes.
+    Mapping en 2 cards (icon + label + value). Icons : ph:user-circle / ph:funnel.
+    Les définitions sont condensées depuis les valeurs du TwoColumnTable source. */}
+<InfoCardsGrid
   title="Persona et segment, deux concepts à ne pas confondre"
-  subtitle="Le vocabulaire flotte souvent dans les équipes. Clarifier coupe court à des heures de discussions inutiles."
-  highlight="deux concepts"
-  headers={["Concept", "Définition opérationnelle"]}
-  rows={[
-    { label: "Persona", value: "Un archétype d'humain construit à partir d'entretiens et d'observation. Exemple : Marc, 35 ans, CMO d'une start-up SaaS de 30 personnes, lit Lenny's Newsletter, déteste les démos commerciales. Un persona ne se filtre PAS dans le CRM : c'est un modèle mental qui informe le ton et le contenu." },
-    { label: "Segment", value: "Un sous-ensemble de votre base actuelle, défini par des critères filtrables. Exemple : tous les contacts avec score supérieur à 70 ET dernière visite il y a moins de 30 jours ET taille société entre 20 et 100. Un segment SE FILTRE et S'ACTIVE. C'est opérationnel." },
+  italicPart="deux concepts"
+  subtitle="Le vocabulaire flotte souvent dans les équipes. Clarifier coupe court à des heures de discussions."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:user-circle', label: 'Persona', value: "Un archétype humain construit à partir d'entretiens. Exemple : Marc, 35 ans, CMO SaaS. Un persona ne se filtre PAS dans le CRM : c'est un modèle mental qui informe le ton et le contenu." },
+    { icon: 'ph:funnel', label: 'Segment', value: "Un sous-ensemble de votre base défini par des critères filtrables. Exemple : score supérieur à 70 ET visite récente ET taille société 20-100. Un segment SE FILTRE et S'ACTIVE. C'est opérationnel." },
   ]}
 />
 
-{/* Slide 9 : Trois leviers d'IA pour accelerer la segmentation. NumberedCards
-    1x3. */}
-<NumberedCards
+{/* Slide 8 : NumberedSplit - Trois leviers d'IA. Source : NumberedCards 1 col ×3.
+    PLACEHOLDER IMAGE : Unsplash réseau neuronal / IA conceptuel (à remplacer). */}
+<NumberedSplit
   title="Trois leviers d'IA qui accélèrent la segmentation"
+  italicPart="trois leviers"
   subtitle="L'IA ne remplace pas le jugement, elle traite la masse. Vous gardez la stratégie, l'algorithme gère le volume."
-  highlight="trois leviers"
-  cols={1}
+  image="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Clustering automatique",
-      description: "L'IA détecte des regroupements naturels dans votre base sans que vous donniez les critères. Utile pour révéler des segments invisibles à l'oeil nu (ex : un cluster de PME tech qui achète après 3 webinaires précis). Disponible dans HubSpot Lists Auto, Salesforce Einstein, ou via des outils ML autonomes.",
-    },
-    {
-      number: "02",
-      title: "Lookalike (jumeaux statistiques)",
-      description: "À partir de vos meilleurs clients, l'IA identifie dans votre base ou ailleurs des contacts qui leur ressemblent. Utilisé pour le ciblage publicitaire (Meta, LinkedIn) ou pour la prospection sortante. Multiplie l'efficacité du sourcing sans demander d'effort additionnel.",
-    },
-    {
-      number: "03",
-      title: "Predictive scoring",
-      description: "Chaque contact reçoit un score : propension d'achat, risque de churn, lifetime value estimée. Le score se met à jour automatiquement à chaque interaction. Pilote les priorités de l'équipe commerciale et les campagnes marketing.",
-    },
+    { text: "Clustering automatique : l'IA détecte des regroupements naturels sans que vous donniez les critères. Révèle des segments invisibles à l'oeil nu. Natif dans HubSpot Lists Auto, Salesforce Einstein." },
+    { text: "Lookalike (jumeaux statistiques) : à partir de vos meilleurs clients, l'IA identifie des contacts qui leur ressemblent. Utilisé pour le ciblage publicitaire (Meta, LinkedIn) ou la prospection sortante." },
+    { text: "Predictive scoring : chaque contact reçoit un score de propension d'achat, risque de churn, lifetime value. Le score se met à jour à chaque interaction et pilote les priorités commerciales." },
   ]}
 />
 
-{/* Slide 10 : Section 03 - L'activation. Le geste qui suit le segment. */}
-<Section
-  number="03"
-  eyebrow="Du segment au geste"
+{/* Slide 9 : SubSectionHero - Section 03 L'activation */}
+<SubSectionHero
+  kicker="Du segment au geste"
+  index="03"
   title="L'activation"
-  highlight="activation"
-  subtitle="Segmenter sans activer, c'est faire de la statistique. Activer sans segmenter, c'est faire du spam. Les deux ensemble, c'est faire du CRM."
+  italicPart="activation"
+  subtitle="Segmenter sans activer, c'est faire de la statistique. Activer sans segmenter, c'est du spam."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 11 : Statement pivot. Le segment est un outil, l'activation est
-    le geste, la valeur arrive avec le geste. */}
-<Statement
+{/* Slide 10 : StatementHero - "Segmenter sans activer c'est perdre son temps".
+    Source : Statement sans image (slide 11). Body = fusion subtitle + children. */}
+<StatementHero
+  eyebrow="Discipline clé"
   title="Segmenter sans activer, c'est perdre son temps"
-  subtitle="Le segment est un outil. L'activation est le geste. La valeur arrive avec le geste, pas avec l'outil."
->
-  Combien de bases CRM contiennent des segments parfaitement définis, jamais utilisés ? Combien de tableaux Excel "à activer plus tard" qui dorment dans Drive ? La discipline qui distingue les équipes performantes : pour chaque segment créé, une action déclenchée derrière. Pas de segment orphelin.
-</Statement>
+  italicPart="perdre son temps"
+  body="Le segment est un outil. L'activation est le geste. La valeur arrive avec le geste, pas avec l'outil. Combien de bases CRM contiennent des segments parfaitement définis, jamais utilisés ? La discipline qui distingue les équipes performantes : pour chaque segment créé, une action déclenchée derrière. Pas de segment orphelin."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 12 : Quatre modes d'activation. Cadre operationnel pour
-    associer un segment a un geste. NumberedCards 1x4. */}
-<NumberedCards
+{/* Slide 11 : NumberedSplit - Quatre modes d'activation. Source : NumberedCards 1 col ×4.
+    PLACEHOLDER IMAGE : Unsplash email / marketing activation conceptuel (à remplacer). */}
+<NumberedSplit
   title="Quatre modes d'activation à connecter à vos segments"
-  subtitle="Chaque segment appelle un mode dominant. Le bon réflexe : commencer par associer un mode à un segment, et faire vivre la paire dans le temps."
-  highlight="quatre modes"
-  cols={1}
+  italicPart="quatre modes"
+  subtitle="Chaque segment appelle un mode dominant. Associer un mode à un segment, et faire vivre la paire."
+  image="https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Séquence email automatisée",
-      description: "Suite de messages programmés sur plusieurs jours ou semaines, déclenchée par l'entrée dans un segment. Mode classique pour les leads en nurturing. Exemple : 5 emails sur 15 jours pour les MQL technos qui ont téléchargé le lead magnet.",
-    },
-    {
-      number: "02",
-      title: "Email transactionnel déclenché",
-      description: "Un message unique envoyé sur un événement précis : abandon de panier, anniversaire, score franchi, page tarifs visitée. Forte pertinence, taux d'ouverture record. Mode chirurgical, à réserver aux moments à fort potentiel.",
-    },
-    {
-      number: "03",
-      title: "Audience publicitaire (retargeting)",
-      description: "Le segment est exporté comme audience custom dans Meta Ads, LinkedIn Ads, Google Ads. Permet de toucher les contacts hors email, avec un message coordonné. Audiences à rafraîchir périodiquement pour rester pertinent.",
-    },
-    {
-      number: "04",
-      title: "Handover commercial",
-      description: "Les contacts d'un segment chaud (score haut, comportement d'achat) sont transmis directement à l'équipe commerciale, avec contexte et historique fourni. Le mode où le ROI est le plus mesurable, et le plus rapidement.",
-    },
+    { text: "Séquence email automatisée : suite de messages programmés sur plusieurs jours, déclenchée par l'entrée dans un segment. Mode classique pour les leads en nurturing." },
+    { text: "Email transactionnel déclenché : un message unique envoyé sur un événement précis (abandon de panier, score franchi, page tarifs). Forte pertinence, taux d'ouverture record." },
+    { text: "Audience publicitaire (retargeting) : le segment est exporté comme audience custom dans Meta Ads, LinkedIn Ads, Google Ads. Permet de toucher les contacts hors email." },
+    { text: "Handover commercial : les contacts d'un segment chaud sont transmis à l'équipe commerciale avec contexte et historique fourni. Le mode où le ROI est le plus mesurable." },
   ]}
 />
 
-{/* Slide 13 : Section 04 - Mettre en pratique. Demo et workshop sur le
-    fil rouge Cedric. */}
-<Section
-  number="04"
-  eyebrow="Démonstration et workshop"
+{/* Slide 12 : SubSectionHero - Section 04 Mettre en pratique */}
+<SubSectionHero
+  kicker="Démonstration et workshop"
+  index="04"
   title="Mettre en pratique"
-  highlight="pratique"
-  subtitle="Reprenons la base de Cédric (nettoyée et enrichie au sujet 2). Trois segments concrets, trois activations alignées. Puis à vous de jouer."
+  italicPart="pratique"
+  subtitle="Reprenons la base de Cédric : trois segments concrets, trois activations alignées. À vous de jouer."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 14 : Démo live. Reprend la base Cédric (nettoyée et enrichie
-    au sujet 2 Qualité) et crée 3 segments + 3 activations dans Zoho ou
-    HubSpot. 15 min, focus sur les choix de critères et la cohérence
-    segment vers activation. */}
-<Demo
+{/* Slide 13 : DemoHero - Trois segments Cédric, trois activations.
+    Source : Demo sans screenshot ni image (slide 14). Règle : DemoHero REQUIRES image + rows.
+    PLACEHOLDER IMAGE : Unsplash tableau de bord CRM (à remplacer par capture Zoho réelle).
+    Rows rédigés à partir du contexte du slide source (base Cédric, Zoho CRM, 15 min). */}
+<DemoHero
   title="Trois segments Cédric, trois activations"
-  subtitle="Live dans Zoho : création de trois segments distincts depuis la base nettoyée et enrichie au sujet 2 Qualité. Pour chacun, une activation cohérente déclenchée. Quinze minutes, focus sur les choix de critères et la cohérence segment vers activation."
-  highlight="Cédric"
-/>
-
-{/* Slide 15 : Workshop transition. Multi-groupes, reprise de la boîte
-    travaillée plus tôt dans la journée (formulaire au sujet 1, pipeline
-    au sujet 2, ERD au sujet 3) pour la cohérence pédagogique. */}
-<Workshop
-  title="Vos segments, vos activations"
-  subtitle="En groupes de trois à quatre, définissez 3 segments pertinents pour la boîte d'un membre, puis associez à chaque segment un mode d'activation et un premier message."
-  highlight="vos segments"
-/>
-
-{/* Slide 16 : WorkshopBrief detaille. Le format multi-groupes, les
-    etapes chronometrees, l'output (tableau segments x activations). */}
-<WorkshopBrief
-  title="Guidelines du workshop"
-  subtitle="Vingt minutes en groupe, dix minutes de restitution collective."
-  highlight="workshop"
-  subject="Segmenter et activer la base d'une boîte participante"
+  italicPart="Cédric"
+  subtitle="Live dans Zoho : création de trois segments depuis la base nettoyée au sujet 2 Qualité. Pour chacun, une activation cohérente déclenchée."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
+  caption="Zoho CRM : création de segments et activation (à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   rows={[
-    { label: "Format", content: "Groupes de 3 à 4 personnes. Reprenez la boîte travaillée plus tôt dans la journée (formulaire, pipeline, ERD) pour la cohérence du fil rouge, ou changez si un autre cas est plus stimulant." },
-    { label: "Temps", content: "20 minutes en groupe, 10 minutes de restitution en plénière." },
-    { label: "Étapes", content: [
-      "5 min : choisir 3 segments pertinents en croisant 2 axes minimum",
-      "5 min : définir les critères de filtre opérationnels pour chaque segment",
-      "10 min : associer un mode d'activation à chaque segment, avec un premier message ou action décrit en une phrase",
-    ] },
-    { label: "Output", content: "Un tableau ou diagramme : 3 segments × critères × mode d'activation × premier message. Sur paperboard ou A3." },
-    { label: "Bonus IA", content: "Soumettez votre tableau à Claude ou ChatGPT et demandez : quels segments j'oublie ? quelle activation serait plus pertinente pour le segment 3 ?" },
-    { label: "Restitution", content: "1 à 2 minutes par groupe en plénière, focus sur l'association segment vers activation la plus inattendue." },
+    { label: "Outil", value: "Zoho CRM : vues filtrées, listes de contacts, règles de workflow pour l'activation." },
+    { label: "Base", value: "Base Cédric nettoyée et enrichie au sujet 2 Qualité : coordonnées, secteur, score de chaleur." },
+    { label: "Étapes", value: "Définir les critères de chaque segment, créer la vue filtrée, associer un mode d'activation." },
+    { label: "À retenir", value: "Pour chaque segment créé, une action déclenchée derrière. Pas de segment orphelin." },
   ]}
 />
 
-{/* Slide 17 : Closing Q&R. Sert egalement a la restitution des groupes. */}
-<Closing variant="qa" />
+{/* Slide 14 : WorkshopHero - fusion Workshop (slide 15) + WorkshopBrief (slide 16).
+    Rows : les 6 champs du WorkshopBrief aplatis (arrays -> une seule string via " / ").
+    defaultMinutes=30 (20 min groupe + 10 min restitution). presets=[15, 20, 30]. */}
+<WorkshopHero
+  title="Vos segments, vos activations"
+  italicPart="activations"
+  subtitle="En groupes de trois à quatre, définissez 3 segments pertinents et associez à chacun un mode d'activation."
+  defaultMinutes={30}
+  presets={[15, 20, 30]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Format", value: "Groupes de 3 à 4. Reprenez la boîte travaillée dans la journée (formulaire, pipeline, ERD) ou changez si un autre cas est plus stimulant." },
+    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", value: "5 min : choisir 3 segments en croisant 2 axes minimum / 5 min : définir les critères de filtre opérationnels / 10 min : associer un mode d'activation à chaque segment." },
+    { label: "Output", value: "Un tableau : 3 segments x critères x mode d'activation x premier message. Sur paperboard ou A3." },
+    { label: "Bonus IA", value: "Soumettez votre tableau à Claude ou ChatGPT : quels segments j'oublie ? quelle activation serait plus pertinente pour le segment 3 ?" },
+    { label: "Restitution", value: "1 à 2 minutes par groupe en plénière, focus sur l'association segment vers activation la plus inattendue." },
+  ]}
+/>
+
+{/* Slide 15 : ClosingHero - Q&R. Source : Closing variant="qa".
+    Image : cover-archer.jpg (seule image locale disponible). */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="Merci pour votre attention."
+  url="lausanne.marketing"
+  image="/decks/segmentation-activation/cover-archer.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

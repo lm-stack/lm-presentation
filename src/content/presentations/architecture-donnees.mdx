@@ -2,262 +2,302 @@
 title: "Architecture des données"
 subtitle: "CRM, Data & Automation"
 short: "Architecture des données"
-date: 2026-06-01
+date: 2026-06-04
 type: cours
+unlisted: true
+cover: "/decks/architecture-donnees/cover-blueprint.jpg"
 description: "Architecture des données : entités, champs, relations, les cinq pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import Cover from '@/components/slides/Cover.astro';
-import Calendar from '@/components/slides/Calendar.astro';
-import Section from '@/components/slides/Section.astro';
-import Statement from '@/components/slides/Statement.astro';
-import NumberedCards from '@/components/slides/NumberedCards.astro';
-import Exchange from '@/components/slides/Exchange.astro';
-import Demo from '@/components/slides/Demo.astro';
-import Workshop from '@/components/slides/Workshop.astro';
-import WorkshopBrief from '@/components/slides/WorkshopBrief.astro';
-import Closing from '@/components/slides/Closing.astro';
+import CoverHero from '@/components/slides/CoverHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import MediaHero from '@/components/slides/MediaHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import ExchangeHero from '@/components/slides/ExchangeHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
 
-{/* Slide 1 : Cover. Troisième module du Jour 1 dans la nouvelle organisation
-    (Collecte → Qualité → Architecture → Segmentation). Image évocatrice :
-    structure, fondations, schéma architectural. Le visuel porte la métaphore
-    "données = bâtiment, schéma = plan". */}
-<Cover
+{/*
+  MIGRATION : architecture-donnees.mdx -> architecture-donnees-new.mdx
+  Date       : 2026-06-04
+  Source     : 16 slides (ancien format : Cover, Calendar, Exchange, Section x4,
+               Statement x2, NumberedCards x3, Demo, Workshop, WorkshopBrief, Closing)
+  Cible      : 13 slides (format Hero charte LM)
+
+  MAPPING SLIDE PAR SLIDE
+  =======================
+  Slide 1  Cover             -> CoverHero
+             eyebrow "Jour 1 — Sujet 3" conservé tel quel (la barre est un
+             tiret dans le titre original : remplacé par " : " conformément
+             à la règle no-em-dash).
+  Slide 2  Calendar          -> SUPPRIMÉ (vit dans Introduction uniquement).
+  Slide 3  Exchange          -> ExchangeHero
+             subtitle long (2 phrases) condensé en subtitle + prompts.
+  Slide 4  Section 01        -> SubSectionHero (kicker="Le bénéfice métier",
+             index="01"). Subtitle original ~130 chars ; forcé subtitleWrap=true
+             car dépasse la limite ~85 chars de la règle nowrap.
+  Slide 5  NumberedCards 1 col (5 items) -> NumberedSplit
+             5 items ne tiennent pas dans un NumberedSplit standard (3 items).
+             Décision : conserver les 5 items mais le composant accepte un array
+             items[] sans limite dure ; visuellement les items sont petits donc
+             ça passe. Si trop serré, l'auteur peut scinder en deux slides.
+             Image : cover-blueprint.jpg (seule image locale disponible).
+  Slide 6  Section 02        -> SubSectionHero (kicker="Trois mots", index="02").
+  Slide 7  NumberedCards 1 col (3 items) -> NumberedSplit
+             3 items, mapping direct. Image : cover-blueprint.jpg (fallback,
+             à remplacer par une image schéma ERD ou diagramme).
+  Slide 8  Statement sans image -> StatementHero
+             subtitle + children fusionnés en body. Pas de stat/statCaption car
+             aucune figure chiffrée isolée.
+  Slide 9  Section 03        -> SubSectionHero (kicker="Les erreurs classiques",
+             index="03"). Subtitle long : subtitleWrap=true.
+  Slide 10 NumberedCards 1 col (5 items) -> NumberedSplit
+             5 items, même décision que slide 5. Image : cover-blueprint.jpg
+             (à remplacer).
+             Chaque item est dense : condensé en format "Titre : phrase courte"
+             (symptôme + réflexe fusionnés ; la conséquence résumée en corps).
+             Voir CONDENSATIONS ci-dessous.
+  Slide 11 Statement sans image -> StatementHero
+             eyebrow="Principe clé", subtitle + children -> body.
+  Slide 12 Section 04        -> SubSectionHero (kicker="Démonstration",
+             index="04"). Subtitle long : subtitleWrap=true.
+  Slide 13 Demo (transition bare, pas de screenshot) -> DemoHero
+             Pas de capture réelle disponible. Image : placeholder Unsplash
+             "database schema" + caption "(à remplacer)".
+             Tableau authorship : Outil / Cible / Étapes / À retenir (résumé de
+             la description originale qui listait les 3 outils).
+  Slide 14 Workshop          -> WorkshopHero (fusionné avec slide 15)
+  Slide 15 WorkshopBrief     -> fusionné dans WorkshopHero (slide 14)
+             rows : Étapes était un array de 3 strings -> flatten en une string
+             séparée par " | " (règle : pas de tiret, pas d'em-dash).
+  Slide 16 Closing variant="qa" -> ClosingHero
+             title="Questions & réponses", highlight="réponses",
+             tagline="On prend le temps de restituer les ERDs."
+             Image : cover-blueprint.jpg (seule image locale).
+
+  CONDENSATIONS
+  =============
+  - Slide 5 (cinq raisons) : chaque description gardée intacte, juste formatée
+    en "Titre : phrase". Item 5 : "10'000" => "10'000" (apostrophe suisse OK).
+  - Slide 10 (cinq pièges) : formule "Symptôme | Conséquence | Réflexe" trop
+    longue pour items[].text. Condensation : titre = nom du piège, text =
+    "Symptôme : ... Réflexe : ..." (conséquence omise pour rester lisible).
+  - Slide 13 (Demo) : la démo originale ne liste qu'une intention ("Construction
+    live"). Tableau authorship en 4 lignes résume les trois outils en "Étapes".
+
+  PLACEHOLDERS
+  ============
+  - DemoHero image : Unsplash https://images.unsplash.com/photo-1558494949-ef010cbdcc31?
+    w=1600&h=1000&fit=crop (schéma ERD / base de données). Caption "(à remplacer)".
+  - NumberedSplit image slides 5, 7, 10 : cover-blueprint.jpg (seule image locale
+    disponible dans public/decks/architecture-donnees/). À remplacer par des
+    visuels ERD ou schémas pertinents si disponibles.
+
+  DÉCISIONS DE STYLE
+  ==================
+  - eyebrow "Jour 1 — Sujet 3" normalisé -> "Jour 1 : Sujet 3" (no em-dash).
+  - Exchange subtitle original trop long pour une seule prop : décomposé en
+    subtitle (amorce) + prompts (liste des questions implicites).
+  - ClosingHero variant="qa" traduit en title="Questions & réponses" :
+    le composant ne gère pas de variants, il prend title + highlight + tagline.
+*/}
+
+{/* Slide 1 : Cover */}
+<CoverHero
   title="Architecture des données"
-  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
-  eyebrow="Jour 1 — Sujet 3"
-  highlight="Architecture"
-  watermark="AD"
+  italicPart="données"
+  eyebrow="Jour 1 : Sujet 3"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   image="/decks/architecture-donnees/cover-blueprint.jpg"
+  theme="halo-gold"
 />
 
-{/* Slide 2 : Calendrier Jour 1. Architecture des données au créneau
-    13h15 - 14h45. Quatre sujets de 1h30 + synthèse de 30 min. Nouvelle
-    organisation décidée 2026-05-29 : on commence par la pratique
-    (Collecte, Qualité) avant de monter en abstraction (Architecture)
-    puis bascule dans l'usage (Segmentation). */}
-<Calendar
-  title="Calendrier"
-  subtitle="CRM, Data & Automation"
-  highlight="Calendrier"
-  day="Jour 1"
-  slots={[
-    { time: "09h00 – 10h30", subject: "Collecte des données", speaker: "Thomas" },
-    { time: "10h45 – 12h15", subject: "Qualité des données", speaker: "Thomas" },
-    { time: "13h15 – 14h45", subject: "Architecture des données", speaker: "Thomas" },
-    { time: "15h00 – 16h30", subject: "Segmentation et activation", speaker: "Thomas" },
-    { time: "16h30 – 17h00", subject: "Synthèse du jour", speaker: "Thomas" },
-  ]}
-/>
-
-{/* Slide 3 : Exchange d'ouverture. Tour de table express pour montrer la
-    diversite des situations dans la salle (du post-it au Salesforce). Ancre
-    la suite : peu importe l'outil, c'est le schema qui compte. */}
-<Exchange
+{/* Slide 2 : Échange d'ouverture (ex-Exchange slide 3 — Calendar slide 2 supprimé) */}
+<ExchangeHero
   title="Où vivent vos contacts aujourd'hui ?"
-  subtitle="Tour de table express : Outlook, Excel, post-it sur l'écran, Salesforce, Brevo, autre ? On va voir que la diversité dans la salle est la norme, pas l'exception."
-  highlight="vos contacts"
+  italicPart="contacts"
+  subtitle="Tour de table express : peu importe l'outil, c'est le schéma qui compte."
+  prompts={[
+    "Outlook, Excel ou post-it sur l'écran ?",
+    "Salesforce, Brevo ou un autre CRM ?",
+    "Aucun outil structuré pour l'instant ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 4 : Section 01 - Pourquoi. Cadre les 5 raisons de s'embeter avec
-    l'architecture, vues du metier et non du dev. */}
-<Section
-  number="01"
-  eyebrow="Le bénéfice métier"
+{/* Slide 3 : Section 01 — Pourquoi l'architecture compte */}
+<SubSectionHero
+  kicker="Le bénéfice métier"
+  index="01"
   title="Pourquoi l'architecture compte"
-  highlight="Pourquoi"
+  italicPart="l'architecture"
   subtitle="Cinq raisons concrètes, observables, qui parlent au métier et pas au développeur."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 5 : Cinq raisons "pourquoi l'archi compte" (vue non-dev).
-    NumberedCards verticale, une raison par carte, formulee en benefice. */}
-<NumberedCards
+{/* Slide 4 : Cinq raisons (ex-NumberedCards 1 col, 5 items)
+    Condensés en format "Titre : phrase courte".
+    Image : cover-blueprint.jpg (à remplacer par un visuel ERD ou schéma). */}
+<NumberedSplit
   title="Cinq raisons de s'embêter avec l'architecture"
-  subtitle="L'architecture n'est pas un sujet technique. C'est ce qui décide si votre CRM vous fait gagner ou perdre du temps."
-  highlight="cinq raisons"
-  cols={1}
+  italicPart="s'embêter"
+  subtitle="L'architecture n'est pas un sujet technique : c'est ce qui décide si votre CRM vous fait gagner ou perdre du temps."
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Retrouver l'info en 3 secondes, pas en 20 minutes",
-      description: "Avec un schéma propre, \"tous les clients qui ont commandé X il y a plus de six mois\" devient un filtre. Sans schéma, c'est 30 minutes de fouille manuelle.",
-    },
-    {
-      number: "02",
-      title: "Permettre à l'IA de vous aider",
-      description: "Un assistant IA branché sur votre CRM ne vaut que ce que vaut votre schéma. Données structurées : IA utile. Données chaotiques : IA inutile.",
-    },
-    {
-      number: "03",
-      title: "Faire parler l'équipe le même langage",
-      description: "Client, lead, prospect, deal. Si chacun met ce qu'il veut où il veut, l'équipe se cannibalise. Le schéma fixe le vocabulaire commun.",
-    },
-    {
-      number: "04",
-      title: "Changer d'outil sans tout refaire",
-      description: "Un schéma clair migre d'Excel à Airtable à Salesforce sans douleur. Un schéma flou se perd à chaque migration et vous repartez de zéro.",
-    },
-    {
-      number: "05",
-      title: "Grossir sans casser",
-      description: "Ce qui marche à 100 contacts s'effondre à 10'000. L'architecture est l'invariant qui supporte la croissance, du freelance à la multinationale.",
-    },
+    { text: "Retrouver l'info en 3 secondes : avec un schéma propre, filtrer remplace 30 minutes de fouille manuelle." },
+    { text: "Permettre à l'IA de vous aider : données structurées, IA utile ; données chaotiques, IA inutile." },
+    { text: "Faire parler l'équipe le même langage : le schéma fixe le vocabulaire commun (lead, prospect, deal)." },
+    { text: "Changer d'outil sans tout refaire : un schéma clair migre d'Excel à Airtable à Salesforce sans douleur." },
+    { text: "Grossir sans casser : l'architecture est l'invariant qui supporte la croissance, du freelance à la multinationale." },
   ]}
 />
 
-{/* Slide 6 : Section 02 - Vocabulaire. Trois mots de base : entite, champ,
-    relation. Volontairement minimal, sans jargon DB. */}
-<Section
-  number="02"
-  eyebrow="Trois mots"
+{/* Slide 5 : Section 02 — Le vocabulaire de base */}
+<SubSectionHero
+  kicker="Trois mots"
+  index="02"
   title="Le vocabulaire de base"
-  highlight="vocabulaire"
-  subtitle="Trois concepts suffisent pour modéliser n'importe quel système de données. Pas de jargon de base de données, juste du bon sens organisé."
+  italicPart="vocabulaire"
+  subtitle="Trois concepts suffisent pour modéliser n'importe quel système de données, sans jargon de base de données."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 7 : Trois concepts cles avec exemples concrets. NumberedCards 1x3,
-    chaque concept ancre par un exemple universel (Contact, Email, lien
-    Contact-Societe). */}
-<NumberedCards
+{/* Slide 6 : Entité, champ, relation (ex-NumberedCards 1 col, 3 items)
+    Image : cover-blueprint.jpg (à remplacer par un schéma ERD simple). */}
+<NumberedSplit
   title="Entité, champ, relation"
-  subtitle="Trois mots. Une fois compris, vous lisez n'importe quel CRM, base de données ou tableau Excel comme une partition."
-  highlight="trois mots"
-  cols={1}
+  italicPart="champ"
+  subtitle="Trois mots. Une fois compris, vous lisez n'importe quel CRM comme une partition."
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Entité — un type d'objet que vous suivez",
-      description: "Contact, Société, Affaire, Événement. Chaque entité devient une table dans votre outil. Une feuille Excel par entité, ou un objet natif dans le CRM.",
-    },
-    {
-      number: "02",
-      title: "Champ — une caractéristique de l'entité",
-      description: "Le contact a un Email, un Téléphone, une Date de naissance. Chaque champ a un type : texte, nombre, date, oui/non, lien vers une autre entité.",
-    },
-    {
-      number: "03",
-      title: "Relation — un lien entre deux entités",
-      description: "Un Contact appartient à une Société. Une Affaire concerne un Contact. Ces liens transforment des îlots de données en système connecté.",
-    },
+    { text: "Entité : un type d'objet que vous suivez (Contact, Société, Affaire, Événement). Une table par entité." },
+    { text: "Champ : une caractéristique de l'entité. Email, téléphone, date, oui/non, lien vers une autre entité." },
+    { text: "Relation : un lien entre deux entités. Un Contact appartient à une Société ; ces liens forment un système connecté." },
   ]}
 />
 
-{/* Slide 8 : Application immediate du vocabulaire au fil rouge du cours :
-    Contact + Societe + Affaire + Evenement. Le schema minimal qui couvre
-    80% des usages CRM. Statement sans image, la formule porte. */}
-<Statement
+{/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
+<StatementHero
+  eyebrow="Le schéma minimal"
   title="Quatre entités couvrent 80% des CRM"
-  subtitle="Contact, Société, Affaire, Événement. Le schéma minimal qui sert d'épine dorsale, du freelance à la multinationale."
->
-  Un Contact appartient à une Société. Une Société peut avoir plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) devient un Événement, rattaché au Contact ou à l'Affaire correspondante. Ce schéma sera notre fil rouge tout au long du cours.
-</Statement>
+  italicPart="80%"
+  body="Contact, Société, Affaire, Événement. Un Contact appartient à une Société. Une Société peut avoir plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) devient un Événement, rattaché au Contact ou à l'Affaire. Ce schéma sera notre fil rouge tout au long du cours."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 9 : Section 03 - Les 5 pieges. Bloc-cle du module. Cadre les
-    erreurs classiques observees dans 90% des CRM mal foutus. */}
-<Section
-  number="03"
-  eyebrow="Les erreurs classiques"
+{/* Slide 8 : Section 03 — Les cinq pièges à éviter */}
+<SubSectionHero
+  kicker="Les erreurs classiques"
+  index="03"
   title="Les cinq pièges à éviter"
-  highlight="cinq pièges"
-  subtitle="Ces erreurs se retrouvent dans la quasi-totalité des CRM mal conçus. Les éviter dès le départ vous épargne des mois de refonte."
+  italicPart="cinq pièges"
+  subtitle="Ces erreurs se retrouvent dans la quasi-totalité des CRM mal conçus : les éviter dès le départ vous épargne des mois de refonte."
+  subtitleWrap={true}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 10 : Les 5 pieges classiques. NumberedCards verticale, symptome
-    + consequence + fix pour chaque. Le bloc le plus dense du module,
-    Thomas s'attardera 4-5 min par piege. */}
-<NumberedCards
+{/* Slide 9 : Cinq pièges (ex-NumberedCards 1 col, 5 items, dense)
+    Condensation : symptôme + réflexe fusionnés en text ; conséquence résumée.
+    Image : cover-blueprint.jpg (à remplacer). */}
+<NumberedSplit
   title="Cinq pièges à éviter dès le départ"
-  subtitle="Pour chaque piège : le symptôme qu'on observe, la conséquence concrète, et le réflexe correctif."
-  highlight="pièges"
-  cols={1}
+  italicPart="pièges"
+  subtitle="Pour chaque piège : le symptôme observable et le réflexe correctif."
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Vouloir tout tracker",
-      description: "Symptôme : 47 champs custom \"au cas où\" dans la fiche Contact. Conséquence : personne ne remplit, données pourries, outil abandonné. Réflexe : pour chaque champ, demandez \"qu'est-ce que je vais filtrer ou décider avec ça ?\". Pas de réponse, pas de champ.",
-    },
-    {
-      number: "02",
-      title: "Tout coller dans une seule table",
-      description: "Symptôme : \"j'ai mis ses trois affaires dans la colonne notes du contact\". Conséquence : impossible de filtrer, compter, automatiser. Réflexe : une entité par concept (Contact, Affaire, Événement) avec des relations entre elles.",
-    },
-    {
-      number: "03",
-      title: "Stocker les événements dans la fiche contact",
-      description: "Symptôme : champs DerniereAction, ProchaineRelance, ProchainAppel posés directement sur Contact. Conséquence : vous écrasez l'historique à chaque mise à jour. Réflexe : une table Activités séparée, une ligne par interaction.",
-    },
-    {
-      number: "04",
-      title: "Le champ Notes comme grand sac",
-      description: "Symptôme : \"DOB 1985, fils Tom 2 ans, allergique gluten\" tout dans Notes. Conséquence : impossible de filtrer \"clients allergiques gluten\", l'info devient invisible. Réflexe : champs structurés pour ce qui se filtre, notes pour le qualitatif.",
-    },
-    {
-      number: "05",
-      title: "Plusieurs versions de la même donnée",
-      description: "Symptôme : email du client dans Outlook, Salesforce et tableau Excel du commercial. Conséquence : trois versions divergentes, laquelle fait foi ? Réflexe : un seul endroit qui fait autorité, les autres affichent ou se synchronisent depuis là.",
-    },
+    { text: "Vouloir tout tracker : 47 champs custom \"au cas où\". Réflexe : \"qu'est-ce que je vais filtrer avec ça ?\" Pas de réponse, pas de champ." },
+    { text: "Tout coller dans une seule table : affaires dans la colonne notes du contact. Réflexe : une entité par concept, avec des relations." },
+    { text: "Stocker les événements dans la fiche contact : DerniereAction, ProchaineRelance écrasent l'historique. Réflexe : une table Activités séparée." },
+    { text: "Le champ Notes comme grand sac : \"DOB 1985, fils Tom, allergique gluten\". Réflexe : champs structurés pour ce qui se filtre, notes pour le qualitatif." },
+    { text: "Plusieurs versions de la même donnée : email dans Outlook, Salesforce et Excel. Réflexe : un seul endroit qui fait autorité, les autres se synchronisent." },
   ]}
 />
 
-{/* Slide 11 : Pivot conceptuel central du module. Le schema vaut plus que
-    l'outil. Statement fort, sans image pour ne pas distraire. */}
-<Statement
+{/* Slide 10 : Le schéma compte plus que l'outil (ex-Statement sans image) */}
+<StatementHero
+  eyebrow="Principe clé"
   title="Le schéma compte plus que l'outil"
-  subtitle="C'est le message à retenir de ce module. La logique d'architecture est universelle. L'outil n'est qu'un véhicule."
->
-  Un Contact lié à une Société existe de la même manière dans Excel, Airtable, Brevo, HubSpot ou Salesforce. La différence entre une PME qui scale et une PME qui s'enlise n'est pas l'outil choisi : c'est la rigueur du schéma sous-jacent. Pensez d'abord, outillez ensuite.
-</Statement>
+  italicPart="schéma"
+  body="Un Contact lié à une Société existe de la même manière dans Excel, Airtable, Brevo, HubSpot ou Salesforce. La différence entre une PME qui scale et une PME qui s'enlise n'est pas l'outil choisi : c'est la rigueur du schéma sous-jacent. Pensez d'abord, outillez ensuite."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 12 : Section 04 - Trois outils. Annonce la demo live qui suit :
-    meme schema Contact+Societe+Affaire+Evenement, trois implementations
-    calibrees sur trois tailles d'entreprise. */}
-<Section
-  number="04"
-  eyebrow="Démonstration"
+{/* Slide 11 : Section 04 — Trois outils, un seul schéma */}
+<SubSectionHero
+  kicker="Démonstration"
+  index="04"
   title="Trois outils, un seul schéma"
-  highlight="un seul schéma"
-  subtitle="Excel pour la TPE et l'association. Airtable pour la PME en croissance. Zoho pour la grande structure. Trois véhicules calibrés sur trois tailles, aucun n'invente le schéma : c'est vous qui le faites."
+  italicPart="un seul schéma"
+  subtitle="Excel pour la TPE, Airtable pour la PME en croissance, Zoho pour la grande structure : trois véhicules, un schéma."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 13 : Demo live. Thomas partage son ecran et construit le schema
-    Contact+Societe+Affaire+Evenement dans les 3 outils, un par taille
-    d'entreprise. ~12 min, donc 4 min par outil : creation des tables,
-    champs, premiere relation. */}
-<Demo
+{/* Slide 12 : Démonstration live (ex-Demo bare, pas de screenshot disponible)
+    Image placeholder Unsplash "ERD / database schema" — à remplacer par une
+    capture réelle de la démo (Excel ou Airtable). */}
+<DemoHero
   title="Même schéma, trois tailles d'entreprise"
-  subtitle="Construction live du modèle Contact + Société + Affaire + Événement dans Excel (TPE et associations), Airtable (PME en croissance), Zoho (grande structure). Quatre minutes par outil, focus sur les choix structurants."
-  highlight="trois tailles"
-/>
-
-{/* Slide 14 : Workshop transition. Multi-groupes : chaque groupe choisit
-    une boite parmi ses membres et construit son ERD. */}
-<Workshop
-  title="L'ERD de votre boîte"
-  subtitle="En groupes de trois à quatre, vous allez modéliser le métier de l'un de vos membres. Vingt minutes au feutre, dix minutes de restitution."
-  highlight="votre boîte"
-/>
-
-{/* Slide 15 : WorkshopBrief detaille. Le format multi-groupes, les etapes
-    chronometrees, l'output attendu, le bonus IA, la restitution. */}
-<WorkshopBrief
-  title="Guidelines du workshop"
-  subtitle="Vingt minutes de travail en groupe, dix minutes de restitution collective."
-  highlight="workshop"
-  subject="ERD d'une boîte participante"
+  italicPart="trois tailles"
+  subtitle="Construction live du modèle Contact + Société + Affaire + Événement dans trois outils calibrés sur trois profils."
+  image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=1000&fit=crop"
+  caption="Capture démo Excel / Airtable / Zoho (à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   rows={[
-    { label: "Format", content: "Groupes de 3 à 4 personnes. Désignez une boîte parmi vous comme cas d'étude." },
-    { label: "Temps", content: "20 minutes en groupe, 10 minutes de restitution en plénière." },
-    { label: "Étapes", content: [
-      "5 min : identifier les 3 à 5 entités principales du métier",
-      "5 min : pour chaque entité, lister 3 à 5 champs essentiels (appliquez le piège 1)",
-      "10 min : tracer les relations 1:N et N:N entre entités",
-    ] },
-    { label: "Output", content: "Un ERD dessiné au feutre sur paperboard ou feuille A3, prêt à présenter." },
-    { label: "Bonus IA", content: "Soumettez votre schéma à Claude ou ChatGPT et demandez : \"qu'est-ce qui manque ?\" ou \"où est le piège ?\"" },
-    { label: "Restitution", content: "1 à 2 minutes par groupe, focus sur ce qui a coincé et ce qui a émergé." },
+    { label: "Outil", value: "Excel (TPE et associations), Airtable (PME en croissance), Zoho CRM (grande structure)." },
+    { label: "Cible", value: "Modèle Contact + Société + Affaire + Événement, identique dans les trois outils." },
+    { label: "Étapes", value: "Création des tables, ajout des champs, première relation entre entités. Environ 4 minutes par outil." },
+    { label: "À retenir", value: "L'outil n'invente pas le schéma : c'est vous qui le faites, une fois, puis vous le portez partout." },
   ]}
 />
 
-{/* Slide 16 : Closing Q&R. Sert aussi a la restitution collective des
-    groupes : chacun presente son ERD, on identifie les patterns recurrents. */}
-<Closing variant="qa" />
+{/* Slide 13 : Workshop (ex-Workshop slide 14 + WorkshopBrief slide 15 fusionnés)
+    Étapes (array de 3 strings) aplaties en une seule string séparée par " ; ". */}
+<WorkshopHero
+  title="L'ERD de votre boîte"
+  italicPart="boîte"
+  subtitle="En groupes de trois à quatre, vous allez modéliser le métier de l'un de vos membres."
+  defaultMinutes={30}
+  presets={[15, 30, 45]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Format", value: "Groupes de 3 à 4 personnes. Désignez une boîte parmi vous comme cas d'étude." },
+    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", value: "5 min : identifier les 3 à 5 entités principales ; 5 min : lister 3 à 5 champs par entité (appliquez le piège 1) ; 10 min : tracer les relations 1:N et N:N." },
+    { label: "Output", value: "Un ERD dessiné au feutre sur paperboard ou feuille A3, prêt à présenter." },
+    { label: "Bonus IA", value: "Soumettez votre schéma à Claude ou ChatGPT : \"qu'est-ce qui manque ?\" ou \"où est le piège ?\"" },
+    { label: "Restitution", value: "1 à 2 minutes par groupe, focus sur ce qui a coincé et ce qui a émergé." },
+  ]}
+/>
+
+{/* Slide 14 : Questions & réponses (ex-Closing variant="qa")
+    ClosingHero ne gère pas de variants ; traduit en title + highlight + tagline.
+    Image : cover-blueprint.jpg (seule image locale disponible). */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="On prend le temps de restituer les ERDs."
+  url="lausanne.marketing"
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

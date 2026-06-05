@@ -2,335 +2,510 @@
 title: "Protection des données"
 subtitle: "CRM, Data & Automation"
 short: "Protection des données"
-date: 2026-06-02
+date: 2026-06-04
 type: cours
+unlisted: true
+cover: "/decks/protection-donnees/cover-classified.jpg"
 description: "Protection des données : LPD, LPrD, RGPD, données personnelles et sensibles, sous-traitance Art 9 LPD. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import Cover from '@/components/slides/Cover.astro';
-import Calendar from '@/components/slides/Calendar.astro';
-import Section from '@/components/slides/Section.astro';
-import ImageGrid from '@/components/slides/ImageGrid.astro';
-import Statement from '@/components/slides/Statement.astro';
-import NumberedCards from '@/components/slides/NumberedCards.astro';
-import TwoColumnTable from '@/components/slides/TwoColumnTable.astro';
-import Exchange from '@/components/slides/Exchange.astro';
-import Closing from '@/components/slides/Closing.astro';
+import CoverHero from '@/components/slides/CoverHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import MediaHero from '@/components/slides/MediaHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
+import ExchangeHero from '@/components/slides/ExchangeHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
 
-{/* Slide 1 : Cover. Module court (30 min) sur le cadre legal qui s'applique au
-    marketing automation et a la sous-traitance des outils. */}
-<Cover
+{/*
+  MAPPING protection-donnees.mdx -> protection-donnees-new.mdx
+  Migration : format SlideTitle/anciens composants -> famille Hero ExecEd-style.
+  Date : 2026-06-04. Auteur : Claude Code (claude-sonnet-4-6).
+
+  DÉCISIONS DE MIGRATION :
+  ─────────────────────────────────────────────────────────────────────────────
+  Slide 1 (Cover) -> CoverHero
+    eyebrow="Module 32" conservé depuis l'original.
+    footer="HEC Lausanne : Juin 2026" (convention du parcours).
+    image="/decks/protection-donnees/cover-classified.jpg" (image locale).
+    theme="halo-gold" (standard parcours CRM, Data & Automation).
+
+  Slide 2 (Calendar) -> SUPPRIMÉ
+    Le calendrier de journée ne vit que dans le deck Introduction (règle établie
+    dans workflows-new.mdx et collecte-donnees-new.mdx).
+
+  Slide 3 (Statement WITH image: definition-matrix.jpeg) -> MediaHero
+    subtitle = ancien subtitle (une phrase).
+    body = ancien children paragraph (texte libre).
+    fit="cover" (illustration/photo, pas un diagramme à lire entièrement).
+
+  Slide 4 (Section 01 "Cadre légal") -> SubSectionHero
+    kicker = ancien eyebrow "Cadre légal".
+    index="01". italicPart="législatifs".
+    subtitle calibré ~85 chars, tient sur une ligne.
+
+  Slide 5 (ImageGrid 3 législations) -> ImageGridHero
+    3 images locales conservées. alt ajouté (manquait dans l'original).
+    italicPart="législatifs" (substring exact du titre).
+
+  Slide 6 (TwoColumnTable "Erreurs/Conséquences") -> CompareColumnsHero
+    JUGEMENT : les deux colonnes sont une vraie opposition erreurs vs conséquences,
+    même logique que "Autorisé vs Risqué" dans collecte-donnees-new.mdx.
+    CompareColumnsHero est le meilleur fit.
+    left = "Erreurs courantes" (3 items), right = "Conséquences" (3 items).
+    note = synthèse tirée du subtitle original.
+
+  Slide 7 (Exchange "Qoqa RGPD?") -> ExchangeHero
+    prompts ajouté pour guider l'échange (pratique établie dans workflows-new).
+
+  Slide 8 (Statement WITH image: qoqa-otter.jpeg) -> MediaHero
+    subtitle = phrase introductive (extraterritorialité RGPD).
+    body = ancien children (cas complet Qoqa).
+    fit="cover" (photo animale illustrative).
+
+  Slide 9 (Section 02 "Données personnelles et sensibles") -> SubSectionHero
+    kicker="Catégories". index="02". italicPart="sensibles".
+    subtitle calibré ~85 chars.
+
+  Slide 10 (ImageGrid 3 types de données personnelles) -> ImageGridHero
+    3 images locales conservées.
+    italicPart="identifie" (substring exact).
+
+  Slide 11 (NumberedCards cols=1 7 items : données sensibles) -> InfoCardsGrid
+    JUGEMENT : 7 items dans un NumberedSplit serait trop dense visuellement
+    (slide 1920×1080, 7 cards numérotées ne rentrent pas). InfoCardsGrid en
+    2 colonnes auto-fit est mieux adapté pour une liste de 7 catégories de
+    protection renforcée (concept grid, pas une séquence narrative).
+    Icônes choisies parmi les icônes Phosphor sûres listées dans le brief :
+      01 Opinions/activités : ph:scales (balance des droits)
+      02 Santé : ph:warning-circle (protection renforcée)
+      03 Sphère intime/ethnique : ph:user-circle (identité profonde)
+      04 Aide sociale : ph:handshake (aide)
+      05 Poursuites/sanctions : ph:gavel (justice)
+      06 Données génétiques : ph:fingerprint (biologie unique)
+      07 Données biométriques : ph:eye-slash (identification masquée)
+    Labels condensés (InfoCard label = CAPS court, value = description).
+
+  Slide 12 (Exchange "Salaire, CV, géolocalisation") -> ExchangeHero
+    prompts ajoutés pour les 3 cas à discuter.
+
+  Slide 13 (Section 03 "Traitement et sous-traitance") -> SubSectionHero
+    kicker="Article 9 LPD". index="03". italicPart="sous-traitance".
+    subtitle calibré ~85 chars.
+
+  Slide 14 (Statement WITHOUT image) -> StatementHero
+    eyebrow="Le traitement" (tag court).
+    title = original.
+    body = merge du subtitle + du children original en un paragraphe.
+    Pas de stat/statCaption : pas de chiffre saillant.
+
+  Slide 15 (NumberedCards cols=1 3 items : acteurs) -> NumberedSplit
+    3 items -> NumberedSplit (séquence narrative).
+    image="/decks/protection-donnees/definition-matrix.jpeg" (réutilisation
+    d'une image locale du deck, décor flou à droite).
+    items[].text = "Titre : description" condensé depuis title+description.
+
+  Slide 16 (Exchange "Qui est sous-traitant ?") -> ExchangeHero
+    prompts ajoutés (Hubspot, agence, Infomaniak).
+
+  Slide 17 (ImageGrid 3 sous-traitants) -> ImageGridHero
+    3 images locales conservées.
+    italicPart="concrets" (substring exact).
+
+  Slide 18 (NumberedCards cols=1 3 items : règles Art9) -> NumberedSplit
+    image="/decks/protection-donnees/soustraitant-infomaniak.jpeg"
+    (hébergeur = thème sécurité, décor flou).
+    items[].text condensé depuis title+description.
+
+  Slide 19 (NumberedCards cols=1 3 items : redflags) -> NumberedSplit
+    image="/decks/protection-donnees/juriste-livres.jpeg" (réutilisation
+    anticipée, cohérente avec la slide "conseil final" qui suit).
+    items[].text condensé.
+
+  Slide 20 (Statement WITH image: juriste-livres.jpeg) -> MediaHero
+    body = merge subtitle + children.
+    fit="cover" (photo illustrative).
+
+  Slide 21 (Closing variant="qa") -> ClosingHero
+    title="Questions & réponses". highlight="réponses".
+    image="/decks/protection-donnees/cover-classified.jpg" (réemploi cover).
+    tagline="Module 32 : Protection des données."
+
+  IMAGES DISPONIBLES (public/decks/protection-donnees/) :
+    cover-classified.jpg, definition-matrix.jpeg, legi-suisse.jpeg,
+    legi-vaud.jpeg, legi-europe.jpeg, qoqa-otter.jpeg, donnees-nom.jpeg,
+    donnees-ip.png, donnees-avs.jpg, quizz-salaire.jpg, quizz-cv.jpg,
+    quizz-geoloc.jpg, soustraitant-hubspot.png, soustraitant-agence.jpeg,
+    soustraitant-infomaniak.jpeg, juriste-livres.jpeg.
+    Aucun placeholder Unsplash nécessaire : toutes les images locales suffisent.
+
+  RÉSULTAT : 21 slides anciens -> 20 slides nouveaux (1 Calendar supprimé).
+*/}
+
+{/* Slide 1 : Cover */}
+<CoverHero
   title="Protection des données"
-  subtitle="CRM, Data & Automation, HEC Lausanne Executive Education"
+  italicPart="données"
   eyebrow="Module 32"
-  highlight="données"
-  watermark="PD"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   image="/decks/protection-donnees/cover-classified.jpg"
+  theme="halo-gold"
 />
 
-{/* Slide 2 : Calendrier Jour 3. Protection des donnees creneau 11h45-12h15. */}
-<Calendar
-  title="Calendrier"
-  subtitle="Formation en Growth Marketing"
-  highlight="Calendrier"
-  day="Jour 3"
-  slots={[
-    { time: "09h00 – 10h30", subject: "Lead nurturing", speaker: "Thomas" },
-    { time: "10h45 – 11h45", subject: "Funnel marketing", speaker: "Thomas" },
-    { time: "11h45 – 12h15", subject: "Protection des données et marketing", speaker: "Thomas" },
-    { time: "13h15 – 14h45", subject: "Workflows avancés", speaker: "Thomas" },
-    { time: "15h00 – 16h15", subject: "IA & Automatisation", speaker: "Thomas" },
-    { time: "16h15 – 17h00", subject: "Conclusion", speaker: "Thomas" },
-  ]}
-/>
-
-{/* Slide 3 : Definition. La loi protege les individus, pas les donnees. */}
-<Statement
+{/* Slide 2 : Renversement de perspective (définition) — Statement avec image */}
+<MediaHero
   title="Protéger les individus, pas les données"
+  italicPart="individus"
   subtitle="La protection des données vise les droits fondamentaux et la personnalité des personnes dont les données sont traitées."
+  body="Renversement de perspective : on ne protège pas un fichier, on protège la personne derrière le fichier. Tous les choix techniques en découlent."
   image="/decks/protection-donnees/definition-matrix.jpeg"
->
-  Renversement de perspective : on ne protège pas un fichier, on protège la personne derrière le fichier. Tous les choix techniques en découlent.
-</Statement>
-
-{/* Slide 4 : Section 01 - Cadre legal. */}
-<Section
-  number="01"
-  eyebrow="Cadre légal"
-  title="Trois cadres législatifs"
-  highlight="législatifs"
-  subtitle="LPD fédérale, LPrD cantonale, RGPD européen. Trois textes qui se superposent selon l'organisation et le ciblage."
+  alt="Effet Matrix, métaphore du flot de données numériques"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 5 : Les trois legislations. ImageGrid 3 cards (Suisse, Vaud, Europe). */}
-<ImageGrid
+{/* Slide 3 : Section 01 — Cadre légal */}
+<SubSectionHero
+  kicker="Cadre légal"
+  index="01"
+  title="Trois cadres législatifs"
+  italicPart="législatifs"
+  subtitle="LPD fédérale, LPrD cantonale, RGPD européen : trois textes qui se superposent selon l'organisation."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 4 : Les trois législations (LPD, LPrD, RGPD) */}
+<ImageGridHero
   title="LPD, LPrD, RGPD"
+  italicPart="RGPD"
   subtitle="Trois cadres législatifs essentiels encadrent l'utilisation des données personnelles dans le contexte suisse."
-  highlight="cadres"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   images={[
     {
       src: "/decks/protection-donnees/legi-suisse.jpeg",
+      alt: "Drapeau suisse, symbole de la loi fédérale sur la protection des données",
       title: "Loi fédérale (LPD)",
       text: "S'applique aux entreprises situées en Suisse. Refonte majeure entrée en vigueur le 1er septembre 2023, alignée sur les standards européens.",
     },
     {
       src: "/decks/protection-donnees/legi-vaud.jpeg",
+      alt: "Blason vaudois, symbole de la loi cantonale sur la protection des données",
       title: "Loi vaudoise (LPrD)",
       text: "S'applique aux entités publiques et parapubliques vaudoises. Chaque canton dispose de sa propre loi cantonale équivalente.",
     },
     {
       src: "/decks/protection-donnees/legi-europe.jpeg",
+      alt: "Drapeau européen, symbole du règlement général sur la protection des données",
       title: "Loi européenne (RGPD)",
       text: "S'applique aux organisations européennes et extraterritorialement si vous ciblez ou trackez des résidents de l'UE.",
     },
   ]}
 />
 
-{/* Slide 6 : Erreurs courantes RGPD vs consequences. TwoColumnTable. */}
-<TwoColumnTable
+{/* Slide 5 : Erreurs RGPD vs conséquences — CompareColumnsHero
+    Jugement : vraie opposition structurelle erreurs/conséquences, pas une liste
+    homogène. CompareColumnsHero est le meilleur fit (cf. collecte-donnees-new). */}
+<CompareColumnsHero
   title="Mentionner le RGPD sans y être soumis vous expose"
+  italicPart="expose"
   subtitle="Erreur fréquente : aligner sa politique de confidentialité sur le RGPD par défaut, alors qu'on n'est soumis qu'à la LPD."
-  highlight="expose"
-  headers={["Erreurs courantes", "Conséquences"]}
-  rows={[
-    { label: "Ajouter la mention « Conforme au RGPD » même si pas obligatoire", value: "Droits exercés sous l'angle RGPD auto-déclaré au lieu de la LPD." },
-    { label: "Référencer le RGPD dans la politique de confidentialité par mimétisme", value: "Complexité accrue et incohérence avec certaines obligations suisses." },
-    { label: "Utiliser les standards de consentement RGPD", value: "Risque accru de sanction en cas de non-respect du RGPD auto-déclaré." },
-  ]}
+  left={{
+    heading: "Erreurs courantes",
+    items: [
+      "Ajouter la mention « Conforme au RGPD » sans y être obligé",
+      "Référencer le RGPD dans la politique de confidentialité par mimétisme",
+      "Utiliser les standards de consentement RGPD sans base légale",
+    ],
+  }}
+  right={{
+    heading: "Conséquences",
+    items: [
+      "Droits exercés sous l'angle RGPD auto-déclaré au lieu de la LPD",
+      "Complexité accrue et incohérence avec certaines obligations suisses",
+      "Risque accru de sanction en cas de non-respect du RGPD auto-déclaré",
+    ],
+  }}
+  note="Se référencer au RGPD crée des obligations qu'on ne maîtrise pas toujours : choisir son cadre légal de référence est une décision stratégique."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 7 : Exchange Qoqa - RGPD ou pas ? */}
-<Exchange
+{/* Slide 6 : Échange — Qoqa soumise au RGPD ? */}
+<ExchangeHero
   title="Qoqa est-elle soumise au RGPD ?"
+  italicPart="RGPD"
   subtitle="E-commerce suisse, site .ch, paiements en CHF. Qu'en dites-vous ?"
-  highlight="RGPD"
+  prompts={[
+    "L'accès depuis la France suffit-il à déclencher le RGPD ?",
+    "La livraison en Suisse uniquement change-t-elle quelque chose ?",
+    "Qu'est-ce que l'extraterritorialité signifie concrètement ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 8 : Reponse Qoqa. Statement avec image loutre rose. */}
-<Statement
+{/* Slide 7 : Réponse Qoqa — pas soumis tant que... */}
+<MediaHero
   title="Pas soumis tant que..."
+  italicPart="tant que"
   subtitle="L'extraterritorialité du RGPD se déclenche sur l'intention commerciale et le ciblage, pas sur l'accès technique au site."
+  body="Le site ne cible pas intentionnellement l'UE : pas de pub en France, pas de paiements en EUR, pas de livraison Europe, pas de site en .fr. Et il n'y a pas de tracking publicitaire spécifique sur un public UE. Un frontalier qui commande ne suffit pas à déclencher l'obligation."
   image="/decks/protection-donnees/qoqa-otter.jpeg"
->
-  Le site ne cible pas intentionnellement l'UE (pas de pub en France, pas de paiements en EUR, pas de livraison Europe, pas de site en .fr) et il n'y a pas de tracking publicitaire spécifique sur un public UE. Un frontalier qui commande ne suffit pas à déclencher l'obligation.
-</Statement>
-
-{/* Slide 9 : Section 02 - Donnees personnelles et sensibles. */}
-<Section
-  number="02"
-  eyebrow="Catégories"
-  title="Données personnelles et sensibles"
-  highlight="sensibles"
-  subtitle="Toute information qui identifie une personne, plus une protection renforcée pour certaines catégories."
+  alt="Loutre rose illustrant la réponse Qoqa : pas soumis au RGPD"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 10 : Donnees personnelles. ImageGrid 3 exemples. */}
-<ImageGrid
+{/* Slide 8 : Section 02 — Données personnelles et sensibles */}
+<SubSectionHero
+  kicker="Catégories"
+  index="02"
+  title="Données personnelles et sensibles"
+  italicPart="sensibles"
+  subtitle="Toute information qui identifie une personne, et une protection renforcée pour certaines catégories."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 9 : Une donnée personnelle identifie une personne */}
+<ImageGridHero
   title="Une donnée personnelle identifie une personne"
+  italicPart="identifie"
   subtitle="Directement (nom, prénom) ou indirectement (combinaison d'informations qui permettent l'identification)."
-  highlight="personnelle"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   images={[
     {
       src: "/decks/protection-donnees/donnees-nom.jpeg",
+      alt: "Nom et prénom inscrits sur un document",
       title: "Nom et prénom",
       text: "L'identification directe la plus évidente. Suffit à elle seule à constituer une donnée personnelle.",
     },
     {
       src: "/decks/protection-donnees/donnees-ip.png",
+      alt: "Adresse IP affichée sur un écran",
       title: "Adresse IP",
       text: "Identification indirecte mais reconnue par la loi. Combinée à d'autres données, elle remonte à un individu.",
     },
     {
       src: "/decks/protection-donnees/donnees-avs.jpg",
+      alt: "Carte AVS suisse avec numéro d'assuré",
       title: "Numéro AVS",
       text: "Identifiant unique en Suisse. Sensible par nature, ne devrait jamais transiter sans précautions renforcées.",
     },
   ]}
 />
 
-{/* Slide 11 : Donnees sensibles. NumberedCards 7 categories, cols=1. */}
-<NumberedCards
+{/* Slide 10 : Sept catégories de données sensibles -> InfoCardsGrid
+    Jugement : 7 items. NumberedSplit à 7 lignes dépasse la safe area sur 1080px.
+    InfoCardsGrid en 2 colonnes est le seul composant existant qui accepte 7 cards
+    sans débordement (grille auto-fit). C'est un concept grid (catégories légales),
+    pas une séquence narrative, donc InfoCardsGrid est sémantiquement juste.
+    Icônes : voir bloc de commentaires en tête de fichier. */}
+<InfoCardsGrid
   title="Sept catégories de données sensibles"
+  italicPart="sensibles"
   subtitle="Protection renforcée car leur utilisation peut porter atteinte aux droits fondamentaux ou à la vie privée."
-  highlight="sensibles"
-  cols={1}
-  items={[
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
     {
-      number: "01",
-      title: "Opinions et activités religieuses, philosophiques, politiques ou syndicales",
-      description: "Convictions personnelles et affiliations susceptibles d'exposer à la discrimination.",
+      icon: "ph:scales",
+      label: "Opinions et activités",
+      value: "Convictions religieuses, philosophiques, politiques ou syndicales susceptibles d'exposer à la discrimination.",
     },
     {
-      number: "02",
-      title: "Données relatives à la santé",
-      description: "Diagnostics, traitements, antécédents, certificats médicaux. Protégées par le secret médical.",
+      icon: "ph:warning-circle",
+      label: "Santé",
+      value: "Diagnostics, traitements, antécédents, certificats médicaux. Protégées par le secret médical.",
     },
     {
-      number: "03",
-      title: "Sphère intime ou appartenance raciale et ethnique",
-      description: "Orientation sexuelle, vie de couple, origine. Données qui touchent à l'identité profonde.",
+      icon: "ph:user-circle",
+      label: "Sphère intime et origine",
+      value: "Orientation sexuelle, vie de couple, appartenance raciale ou ethnique. Données qui touchent à l'identité profonde.",
     },
     {
-      number: "04",
-      title: "Mesures d'aide sociale",
-      description: "Aides financières, accompagnement social, statut de bénéficiaire d'aides publiques.",
+      icon: "ph:handshake",
+      label: "Aide sociale",
+      value: "Aides financières, accompagnement social, statut de bénéficiaire d'aides publiques.",
     },
     {
-      number: "05",
-      title: "Poursuites et sanctions pénales ou administratives",
-      description: "Casier judiciaire, sanctions administratives, contentieux en cours.",
+      icon: "ph:gavel",
+      label: "Poursuites et sanctions",
+      value: "Casier judiciaire, sanctions administratives, contentieux en cours.",
     },
     {
-      number: "06",
-      title: "Données génétiques",
-      description: "Tout résultat d'analyse génétique, héréditaire ou non. Protégées par la LAGH en Suisse.",
+      icon: "ph:fingerprint",
+      label: "Données génétiques",
+      value: "Tout résultat d'analyse génétique, héréditaire ou non. Protégées par la LAGH en Suisse.",
     },
     {
-      number: "07",
-      title: "Données biométriques identifiantes",
-      description: "Empreintes digitales, reconnaissance faciale, iris : tout ce qui identifie de manière unique une personne physique.",
+      icon: "ph:eye-slash",
+      label: "Données biométriques",
+      value: "Empreintes digitales, reconnaissance faciale, iris : tout ce qui identifie de manière unique une personne physique.",
     },
   ]}
 />
 
-{/* Slide 12 : Exchange - Salaire, CV, geolocalisation : personnelle ou sensible ? */}
-<Exchange
+{/* Slide 11 : Échange — Salaire, CV, géolocalisation */}
+<ExchangeHero
   title="Salaire, CV, géolocalisation"
+  italicPart="géolocalisation"
   subtitle="Pour ces trois données, posez-vous la question : simplement personnelle ou également sensible ?"
-  highlight="sensible"
+  prompts={[
+    "Un salaire est-il une donnée sensible au sens de la LPD ?",
+    "Un CV contient-il potentiellement des données sensibles ?",
+    "La géolocalisation en temps réel change-t-elle de catégorie selon le contexte ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 13 : Section 03 - Traitement et sous-traitance. */}
-<Section
-  number="03"
-  eyebrow="Article 9 LPD"
+{/* Slide 12 : Section 03 — Traitement et sous-traitance */}
+<SubSectionHero
+  kicker="Article 9 LPD"
+  index="03"
   title="Traitement et sous-traitance"
-  highlight="sous-traitance"
-  subtitle="La loi contrôle ce qu'on fait des données, pas les données. Et la chaîne de sous-traitance engage votre responsabilité."
+  italicPart="sous-traitance"
+  subtitle="La loi contrôle ce qu'on fait des données, pas les données elles-mêmes. La chaîne engage votre responsabilité."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 14 : Le traitement, c'est tout. */}
-<Statement
+{/* Slide 13 : Ce que contrôle la loi, c'est le traitement — StatementHero
+    Statement sans image dans l'original. eyebrow = tag court "Le traitement".
+    body = merge du subtitle + children original. */}
+<StatementHero
+  eyebrow="Le traitement"
   title="Ce que contrôle la loi, c'est le traitement"
-  subtitle="Collecte, enregistrement, stockage, utilisation, transmission, suppression : tout cycle de vie de la donnée."
->
-  Ce n'est pas la donnée en elle-même qui pose problème. C'est la chaîne d'opérations qu'on réalise sur elle, du moment où elle entre dans le système jusqu'à sa destruction.
-</Statement>
+  italicPart="traitement"
+  body="Collecte, enregistrement, stockage, utilisation, transmission, suppression : tout cycle de vie de la donnée. Ce n'est pas la donnée en elle-même qui pose problème. C'est la chaîne d'opérations qu'on réalise sur elle, du moment où elle entre dans le système jusqu'à sa destruction."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 15 : Les trois acteurs du traitement. NumberedCards 3 cards. */}
-<NumberedCards
+{/* Slide 14 : Trois acteurs du traitement — NumberedSplit (séquence narrative à 3)
+    image décor : definition-matrix.jpeg (flou, thème données numériques).
+    items = "Titre : description" fusionnés. */}
+<NumberedSplit
   title="Trois acteurs du traitement"
-  subtitle="Tout traitement de données personnelles implique au minimum deux acteurs, souvent trois avec un sous-traitant."
-  highlight="acteurs"
-  cols={1}
+  italicPart="acteurs"
+  subtitle="Tout traitement implique au minimum deux acteurs, souvent trois avec un sous-traitant."
+  image="/decks/protection-donnees/definition-matrix.jpeg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Personne concernée",
-      description: "Votre client, votre lead, votre utilisateur. Celle dont les données sont traitées et qui détient des droits sur ces données.",
-    },
-    {
-      number: "02",
-      title: "Responsable du traitement",
-      description: "Vous, en tant qu'organisation qui décide des finalités et des moyens du traitement. Vous portez la responsabilité légale.",
-    },
-    {
-      number: "03",
-      title: "Sous-traitant",
-      description: "Votre fournisseur d'outil qui traite les données pour votre compte. CRM, hébergeur, partenaire technique : tous concernés.",
-    },
+    { text: "Personne concernée : votre client, lead ou utilisateur. Celle dont les données sont traitées et qui détient des droits sur ces données." },
+    { text: "Responsable du traitement : vous, en tant qu'organisation qui décide des finalités et des moyens. Vous portez la responsabilité légale." },
+    { text: "Sous-traitant : votre fournisseur d'outil qui traite les données pour votre compte. CRM, hébergeur, partenaire technique : tous concernés." },
   ]}
 />
 
-{/* Slide 16 : Exchange - Qui est sous-traitant ? */}
-<Exchange
+{/* Slide 15 : Échange — Qui est sous-traitant ? */}
+<ExchangeHero
   title="Qui est sous-traitant ?"
+  italicPart="sous-traitant"
   subtitle="Hubspot, votre agence, Infomaniak. Lesquels sont des sous-traitants au sens de la LPD ?"
-  highlight="sous-traitant"
+  prompts={[
+    "Hubspot : stocke-t-il des données pour votre compte ?",
+    "Votre agence : à quel moment devient-elle sous-traitante ?",
+    "Infomaniak : héberge-t-il bien vos données personnelles ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
-{/* Slide 17 : Trois exemples de sous-traitants. ImageGrid. */}
-<ImageGrid
+{/* Slide 16 : Trois exemples concrets de sous-traitants */}
+<ImageGridHero
   title="Trois exemples concrets"
+  italicPart="concrets"
   subtitle="Dès qu'un fournisseur traite des données personnelles pour votre compte, il est sous-traitant au sens de la LPD."
-  highlight="concrets"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   images={[
     {
       src: "/decks/protection-donnees/soustraitant-hubspot.png",
-      title: "Hubspot — votre CRM",
-      text: "Stockage et traitement des données clients. Sous-traitant typique, nécessite un DPA et l'identification du lieu d'hébergement.",
+      alt: "Logo et interface HubSpot, CRM sous-traitant de données clients",
+      title: "Hubspot, votre CRM",
+      text: "Stockage et traitement des données clients. Sous-traitant typique : nécessite un DPA et l'identification du lieu d'hébergement.",
     },
     {
       src: "/decks/protection-donnees/soustraitant-agence.jpeg",
-      title: "Agence ou développeur — votre partenaire",
+      alt: "Agence digitale travaillant sur des données clients",
+      title: "Agence ou développeur",
       text: "Dès qu'il accède à vos données pour développer ou opérer un outil, sous-traitant. Contrat obligatoire.",
     },
     {
       src: "/decks/protection-donnees/soustraitant-infomaniak.jpeg",
-      title: "Infomaniak — votre hébergeur",
+      alt: "Datacenter Infomaniak, hébergeur suisse",
+      title: "Infomaniak, votre hébergeur",
       text: "Héberge vos serveurs et donc vos données. Sous-traitant infrastructure. Avantage : hébergement en Suisse.",
     },
   ]}
 />
 
-{/* Slide 18 : Trois regles de l'Art 9 LPD. NumberedCards. */}
-<NumberedCards
+{/* Slide 17 : Trois règles de l'Article 9 LPD — NumberedSplit
+    image décor : soustraitant-infomaniak.jpeg (hébergeur, thème sécurité). */}
+<NumberedSplit
   title="Trois règles de l'Article 9 LPD"
+  italicPart="règles"
   subtitle="Le traitement peut être confié à un sous-traitant, mais sous conditions strictes."
-  highlight="règles"
-  cols={1}
+  image="/decks/protection-donnees/soustraitant-infomaniak.jpeg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Périmètre limité aux traitements autorisés",
-      description: "Le sous-traitant ne peut effectuer que les traitements que vous seriez vous-même autorisé à réaliser. Aucune obligation légale ou contractuelle ne doit l'interdire.",
-    },
-    {
-      number: "02",
-      title: "Vérification de la sécurité",
-      description: "Vous devez vérifier que le sous-traitant garantit la sécurité des données. Audit, certifications, clauses contractuelles.",
-    },
-    {
-      number: "03",
-      title: "Autorisation des sous-traitants secondaires",
-      description: "Si votre sous-traitant fait appel à un autre prestataire (cascade), il doit obtenir votre autorisation préalable.",
-    },
+    { text: "Périmètre limité : le sous-traitant ne peut effectuer que les traitements que vous seriez vous-même autorisé à réaliser. Aucune obligation légale ou contractuelle ne doit l'interdire." },
+    { text: "Vérification de la sécurité : vous devez vérifier que le sous-traitant garantit la sécurité des données. Audit, certifications, clauses contractuelles." },
+    { text: "Autorisation des sous-traitants secondaires : si votre sous-traitant fait appel à un autre prestataire, il doit obtenir votre autorisation préalable." },
   ]}
 />
 
-{/* Slide 19 : Redflags pour identifier les sous-traitants problematiques. */}
-<NumberedCards
+{/* Slide 18 : Trois redflags — NumberedSplit
+    image décor : juriste-livres.jpeg (cohérent avec la slide conseil final qui suit). */}
+<NumberedSplit
   title="Trois redflags à connaître"
+  italicPart="redflags"
   subtitle="Ce n'est pas au marketer de juger la conformité juridique, mais voici les signaux qui doivent alerter."
-  highlight="redflags"
-  cols={1}
+  image="/decks/protection-donnees/juriste-livres.jpeg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
   items={[
-    {
-      number: "01",
-      title: "Absence ou faiblesse du DPA",
-      description: "Aucun contrat de sous-traitance (Data Processing Agreement) formalisé, ou contrat qui ne couvre pas les principes essentiels : sécurité, confidentialité, limitation des finalités.",
-    },
-    {
-      number: "02",
-      title: "Hébergement hors Suisse ou pays non adéquat",
-      description: "Données stockées dans un pays sans niveau de protection adéquat selon la liste publique de la confédération. Garanties contractuelles supplémentaires nécessaires (SCC par exemple).",
-    },
-    {
-      number: "03",
-      title: "Liste opaque des sous-traitants secondaires",
-      description: "Pas de communication claire et à jour de la chaîne de sous-traitance. Impossible d'identifier les risques en cascade, effet papillon ingérable.",
-    },
+    { text: "Absence ou faiblesse du DPA : aucun contrat de sous-traitance formalisé, ou contrat qui ne couvre pas la sécurité, la confidentialité et la limitation des finalités." },
+    { text: "Hébergement hors Suisse ou pays non adéquat : données dans un pays sans protection adéquate selon la liste de la Confédération. Garanties contractuelles supplémentaires nécessaires (SCC)." },
+    { text: "Liste opaque des sous-traitants secondaires : pas de communication claire et à jour de la chaîne de sous-traitance. Impossible d'identifier les risques en cascade." },
   ]}
 />
 
-{/* Slide 20 : Conseil final. Statement avec livres juridiques. */}
-<Statement
+{/* Slide 19 : En cas de doute, appelez un juriste — MediaHero (Statement avec image)
+    body = merge du subtitle + children original. */}
+<MediaHero
   title="En cas de doute, appelez un juriste"
+  italicPart="juriste"
   subtitle="Chaque organisation obéit à des contraintes différentes : législation applicable, types de données, types d'outils, secteur d'activité."
+  body="Un outil autorisé dans une organisation ne le sera pas forcément dans une autre. Avant d'installer un nouvel outil qui traite des données clients, consultez votre juriste ou avocat spécialisé en protection des données."
   image="/decks/protection-donnees/juriste-livres.jpeg"
->
-  Un outil autorisé dans une organisation ne le sera pas forcément dans une autre. Avant d'installer un nouvel outil qui traite des données clients, consultez votre juriste ou avocat spécialisé en protection des données.
-</Statement>
+  alt="Étagère de livres juridiques, symbole du conseil spécialisé en protection des données"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
 
-{/* Slide 21 : Questions et reponses. */}
-<Closing variant="qa" />
+{/* Slide 20 : Questions et réponses */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="Module 32 : Protection des données."
+  url="lausanne.marketing"
+  image="/decks/protection-donnees/cover-classified.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

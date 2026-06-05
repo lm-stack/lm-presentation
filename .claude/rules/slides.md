@@ -106,7 +106,7 @@ Vaut pour : `ImageGridHero`, `NumberedSplit`, `SectionSplit`, `WorkshopHero`, `S
 
 Seules exceptions admises : les slides **structurelles** plein cadre qui ont leur propre identité visuelle, `CoverHero` (thème `--ch-bg`) et `ClosingHero` (image + voile). Elles ne sont pas soumises à l'uniformité.
 
-Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#FAF8F3`, créant un saut visible dans le deck `collecte-donnees-new`. Aligné sur le dégradé pearl.
+Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#FAF8F3`, créant un saut visible dans le deck `collecte-donnees`. Aligné sur le dégradé pearl.
 
 ## Intercalaire de sous-section (SubSectionHero) — sous-titre sur une seule ligne
 
