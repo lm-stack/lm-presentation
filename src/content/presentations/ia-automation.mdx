@@ -2,511 +2,241 @@
 title: "IA & Automation"
 subtitle: "CRM, Data & Automation"
 short: "IA & Automation"
-date: 2026-06-03
+date: 2026-06-04
 type: cours
 unlisted: true
-cover: "/decks/marketing-automation/cover-robot.jpg"
-description: "IA & Automation : pourquoi automatiser, les APIs, le JSON, le no-code, et la place de l'IA. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+cover: "/decks/ia-automatisation/cover-ai-chip.jpg"
+description: "IA & Automation : les quatre leviers de l'IA dans le marketing automation, génération de contenu, chatbots connectés aux données. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
 import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
 import MediaHero from '@/components/slides/MediaHero.astro';
-import BarChartHero from '@/components/slides/BarChartHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import PollHero from '@/components/slides/PollHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 import ClosingHero from '@/components/slides/ClosingHero.astro';
 
-{/* Reprise intégrale du deck marketing-automation (ancien format) en ExecEd-style.
-    Images réutilisées telles quelles depuis public/decks/marketing-automation/.
-    Mapping : Cover->CoverHero, BigImage->MediaHero, Section->SubSectionHero,
-    ImageGrid->ImageGridHero, TwoColumnTable->InfoCardsGrid, Statement->MediaHero,
-    Poll->PollHero, WordCloud->WordCloudHero, Closing->ClosingHero. */}
+{/*
+  MIGRATION : ia-automatisation.mdx → ia-automatisation-new.mdx
+  Date : 2026-06-04
+  Format source : anciens composants (Cover, Calendar, ImageGrid, Statement, Demo,
+                  Workshop, WorkshopBrief, Closing)
+  Format cible  : ExecEd-style Hero (charte Lausanne Marketing)
+
+  MAPPING SLIDE PAR SLIDE
+  ────────────────────────
+  Slide 1 (Cover)           → CoverHero
+    eyebrow = "Module 34" (conservé tel quel)
+    italicPart = "IA" (premier mot du titre, mot-clé du module)
+    footer = "HEC Lausanne : Juin 2026"
+    theme = "halo-gold" (convention parcours CRM, Data & Automation)
+    image = local /decks/ia-automatisation/cover-ai-chip.jpg
+
+  Slide 2 (Calendar)        → SUPPRIMÉ
+    Le calendrier vit uniquement dans le deck Introduction, comme dans
+    tous les autres decks migrés (collecte-donnees-new, workflows-new).
+
+  Slide 3 (Statement sans image) → StatementHero
+    eyebrow = "L'IA & l'automation" (tag court de contexte)
+    title = "L'IA révolutionne le marketing automation"
+    italicPart = "révolutionne" (le verbe fort de la déclaration)
+    body = fusion du subtitle + children de l'ancien Statement en un seul
+           paragraphe (les deux étaient complémentaires, pas redondants)
+
+  Slide 4 (ImageGrid 4 cards) → ImageGridHero
+    Quatre leviers : Contenu, Personnalisation, Analyse, Chatbots.
+    Images locales disponibles pour les quatre cards.
+    italicPart = "leviers" (mot-clé du titre)
+
+  Slide 5 (ImageGrid 2 cards) → ImageGridHero
+    Deux cas d'usage : blog et chatbot.
+    Images locales cas-blog.jpg et cas-chatbot.png disponibles.
+    italicPart = "cas d'usage" (deux mots, sous-chaîne exacte du titre)
+
+  Slide 6 (Demo sans capture) → DemoHero
+    L'ancien Demo ne contenait aucune capture d'écran ni aucune donnée
+    structurée : juste title + subtitle + highlight.
+    DemoHero REQUIERT image + rows → solution :
+      - image = placeholder Unsplash (interface n8n générique) avec
+        caption "(à remplacer par une capture du workflow n8n)"
+      - rows = tableau de récap authoritatif (Outil / Cas 1 / Cas 2 /
+        À retenir) rédigé pour ancrer le contenu de la démo live
+    HUMAN REVIEW REQUIS : remplacer l'image placeholder par une vraie
+    capture du workflow n8n une fois la démo filmée/screenshottée.
+
+  Slides 7+8 (Workshop + WorkshopBrief) → WorkshopHero (FUSION)
+    Titre du Workshop = "Applications pratiques de l'IA"
+    italicPart = "pratiques" (adjectif qualificatif central)
+    rows : depuis WorkshopBrief
+      - Temps    : "20 minutes : 10 en individuel, 10 en peer-sharing."
+        (valeur array ["10 minutes…", "10 minutes…"] aplatie en une string)
+      - Objectif : texte du row Objectif du brief
+      - Sujet    : texte du row Sujet du brief
+    defaultMinutes = 20 (WorkshopBrief indiquait "20 minutes")
+    presets = [10, 15, 20] (adapté au créneau court de ce workshop)
+
+  Slide 9 (Closing variant="qa") → ClosingHero
+    variant="qa" → "Questions & réponses" (convention définie dans la spec)
+    image = cover du deck (cover-ai-chip.jpg) : seule image locale adaptée
+    tagline = "Prochain module : Conclusion."
+    url = "lausanne.marketing"
+
+  IMAGES LOCALES DISPONIBLES (public/decks/ia-automatisation/)
+  ──────────────────────────────────────────────────────────────
+  cover-ai-chip.jpg          → Cover + ClosingHero
+  levier-contenu.jpeg        → ImageGridHero slide 4
+  levier-personnalisation.jpeg → ImageGridHero slide 4
+  levier-analyse.jpeg        → ImageGridHero slide 4
+  levier-chatbots.png        → ImageGridHero slide 4
+  cas-blog.jpg               → ImageGridHero slide 5
+  cas-chatbot.png            → ImageGridHero slide 5
+
+  PLACEHOLDERS / ACTIONS HUMAINES
+  ────────────────────────────────
+  1. DemoHero (slide 6) : image Unsplash placeholder. Remplacer par une
+     capture du workflow n8n (nodes IA : génération d'article + chatbot)
+     une fois la démo construite. Caption signalée "(à remplacer)".
+
+  CONDENSATIONS / JUGEMENTS
+  ──────────────────────────
+  - Statement slide 3 : subtitle + children fusionnés en un seul `body`.
+    Le subtitle de l'ancien composant ("L'intelligence artificielle ouvre…")
+    et les children ("Hier, l'automation…") formaient un tout cohérent ;
+    les séparer en deux champs aurait créé de la redondance. La fusion
+    garde les deux idées dans l'ordre logique (contexte → bascule hier/auj).
+  - WorkshopBrief rows : le row "Travail" avait une valeur array
+    ["10 minutes de manière individuelle", "10 minutes de peer-sharing"].
+    Aplati en une string avec point-virgule (pas d'em-dash) pour respecter
+    les conventions de contenu.
+  - DemoHero rows : authoritatif (non présent dans la source). Rédigés
+    pour cadrer la démo live et permettre au présentateur de s'y référer.
+*/}
 
 {/* Slide 1 : Cover */}
 <CoverHero
   title="IA & Automation"
-  italicPart="Automation"
-  eyebrow="Module 23"
+  italicPart="IA"
+  eyebrow="Module 34"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="/decks/marketing-automation/cover-robot.jpg"
+  image="/decks/ia-automatisation/cover-ai-chip.jpg"
   theme="halo-gold"
 />
 
-{/* Slide 2 : Chart ZHAW Technologies pertinentes */}
-<MediaHero
-  title="Technologies marketing pertinentes"
-  italicPart="pertinentes"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-techno-zhaw-04.png"
-  alt="Classement des technologies marketing par importance, ZHAW 2022"
+{/* Slide 2 (ex-Calendar) : SUPPRIMÉ — vit dans le deck Introduction uniquement */}
+
+{/* Slide 3 : L'IA révolutionne le marketing automation (ex-Statement sans image) */}
+<StatementHero
+  eyebrow="L'IA & l'automation"
+  title="L'IA révolutionne le marketing automation"
+  italicPart="révolutionne"
+  body="Hier, l'automation enchaînait des actions prédéfinies sur des données structurées. Aujourd'hui, l'IA permet de raisonner sur du contenu, d'adapter le message au contexte et de tenir la conversation. Les workflows deviennent capables de comprendre, générer et personnaliser à grande échelle."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : Chart ZHAW Objectifs */}
-<MediaHero
-  title="Objectifs marketing digitaux"
-  italicPart="Objectifs"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-objectifs-zhaw-05.png"
-  alt="Classement des objectifs marketing digitaux par importance, ZHAW 2022"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 4 : Vos objectifs (Poll) */}
-<PollHero
-  id="objectifs-marketing"
-  question="Et chez vous, quel objectif marketing digital est le plus important ?"
-  italicPart="le plus important"
-  subtitle="Une seule réponse, depuis ton téléphone"
-  options={[
-    "Augmenter les ventes",
-    "Générer de nouveaux prospects",
-    "Fidéliser les clients",
-    "Accroître la notoriété",
-    "Réduire les coûts",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 5 : Section 01 */}
-<SubSectionHero
-  kicker="Idée reçue"
-  index="01"
-  title="C'est moins compliqué qu'il n'y paraît"
-  italicPart="compliqué"
-  subtitle="Le marketing automation est souvent perçu comme un processus très technique. C'est avant tout du marketing structuré."
-  subtitleWrap
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 6 : Imagination vs Réalité */}
+{/* Slide 4 : Quatre leviers de l'IA dans l'automation (ex-ImageGrid 4 cards) */}
 <ImageGridHero
-  title="Imagination versus réalité"
-  italicPart="réalité"
-  subtitle="Le mythe du processus complexe à compétences informatiques pointues."
+  title="Quatre leviers à exploiter"
+  italicPart="leviers"
+  subtitle="L'IA combinée à l'automation se déploie sur quatre axes complémentaires."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/marketing-automation/imagination-code.jpeg", alt: "Imagination", title: "Imagination", text: "Lignes de code, terminaux noirs, dépendances et compétences informatiques pointues." },
-    { src: "/decks/marketing-automation/realite-workshop.jpeg", alt: "Réalité", title: "Réalité", text: "Des marketeurs autour d'une table, des post-it, un workflow dessiné à la main." },
+    {
+      src: "/decks/ia-automatisation/levier-contenu.jpeg",
+      alt: "Génération de contenu par l'IA",
+      title: "Contenu",
+      text: "Génération de textes, traductions, résumés, déclinaisons multicanales. L'IA produit, l'automation distribue.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-personnalisation.jpeg",
+      alt: "Personnalisation du message marketing",
+      title: "Personnalisation",
+      text: "Adaptation du message au profil, au contexte, au moment. L'IA segmente plus finement que les règles déterministes.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-analyse.jpeg",
+      alt: "Analyse et scoring prédictif",
+      title: "Analyse",
+      text: "Détection de signaux faibles, classification de tickets, scoring prédictif. L'IA voit ce que les filtres ratent.",
+    },
+    {
+      src: "/decks/ia-automatisation/levier-chatbots.png",
+      alt: "Chatbot connecté au CRM",
+      title: "Chatbots",
+      text: "Conversation contextuelle 24/7, connectée au CRM et à la documentation. L'IA tient le dialogue, l'automation déclenche les actions.",
+    },
   ]}
 />
 
-{/* Slide 7 : Définition (3 cards) */}
+{/* Slide 5 : Deux cas d'usage à explorer (ex-ImageGrid 2 cards) */}
 <ImageGridHero
-  title="Définition et applications"
-  italicPart="Définition"
-  subtitle="L'ensemble des techniques pour automatiser les tâches répétitives à faible valeur ajoutée."
+  title="Deux cas d'usage à explorer"
+  italicPart="cas d'usage"
+  subtitle="Pour ancrer ces possibilités, deux scénarios que nous allons construire ensemble dans n8n."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/marketing-automation/definition-donnees.jpg", alt: "Données", title: "Données", text: "Centraliser, qualifier, segmenter et activer la donnée client en continu." },
-    { src: "/decks/marketing-automation/definition-processus.png", alt: "Processus", title: "Processus", text: "Cartographier les étapes, automatiser les transitions, fiabiliser les opérations." },
-    { src: "/decks/marketing-automation/definition-campagnes.jpg", alt: "Campagnes", title: "Campagnes", text: "Diffuser le bon message, au bon moment, sur le bon canal, à la bonne personne." },
+    {
+      src: "/decks/ia-automatisation/cas-blog.jpg",
+      alt: "Génération automatique d'articles de blog",
+      title: "Génération automatique d'articles de blog",
+      text: "À partir d'un sujet ou d'un brief, l'IA rédige un article structuré, optimisé SEO, publié automatiquement sur le CMS.",
+    },
+    {
+      src: "/decks/ia-automatisation/cas-chatbot.png",
+      alt: "Chatbot connecté aux données client",
+      title: "Chatbot connecté aux données",
+      text: "Un assistant qui répond aux questions des prospects en s'appuyant sur le CRM, la documentation produit et l'historique client.",
+    },
   ]}
 />
 
-{/* Slide 8 : Exemple Facebook Lead Ads */}
-<MediaHero
-  title="Exemple : Facebook Lead Ads"
-  italicPart="Lead Ads"
-  subtitle="Annonce sponsorisée, formulaire intégré, capture en un clic."
-  image="/decks/marketing-automation/facebook-lead-ads.jpg"
-  alt="Trois écrans iPhone : annonce sponsorisée, formulaire de lead, confirmation"
+{/* Slide 6 : Démonstration sur n8n (ex-Demo sans capture)
+    PLACEHOLDER : image Unsplash générique n8n. Remplacer par une vraie capture
+    du workflow n8n (nodes IA : génération d'article + chatbot) après la démo. */}
+<DemoHero
+  title="Démonstration sur n8n"
+  italicPart="n8n"
+  subtitle="Construction live des deux cas d'usage avec les nodes IA natifs de n8n et un modèle Claude ou GPT."
+  image="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1600&h=1000&fit=crop"
+  caption="Workflow n8n : génération d'articles et chatbot connecté aux données (à remplacer)"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-/>
-
-{/* Slide 9 : Partage d'expérience Facebook Lead Ads */}
-<InfoCardsGrid
-  title="Partage d'expérience"
-  italicPart="expérience"
-  subtitle="Cinq questions pour confronter Facebook Lead Ads à vos pratiques."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: "ph:eye", label: "Familiarité", value: "Êtes-vous familiers avec les campagnes Facebook Lead Ads ?" },
-    { icon: "ph:gear", label: "Pratique", value: "Avez-vous déjà géré des campagnes de ce type ?" },
-    { icon: "ph:warning-circle", label: "Défis", value: "Quels sont, d'après vous, les défis de ce type de campagne en matière de marketing automation ?" },
-    { icon: "ph:prohibit", label: "Limites", value: "Quel est l'un des seuls éléments difficiles à automatiser ?" },
-    { icon: "ph:user-circle", label: "Owner", value: "Qui est responsable de l'automatisation dans vos organisations ?" },
+  rows={[
+    { label: "Outil", value: "n8n, nodes IA natifs (AI Agent, LLM Chain) connectés à Claude ou GPT-4o." },
+    { label: "Cas 1", value: "Génération d'article : trigger sur brief, rédaction LLM, publication CMS automatique." },
+    { label: "Cas 2", value: "Chatbot RAG : questions prospects, lookup CRM, réponse contextuelle en temps réel." },
+    { label: "À retenir", value: "Deux patterns distincts : génération batch (article) et conversation temps réel (chatbot)." },
   ]}
 />
 
-{/* Slide 10 : Chart ZHAW Avantages */}
-<MediaHero
-  title="Avantages principaux"
-  italicPart="Avantages"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-avantages-zhaw-11.png"
-  alt="Classement des avantages du marketing automation, ZHAW 2022"
+{/* Slides 7+8 : Workshop + WorkshopBrief FUSIONNÉS en WorkshopHero */}
+<WorkshopHero
+  title="Applications pratiques de l'IA"
+  italicPart="pratiques"
+  subtitle="À vous de réfléchir : quels cas d'usage IA seraient les plus impactants dans votre organisation ?"
+  defaultMinutes={20}
+  presets={[10, 15, 20]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-/>
-
-{/* Slide 11 : Vos avantages (Poll) */}
-<PollHero
-  id="avantages-ma"
-  question="Selon vous, quel avantage du marketing automation pèse le plus lourd ?"
-  italicPart="le plus lourd"
-  subtitle="Une seule réponse"
-  options={[
-    "Rendre les processus plus efficaces",
-    "Communiquer de manière personnalisée",
-    "Optimiser les conversions",
-    "Gagner du temps sur les tâches répétitives",
-    "Améliorer la qualité des prospects",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 12 : Vos expériences (WordCloud) */}
-<WordCloudHero
-  id="vos-experiences-ma"
-  question="Votre expérience du marketing automation, en un mot ?"
-  italicPart="en un mot"
-  subtitle="Plusieurs réponses bienvenues"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 13 : Section 02 */}
-<SubSectionHero
-  kicker="Pourquoi"
-  index="02"
-  title="Pourquoi le marketing automation ?"
-  italicPart="automation"
-  subtitle="Quatre dynamiques convergentes : données, outils, contenus, touchpoints."
-  subtitleWrap
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 14 : Quatre dynamiques convergentes */}
-<ImageGridHero
-  title="Quatre dynamiques convergentes"
-  italicPart="dynamiques"
-  subtitle="Le marketing automation est né de la nécessité de gérer simultanément plus de données, d'outils, de contenu et de touchpoints."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/pourquoi-donnees.jpeg", alt: "Données", title: "Données", text: "Volume, variété et vélocité ont explosé. La data devient le terrain de jeu du marketing." },
-    { src: "/decks/marketing-automation/pourquoi-outils.png", alt: "Outils", title: "Outils", text: "Le martech stack grandit chaque année. Chaque équipe orchestre sa propre constellation." },
-    { src: "/decks/marketing-automation/pourquoi-contenus.jpeg", alt: "Contenus", title: "Contenus", text: "Plus de canaux, plus de formats, plus d'itérations. La production est sous pression." },
-    { src: "/decks/marketing-automation/pourquoi-touchpoints.jpeg", alt: "Touchpoints", title: "Touchpoints", text: "Le parcours client est nucléarisé : in-store, web, app, social, TV, mail, SMS, ads." },
+  rows={[
+    { label: "Temps", value: "20 minutes : 10 en individuel, 10 en peer-sharing." },
+    { label: "Objectif", value: "Réfléchir à des applications pratiques de l'IA dans le marketing automation." },
+    { label: "Sujet", value: "Un cas concret applicable à votre organisation, avec un levier IA identifié." },
   ]}
 />
 
-{/* Slide 15 : 175 ZB datasphere */}
-<MediaHero
-  title="Multiplication des données"
-  italicPart="données"
-  subtitle="Eric Schmidt, 2010 : tous les deux jours, autant d'informations que depuis deux millions d'années."
-  image="/decks/marketing-automation/chart-datasphere-15.png"
-  alt="Taille annuelle de la datasphère : 175 ZB en 2025"
-  caption="Source : IDC. Taille annuelle de la datasphère mondiale (en Zettaoctets), 2010 à 2025."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 16 : MartechMap */}
-<MediaHero
-  title="Multiplication des outils"
-  italicPart="outils"
-  subtitle="De 150 outils en 2011 à 9'932 en 2022, +6'521 % en onze ans."
-  image="/decks/marketing-automation/chart-martechmap-16.png"
-  alt="Évolution du paysage Martech, 2011 à 2022"
-  caption="MartechMap 2022, Marketing Technology Landscape."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 17 : PME vs grandes entreprises */}
-<ImageGridHero
-  title="Des stacks aussi variés que les organisations"
-  italicPart="variés"
-  subtitle="Chaque département marketing dispose d'outils propres et distincts."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/pme.jpg", alt: "Petites et moyennes entreprises", title: "Petites et moyennes entreprises", text: "Stack léger, souvent SaaS tout-en-un, opéré par une ou deux personnes." },
-    { src: "/decks/marketing-automation/grande-entreprise.jpeg", alt: "Grandes entreprises", title: "Grandes entreprises", text: "Stack composite, plusieurs vendors par couche, gouvernance partagée IT et marketing." },
-  ]}
-/>
-
-{/* Slide 18 : Philips stack */}
-<MediaHero
-  title="L'ensemble des outils digitaux constitue le stack"
-  italicPart="stack"
-  subtitle="Exemple : le stack utilisé par Philips, organisé en onze catégories distinctes."
-  body="Une carte vivante du marketing et du e-commerce : activation, content, sales enablement, data, voix client, conversion."
-  image="/decks/marketing-automation/philips-stack.png"
-  alt="Stack marketing de Philips, onze catégories"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 19 : Types d'outils */}
-<InfoCardsGrid
-  title="Quelques familles d'outils dans un stack"
-  italicPart="familles"
-  subtitle="Cinq catégories qu'on retrouve à peu près partout."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: "ph:database", label: "Contenus et stockage", value: "CMS, DAM, SEO, cookies, serveurs, CDN." },
-    { icon: "ph:users", label: "Relation client", value: "CRM, CDP, réseaux sociaux, messagerie." },
-    { icon: "ph:chart-bar", label: "Analyse et reporting", value: "BI, enquêtes, dashboards, attribution." },
-    { icon: "ph:megaphone", label: "Publicité et ventes", value: "SEM, emailing, programmatique, e-commerce." },
-    { icon: "ph:wrench", label: "Autres outils", value: "Cookie consent, anti-fraude, accessibilité." },
-  ]}
-/>
-
-{/* Slide 20 : Growth marketing WordCloud */}
-<WordCloudHero
-  id="growth-marketing-def"
-  question="Le growth marketing en un mot, c'est quoi pour vous ?"
-  italicPart="en un mot"
-  subtitle="Plusieurs réponses bienvenues"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 21 : Multiplication des contenus */}
-<ImageGridHero
-  title="Multiplication des contenus"
-  italicPart="contenus"
-  subtitle="Les organisations sont présentes sur toujours plus de supports avec toujours plus de contenus à produire."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/multi-contenu-pages.jpeg", alt: "Multiplication des pages", title: "Multiplication des pages", text: "Pages produits, landing pages, articles : la surface éditoriale grandit en continu." },
-    { src: "/decks/marketing-automation/multi-contenu-formats.jpeg", alt: "Multiplication des formats", title: "Multiplication des formats", text: "Vidéo verticale, podcast, carrousel, story : chaque canal exige son propre format." },
-    { src: "/decks/marketing-automation/multi-contenu-iterations.jpg", alt: "Multiplication des itérations", title: "Multiplication des itérations", text: "Test, mesure, ajuste. Chaque variante doit être produite et suivie." },
-  ]}
-/>
-
-{/* Slide 22 : Touchpoints */}
-<ImageGridHero
-  title="Multiplication des touchpoints"
-  italicPart="touchpoints"
-  subtitle="Avec l'omnicanal, la conversion est nucléarisée. Suivre le parcours réel devient un défi."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/touchpoint-boutique.jpeg", alt: "Boutique", title: "Boutique", text: "Le point de vente physique reste un touchpoint structurant pour les marques retail." },
-    { src: "/decks/marketing-automation/touchpoint-online.jpeg", alt: "Online", title: "Online", text: "Web, app, email, social, search : autant d'interfaces où l'intention se manifeste." },
-    { src: "/decks/marketing-automation/touchpoint-tv.jpeg", alt: "Télévision", title: "Télévision", text: "Du linéaire au streaming, l'audience TV reste massive et difficile à attribuer." },
-  ]}
-/>
-
-{/* Slide 23 : Limites et freins (Poll) */}
-<PollHero
-  id="freins-automatisation"
-  question="Quel est le plus gros frein à l'automatisation dans votre organisation ?"
-  italicPart="le plus gros frein"
-  subtitle="Une seule réponse"
-  options={[
-    "Manque de temps ou de ressources",
-    "Manque de compétences techniques",
-    "Outils trop chers ou trop complexes",
-    "Pas de soutien de la direction",
-    "Données trop dispersées",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 23b : Les vrais freins a l'IA (chart reconstruit, ZHAW 2024) */}
-<BarChartHero
-  title="Les vrais freins à l'IA"
-  italicPart="freins"
-  subtitle="Ce qui bloque l'adoption de l'IA en marketing, selon les entreprises."
-  items={[
-    { label: "Ressources et compétences limitées", value: 72, emphasis: true },
-    { label: "Craintes sur la protection des données", value: 28 },
-    { label: "Pas de vue d'ensemble, ne sait pas par où commencer", value: 28 },
-    { label: "Limites technologiques", value: 21 },
-    { label: "Pas une priorité de la direction", value: 21 },
-    { label: "Manque de prise de conscience", value: 20 },
-  ]}
-  source="ZHAW, Marketing Automation & AI Report 2024 (n=253), plusieurs réponses possibles"
-  sourceUrl="https://www.zhaw.ch/storage/sml/upload/Zumstein-et-al_Marketing-Automation-AI-Report_2024.pdf"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 24 : Section 03 */}
-<SubSectionHero
-  kicker="Sous le capot"
-  index="03"
-  title="Les APIs, la colonne vertébrale"
-  italicPart="vertébrale"
-  subtitle="Au-delà des données, des outils et des contenus, le marketing automation existe grâce à une technologie clé : l'API."
-  subtitleWrap
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 25 : Une technologie spécifique */}
-<MediaHero
-  title="Une technologie spécifique : l'API"
-  italicPart="l'API"
-  subtitle="Le marketing automation a surtout été rendu possible par cette brique technique."
-  body="L'API rend les outils interopérables : ils s'écoutent, s'échangent des données, déclenchent des actions chez le voisin."
-  image="/decks/marketing-automation/api-wires.jpeg"
-  alt="Câbles et connexions, métaphore de l'API"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 26 : Qu'est-ce qu'une API */}
-<MediaHero
-  title="Une API connecte des applications"
-  italicPart="connecte"
-  subtitle="API signifie Application Programming Interface."
-  body="Une API est un ensemble de définitions, de protocoles et de données qu'on peut requêter."
-  image="/decks/marketing-automation/api-puzzle.jpeg"
-  alt="Pièces de puzzle qui s'emboîtent, métaphore de l'API"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 27 : Partage d'expérience APIs */}
-<InfoCardsGrid
-  title="Partage d'expérience : les APIs"
-  italicPart="les APIs"
-  subtitle="Quatre questions pour situer votre familiarité avec la technologie."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: "ph:eye", label: "Découverte", value: "Avant aujourd'hui, qui avait entendu parler des APIs ?" },
-    { icon: "ph:terminal-window", label: "Pratique", value: "Certains d'entre vous savent-ils requêter une API ?" },
-    { icon: "ph:target", label: "Pertinence", value: "Pourquoi est-ce important de connaître la technologie derrière les APIs dans le cadre du marketing automation ?" },
-    { icon: "ph:code", label: "Langage", value: "Quel langage est souvent utilisé pour communiquer avec une API ?" },
-  ]}
-/>
-
-{/* Slide 28 : JSON */}
-<MediaHero
-  title="JSON, le langage des APIs"
-  italicPart="JSON"
-  subtitle="JSON : JavaScript Object Notation."
-  body="Un langage d'échange de données texte, plus rapide et plus simple que XML, lisible par les humains comme par les machines."
-  image="/decks/marketing-automation/json-brackets.png"
-  alt="Accolades JSON, métaphore du format"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 29 : Applications du JSON */}
-<ImageGridHero
-  title="Applications du JSON"
-  italicPart="JSON"
-  subtitle="De plus en plus utilisé en marketing, et notamment dans trois cas typiques."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/json-server.jpg", alt: "Requêtes API", title: "Requêtes API", text: "L'échange standard entre un client (navigateur, app, workflow) et un service web." },
-    { src: "/decks/marketing-automation/json-magnifier.jpg", alt: "Requêtes de recherche", title: "Requêtes de recherche", text: "Filtres complexes, agrégations, facettes : le JSON exprime la requête comme la réponse." },
-    { src: "/decks/marketing-automation/json-structured.jpg", alt: "Données structurées", title: "Données structurées", text: "Schema.org, balisage SEO, configuration : JSON structure la donnée pour les moteurs." },
-  ]}
-/>
-
-{/* Slide 30 : Verbes HTTP */}
-<MediaHero
-  title="GET, POST, PUT, DELETE"
-  subtitle="Une requête API : une URL et une action."
-  image="/decks/marketing-automation/chart-http-verbs-30.png"
-  alt="Quatre verbes HTTP : GET consulter, POST créer, PUT mettre à jour, DELETE supprimer"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 31 : Documentation d'API (Stripe, Twilio, Spotify) */}
-<ImageGridHero
-  title="Documentation d'API"
-  italicPart="Documentation"
-  subtitle="Chaque API a son propre fonctionnement. Avant de coder, on lit la doc."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/api-doc-stripe.png", alt: "Stripe", title: "Stripe", text: "Référence du paiement en ligne : doc claire, exemples copier-coller, SDK officiels." },
-    { src: "/decks/marketing-automation/api-doc-twilio.png", alt: "Twilio", title: "Twilio", text: "Messages, voix, vidéo, WhatsApp : l'omnicanal communication accessible par API." },
-    { src: "/decks/marketing-automation/api-doc-spotify.png", alt: "Spotify", title: "Spotify", text: "Accès aux playlists, métadonnées, recommandations : un cas d'école pour démarrer." },
-  ]}
-/>
-
-{/* Slide 32 : Démonstration sur Postman */}
-<MediaHero
-  title="Démonstration sur Postman"
-  italicPart="Postman"
-  subtitle="Un client graphique gratuit pour explorer une API sans écrire une ligne de code."
-  image="/decks/marketing-automation/postman-demo.png"
-  alt="Illustration : deux personnes inspectent un carnet Postman avec une loupe"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 33 : Résultat de la démonstration */}
-<MediaHero
-  title="Résultat de la démonstration"
-  italicPart="Résultat"
-  subtitle="Requête GET sur api.genderize.io, réponse JSON renvoyée en 237 ms."
-  image="/decks/marketing-automation/screen-postman-result-33.png"
-  alt="Capture Postman : requête GET et réponse JSON formatée"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 34 : No-code et low-code */}
-<ImageGridHero
-  title="No-code et low-code"
-  italicPart="No-code"
-  subtitle="Les APIs sont essentielles pour le fonctionnement des outils no-code comme low-code."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/nocode.jpeg", alt: "No-code", title: "No-code", text: "Pas de développement. On configure, on connecte, on exécute. Zapier, n8n, Make, Airtable." },
-    { src: "/decks/marketing-automation/lowcode.jpeg", alt: "Low-code", title: "Low-code", text: "Développement ponctuel. On étend, on personnalise, on intègre du code custom là où c'est nécessaire." },
-  ]}
-/>
-
-{/* Slide 35 : Automatisations simples du quotidien */}
-<ImageGridHero
-  title="Automatisations simples du quotidien"
-  italicPart="quotidien"
-  subtitle="Les outils digitaux que nous utilisons sont déjà partiellement no-code. Vous en avez déjà créés."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
-    { src: "/decks/marketing-automation/auto-clickup.png", alt: "Assignation de tâche auto", title: "Assignation de tâche auto", text: "Une tâche créée dans un statut donné se voit assigner automatiquement à la bonne personne." },
-    { src: "/decks/marketing-automation/auto-facebook.jpg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
-  ]}
-/>
-
-{/* Slide 36 : Questions & réponses */}
+{/* Slide 9 : Questions & réponses (ex-Closing variant="qa") */}
 <ClosingHero
   title="Questions & réponses"
   highlight="réponses"
-  tagline="Merci pour votre attention."
+  tagline="Prochain module : Conclusion."
   url="lausanne.marketing"
-  image="/decks/marketing-automation/qa-bg.jpg"
+  image="/decks/ia-automatisation/cover-ai-chip.jpg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
