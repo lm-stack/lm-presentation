@@ -6,7 +6,7 @@
 
 Site `slides.lausanne.marketing` qui héberge les présentations Lausanne Marketing (cours, PPT commerciaux, workshops, événements). Astro statique + Reveal.js pour le mode plein écran.
 
-Branding : Lausanne Marketing (charte calquée sur `lm/`). Pas de branding ExecEd même si le contenu d'origine venait de là.
+Branding par défaut : Lausanne Marketing (charte calquée sur `lm/`). Les **decks** restent en charte LM. Un **parcours** peut toutefois être basculé en thème ExecEd via `scheme: execed` quand le contexte le justifie (ex. cours HEC ExecEd) : voir `.claude/rules/parcours.md` et `.claude/rules/themes.md`.
 
 Spec : `docs/superpowers/specs/2026-05-07-lm-presentation-design.md`
 
@@ -67,7 +67,7 @@ Constaté 2026-06-04 : `/p/template-execed/` (renommé `template`, commit `c1be3
 
 ## Fichiers de règles (`.claude/rules/`)
 
-Chargés automatiquement à chaque session. À respecter pour tout travail sur les decks.
+Chargés automatiquement à chaque session. À respecter pour tout travail sur les decks et les parcours.
 
 | Fichier | Contenu |
 |---------|---------|
@@ -75,3 +75,4 @@ Chargés automatiquement à chaque session. À respecter pour tout travail sur l
 | `conventions.md` | UTF-8, pas d'em-dash dans les slides, nombres CHF suisses (`2'250 CHF`), pas d'emojis, nommage PascalCase / kebab-case |
 | `polls.md` | Sondages live `<Poll>` / `<WordCloud>` : workflow présentateur, Cloudflare KV, variable `PUBLIC_LM_POLLS_URL` |
 | `themes.md` | Tokens de couleur (schémas LM / ExecEd), règle « pas de hex en dur », frontmatter `scheme` |
+| `parcours.md` | Conventions des parcours : dates précises, chaque deck dans un jour (intro/conclusion inclus), `scheme` + `switcher` par parcours |
