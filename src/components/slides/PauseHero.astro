@@ -1,0 +1,207 @@
+---
+// src/components/slides/PauseHero.astro
+// Slide Pause ExecEd-style : header full-width standard, fond pearl, titre serif
+// italique partiel, puis un TimerControl (sélection de durée -> compteur géant).
+// Lecteur Spotify optionnel à droite (logique reprise de Timer.astro).
+import TimerControl from '@/components/slides/TimerControl.astro';
+import { splitHighlight } from '@/utils/highlight';
+
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  /** Durées proposées en minutes. */
+  presets?: number[];
+  /** Durée affichée par défaut (démarre directement en mode décompte). */
+  defaultMinutes?: number;
+  /** URL Spotify (track/album/playlist/episode/show/artist). */
+  spotify?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title = 'Pause',
+  italicPart = 'Pause',
+  subtitle,
+  presets = [5, 10, 15],
+  defaultMinutes = 15,
+  spotify,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+
+const titleParts = splitHighlight(title, italicPart);
+// Pas de Spotify en mode handout (PDF) : l'iframe n'a pas de sens imprimée.
+const isHandout = Astro.url.pathname.includes('/handout/');
+
+const VALID_SPOTIFY_TYPES = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
+function parseSpotifyUrl(raw?: string): { type: string; id: string } | null {
+  if (!raw) return null;
+  try {
+    const u = new URL(raw);
+    if (!u.hostname.endsWith('spotify.com')) return null;
+    const segments = u.pathname.split('/').filter(Boolean);
+    const typeIdx = segments.findIndex((s) => VALID_SPOTIFY_TYPES.has(s));
+    if (typeIdx === -1 || !segments[typeIdx + 1]) return null;
+    return { type: segments[typeIdx], id: segments[typeIdx + 1] };
+  } catch {
+    return null;
+  }
+}
+const spotifyParsed = parseSpotifyUrl(spotify);
+const spotifyEmbed = spotifyParsed
+  ? `https://open.spotify.com/embed/${spotifyParsed.type}/${spotifyParsed.id}?utm_source=generator&theme=0`
+  : null;
+const showSpotify = !!spotifyEmbed && !isHandout;
+---
+<section class="pause-hero" data-layout="pause-hero" data-section-title={title}>
+  <header class="pause-hero__header">
+    <div class="pause-hero__brand-text">
+      <p class="pause-hero__brand-main">{brand}</p>
+      {brandSub && <p class="pause-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="pause-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="pause-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class:list={['pause-hero__body', { 'pause-hero__body--spotify': showSpotify }]}>
+    <div class="pause-hero__main">
+      <h2 class="pause-hero__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="pause-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="pause-hero__subtitle">{subtitle}</p>}
+
+      <div class="pause-hero__timer">
+        <TimerControl size="large" presets={presets} allowCustom={true} defaultMinutes={defaultMinutes} />
+      </div>
+    </div>
+
+    {showSpotify && (
+      <div class="pause-hero__spotify" aria-label="Lecteur audio">
+        <iframe
+          src={spotifyEmbed}
+          width="100%"
+          height="100%"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+          title="Lecteur Spotify"
+        ></iframe>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .pause-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .pause-hero__header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 96px 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .pause-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .pause-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .pause-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .pause-hero__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 32px 96px 64px;
+    display: flex;
+    align-items: center;
+    gap: 64px;
+  }
+  .pause-hero__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pause-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(72px, 7vw, 120px);
+    line-height: 1.02;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .pause-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .pause-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--c-muted);
+    margin: 0 0 32px;
+    max-width: 900px;
+  }
+  .pause-hero__timer {
+    margin-top: 8px;
+  }
+
+  /* Lecteur Spotify : carte verticale à droite. */
+  .pause-hero__spotify {
+    flex: 0 0 460px;
+    align-self: center;
+    height: 520px;
+    margin-right: 40px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--c-ink) 25%, transparent);
+  }
+  .pause-hero__spotify iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

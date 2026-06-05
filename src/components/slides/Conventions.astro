@@ -1,0 +1,182 @@
+---
+// src/components/slides/Conventions.astro
+// Slide a contenu qui expose les 3 conventions visuelles du deck :
+// Echange (rouge), Demo (bleu), Workshop (vert). Reprend les memes
+// glyphs et couleurs que les templates de transition correspondants
+// (Exchange.astro, Demo.astro, Workshop.astro). Sert d'amorce
+// pedagogique avant que ces transitions n'apparaissent dans le deck.
+import SlideTitle from '@/components/SlideTitle.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Convention {
+  icon: string;
+  label: string;
+  description: string;
+  color: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+  items?: Convention[];
+}
+
+const DEFAULT_ITEMS: Convention[] = [
+  {
+    icon: 'ph:chats-circle-fill',
+    label: 'Échange',
+    description: 'Prenez la parole quand ce pictogramme apparaît : partage d\'expérience, retour critique, anecdote terrain.',
+    color: '#E53E5E',
+  },
+  {
+    icon: 'ph:cursor-click-fill',
+    label: 'Démo',
+    description: 'Une démonstration en direct va suivre : outil en ligne, requête API, écran à observer ensemble.',
+    color: '#5BA8D6',
+  },
+  {
+    icon: 'ph:pencil-simple-line-bold',
+    label: 'Workshop',
+    description: 'Un atelier hands-on commence : exercice individuel ou en sous-groupe, livrable concret en sortie.',
+    color: '#2EC27E',
+  },
+];
+
+const {
+  title = 'Conventions du support',
+  subtitle = 'Trois pictogrammes balisent les moments clés du cours.',
+  highlight = 'pictogrammes',
+  items = DEFAULT_ITEMS,
+} = Astro.props;
+---
+<section class="conventions" data-layout="conventions">
+  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
+
+  <div class="conventions__grid">
+    {items.map((item, i) => (
+      <article class="conventions__card" style={`--accent: ${item.color}; --i: ${i}`}>
+        <span class="conventions__halo" aria-hidden="true"></span>
+        <span class="conventions__disc" aria-hidden="true">
+          <Icon name={item.icon} />
+        </span>
+        <h3 class="conventions__label">{item.label}</h3>
+        <p class="conventions__description">{item.description}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .conventions__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    align-content: center;
+  }
+
+  /* Carte verticale : grand cercle colore avec icone, label, description.    */
+  /* La carte porte --accent en var locale pour que le disc et le halo        */
+  /* derivent leur couleur du composant parent (cf. Conventions appelant).    */
+  .conventions__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 32px 32px;
+    background: #FFFFFF;
+    border: 1px solid rgba(25, 25, 25, 0.06);
+    border-radius: 24px;
+    box-shadow: 0 16px 32px -12px rgba(25, 25, 25, 0.12);
+    overflow: hidden;
+    animation: conv-card 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.12s + 0.1s) both;
+  }
+
+  /* Halo rotative dans le fond : nappe coloree douce qui rappelle le wash    */
+  /* radial des templates de transition. Crée une signature visuelle commune. */
+  .conventions__halo {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+    opacity: 0.18;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Disc central monumental : meme glyph que dans les transitions, mais ici */
+  /* en taille reduite et plein cadre. Bord noir 4px = signature LM forte.   */
+  .conventions__disc {
+    position: relative;
+    z-index: 1;
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 4px solid #191919;
+    box-shadow: 8px 8px 0 0 #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    margin-bottom: 36px;
+    animation: conv-pop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--i, 0) * 0.12s + 0.3s) both;
+  }
+  .conventions__disc :global(svg) {
+    width: 72px;
+    height: 72px;
+  }
+
+  .conventions__label {
+    position: relative;
+    z-index: 1;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #191919;
+    margin: 0 0 18px;
+  }
+
+  .conventions__description {
+    position: relative;
+    z-index: 1;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #6B6F84;
+    margin: 0;
+    max-width: 420px;
+  }
+
+  @keyframes conv-card {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes conv-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6) rotate(-8deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+</style>

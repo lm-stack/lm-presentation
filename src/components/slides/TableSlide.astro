@@ -1,0 +1,97 @@
+---
+// src/components/slides/TableSlide.astro
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  highlight?: string;
+  intro?: string;
+  headers: string[];
+  rows: string[][];
+  leftLabel?: string;
+}
+const { title, subtitle, highlight, intro, headers, rows, leftLabel } = Astro.props;
+---
+<section class="table-slide" data-layout="table">
+  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
+  <div class="table-slide__body">
+    {intro && <p class="table-slide__intro">{intro}</p>}
+    <div class="table-slide__wrapper">
+      {leftLabel && <span class="table-slide__left-label">{leftLabel}</span>}
+      <table class="lm-table">
+        <thead>
+          <tr>
+            {headers.map((h) => <th>{h}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              {row.map((cell) => <td>{cell}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Wrapper unique sous SlideTitle. Sans ce wrap, le `.slide-title + *` de */
+  /* slides.css ne matche que le PREMIER sibling : si intro est present il */
+  /* prend tout l'espace flex et le tableau est rejete en bas hors-vue.    */
+  .table-slide__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  .table-slide__intro {
+    font-size: 22px;
+    color: #6B6F84;
+    text-align: center;
+    margin: 0 auto 32px;
+    max-width: 1400px;
+    line-height: 1.5;
+  }
+  .table-slide__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .table-slide__left-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 18px;
+    color: #6B6F84;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .lm-table {
+    flex: 1;
+    border-collapse: collapse;
+    font-size: 22px;
+    color: #191919;
+  }
+  .lm-table thead th {
+    background: #191919;
+    color: #FFFFFF;
+    text-align: left;
+    padding: 16px 24px;
+    font-weight: 500;
+  }
+  .lm-table tbody tr:nth-child(odd) {
+    background: rgba(25, 25, 25, 0.04);
+  }
+  .lm-table tbody tr:nth-child(even) {
+    background: rgba(25, 25, 25, 0.02);
+  }
+  .lm-table tbody td {
+    padding: 14px 24px;
+    color: #6B6F84;
+  }
+</style>

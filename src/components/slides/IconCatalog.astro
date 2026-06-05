@@ -1,0 +1,95 @@
+---
+// src/components/slides/IconCatalog.astro
+// Catalogue d'icônes Phosphor utilisées dans le repo. Affiche chaque
+// icône avec son nom astro-icon ('ph:xxx') et la liste des composants
+// qui l'utilisent. Sert de slide référence dans le template, mais
+// peut être réutilisé dans n'importe quel deck pour inventorier la
+// bibliothèque graphique.
+import SlideTitle from '@/components/SlideTitle.astro';
+import { Icon } from 'astro-icon/components';
+
+interface IconEntry {
+  name: string;
+  usedIn: string;
+  color?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+  items: IconEntry[];
+}
+
+const {
+  title = "Icônes Phosphor utilisées",
+  subtitle = "Inventaire des icônes employées dans les slides. Bibliothèque astro-icon plus @iconify-json/ph.",
+  highlight = "Phosphor",
+  items,
+} = Astro.props;
+---
+<section class="icon-catalog" data-layout="icon-catalog">
+  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
+  <div class="icon-catalog__grid">
+    {items.map((item) => (
+      <article class="icon-catalog__card" style={`--accent: ${item.color ?? '#191919'}`}>
+        <span class="icon-catalog__disc" aria-hidden="true">
+          <Icon name={item.name} />
+        </span>
+        <code class="icon-catalog__name">{item.name}</code>
+        <p class="icon-catalog__usage">{item.usedIn}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .icon-catalog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 56px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    align-content: center;
+  }
+  .icon-catalog__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    margin: 0;
+  }
+  .icon-catalog__disc {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    background: var(--accent, #191919);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FAF8F3;
+    box-shadow: 0 14px 32px -18px var(--accent, rgba(0, 0, 0, 0.4));
+  }
+  .icon-catalog__disc :global(svg) {
+    width: 64px;
+    height: 64px;
+  }
+  .icon-catalog__name {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 18px;
+    color: #191919;
+    background: rgba(255, 216, 56, 0.22);
+    padding: 6px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.01em;
+  }
+  .icon-catalog__usage {
+    font-size: 17px;
+    color: #6B6F84;
+    margin: 0;
+    line-height: 1.45;
+    max-width: 280px;
+  }
+</style>

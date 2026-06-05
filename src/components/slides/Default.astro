@@ -1,0 +1,93 @@
+---
+// src/components/slides/Default.astro
+// Slide par defaut : titre + sous-titre optionnels en haut, contenu MDX libre dessous.
+// A utiliser quand aucun layout specialise (TableSlide, NumberedCards, etc.) ne s'applique.
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  highlight?: string;
+}
+
+const { title, subtitle, highlight } = Astro.props;
+const hasHeader = Boolean(title || subtitle);
+---
+<section class="slide-default" data-layout="default">
+  {hasHeader && <SlideTitle title={title ?? ''} subtitle={subtitle} highlight={highlight} />}
+  <div class="slide-default__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .slide-default__body {
+    max-width: 1500px;
+    margin: 0 auto;
+    width: 100%;
+    font-size: 22px;
+    line-height: 1.55;
+    color: #6B6F84;
+    /* Centre le contenu MDX dans l'espace restant sous SlideTitle (regle */
+    /* intangible : titre fixe en haut, contenu centre dans le reste).   */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Styles globaux pour le contenu MDX libre injecte via le slot */
+  .slide-default__body :global(h2),
+  .slide-default__body :global(h3) {
+    font-weight: 700;
+    color: #191919;
+    margin: 32px 0 16px;
+  }
+  .slide-default__body :global(h2) {
+    font-size: 36px;
+  }
+  .slide-default__body :global(h3) {
+    font-size: 28px;
+  }
+  .slide-default__body :global(p) {
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
+  .slide-default__body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .slide-default__body :global(ul),
+  .slide-default__body :global(ol) {
+    margin: 0 0 16px;
+    padding-left: 28px;
+  }
+  .slide-default__body :global(li) {
+    margin-bottom: 8px;
+  }
+  .slide-default__body :global(li:last-child) {
+    margin-bottom: 0;
+  }
+  .slide-default__body :global(strong) {
+    color: #191919;
+    font-weight: 600;
+  }
+  .slide-default__body :global(a) {
+    color: #191919;
+    text-decoration-color: #FFD838;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 2px;
+  }
+  .slide-default__body :global(code) {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.9em;
+    background: rgba(25, 25, 25, 0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .slide-default__body :global(blockquote) {
+    border-left: 4px solid #FFD838;
+    padding: 8px 24px;
+    margin: 16px 0;
+    color: #191919;
+    font-size: 24px;
+  }
+</style>

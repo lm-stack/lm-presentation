@@ -1,0 +1,333 @@
+---
+// src/components/slides/TimerControl.astro
+// Bloc minuteur réutilisable (slides Pause + Workshop). Deux états :
+//  1. Sélection : boutons de durée (presets) + bouton "00:00" custom (saisie min).
+//  2. Décompte : durée choisie en grand + Démarrer/Pause + Changer (revient à la
+//     sélection ; remplace l'ancien bouton Réinitialiser).
+// `defaultMinutes` : si fourni, le bloc démarre directement en mode décompte avec
+// cette durée (le bouton Changer sert alors à choisir une autre durée).
+// Hauteur réservée (min-height par taille) pour que le passage sélection <-> décompte
+// ne fasse PAS reflow le contenu de la slide autour.
+// Clavier (slide active uniquement) : Espace = start/pause, R = reset.
+interface Props {
+  presets?: number[];
+  allowCustom?: boolean;
+  size?: 'large' | 'compact';
+  /** Durée initiale en minutes : démarre directement en mode décompte. */
+  defaultMinutes?: number;
+  /** Centre les textes (compteur, boutons, presets). */
+  center?: boolean;
+  /** Masque la barre de progression. */
+  hideProgress?: boolean;
+}
+const { presets = [5, 10, 15], allowCustom = true, size = 'large', defaultMinutes, center = false, hideProgress = false } = Astro.props;
+function fmtMin(min: number) {
+  const m = Math.floor(min);
+  const s = Math.round((min - m) * 60);
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+function fmtSec(sec: number) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+const defaultSeconds = defaultMinutes && defaultMinutes > 0 ? Math.round(defaultMinutes * 60) : 0;
+const hasDefault = defaultSeconds > 0;
+---
+<div class:list={['timer-control', `timer-control--${size}`, { 'timer-control--center': center, 'timer-control--no-progress': hideProgress }]} data-timer-control data-tc-default={defaultSeconds}>
+  <div class="timer-control__select" data-tc-select hidden={hasDefault}>
+    <div class="timer-control__presets">
+      {presets.map((m) => (
+        <button type="button" class="timer-control__preset" data-tc-preset={Math.round(m * 60)}>{fmtMin(m)}</button>
+      ))}
+      {allowCustom && (
+        <button type="button" class="timer-control__preset timer-control__preset--custom" data-tc-custom-btn>00:00</button>
+      )}
+    </div>
+    {allowCustom && (
+      <div class="timer-control__custom" data-tc-custom hidden>
+        <input type="number" min="1" max="180" inputmode="numeric" class="timer-control__custom-input" data-tc-custom-input placeholder="Minutes" />
+        <button type="button" class="timer-control__custom-ok" data-tc-custom-ok>Valider</button>
+      </div>
+    )}
+  </div>
+
+  <div class="timer-control__run" data-tc-run hidden={!hasDefault}>
+    <span class="timer-control__time" data-tc-display>{hasDefault ? fmtSec(defaultSeconds) : '00:00'}</span>
+    <span class="timer-control__progress" aria-hidden="true"><span class="timer-control__progress-fill" data-tc-progress></span></span>
+    <div class="timer-control__controls">
+      <button type="button" class="timer-control__btn timer-control__btn--primary" data-tc-toggle><span data-tc-toggle-label>Démarrer</span></button>
+      <button type="button" class="timer-control__btn timer-control__btn--ghost" data-tc-change>Changer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initTimerControl(root: HTMLElement) {
+    if (root.dataset.tcInit === 'true') return;
+    root.dataset.tcInit = 'true';
+
+    const selectEl = root.querySelector<HTMLElement>('[data-tc-select]');
+    const runEl = root.querySelector<HTMLElement>('[data-tc-run]');
+    const customWrap = root.querySelector<HTMLElement>('[data-tc-custom]');
+    const customInput = root.querySelector<HTMLInputElement>('[data-tc-custom-input]');
+    const customOk = root.querySelector<HTMLButtonElement>('[data-tc-custom-ok]');
+    const customBtn = root.querySelector<HTMLButtonElement>('[data-tc-custom-btn]');
+    const display = root.querySelector<HTMLElement>('[data-tc-display]');
+    const progress = root.querySelector<HTMLElement>('[data-tc-progress]');
+    const toggleBtn = root.querySelector<HTMLButtonElement>('[data-tc-toggle]');
+    const toggleLabel = root.querySelector<HTMLElement>('[data-tc-toggle-label]');
+    const changeBtn = root.querySelector<HTMLButtonElement>('[data-tc-change]');
+    if (!selectEl || !runEl || !display || !progress || !toggleBtn || !toggleLabel || !changeBtn) return;
+
+    let total = 0;
+    let remaining = 0;
+    let intervalId: number | null = null;
+    let running = false;
+
+    function fmt(s: number) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+    function render() {
+      display!.textContent = fmt(remaining);
+      const pct = total > 0 ? ((total - remaining) / total) * 100 : 0;
+      progress!.style.width = `${pct}%`;
+      root.dispatchEvent(new CustomEvent('tc:tick', { detail: { pct } }));
+      root.classList.toggle('is-done', total > 0 && remaining <= 0);
+      toggleLabel!.textContent = running ? 'Pause' : remaining <= 0 ? 'Terminé' : remaining < total ? 'Reprendre' : 'Démarrer';
+      toggleBtn!.disabled = remaining <= 0;
+    }
+    function stop() {
+      running = false;
+      if (intervalId !== null) { window.clearInterval(intervalId); intervalId = null; }
+      render();
+    }
+    function tick() {
+      remaining = Math.max(0, remaining - 1);
+      render();
+      if (remaining <= 0) stop();
+    }
+    function start() {
+      if (running || remaining <= 0 || total <= 0) return;
+      running = true;
+      intervalId = window.setInterval(tick, 1000);
+      render();
+    }
+    function reset() {
+      stop();
+      remaining = total;
+      render();
+    }
+    function choose(seconds: number) {
+      total = Math.max(1, Math.round(seconds));
+      remaining = total;
+      stop();
+      selectEl!.hidden = true;
+      runEl!.hidden = false;
+      render();
+    }
+    function backToSelect() {
+      stop();
+      total = 0;
+      remaining = 0;
+      runEl!.hidden = true;
+      selectEl!.hidden = false;
+      if (customWrap) customWrap.hidden = true;
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-tc-preset]').forEach((btn) => {
+      btn.addEventListener('click', () => choose(Number(btn.dataset.tcPreset || '0')));
+    });
+    if (customBtn && customWrap && customInput) {
+      customBtn.addEventListener('click', () => {
+        customWrap.hidden = false;
+        customInput.focus();
+      });
+    }
+    if (customOk && customInput) {
+      const applyCustom = () => {
+        const mins = Number(customInput.value);
+        if (!Number.isFinite(mins) || mins <= 0) return;
+        choose(mins * 60);
+      };
+      customOk.addEventListener('click', applyCustom);
+      customInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCustom(); } });
+    }
+    toggleBtn.addEventListener('click', () => (running ? stop() : start()));
+    changeBtn.addEventListener('click', backToSelect);
+
+    const slide = root.closest('section');
+    document.addEventListener('keydown', (e) => {
+      if (!slide || !slide.classList.contains('present')) return;
+      if (runEl!.hidden) return;
+      const t = e.target as HTMLElement | null;
+      const editable = !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      if (editable) return;
+      if (e.code === 'Space') { e.preventDefault(); running ? stop() : start(); }
+      else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); reset(); }
+    });
+
+    document.addEventListener('slidechanged', (e: Event) => {
+      const cur = (e as Event & { currentSlide?: HTMLElement }).currentSlide;
+      if (slide && cur && !(cur === slide || slide.contains(cur))) stop();
+    });
+
+    // Durée par défaut : démarre directement en mode décompte (le markup est déjà
+    // rendu en mode run, on initialise juste le compteur).
+    const def = Number(root.dataset.tcDefault || '0');
+    if (def > 0) { total = def; remaining = def; }
+    render();
+  }
+  document.querySelectorAll<HTMLElement>('[data-timer-control]').forEach(initTimerControl);
+</script>
+
+<style>
+  .timer-control {
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: var(--c-ink);
+    width: 100%;
+  }
+  /* Hauteur réservée : le passage sélection <-> décompte ne change pas la hauteur
+     du bloc, donc pas de reflow du contenu de la slide autour. */
+  .timer-control--large { min-height: 400px; }
+  .timer-control--compact { min-height: 270px; }
+
+  /* Variantes : centrage des textes + masquage de la barre de progression. */
+  .timer-control--center { text-align: center; }
+  .timer-control--center .timer-control__presets { margin-left: auto; margin-right: auto; }
+  .timer-control--center .timer-control__custom { margin-left: auto; margin-right: auto; }
+  .timer-control--center .timer-control__controls { justify-content: center; }
+  .timer-control--no-progress .timer-control__progress { display: none; }
+
+  /* ---- Sélection ---- */
+  .timer-control__presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .timer-control--large .timer-control__presets { max-width: 540px; }
+  .timer-control--compact .timer-control__presets { max-width: 380px; gap: 12px; }
+
+  .timer-control__preset {
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--c-ink);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .timer-control--large .timer-control__preset { font-size: 32px; padding: 20px 0; }
+  .timer-control--compact .timer-control__preset { font-size: 26px; padding: 16px 0; }
+  .timer-control__preset:hover {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+  .timer-control__preset--custom {
+    border-style: dashed;
+    color: var(--c-muted);
+  }
+
+  .timer-control__custom {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    max-width: 540px;
+  }
+  .timer-control--compact .timer-control__custom { max-width: 380px; }
+  .timer-control__custom-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 20px;
+    padding: 12px 16px;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 20%, transparent);
+    border-radius: 4px;
+    background: var(--c-surface);
+    color: var(--c-ink);
+  }
+  .timer-control__custom-ok {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--c-on-accent);
+    background: var(--c-accent);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    cursor: pointer;
+  }
+
+  /* ---- Décompte ---- */
+  .timer-control__time {
+    display: block;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--c-ink);
+  }
+  .timer-control--large .timer-control__time { font-size: clamp(150px, 17vw, 280px); }
+  .timer-control--compact .timer-control__time { font-size: clamp(84px, 8.5vw, 140px); }
+  .timer-control.is-done .timer-control__time { color: var(--c-muted); }
+
+  .timer-control__progress {
+    display: block;
+    width: 100%;
+    height: 6px;
+    background: color-mix(in srgb, var(--c-ink) 12%, transparent);
+    border-radius: 999px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  .timer-control--large .timer-control__progress { max-width: 900px; }
+  .timer-control--compact .timer-control__progress { max-width: 480px; }
+  .timer-control__progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--c-accent);
+    border-radius: 999px;
+    transition: width 0.9s linear;
+  }
+
+  .timer-control__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+  }
+  .timer-control__btn {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: var(--c-ink);
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 30%, transparent);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .timer-control--large .timer-control__btn { font-size: 20px; padding: 14px 28px; }
+  .timer-control--compact .timer-control__btn { font-size: 18px; padding: 12px 24px; }
+  .timer-control__btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--c-ink) 5%, transparent);
+    border-color: var(--c-ink);
+  }
+  .timer-control__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .timer-control__btn--primary {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .timer-control__btn--primary:hover:not(:disabled) { background: var(--c-accent-soft); border-color: var(--c-accent-soft); color: var(--c-ink); }
+  .timer-control__btn--ghost { color: var(--c-muted); }
+</style>

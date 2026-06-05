@@ -1,0 +1,427 @@
+---
+// src/components/slides/CoverHero.astro
+// Page de garde "ExecEd-style" en variantes light. Quatre thèmes via
+// la prop `theme` :
+//   - cream-mist  : crème → blanc, vertical. Sobre éditorial.
+//   - warm-blush  : crème → jaune primary-light, diagonal. Signature LM.
+//   - pearl-stone : blanc → gris perle, vertical. Premium minimal.
+//   - halo-gold   : crème + radial jaune coin haut-droit. Spotlight (défaut).
+//
+// Layout : header marque top-left + ligne. Body : texte à gauche
+// (eyebrow + titre serif italique partiel souligné jaune + footer),
+// image polaroid à droite avec matrix rain animé autour (canvas).
+//
+// Le matrix rain est inspiré du composant `.faq-layout__rain` du repo lm.
+interface Props {
+  title: string;
+  italicPart?: string;
+  eyebrow?: string;
+  footer?: string;
+  brand?: string;
+  brandSub?: string;
+  image?: string;
+  rating?: { score: string; count: string };
+  theme?: 'cream-mist' | 'warm-blush' | 'pearl-stone' | 'halo-gold';
+  tocLabel?: string;
+}
+import { splitHighlight } from '@/utils/highlight';
+const {
+  title,
+  italicPart,
+  eyebrow,
+  footer,
+  brand = 'Titre de la présentation',
+  brandSub,
+  image,
+  rating,
+  theme = 'pearl-stone',
+  tocLabel = 'Accueil',
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section
+  class:list={['cover-hero', `cover-hero--${theme}`]}
+  data-layout="cover-hero"
+  data-theme={theme}
+  data-section-title={tocLabel}
+>
+  <header class="cover-hero__header">
+    <div class="cover-hero__brand-text">
+      <p class="cover-hero__brand-main">{brand}</p>
+      {brandSub && <p class="cover-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="cover-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="cover-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="cover-hero__body">
+    <div class="cover-hero__text">
+      {eyebrow && <p class="cover-hero__eyebrow">{eyebrow}</p>}
+      <h1 class="cover-hero__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="cover-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h1>
+      {footer && <p class="cover-hero__footer">{footer}</p>}
+    </div>
+
+    {image && (
+      <div class="cover-hero__image-area">
+        <canvas class="cover-hero__rain" aria-hidden="true"></canvas>
+        <div class="cover-hero__image-card">
+          <img src={image} alt="" loading="eager" decoding="async" />
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  // Matrix rain "papier-pluie" inspiré de `initFaqMatrixRain` du repo lm.
+  // Caractères 0/1 qui tombent par colonne, mask radial qui assombrit
+  // les bords et concentre l'opacité au centre. Couleur grise discrète.
+  function initCoverHeroRain(canvas: HTMLCanvasElement) {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    function sizeCanvas() {
+      canvas.width = parent!.offsetWidth;
+      canvas.height = parent!.offsetHeight;
+    }
+    sizeCanvas();
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const fontSize = 11;
+    let W = canvas.width;
+    let H = canvas.height;
+    let cols = Math.floor(W / fontSize);
+    let rows = Math.floor(H / fontSize);
+    let centerX = W / 2;
+    let centerY = H / 2;
+    let maxRadius = Math.max(W, H) * 0.5;
+
+    interface Cell { char: string; alpha: number; state: string; life: number; }
+    let grid: Cell[][] = [];
+    let drops: { row: number; speed: number }[] = [];
+    let radialMask: number[][] = [];
+
+    function rebuild() {
+      W = canvas.width;
+      H = canvas.height;
+      cols = Math.floor(W / fontSize);
+      rows = Math.floor(H / fontSize);
+      centerX = W / 2;
+      centerY = H / 2;
+      maxRadius = Math.max(W, H) * 0.5;
+
+      grid = [];
+      drops = [];
+      radialMask = [];
+      for (let c = 0; c < cols; c++) {
+        grid[c] = [];
+        for (let r = 0; r < rows; r++) {
+          grid[c][r] = { char: Math.random() > 0.5 ? '1' : '0', alpha: 0, state: 'off', life: 0 };
+        }
+        drops[c] = { row: Math.floor(Math.random() * -rows), speed: 1.0 + Math.random() * 0.8 };
+      }
+      for (let c = 0; c < cols; c++) {
+        radialMask[c] = [];
+        for (let r = 0; r < rows; r++) {
+          const x = c * fontSize + fontSize / 2;
+          const y = r * fontSize + fontSize / 2;
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy) / maxRadius;
+          radialMask[c][r] = Math.max(0, 1 - dist * dist);
+        }
+      }
+    }
+    rebuild();
+
+    function update() {
+      for (let c = 0; c < cols; c++) {
+        const drop = drops[c];
+        const headRow = Math.floor(drop.row);
+        if (headRow >= 0 && headRow < rows) {
+          const cell = grid[c][headRow];
+          if (cell.state === 'off') {
+            cell.state = 'in';
+            cell.alpha = 0;
+            cell.char = Math.random() > 0.5 ? '1' : '0';
+          }
+        }
+        drop.row += drop.speed;
+        if (drop.row > rows + 10) {
+          drop.row = Math.random() * -30 - 5;
+          drop.speed = 1.0 + Math.random() * 0.8;
+        }
+      }
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const cell = grid[c][r];
+          const peak = radialMask[c][r] * 0.45;
+          if (cell.state === 'in') {
+            cell.alpha += 0.04;
+            if (cell.alpha >= peak) { cell.alpha = peak; cell.state = 'visible'; cell.life = 30 + Math.floor(Math.random() * 50); }
+          } else if (cell.state === 'visible') {
+            cell.life--;
+            if (cell.life <= 0) cell.state = 'out';
+          } else if (cell.state === 'out') {
+            cell.alpha -= 0.02;
+            if (cell.alpha <= 0) { cell.alpha = 0; cell.state = 'off'; }
+          }
+        }
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, W, H);
+      ctx!.font = fontSize + 'px ui-monospace, "SF Mono", Menlo, monospace';
+      ctx!.textBaseline = 'top';
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const cell = grid[c][r];
+          if (cell.alpha <= 0) continue;
+          ctx!.fillStyle = 'rgba(100, 104, 135, ' + cell.alpha.toFixed(3) + ')';
+          ctx!.fillText(cell.char, c * fontSize, r * fontSize);
+        }
+      }
+    }
+
+    let running = true;
+    const obs = new IntersectionObserver(([entry]) => {
+      running = entry.isIntersecting;
+    }, { threshold: 0 });
+    obs.observe(canvas);
+
+    const ro = new ResizeObserver(() => {
+      sizeCanvas();
+      rebuild();
+    });
+    ro.observe(parent);
+
+    function loop() {
+      if (running) { update(); draw(); }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function initAllRains() {
+    document.querySelectorAll<HTMLCanvasElement>('.cover-hero__rain').forEach((c) => {
+      if (c.dataset.rainInit) return;
+      c.dataset.rainInit = '1';
+      initCoverHeroRain(c);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllRains);
+  } else {
+    initAllRains();
+  }
+</script>
+
+<style>
+  .cover-hero {
+    --ch-bg: var(--c-cream);
+    --ch-text: var(--c-ink);
+    --ch-text-muted: var(--c-muted);
+    --ch-divider: color-mix(in srgb, var(--c-ink) 12%, transparent);
+    --ch-eyebrow: var(--c-muted);
+    --ch-accent: var(--c-accent);
+    --ch-image-frame: var(--c-surface);
+    --ch-image-shadow: color-mix(in srgb, var(--c-ink) 18%, transparent);
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: var(--ch-bg);
+    color: var(--ch-text);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* ====== Variantes de fond light ====== */
+  .cover-hero--cream-mist {
+    --ch-bg: linear-gradient(180deg, var(--c-cream) 0%, var(--c-bg-start) 100%);
+  }
+  .cover-hero--warm-blush {
+    --ch-bg: linear-gradient(135deg, var(--c-cream) 0%, var(--c-accent-soft) 100%);
+  }
+  .cover-hero--pearl-stone {
+    --ch-bg: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    --ch-divider: color-mix(in srgb, var(--c-ink) 10%, transparent);
+    --ch-image-frame: var(--c-surface);
+    --ch-image-shadow: color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .cover-hero--halo-gold {
+    --ch-bg:
+      radial-gradient(120% 90% at 95% 5%, var(--c-accent-soft) 0%, color-mix(in srgb, var(--c-accent-soft) 0%, transparent) 55%),
+      linear-gradient(180deg, var(--c-cream) 0%, var(--c-bg-end) 100%);
+  }
+
+  .cover-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--ch-divider);
+  }
+  .cover-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .cover-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--ch-text);
+    text-align: left;
+  }
+  .cover-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--ch-text-muted);
+    text-align: left;
+  }
+
+  .cover-hero__rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+  .cover-hero__rating-score {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ch-text);
+  }
+  .cover-hero__rating-stars {
+    color: var(--ch-accent);
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
+  .cover-hero__rating-count {
+    font-size: 14px;
+    color: var(--ch-text-muted);
+  }
+
+  .cover-hero__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    min-height: 0;
+  }
+
+  .cover-hero__text {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .cover-hero__eyebrow {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: var(--ch-eyebrow);
+    margin: 0 0 36px;
+    text-align: left;
+  }
+
+  /* text-align: left override le default global :where(.reveal) h1 { text-align: center } */
+  .cover-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(110px, 11vw, 188px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ch-text);
+    text-wrap: balance;
+    text-align: left;
+  }
+  /* Italique : serif système, fallback. */
+  .cover-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ch-text);
+    letter-spacing: -0.015em;
+  }
+
+  /* Sous-titre poussé en bas du bloc texte via position absolue.
+     Le bloc texte étend sa hauteur (align-self: stretch) pour permettre
+     ce positionnement. Le titre reste vertically centered au-dessus. */
+  /* L'underline jaune rotatif (rotate -3deg) du titre déborde visuellement
+     sous la baseline. On compense avec un padding-top plus large pour que
+     le gap visible corresponde à ce qu'on attend (~40-60px utiles). */
+  .cover-hero__footer {
+    margin: 0;
+    padding-top: 88px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: var(--ch-text);
+    text-align: left;
+  }
+
+  /* ====== Image card + matrix rain ======
+     Image area large pour donner du champ au matrix rain.
+     Le rain remplit toute la zone, l'image card est plus petite et
+     centrée dedans, donc le rain est visible tout autour. */
+  .cover-hero__image-area {
+    position: relative;
+    flex: 0 0 auto;
+    width: 760px;
+    height: 880px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Marge négative pour déborder au-delà du padding 64px de la slide,
+       le rain prend plus d'espace visuel sans casser le layout. */
+    margin: -64px -32px -64px 0;
+  }
+  .cover-hero__rain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cover-hero__image-card {
+    position: relative;
+    z-index: 1;
+    width: 480px;
+    aspect-ratio: 4 / 5;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
+  }
+  .cover-hero__image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

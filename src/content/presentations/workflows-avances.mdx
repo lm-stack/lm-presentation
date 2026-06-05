@@ -1,0 +1,275 @@
+---
+title: "Workflows avancés"
+subtitle: "CRM, Data & Automation"
+short: "Workflows avancés"
+date: 2026-06-04
+type: cours
+unlisted: true
+cover: "/decks/workflows-avances/cover-rocket.jpg"
+description: "Workflows avancés : limites des workflows uniques, automatiser l'automatisation avec n8n, devenir flowgrammer et appliquer les six piliers d'une automation durable. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import MediaHero from '@/components/slides/MediaHero.astro';
+import ExchangeHero from '@/components/slides/ExchangeHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import StatementHero from '@/components/slides/StatementHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
+
+{/*
+  MAPPING workflows-avances.mdx -> workflows-avances-new.mdx
+  Date de migration : 2026-06-04
+
+  Composants source -> cible :
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ Slide 1  Cover           -> CoverHero                                       │
+  │ Slide 2  Calendar        -> SUPPRIMÉ (vit uniquement dans le deck Intro)    │
+  │ Slide 3  Exchange        -> ExchangeHero                                    │
+  │ Slide 4  ImageGrid       -> ImageGridHero                                   │
+  │ Slide 5  Statement+image -> MediaHero (fit="cover", image locale)           │
+  │ Slide 6  Exchange        -> ExchangeHero                                    │
+  │ Slide 7  Demo            -> DemoHero                                        │
+  │ Slide 8  Section         -> SubSectionHero (index="01")                     │
+  │ Slide 9  NumberedCards cols=1 (5 items) -> NumberedSplit                    │
+  │ Slide 10 Section         -> SubSectionHero (index="02")                     │
+  │ Slide 11 NumberedCards cols=2 (6 items) -> InfoCardsGrid                   │
+  │ Slide 12 Closing variant="qa" -> ClosingHero                                │
+  └─────────────────────────────────────────────────────────────────────────────┘
+
+  Décisions / jugements / placeholders :
+
+  SLIDE 2 - Calendar supprimé :
+    Le calendrier jour 3 est supprimé conformément à la règle du parcours
+    (il vit uniquement dans le deck Introduction). Résultat : 12 slides -> 11 slides.
+
+  SLIDE 4 - ImageGridHero (Trois limites) :
+    Images locales réutilisées telles quelles depuis public/decks/workflows-avances/.
+    Les propriétés `alt` n'existaient pas dans l'ancien ImageGrid ; textes alt rédigés
+    à partir des titres et descriptions d'origine.
+
+  SLIDE 5 - MediaHero (Statement + image) :
+    Ancien Statement avec image automatiser-lightbulb.jpeg. Le body de l'ancien
+    composant (children) est passé en prop `body`. Le `subtitle` reprend le champ
+    subtitle d'origine. fit="cover" car photo.
+
+  SLIDE 7 - DemoHero (Démonstration n8n) :
+    L'ancienne Demo était une slide de transition bare (pas de capture, pas de rows).
+    DemoHero REQUIERT image + rows. DÉCISION :
+    - Image placeholder : zapier-workflow.png (seule capture technique disponible
+      dans le deck ; à remplacer par une vraie capture n8n).
+    - Rows synthétisées à partir du contexte pédagogique du deck (logique
+      d'orchestration n8n, workflow paramétrable).
+    HUMAIN : remplacer l'image par une capture n8n réelle et ajuster les rows.
+
+  SLIDE 9 - NumberedSplit (Cinq vérités) :
+    5 items, colonnes=1 dans l'original -> NumberedSplit avec image locale
+    flowgrammer-3d.jpeg. Items reformatés "Titre : description" en une seule
+    prop `text` par item (format attendu par NumberedSplit).
+
+  SLIDE 11 - InfoCardsGrid (Six piliers) :
+    6 items, colonnes=2 dans l'original -> InfoCardsGrid (grille cards).
+    Icônes Phosphor choisies par affinité sémantique :
+    01 Simplicité   -> ph:arrows-clockwise (simplification, itération)
+    02 Maintenance  -> ph:wrench
+    03 Valeur       -> ph:target
+    04 Data-first   -> ph:database
+    05 Humain       -> ph:users
+    06 Tester       -> ph:check-circle
+
+  BRAND : brand="CRM, Data & Automation" brandSub="Executive Education" sur tous.
+*/}
+
+{/* Slide 1 : Cover */}
+<CoverHero
+  title="Workflows avancés"
+  italicPart="avancés"
+  eyebrow="Module 33"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="/decks/workflows-avances/cover-rocket.jpg"
+  theme="halo-gold"
+/>
+
+{/* Slide 2 : Exchange — quelles sont les limites du workflow d'hier ?
+    Reprise du workflow Zapier construit lors du module précédent pour
+    interpeller la classe avant d'aborder les limites structurelles. */}
+<ExchangeHero
+  title="Quelles sont les limites du workflow d'hier ?"
+  italicPart="limites"
+  subtitle="Reprenez le workflow Zapier construit lors du module précédent. Qu'est-ce qui pourrait mal se passer à l'échelle ?"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : Trois limites des workflows uniques */}
+<ImageGridHero
+  title="Trois limites des workflows uniques"
+  italicPart="limites"
+  subtitle="Créer un workflow par processus entraîne des externalités négatives qu'il faut mitiger rapidement."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflows-avances/limite-risque-erreur.jpeg",
+      alt: "Illustration du risque d'erreur lié aux duplications de workflows",
+      title: "Risque d'erreur",
+      text: "Trop d'actions manuelles et de duplications. Chaque copie d'un workflow réintroduit des occasions de divergence.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-scalabilite.jpeg",
+      alt: "Illustration de la scalabilité limitée par la multiplication des workflows",
+      title: "Scalabilité limitée",
+      text: "Un workflow par processus, donc une multiplication linéaire. Le coût de maintenance grandit avec le catalogue.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-usine-gaz.jpeg",
+      alt: "Illustration d'une usine à gaz, métaphore de la complexité incontrôlée",
+      title: "Usine à gaz",
+      text: "Historicité compliquée, qui a fait quoi, quand, et pourquoi. Le debugging devient archéologique.",
+    },
+  ]}
+/>
+
+{/* Slide 4 : Automatiser l'automatisation (pivot conceptuel) */}
+<MediaHero
+  title="Automatiser l'automatisation"
+  italicPart="automatisation"
+  subtitle="Construire un workflow qui reste valable à chaque nouvel événement, sans dupliquer ni reconfigurer."
+  body="Le pivot conceptuel : on ne crée plus un workflow par événement, mais un workflow qui s'adapte à tous les événements. Le code est unique, la donnée est variable."
+  image="/decks/workflows-avances/automatiser-lightbulb.jpeg"
+  alt="Ampoule allumée, métaphore du pivot conceptuel vers l'automatisation de l'automatisation"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 5 : Exchange — modéliser un processus BPMN ensemble */}
+<ExchangeHero
+  title="Modélisons un processus BPMN ensemble"
+  italicPart="ensemble"
+  subtitle="Choisissez un processus récurrent de votre organisation. On le modélise en direct, prêt pour n8n."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Démonstration sur n8n
+    PLACEHOLDER : image zapier-workflow.png réutilisée (seule capture technique
+    du deck) — à remplacer par une vraie capture n8n. Rows synthétisées à partir
+    du contexte pédagogique : workflow paramétrable orchestrant plusieurs événements. */}
+<DemoHero
+  title="Démonstration sur n8n"
+  italicPart="n8n"
+  subtitle="Construction live d'un workflow paramétrable qui orchestre plusieurs événements à partir d'une seule logique."
+  image="/decks/workflows-avances/zapier-workflow.png"
+  caption="Capture n8n : workflow paramétrable multi-événements (à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "n8n, éditeur open-source de workflows (auto-hébergeable, communauté active en Suisse romande)." },
+    { label: "Principe", value: "Un seul workflow paramétrable traite tous les événements entrants, sans duplication de logique." },
+    { label: "Étapes", value: "Webhook déclencheur, routage conditionnel, actions CRM, notification Slack, journalisation." },
+    { label: "À retenir", value: "La donnée est variable, le code est unique : c'est le pivot vers l'industrialisation." },
+  ]}
+/>
+
+{/* Slide 7 : Section — Devenir flowgrammer */}
+<SubSectionHero
+  kicker="Mindset"
+  index="01"
+  title="Devenir flowgrammer"
+  italicPart="flowgrammer"
+  subtitle="Ni développeur, ni utilisateur final : le flowgrammer pense en flux, déclencheurs et branchements."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 8 : Cinq vérités sur le flowgramming (NumberedCards cols=1 -> NumberedSplit)
+    Image locale flowgrammer-3d.jpeg disponible dans le deck. */}
+<NumberedSplit
+  title="Cinq vérités sur le flowgramming"
+  italicPart="flowgramming"
+  subtitle="C'est en testant que vous deviendrez flowgrammer. La pratique sur vos propres cas vaut mille tutoriels."
+  image="/decks/workflows-avances/flowgrammer-3d.jpeg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Accessible à tous : plus besoin de savoir coder. Les outils no-code rendent l'automation disponible à toute l'équipe métier." },
+    { text: "Tendance irréversible : les workflows vont se multiplier. Anticiper la gouvernance dès maintenant évite la dette technique." },
+    { text: "Templates contre-productifs : les modèles publics ignorent vos données, votre stack et vos contraintes. Source de complexité." },
+    { text: "Adapter plutôt qu'imiter : partir de votre processus réel, pas d'un modèle théorique. La valeur émerge de la spécificité." },
+    { text: "Stratégie obligatoire : des workflows sans cartographie d'ensemble se contredisent et se cannibalisent." },
+  ]}
+/>
+
+{/* Slide 9 : Section — Les fondations d'une automation durable */}
+<SubSectionHero
+  kicker="Six piliers"
+  index="02"
+  title="Les fondations d'une automation durable"
+  italicPart="durable"
+  subtitle="Trop d'organisations tombent dans le piège d'automatiser sans réflexion. Six piliers pour ancrer la pratique."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 10 : Les six piliers de l'automatisation (NumberedCards cols=2 -> InfoCardsGrid)
+    Icônes Phosphor choisies par affinité sémantique (voir commentaire mapping en haut).
+    Image piliers-columns.jpg disponible dans le deck mais non utilisée ici car
+    InfoCardsGrid n'a pas de prop image — elle pourrait servir dans une MediaHero
+    introductive si le contenu de la grille paraît chargé. */}
+<InfoCardsGrid
+  title="Les six piliers de l'automatisation"
+  italicPart="piliers"
+  subtitle="Réussir une stratégie d'automatisation efficace et durable demande plus qu'un simple enchaînement d'actions."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    {
+      icon: "ph:arrows-clockwise",
+      label: "Simplifier, pas complexifier",
+      value: "Un bon workflow simplifie l'expérience client et les processus. Une automation mal pensée crée de la complexité supplémentaire.",
+    },
+    {
+      icon: "ph:wrench",
+      label: "Maintenance essentielle",
+      value: "Un workflow ça se maintient, ça s'optimise. Sans owner identifié, il tombe en panne. Prévoyez qui maintient avant la mise en production.",
+    },
+    {
+      icon: "ph:target",
+      label: "Prioriser la valeur",
+      value: "On n'automatise pas pour automatiser. On automatise ce qui génère de la valeur : gain de temps, qualité d'expérience, réactivité.",
+    },
+    {
+      icon: "ph:database",
+      label: "Data-first mindset",
+      value: "La qualité des workflows dépend de la qualité des données. Sans données propres, l'automatisation amplifie les problèmes.",
+    },
+    {
+      icon: "ph:users",
+      label: "Humain au bon endroit",
+      value: "On automatise les tâches répétitives, pas les relations. Bon équilibre humain et automation égale meilleure expérience client.",
+    },
+    {
+      icon: "ph:check-circle",
+      label: "Tester avant de scaler",
+      value: "Toujours valider sur un petit volume avant la production. Évite de propager massivement une erreur sur toute la base.",
+    },
+  ]}
+/>
+
+{/* Slide 11 : Questions et réponses
+    variant="qa" dans l'original -> titre "Questions & réponses" + image cover réutilisée. */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="Ensuite : IA et automatisation."
+  url="lausanne.marketing"
+  image="/decks/workflows-avances/cover-rocket.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

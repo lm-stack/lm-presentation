@@ -1,0 +1,220 @@
+---
+// src/components/slides/SubSectionHero.astro
+// Intercalaire de SOUS-SECTION, direction éditoriale / magazine (charte LM light).
+// Header standard (brand + logo LM + border, 44/40) en haut, puis sous le header
+// une compo asymétrique : grand numéro jaune à gauche, filet vertical, kicker
+// (section parente) + titre serif italique (accent souligné jaune) + sous-titre.
+// Reveal en cascade du contenu quand la slide devient active.
+interface Props {
+  /** Section parente, ex "Collecte · Jour 1". Optionnel. */
+  kicker?: string;
+  /** Numéro de sous-section, ex "1.2". Optionnel. */
+  index?: string;
+  title: string;
+  /** Portion du titre soulignée en jaune (le titre est en serif italique). */
+  italicPart?: string;
+  subtitle?: string;
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+  /** Autorise le sous-titre sur plusieurs lignes (défaut : une seule ligne). */
+  subtitleWrap?: boolean;
+}
+import { splitHighlight } from '@/utils/highlight';
+const {
+  kicker,
+  index,
+  title,
+  italicPart,
+  subtitle,
+  brand = 'Titre de la présentation',
+  brandSub,
+  tocLabel,
+  subtitleWrap = false,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="subsection-hero" data-layout="subsection-hero" data-section-title={tocLabel ?? title}>
+  <header class="subsection-hero__header">
+    <div class="subsection-hero__brand-text">
+      <p class="subsection-hero__brand-main">{brand}</p>
+      {brandSub && <p class="subsection-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="subsection-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="subsection-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="subsection-hero__body">
+    <div class="subsection-hero__inner">
+      {index && <span class="subsection-hero__index">{index}</span>}
+      <span class="subsection-hero__rule" aria-hidden="true"></span>
+      <div class="subsection-hero__text">
+        {kicker && <p class="subsection-hero__kicker">{kicker}</p>}
+        <h2 class="subsection-hero__title">
+          {titleParts
+            ? <>{titleParts.before}<span class="underline">{titleParts.match}</span>{titleParts.after}</>
+            : title}
+        </h2>
+        {subtitle && <p class:list={['subsection-hero__subtitle', subtitleWrap && 'subsection-hero__subtitle--wrap']}>{subtitle}</p>}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .subsection-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    /* Lumière chaude éditoriale + halo jaune doux côté numéro. */
+    background:
+      radial-gradient(120% 72% at 13% 56%, color-mix(in srgb, var(--c-accent) 16%, transparent) 0%, color-mix(in srgb, var(--c-accent) 0%, transparent) 46%),
+      linear-gradient(176deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header standard intangible : brand gauche + logo LM droite + border-bottom. */
+  .subsection-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .subsection-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .subsection-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .subsection-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps centré verticalement dans l'espace sous le header. */
+  .subsection-hero__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+  }
+  .subsection-hero__inner {
+    display: flex;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+  }
+
+  /* Grand numéro jaune, ancre graphique. */
+  .subsection-hero__index {
+    flex: 0 0 auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(190px, 20vw, 340px);
+    font-weight: 700;
+    line-height: 0.82;
+    letter-spacing: -0.045em;
+    color: var(--c-accent);
+    text-shadow: 0 8px 30px color-mix(in srgb, var(--c-accent) 25%, transparent);
+    opacity: 0;
+    animation: ss-scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+  }
+
+  /* Filet vertical éditorial entre le numéro et le texte. */
+  .subsection-hero__rule {
+    flex: 0 0 auto;
+    width: 1px;
+    align-self: stretch;
+    max-height: 420px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c-ink) 0%, transparent) 0%, color-mix(in srgb, var(--c-ink) 22%, transparent) 18%, color-mix(in srgb, var(--c-ink) 22%, transparent) 82%, color-mix(in srgb, var(--c-ink) 0%, transparent) 100%);
+    transform-origin: center;
+    opacity: 0;
+    animation: ss-grow-y 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+  }
+
+  .subsection-hero__text {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 1280px;
+  }
+  .subsection-hero__kicker {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    color: var(--c-muted);
+    margin: 0 0 28px;
+    opacity: 0;
+    animation: ss-fade-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+  }
+  .subsection-hero__title {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(68px, 7vw, 128px);
+    line-height: 1.0;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+    opacity: 0;
+    animation: ss-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  }
+  .subsection-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 27px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 32px 0 0;
+    max-width: 1280px;
+    white-space: nowrap;
+    opacity: 0;
+    animation: ss-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both;
+  }
+  .subsection-hero__subtitle--wrap {
+    white-space: normal;
+    max-width: 1100px;
+  }
+
+  @keyframes ss-scale-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes ss-grow-y {
+    from { opacity: 0; transform: scaleY(0.2); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+  @keyframes ss-fade-up {
+    from { opacity: 0; transform: translateY(26px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ss-fade-left {
+    from { opacity: 0; transform: translateX(-22px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+</style>

@@ -1,0 +1,231 @@
+---
+// src/components/slides/QuoteImage.astro
+// Citation entièrement centrée (horizontalement + verticalement) sur image de
+// fond floutée + voile crème halo gold. Pastille jaune avec icône Phosphor
+// "quotes" centrée au-dessus de la citation, attribution centrée dessous.
+// Variante optionnelle "logos row" pour afficher les logos de marques
+// sous l'attribution.
+// Inspiration slides 5 et 6 du PPTX ExecEd.
+import { Icon } from 'astro-icon/components';
+
+interface LogoItem {
+  src: string;
+  alt: string;
+}
+interface Props {
+  text: string;
+  author: string;
+  role?: string;
+  image: string;
+  logos?: LogoItem[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  text,
+  author,
+  role,
+  image,
+  logos,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="quote-image" data-layout="quote-image">
+  <div class="quote-image__bg" aria-hidden="true">
+    <img src={image} alt="" loading="lazy" decoding="async" />
+    <div class="quote-image__overlay"></div>
+  </div>
+
+  <header class="quote-image__header">
+    <div class="quote-image__brand-text">
+      <p class="quote-image__brand-main">{brand}</p>
+      {brandSub && <p class="quote-image__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="quote-image__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="quote-image__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="quote-image__body">
+    <span class="quote-image__mark" aria-hidden="true">
+      <Icon name="ph:quotes-thin" />
+    </span>
+    <blockquote class="quote-image__text">{text}</blockquote>
+    <p class="quote-image__author">
+      <span class="quote-image__author-name">{author}</span>
+      {role && <span class="quote-image__author-role">, {role}</span>}
+    </p>
+  </div>
+
+  {logos && logos.length > 0 && (
+    <div class="quote-image__logos">
+      {logos.map((logo) => (
+        <span class="quote-image__logo">
+          <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
+        </span>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .quote-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    color: var(--c-ink);
+    display: grid !important;
+    grid-template-rows: auto 1fr auto;
+    background: var(--c-cream);
+  }
+
+  .quote-image__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .quote-image__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(14px) saturate(0.6);
+    transform: scale(1.1); /* évite les bords blurés en sortant de l'écran */
+  }
+  /* Voile crème + halo gold en coin pour rester en light mode et la
+     lisibilité du texte foncé. Opacité plus marquée pour que l'image
+     reste sous-jacente mais ne dispute pas le texte. */
+  .quote-image__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c-bg-start) 60%, transparent) 0%, color-mix(in srgb, var(--c-bg-end) 70%, transparent) 100%);
+  }
+
+  .quote-image__header,
+  .quote-image__icon,
+  .quote-image__body,
+  .quote-image__logos {
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-image__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .quote-image__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+  .quote-image__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .quote-image__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+
+  /* Bloc entièrement centré : pastille, citation et attribution empilées
+     et centrées horizontalement (align-items + text-align center) dans un
+     conteneur lui-même centré (margin auto). */
+  .quote-image__body {
+    align-self: center;
+    max-width: 1480px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    text-align: center;
+    position: relative;
+  }
+  /* Pastille jaune centrée au-dessus de la citation (remplace l'ancien rond
+     ancré au bord gauche qui déséquilibrait la composition vers la gauche). */
+  .quote-image__mark {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-on-accent);
+    flex: 0 0 auto;
+  }
+  .quote-image__mark :global(svg) {
+    width: 60px;
+    height: 60px;
+  }
+  .quote-image__text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(34px, 3.3vw, 50px);
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 1380px;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: center;
+  }
+  .quote-image__author {
+    position: relative;
+    z-index: 1;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 22px;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: center;
+  }
+  .quote-image__author-name {
+    font-weight: 500;
+  }
+  .quote-image__author-role {
+    font-weight: 400;
+    color: var(--c-muted);
+  }
+
+  .quote-image__logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    padding-top: 32px;
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .quote-image__logo {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.78;
+  }
+  .quote-image__logo img {
+    max-height: 36px;
+    max-width: 140px;
+    object-fit: contain;
+    filter: grayscale(1);
+  }
+</style>

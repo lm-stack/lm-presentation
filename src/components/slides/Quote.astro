@@ -1,0 +1,99 @@
+---
+// src/components/slides/Quote.astro
+interface Props {
+  text: string;
+  author: string;
+  role?: string;
+  image?: string;
+  highlight?: string;
+}
+
+const { text, author, role, image, highlight } = Astro.props;
+
+import { splitHighlight } from '@/utils/highlight';
+
+const textParts = splitHighlight(text, highlight);
+---
+<section class="quote-slide" data-layout="quote">
+  <figure>
+    <blockquote class="quote-slide__text">
+      <span class="quote-slide__mark" aria-hidden="true">&#x201C;</span>
+      {textParts
+        ? <span>{textParts.before}<span class="underline">{textParts.match}</span>{textParts.after}</span>
+        : <span>{text}</span>}
+    </blockquote>
+    <figcaption class="quote-slide__attribution">
+      {image && (
+        <span class="quote-slide__avatar">
+          <img src={image} alt={author} loading="lazy" decoding="async" />
+        </span>
+      )}
+      <span class="quote-slide__name-block">
+        <span class="quote-slide__author">{author}</span>
+        {role && <span class="quote-slide__role">{role}</span>}
+      </span>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  .quote-slide {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center;
+  }
+  .quote-slide figure {
+    margin: 0;
+    max-width: 1400px;
+  }
+  .quote-slide__text {
+    position: relative;
+    font-size: 44px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: #191919;
+    margin: 0 0 48px;
+    quotes: none;
+  }
+  .quote-slide__mark {
+    position: absolute;
+    top: -32px;
+    left: -16px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 120px;
+    line-height: 1;
+    color: #FFD838;
+    opacity: 0.6;
+  }
+  .quote-slide__attribution {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+  }
+  .quote-slide__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .quote-slide__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .quote-slide__name-block {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .quote-slide__author {
+    font-size: 22px;
+    font-weight: 700;
+    color: #191919;
+  }
+  .quote-slide__role {
+    font-size: 18px;
+    color: #6B6F84;
+  }
+</style>

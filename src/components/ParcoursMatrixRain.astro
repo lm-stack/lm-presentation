@@ -1,0 +1,143 @@
+---
+// src/components/ParcoursMatrixRain.astro
+// Pluie binaire decorative (1/0), concentree en haut a droite du hero, masquee
+// <860px. Adaptee de lm-hub/src/components/MatrixRain.astro. La couleur suit le
+// token --c-faint du schema courant (relue au changement de theme). Pause hors
+// ecran via IntersectionObserver. Effet purement decoratif (exception au "pas de
+// hex en dur" : la couleur vient d'un token, le fallback est un slate neutre).
+interface Props {
+  width?: number;
+  height?: number;
+}
+const { width = 1400, height = 440 } = Astro.props;
+---
+<canvas class="parcours-matrix" width={width} height={height} aria-hidden="true"></canvas>
+
+<style define:vars={{ mW: width + 'px', mH: height + 'px' }}>
+  .parcours-matrix {
+    position: absolute; top: 0; right: -2rem;
+    width: var(--mW); height: var(--mH);
+    z-index: 0; pointer-events: none;
+    mask-image: radial-gradient(ellipse 100% 80% at 72% 28%, black 38%, transparent 88%);
+    -webkit-mask-image: radial-gradient(ellipse 100% 80% at 72% 28%, black 38%, transparent 88%);
+  }
+  @media (max-width: 860px) {
+    .parcours-matrix { display: none; }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const canvases = document.querySelectorAll('canvas.parcours-matrix');
+    canvases.forEach((canvas) => {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const W = canvas.width;
+      const H = canvas.height;
+      const fontSize = 11;
+      const cols = Math.floor(W / fontSize);
+      const rows = Math.floor(H / fontSize);
+      const centerX = W * 0.82;
+      const centerY = H * 0.28;
+      const maxRadius = Math.max(W, H) * 0.6;
+
+      function readColor() {
+        const v = getComputedStyle(document.body).getPropertyValue('--c-faint').trim();
+        return v || '#9A9DAD';
+      }
+      let color = readColor();
+
+      const grid = [];
+      const drops = [];
+      const radialMask = [];
+      for (let c = 0; c < cols; c++) {
+        grid[c] = [];
+        radialMask[c] = [];
+        for (let r = 0; r < rows; r++) {
+          grid[c][r] = { char: Math.random() > 0.5 ? '1' : '0', alpha: 0, state: 'off', life: 0 };
+          const x = c * fontSize + fontSize / 2;
+          const y = r * fontSize + fontSize / 2;
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy) / maxRadius;
+          radialMask[c][r] = Math.max(0, 1 - dist * dist);
+        }
+        drops[c] = { row: Math.floor(Math.random() * -rows), speed: 1.0 + Math.random() * 0.8 };
+      }
+
+      function update() {
+        for (let c = 0; c < cols; c++) {
+          const drop = drops[c];
+          const headRow = Math.floor(drop.row);
+          if (headRow >= 0 && headRow < rows) {
+            const cell = grid[c][headRow];
+            if (cell.state === 'off') {
+              cell.state = 'in';
+              cell.alpha = 0;
+              cell.char = Math.random() > 0.5 ? '1' : '0';
+            }
+          }
+          drop.row += drop.speed;
+          if (drop.row > rows + 10) {
+            drop.row = Math.random() * -30 - 5;
+            drop.speed = 1.0 + Math.random() * 0.8;
+          }
+        }
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const cell = grid[c][r];
+            const peak = radialMask[c][r] * 0.35;
+            if (cell.state === 'in') {
+              cell.alpha += 0.04;
+              if (cell.alpha >= peak) {
+                cell.alpha = peak;
+                cell.state = 'visible';
+                cell.life = 30 + Math.floor(Math.random() * 50);
+              }
+            } else if (cell.state === 'visible') {
+              cell.life--;
+              if (cell.life <= 0) cell.state = 'out';
+            } else if (cell.state === 'out') {
+              cell.alpha -= 0.02;
+              if (cell.alpha <= 0) {
+                cell.alpha = 0;
+                cell.state = 'off';
+              }
+            }
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.font = fontSize + 'px monospace';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = color;
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const cell = grid[c][r];
+            if (cell.alpha <= 0) continue;
+            ctx.globalAlpha = cell.alpha;
+            ctx.fillText(cell.char, c * fontSize, r * fontSize);
+          }
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // Recolorer si le theme change (data-scheme sur <body>).
+      const obs = new MutationObserver(() => { color = readColor(); });
+      obs.observe(document.body, { attributes: true, attributeFilter: ['data-scheme'] });
+
+      let running = true;
+      const hero = canvas.closest('.parcours-hero');
+      if (hero && 'IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => { running = entry.isIntersecting; }, { threshold: 0 }).observe(hero);
+      }
+      function loop() {
+        if (running) { update(); draw(); }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    });
+  })();
+</script>

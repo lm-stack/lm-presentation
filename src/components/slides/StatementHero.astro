@@ -1,0 +1,232 @@
+---
+// src/components/slides/StatementHero.astro
+// Slide "déclaration / chiffre-clé" ExecEd-style : header standard (brand + logo
+// + border, 44/40), à gauche eyebrow + titre statement (serif italique souligné,
+// sur deux lignes via \n) + corps, à droite un grand chiffre (stat) optionnel +
+// légende centrés. Footer "Source" cliquable en bas à gauche (.slide-source).
+interface Props {
+  eyebrow?: string;
+  /** Titre statement. Un \n force un saut de ligne (white-space: pre-line). */
+  title: string;
+  italicPart?: string;
+  body?: string;
+  /** Grand chiffre mis en avant, ex "21%". Optionnel. */
+  stat?: string;
+  /** Légende sous le chiffre. */
+  statCaption?: string;
+  /** Étude citée, affichée en bas à gauche. Ex "Wavestone, 2024". */
+  source?: string;
+  /** Lien vers l'étude : rend la source cliquable. */
+  sourceUrl?: string;
+  brand?: string;
+  brandSub?: string;
+}
+import { splitHighlight } from '@/utils/highlight';
+const {
+  eyebrow,
+  title,
+  italicPart,
+  body,
+  stat,
+  statCaption,
+  source,
+  sourceUrl,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="statement-hero" data-layout="statement-hero">
+  <header class="statement-hero__header">
+    <div class="statement-hero__brand-text">
+      <p class="statement-hero__brand-main">{brand}</p>
+      {brandSub && <p class="statement-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="statement-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="statement-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="statement-hero__content">
+    <div class="statement-hero__text">
+      {eyebrow && (
+        <p class="statement-hero__eyebrow">
+          <span class="statement-hero__eyebrow-square" aria-hidden="true"></span>{eyebrow}
+        </p>
+      )}
+      <h2 class="statement-hero__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="statement-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {body && <p class="statement-hero__body">{body}</p>}
+    </div>
+
+    {stat && (
+      <div class="statement-hero__stat-block">
+        <span class="statement-hero__stat">{stat}</span>
+        {statCaption && <span class="statement-hero__stat-caption">{statCaption}</span>}
+      </div>
+    )}
+  </div>
+
+  {source && (sourceUrl
+    ? <a class="slide-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+    : <p class="slide-source">Source : {source}</p>)}
+</section>
+
+<style>
+  .statement-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .statement-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .statement-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .statement-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .statement-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .statement-hero__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+  }
+  .statement-hero__text {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .statement-hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-muted);
+    margin: 0 0 24px;
+  }
+  .statement-hero__eyebrow-square {
+    width: 14px;
+    height: 14px;
+    background: var(--c-accent);
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+  .statement-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(56px, 5.6vw, 96px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    white-space: pre-line;
+    text-align: left;
+  }
+  .statement-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .statement-hero__body {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 26px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 28px 0 0;
+    max-width: 760px;
+  }
+
+  /* Chiffre-clé à droite, centré horizontalement dans sa colonne. */
+  .statement-hero__stat-block {
+    flex: 0 0 auto;
+    width: 38%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .statement-hero__stat {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(120px, 13vw, 220px);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+  }
+  .statement-hero__stat-caption {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 500;
+    color: var(--c-muted);
+    margin-top: 12px;
+    max-width: 420px;
+    text-align: center;
+  }
+</style>
+
+<style is:global>
+  /* Footer "Source" réutilisable, en bas à gauche, pour citer une étude sur
+     n'importe quelle slide. Positionné par rapport à la <section> (relative).
+     Toujours cliquable quand un lien est fourni. */
+  [data-layout] .slide-source {
+    position: absolute;
+    left: 96px;
+    bottom: 40px;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--c-faint);
+    letter-spacing: 0.01em;
+    z-index: 3;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  [data-layout] a.slide-source:hover {
+    color: var(--c-ink);
+    text-decoration: underline;
+  }
+</style>

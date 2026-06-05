@@ -1,0 +1,943 @@
+/* Theme LM pour Reveal.js : layout de Reveal + override visuels LM */
+@import 'reveal.js/reveal.css';
+@import './global.css';
+@import './themes.css';
+
+/* Fond unique creme pour tout le deck : body + slides partagent --slide-bg.
+   Plus de mecanique seamless (JS qui suit la couleur de la slide courante) :
+   chaque slide repose visuellement sur le meme aplat. Les decos internes
+   (washes gold, watermarks) restent assumees comme accents locaux. */
+:root {
+  --slide-bg: var(--c-cream);
+}
+
+body {
+  background: var(--slide-bg);
+  margin: 0;
+}
+
+/* Impression : forcer la conservation des fonds, gradients, et couleurs. Sans cela
+   les browsers strippent les backgrounds en PDF (washes, fonds gold, etc. disparaissent). */
+@media print {
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Variables partagees pour la geometrie du slide. Permet de switcher entre mode
+   fenetre (avec marges chrome) et mode fullscreen (pleine taille) en redefinissant
+   uniquement ces vars. */
+:root {
+  --slide-top-offset: -40px;       /* remonte le slide par rapport au centre viewport */
+  --slide-h-margin: 32px;          /* marge horizontale autour du slide */
+  --slide-v-chrome: 160px;         /* hauteur de chrome reservee (top + bottom) */
+}
+
+/* Mode fullscreen : on supprime les marges et on recentre, le slide remplit l'ecran. */
+:root:has(:fullscreen),
+body.is-fullscreen {
+  --slide-top-offset: 0px;
+  --slide-h-margin: 0px;
+  --slide-v-chrome: 0px;
+}
+
+.deck-stage {
+  position: fixed;
+  top: calc(50% + var(--slide-top-offset));
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Le wrapper respecte l'aspect ratio 16:9 pour que le slide remplisse pile le */
+  /* container, plus aucune bande visible a l'interieur. Hairline 1px pour     */
+  /* materialiser le bord du slide contre le bg du body (meme creme partage). */
+  /* Cette bordure est neutralisee en mode plein ecran via .is-fullscreen.    */
+  width: min(
+    calc(100vw - var(--slide-h-margin)),
+    calc((100vh - var(--slide-v-chrome)) * 16 / 9)
+  );
+  aspect-ratio: 16 / 9;
+  background: transparent;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--c-ink) 4%, transparent);
+}
+
+html:has(:fullscreen) .deck-stage,
+body.is-fullscreen .deck-stage {
+  border: none;
+  box-shadow: none;
+}
+
+/* Init Reveal echouee : on masque les controles qui ne servent plus a rien (compteur,
+   nav prev/next, bouton fullscreen). Le contenu MDX reste lisible en flux normal. */
+body.deck-init-failed .deck-footer,
+body.deck-init-failed .deck-toolbar {
+  display: none !important;
+}
+
+/* Mode plein ecran : on masque tout le chrome. Deux selecteurs en doublon : */
+/* :has(:fullscreen) (CSS moderne) et body.is-fullscreen (classe ajoutee par JS via */
+/* l'event fullscreenchange) pour la compat tous navigateurs. */
+html:has(:fullscreen) .deck-menu-pill,
+html:has(:fullscreen) .deck-menu,
+html:has(:fullscreen) .deck-toolbar,
+html:has(:fullscreen) .deck-footer,
+body.is-fullscreen .deck-menu-pill,
+body.is-fullscreen .deck-menu,
+body.is-fullscreen .deck-toolbar,
+body.is-fullscreen .deck-footer {
+  display: none !important;
+}
+
+.reveal {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 28px;
+  background: transparent;
+  color: var(--c-muted);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* ============================================================ */
+/* LIENS DANS LES SLIDES                                        */
+/* ============================================================ */
+/* Tous les <a> dans les slides (mode reveal ou handout) : couleur
+   héritée du parent, soulignement classique, hover discret. */
+:where(.reveal, .handout-doc) a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  transition: opacity 0.15s ease;
+}
+:where(.reveal, .handout-doc) a:hover {
+  color: var(--c-accent);
+}
+
+/* ============================================================ */
+/* HEADER EXECED-STYLE : BORDER-BOTTOM PLEINE LARGEUR           */
+/* ============================================================ */
+/* Règle absolue (cf. .claude/CLAUDE.md) : la border-bottom du header
+   traverse TOUTE la largeur de la slide. Les composants à header "inset"
+   (section padding 64px 96px, header enfant direct) voient leur header
+   étendu de -96px de chaque côté, avec padding interne pour réaligner
+   le brand et le logo. ProgrammeHero / NumberedSplit / WorkshopHero ne
+   sont PAS listés : leur header est déjà full-width (section padding 0,
+   header padding 96px). */
+.cover-hero__header,
+.about-hero__header,
+.image-grid-hero__header,
+.quote-image__header,
+.poll-hero__header,
+.wordcloud-hero__header,
+.closing-hero__header,
+.big-image-hero__header,
+.section-hero__header,
+.info-cards-grid__header,
+.people-cards__header,
+.section-split__header {
+  margin-left: -96px;
+  margin-right: -96px;
+  padding-left: 96px;
+  padding-right: 96px;
+}
+
+/* ============================================================ */
+/* REGLE ABSOLUE LAYOUT DES SLIDES                              */
+/* ============================================================ */
+/*
+   Le TITRE (SlideTitle = .slide-title : h2 + sous-titre + barre)
+   reste TOUJOURS en haut de la slide, en position fixe.
+
+   Le CONTENU sous le titre (le body de la slide) est centre
+   verticalement dans l'espace restant (entre le bas du titre
+   et le bas de la slide, padding inclus).
+
+   PAS de "tout centre comme un bloc" : le titre doit etre dans
+   la meme position spatiale sur TOUTES les slides. Sinon Thomas
+   relit cette section pour la 16e fois.
+
+   Comment c'est implemente :
+   - .reveal section : flex column + height 100% + padding, MAIS
+     PAS de justify-content (defaut flex-start, titre en haut).
+   - .slide-title + * : le sibling juste apres le titre prend
+     flex: 1 pour occuper le reste de la hauteur.
+   - Chaque body de composant slide gere son centrage interne
+     (align-content: center si grid, justify-content: center
+     si flex column).
+
+   Pourquoi !important : Reveal.js applique
+   .reveal .slides>section.present { display:block } (spec 0,3,1)
+   sur la slide active, ce qui casse notre flex sans !important.
+
+   Slides "structurelles" (Cover, Section, Closing, AboutMe,
+   AboutMeBullets, Timer, Statement, Quote, BigImage, ImageGrid,
+   Title) : ces composants ont leur propre justify-content:center
+   !important pour centrer leur layout custom (h1 monumental,
+   watermark, etc.). Leur regle override la notre, c'est OK.
+*/
+.reveal section {
+  padding: 80px 96px;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Body de slide : le sibling juste apres .slide-title occupe
+   tout l'espace vertical restant. Le centrage du contenu DANS
+   le body est defini par chaque composant (.xxx-slide__body). */
+.reveal section > .slide-title + * {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+/* :where(.reveal, .handout-doc) : 0-specificity wildcard pour que la meme regle */
+/* s'applique en mode presentation (Deck/Reveal) ET en mode handout (PDF), sans  */
+/* augmenter la specificite. Sinon le subtitle ressort en 16px et le divider     */
+/* jaune disparait completement en handout.                                       */
+:where(.reveal, .handout-doc) h1, :where(.reveal, .handout-doc) h2 {
+  font-weight: 700;
+  color: var(--c-ink);
+  margin: 0;
+  text-align: center;
+}
+
+/* REGLE INTANGIBLE : la zone titre = h2 + .slide-subtitle + .slide-divider,
+   dans cet ordre exact, AUCUN autre element entre h2 et .slide-divider.
+   Rythme : 4px entre titre et sous-titre, 32px entre sous-titre et bordure.
+   Toute violation casse la coherence visuelle du deck — voir .claude/CLAUDE.md. */
+:where(.reveal, .handout-doc) h2 {
+  font-size: 56px;
+  margin-bottom: 4px;
+}
+
+:where(.reveal, .handout-doc) h2 + .slide-subtitle {
+  font-size: 24px;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* Cas sans sous-titre : h2 colle direct a la bordure jaune via 32px aussi
+   (le selecteur h2 + .slide-divider preserve le rythme quand subtitle absent). */
+:where(.reveal, .handout-doc) h2 + .slide-divider {
+  margin-top: 32px;
+}
+
+:where(.reveal, .handout-doc) .slide-divider {
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: var(--c-accent);
+  margin: 0 auto 48px;
+}
+
+/* Footer flottant du deck : style aligne sur les icones flottantes lm-diagrams */
+.deck-footer {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  height: 56px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
+  z-index: 10;
+}
+
+.deck-footer__center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--c-muted);
+}
+
+.deck-footer .deck-brand {
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.deck-footer .deck-title {
+  color: var(--c-muted);
+}
+
+.deck-footer .deck-sep {
+  color: color-mix(in srgb, var(--c-ink) 18%, transparent);
+}
+
+.deck-footer .deck-counter {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.deck-nav-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+/* @media (hover: hover) : sur tactile, :hover reste "colle" apres tap (sticky hover). */
+/* On limite l'effet hover aux pointeurs reels (souris/trackpad) pour eviter qu'un bouton */
+/* tape reste affiche en jaune apres relachement. */
+@media (hover: hover) {
+  .deck-nav-btn:hover {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+}
+
+.deck-nav-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  background: var(--c-surface);
+}
+
+/* Toolbar haut-droite : Telecharger PDF + Lecture (calque sur diagram-toolbar lm-diagrams) */
+.deck-toolbar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+}
+
+.deck-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .deck-icon-btn:hover {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+}
+
+/* ============================================================ */
+/* Mode présentateur : active via ?presenter dans l'URL.
+   Les viewers (sans ce param) ne voient pas les boutons admin Démarrer/Figer/Reset
+   ni le bouton "Nouvelle session" en mode archived. Les éléments .viewer-only
+   inversement n'apparaissent que pour les viewers. */
+body:not(.is-presenter) .presenter-only { display: none !important; }
+body.is-presenter .viewer-only { display: none !important; }
+
+/* Badge "Présentateur" en haut centre du viewport quand mode actif.
+   Masqué en plein écran avec le reste du chrome. */
+.presenter-badge {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--c-ink);
+  color: var(--c-accent);
+  border-radius: 6px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+[data-scheme="execed"] .presenter-badge { color: #FFFFFF; }
+body.is-presenter .presenter-badge { display: inline-flex; }
+html:has(:fullscreen) .presenter-badge,
+body.is-fullscreen .presenter-badge { display: none !important; }
+
+/* Message "En attente de l'animateur" pour les viewers sur slides poll/wordcloud
+   en mode initial. Style discret aligné sur les autres messages d'état. */
+.poll-waiting {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--c-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+/* ============================================================ */
+/* Recherche dans le deck : panel pill qui descend sous la toolbar */
+/* ============================================================ */
+
+/* Panel ancre top-right, sous la deck-toolbar (qui est a top:16px height:40px) */
+.deck-search {
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--c-surface);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  padding: 6px 8px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+}
+
+.deck-search[hidden] {
+  display: none;
+}
+
+.deck-search__icon {
+  color: var(--c-muted);
+  flex-shrink: 0;
+  margin: 0 4px 0 6px;
+}
+
+.deck-search__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15px;
+  color: var(--c-ink);
+  padding: 6px 4px;
+}
+.deck-search__input::placeholder {
+  color: var(--c-muted);
+}
+
+.deck-search__count {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-muted);
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.deck-search__nav,
+.deck-search__close {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--c-muted);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+@media (hover: hover) {
+  .deck-search__nav:hover,
+  .deck-search__close:hover {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+}
+
+/* Masquage en fullscreen au meme titre que le reste du chrome */
+html:has(:fullscreen) .deck-search,
+body.is-fullscreen .deck-search {
+  display: none !important;
+}
+
+/* Highlight des matches dans les slides. mark est neutralise par defaut
+   pour eviter le surlignage hideux jaune fluo des UA stylesheets. */
+.search-hit {
+  background: color-mix(in srgb, var(--c-accent) 45%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+}
+.search-hit--current {
+  background: var(--c-accent);
+  outline: 2px solid var(--c-ink);
+  outline-offset: 0;
+}
+
+/* Menu (infos cours) — pastille en haut-gauche + panel deroulable, calque sur InfoPanel lm-diagrams */
+.deck-menu-pill {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0;
+}
+
+@media (hover: hover) {
+  .deck-menu-pill:hover {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+}
+
+.deck-menu {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 101;
+  max-width: 380px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  padding: 24px;
+}
+
+.deck-menu__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--c-muted);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.deck-menu__close:hover {
+  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+  color: var(--c-ink);
+}
+
+.deck-menu__eyebrow {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-ink);
+  margin-bottom: 4px;
+  margin-right: 24px;
+}
+
+/* Le span "Lausanne Marketing" a une bande jaune rotative en pseudo-element via */
+/* `.underline::after` (defini dans global.css). On ne re-applique PAS un second */
+/* background-image plat ici, sinon doublon visuel (deux bandes superposees). */
+.deck-menu__eyebrow .underline {
+  text-decoration: none;
+}
+
+/* Lien retour au parcours dans le menu (active par JS si ?from=<slug>) :
+   pill discrete avec icone fleche + label, en haut du panel avant l'eyebrow. */
+.deck-menu__back-parcours {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-on-accent);
+  text-decoration: none;
+  padding: 8px 12px;
+  margin: 0 0 20px;
+  background: var(--c-accent);
+  border-radius: 6px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  align-self: flex-start;
+  width: fit-content;
+}
+.deck-menu__back-parcours:hover {
+  background: color-mix(in srgb, var(--c-accent) 82%, white);
+  transform: translateX(-2px);
+}
+
+.deck-menu__title {
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--c-ink);
+  margin: 0 0 8px;
+}
+
+.deck-menu__subtitle {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-muted);
+  margin: 0 0 12px;
+}
+
+.deck-menu__meta {
+  font-size: 12px;
+  color: var(--c-muted);
+  margin: 0;
+}
+
+.deck-menu__toc {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+}
+
+.deck-menu__toc-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--c-muted);
+  margin: 0 0 8px;
+}
+
+.deck-menu__toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Bouton TOC : flex baseline pour aligner numero et titre proprement,
+   peu importe les font-sizes / line-heights. Plus de ::before counter
+   absolument positionne (qui cassait l'alignement vertical). */
+.deck-menu__toc-btn {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  margin: 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-ink);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.deck-menu__toc-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-muted);
+  flex-shrink: 0;
+  min-width: 18px;
+  transition: color 0.15s ease;
+}
+
+.deck-menu__toc-btn:hover {
+  background: var(--c-accent);
+  color: var(--c-on-accent);
+}
+
+.deck-menu__toc-btn:hover .deck-menu__toc-num {
+  color: var(--c-on-accent);
+}
+
+/* ============================================================ */
+/* Mobile : chrome compacte pour libere de l'espace au slide      */
+/* ============================================================ */
+
+@media (max-width: 600px) {
+  /* Reduit la marge verticale reservee au chrome : sur petit ecran le slide */
+  /* 16:9 est de toute facon contraint par la largeur. */
+  :root {
+    --slide-h-margin: 16px;
+    --slide-v-chrome: 120px;
+    --slide-top-offset: -28px;
+  }
+
+  /* Footer : on cache brand+title (manque de place pour wrap proprement). */
+  /* Reste : prev | counter | next, parfaitement alignes sur une ligne.    */
+  .deck-footer {
+    height: 48px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  .deck-footer__center {
+    gap: 8px;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+  .deck-footer .deck-brand,
+  .deck-footer .deck-title,
+  .deck-footer .deck-sep {
+    display: none;
+  }
+  .deck-footer .deck-counter {
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  .deck-nav-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  /* Toolbar haut-droite et pastille menu : un poil plus petits */
+  .deck-toolbar {
+    top: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+  .deck-icon-btn,
+  .deck-menu-pill {
+    width: 36px;
+    height: 36px;
+  }
+  .deck-menu-pill {
+    top: 8px;
+    left: 8px;
+  }
+
+  /* Menu (panel TOC) : plein largeur ecran, scroll vertical possible */
+  .deck-menu {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    max-width: none;
+    padding: 20px 20px 16px;
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+  }
+  .deck-menu__title {
+    font-size: 20px;
+  }
+}
+
+/* Mode lecture : reset Reveal, scroll vertical */
+.deck-reading {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 64px 32px;
+}
+.deck-reading section {
+  display: block;
+  margin-bottom: 80px;
+  border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+  padding-bottom: 64px;
+}
+
+/* ============================================================ */
+/* PdfModal : modale de choix de layout PDF (pattern .deck-menu) */
+/* ============================================================ */
+
+.pdf-modal {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  max-width: 720px;
+  width: calc(100vw - 32px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  /* Centrage explicite : certains contextes (Reveal initialise, fullscreen,
+     transforms ancestraux) cassent le margin:auto auto du UA dialog:modal. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  max-height: calc(100vh - 32px);
+}
+.pdf-modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+.pdf-modal__inner {
+  position: relative;
+  padding: 32px 24px 24px;
+}
+.pdf-modal__title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--c-ink);
+}
+.pdf-modal__hint {
+  font-size: 14px;
+  color: var(--c-muted);
+  margin: 0 0 20px;
+}
+.pdf-modal__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.pdf-modal__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-family: 'Hanken Grotesk', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.pdf-modal__card:hover:not(:disabled) {
+  border-color: var(--c-ink);
+}
+.pdf-modal__card:focus-visible {
+  outline: 2px solid var(--c-ink);
+  outline-offset: 2px;
+}
+.pdf-modal__card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pdf-modal__card--loading {
+  border-color: var(--c-ink);
+}
+/* Etat erreur transitoire : 4s apres l'echec final, la classe est retiree. */
+.pdf-modal__card--error {
+  border-color: #C2410C;
+  background: #FFF5F0;
+}
+.pdf-modal__card--error::before {
+  content: 'Erreur, reessayer';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #C2410C;
+}
+.pdf-modal__card--loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23191919' stroke-width='3' stroke-linecap='round'><circle cx='12' cy='12' r='9' opacity='0.25'/><path d='M21 12a9 9 0 0 0-9-9'><animateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='0.9s' repeatCount='indefinite'/></path></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.pdf-modal__card {
+  position: relative;
+}
+.pdf-modal__preview {
+  width: 80px;
+  height: 64px;
+  color: var(--c-muted);
+}
+.pdf-modal__card-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.pdf-modal__card-sub {
+  font-size: 12px;
+  color: var(--c-muted);
+}
+.pdf-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--c-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-modal__close:hover {
+  background: #F3F4F6;
+}
+
+@media (max-width: 600px) {
+  .pdf-modal__cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================ */
+/* COMPOSANT SOURCE REUTILISABLE                                */
+/* ============================================================ */
+/* Footer "Source" activable sur N'IMPORTE QUEL slide (section avec data-layout) :
+   en bas a gauche, discret, cliquable quand un lien est fourni. Rendre dans le
+   composant : <p class="slide-source"> ou <a class="slide-source" href>. */
+[data-layout] .slide-source {
+  position: absolute;
+  left: 96px;
+  bottom: 40px;
+  margin: 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--c-faint);
+  letter-spacing: 0.01em;
+  z-index: 3;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+[data-layout] a.slide-source:hover {
+  color: var(--c-ink);
+  text-decoration: underline;
+}
+

@@ -1,0 +1,10 @@
+---
+// src/components/FontsPreload.astro
+// Preload des fonts critiques pour eliminer le FOUT (flash of unstyled text) qui
+// se voit fort sur Cover/Section a cause des tailles enormes (>200px). On precharge
+// les sous-sets latin uniquement, le latin-ext est charge a la demande par le
+// navigateur quand un caractere du range apparait. crossorigin est obligatoire :
+// woff2 servi en CORS implicite cote Cloudflare Pages.
+---
+<link rel="preload" href="/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-700-subset.woff2" as="font" type="font/woff2" crossorigin />

@@ -1,0 +1,195 @@
+---
+// src/components/deck/PdfModal.astro
+// Modale de choix de layout PDF, ouverte au clic sur le bouton
+// "Télécharger" du Deck. Trois options : 1up paysage, 2up portrait,
+// 3up + lignes portrait. Click sur une card -> fetch lm-pdf -> download.
+---
+<dialog id="pdf-modal" class="pdf-modal" aria-labelledby="pdf-modal-title">
+  <div class="pdf-modal__inner">
+    <h2 id="pdf-modal-title" class="pdf-modal__title">Télécharger en PDF</h2>
+    <p class="pdf-modal__hint">Choisis la disposition</p>
+
+    <div class="pdf-modal__cards">
+      <button type="button" class="pdf-modal__card" data-mode="1">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="2" y="20" width="96" height="40" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="10" y="28" width="80" height="24" fill="currentColor" opacity="0.15"/>
+        </svg>
+        <span class="pdf-modal__card-title">1 slide / page</span>
+        <span class="pdf-modal__card-sub">Paysage</span>
+      </button>
+
+      <button type="button" class="pdf-modal__card" data-mode="2">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="20" y="2" width="60" height="76" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="26" y="14" width="48" height="22" fill="currentColor" opacity="0.15"/>
+          <rect x="26" y="44" width="48" height="22" fill="currentColor" opacity="0.15"/>
+        </svg>
+        <span class="pdf-modal__card-title">2 slides / page</span>
+        <span class="pdf-modal__card-sub">Portrait</span>
+      </button>
+
+      <button type="button" class="pdf-modal__card" data-mode="3">
+        <svg class="pdf-modal__preview" viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="20" y="2" width="60" height="76" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="24" y="6" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="9" x2="76" y2="9" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="13" x2="76" y2="13" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="17" x2="76" y2="17" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <rect x="24" y="24" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="27" x2="76" y2="27" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="31" x2="76" y2="31" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="35" x2="76" y2="35" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <rect x="24" y="42" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="45" x2="76" y2="45" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="49" x2="76" y2="49" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="53" x2="76" y2="53" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <rect x="24" y="60" width="28" height="14" fill="currentColor" opacity="0.15"/>
+          <line x1="56" y1="63" x2="76" y2="63" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="67" x2="76" y2="67" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+          <line x1="56" y1="71" x2="76" y2="71" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+        <span class="pdf-modal__card-title">4 slides + lignes</span>
+        <span class="pdf-modal__card-sub">Portrait</span>
+      </button>
+    </div>
+
+    <button type="button" class="pdf-modal__close" id="pdf-modal-close" aria-label="Fermer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+        <path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z"/>
+      </svg>
+    </button>
+  </div>
+</dialog>
+
+<script>
+  const LM_PDF_URL = import.meta.env.PUBLIC_LM_PDF_URL || 'https://lm-pdf.hello-cb2.workers.dev';
+  // Bucket R2 ou les PDFs sont pre-buildes a chaque push (workflow build-handouts.yml).
+  // Si le PDF y est present, telechargement instantane. Sinon fallback sur le worker.
+  const LM_HANDOUTS_URL = import.meta.env.PUBLIC_LM_HANDOUTS_URL || 'https://pdf.lausanne.marketing';
+
+  const modal = document.getElementById('pdf-modal') as HTMLDialogElement | null;
+  const closeBtn = document.getElementById('pdf-modal-close') as HTMLButtonElement | null;
+  const cards = modal ? Array.from(modal.querySelectorAll<HTMLButtonElement>('.pdf-modal__card')) : [];
+
+  // Cloudflare Browser Rendering rate-limit les sessions concurrentes, donc trois
+  // exports lances en parallele peuvent retourner une erreur transitoire 5xx.
+  // On retry en silence avec backoff exponentiel + jitter avant d'abandonner.
+  const RETRY_ATTEMPTS = 3;
+  const RETRY_BASE_MS = 1500;
+
+  function getSlugFromPath(): string {
+    // `/p/<slug>/` -> `<slug>`. Fallback : last non-empty segment.
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const pIdx = parts.indexOf('p');
+    if (pIdx >= 0 && parts[pIdx + 1]) return parts[pIdx + 1];
+    return parts[parts.length - 1] || 'presentation';
+  }
+
+  function buildTargetUrl(mode: '1' | '2' | '3'): { url: string; orientation: 'portrait' | 'landscape' } {
+    const origin = window.location.origin;
+    const slug = getSlugFromPath();
+    const orientation = mode === '1' ? 'landscape' : 'portrait';
+    return { url: `${origin}/p/${slug}/handout/${mode}/`, orientation };
+  }
+
+  function buildFilename(mode: '1' | '2' | '3'): string {
+    const slug = getSlugFromPath();
+    if (mode === '1') return `${slug}-1up`;
+    if (mode === '2') return `${slug}-2up`;
+    return `${slug}-3up-notes`;
+  }
+
+  function buildR2Url(mode: '1' | '2' | '3'): string {
+    // Cle dans le bucket : <slug>-<mode>up.pdf (voir scripts/build-handouts.mjs).
+    const slug = getSlugFromPath();
+    return `${LM_HANDOUTS_URL}/${slug}-${mode}up.pdf`;
+  }
+
+  function setLoading(card: HTMLButtonElement, loading: boolean) {
+    // On desactive seulement la card cliquee, pas les autres : l'utilisateur peut
+    // ainsi lancer les trois exports en parallele sans attendre.
+    if (loading) {
+      card.classList.add('pdf-modal__card--loading');
+      card.disabled = true;
+    } else {
+      card.classList.remove('pdf-modal__card--loading');
+      card.disabled = false;
+    }
+  }
+
+  async function fetchPdfWithRetry(url: string): Promise<Response> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt < RETRY_ATTEMPTS; attempt++) {
+      try {
+        const response = await fetch(url);
+        if (response.ok) return response;
+        // 4xx : erreur cliente, inutile de retenter (URL invalide, etc.).
+        if (response.status < 500) throw new Error(`HTTP ${response.status}`);
+        lastError = new Error(`HTTP ${response.status}`);
+      } catch (err) {
+        lastError = err;
+      }
+      if (attempt < RETRY_ATTEMPTS - 1) {
+        const delay = RETRY_BASE_MS * Math.pow(2, attempt) + Math.random() * 500;
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+    throw lastError;
+  }
+
+  async function fetchPdf(mode: '1' | '2' | '3', filename: string): Promise<Response> {
+    // 1) Tentative directe sur R2 : PDFs pre-buildes a chaque push.
+    //    Telechargement quasi-instantane si present (CDN), pas de Browser Rendering.
+    try {
+      const r2 = await fetch(buildR2Url(mode));
+      if (r2.ok) return r2;
+    } catch {
+      // CORS, reseau, etc. : on tombe sur le fallback.
+    }
+
+    // 2) Fallback : generation a la volee via lm-pdf worker (retry inclus).
+    const { url: targetUrl, orientation } = buildTargetUrl(mode);
+    const workerUrl = `${LM_PDF_URL}/api/pdf?url=${encodeURIComponent(targetUrl)}&format=A4&orientation=${orientation}&filename=${encodeURIComponent(filename)}`;
+    return fetchPdfWithRetry(workerUrl);
+  }
+
+  async function handleCardClick(card: HTMLButtonElement) {
+    const mode = card.dataset.mode as '1' | '2' | '3' | undefined;
+    if (!mode) return;
+    setLoading(card, true);
+    try {
+      const filename = buildFilename(mode);
+      const response = await fetchPdf(mode, filename);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${filename}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      // On NE ferme PAS la modale : permet de lancer un autre layout dans la foulee.
+    } catch (err) {
+      console.error('PDF generation failed after retries', err);
+      // Flag visuel sur la card pendant 4s : sans signal, l'utilisateur attend ~10s
+      // (3 retries + backoff) puis voit la card revenir a l'etat initial sans
+      // comprendre pourquoi le download ne s'est pas declenche.
+      card.classList.add('pdf-modal__card--error');
+      setTimeout(() => card.classList.remove('pdf-modal__card--error'), 4000);
+    } finally {
+      setLoading(card, false);
+    }
+  }
+
+  cards.forEach((card) => card.addEventListener('click', () => handleCardClick(card)));
+  closeBtn?.addEventListener('click', () => modal?.close());
+
+  // Expose une fonction pour ouvrir la modale depuis Deck.astro.
+  (window as any).openPdfModal = () => {
+    modal?.showModal();
+    // Focus sur la premiere card apres ouverture (frame suivante).
+    requestAnimationFrame(() => cards[0]?.focus());
+  };
+</script>

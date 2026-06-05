@@ -1,0 +1,103 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+@layer base {
+  :root {
+    /* Tokens fluides typo (calque sur lm/) */
+    --text-xs: 1.2rem;
+    --text-sm: 1.4rem;
+    --text-base: 1.6rem;
+    --text-md: 1.8rem;
+    --text-lg: 2rem;
+    --text-xl: 2.4rem;
+    --text-2xl: 2.8rem;
+    --text-3xl: clamp(2.6rem, 2.33rem + 0.68vw, 3.2rem);
+    --text-4xl: clamp(2.8rem, 2.62rem + 0.45vw, 3.2rem);
+    --text-5xl: clamp(3.6rem, 2.51rem + 2.73vw, 6rem);
+
+    /* Texte secondaire : assombri pour passer le ratio WCAG AA (>=4.5:1) sur
+       fond blanc et sur fond creme. L'ancien #6B6F84 plafonnait a 4.32:1 sur
+       blanc et 4.08:1 sur #FAF8F3, donc echec AA pour texte normal. */
+    --color-text: #5A5E72;
+  }
+
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--color-text);
+    background: #FFFFFF;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 700;
+    color: #191919;
+    line-height: 1.2;
+  }
+}
+
+/* Reduced motion : respect WCAG 2.3.3 et de la pref utilisateur. Toutes les */
+/* animations (parcours, slides Cover/Section/Closing, watermarks, stagger) */
+/* sont neutralisees. On garde une duree de 0.01ms plutot que 0 pour ne pas */
+/* casser les chains JS qui ecoutent transitionend / animationend. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible global : keyboard navigation reste visible sur tous interactifs. */
+/* Outline gold sur fond clair = signature LM, ressort sans casser le rythme. */
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Outline gold sur fond gold = invisible. Pour les rares elements interactifs */
+/* a fond #FFD838 (boutons "Demarrer" des polls, lien retour parcours, "Retour */
+/* a la liste" du 404), on bascule l'outline en noir. Cascade : on s'aligne   */
+/* sur la specificite du rule global (0,1,0 via :where) et on profite de     */
+/* l'ordre source pour l'override. */
+:focus-visible:where(
+  .poll-slide__start-btn,
+  .wordcloud-slide__start-btn,
+  .deck-menu__back-parcours,
+  .back-home
+) {
+  outline-color: var(--c-ink);
+}
+
+/* Underline gold rotatif (signature LM, hors @layer pour battre Tailwind utility) */
+.underline {
+  position: relative;
+  display: inline;
+  text-decoration-line: none !important;
+}
+.underline::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 10px solid var(--c-accent);
+  transform: rotate(-3deg);
+  pointer-events: none;
+  background-color: transparent;
+  z-index: -1;
+}
+@media (max-width: 767px) {
+  .underline::after {
+    border-bottom-width: 6px;
+  }
+}

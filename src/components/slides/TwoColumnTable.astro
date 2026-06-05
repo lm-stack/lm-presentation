@@ -1,0 +1,170 @@
+---
+// src/components/slides/TwoColumnTable.astro
+// Template tableau 2 colonnes / 8 lignes. En-tête jaune LM, lignes alternées,
+// numérotation discrète à gauche, index ordinal en gris à droite. Pensé pour
+// comparatifs courts, glossaires, checklists chiffrées.
+import SlideTitle from '@/components/SlideTitle.astro';
+
+interface Row {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  highlight?: string;
+  intro?: string;
+  headers: [string, string];
+  rows: Row[];
+}
+
+const {
+  title,
+  subtitle,
+  highlight,
+  intro,
+  headers,
+  rows,
+} = Astro.props;
+
+// Pad ou trim à 8 lignes pour garantir un rendu stable.
+const fixedRows: Row[] = [
+  ...rows.slice(0, 8),
+  ...Array.from({ length: Math.max(0, 8 - rows.length) }, () => ({ label: '', value: '' })),
+];
+---
+<section class="two-col-table" data-layout="two-col-table">
+  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
+  <div class="two-col-table__body">
+    {intro && <p class="two-col-table__intro">{intro}</p>}
+
+    <div class="two-col-table__frame">
+      <table class="two-col-table__table">
+        <colgroup>
+          <col class="two-col-table__col-idx" />
+          <col class="two-col-table__col-label" />
+          <col class="two-col-table__col-value" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="two-col-table__idx" aria-hidden="true">№</th>
+            <th>{headers[0]}</th>
+            <th>{headers[1]}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fixedRows.map((row, i) => (
+            <tr class={row.label === '' ? 'is-empty' : ''}>
+              <td class="two-col-table__idx">{String(i + 1).padStart(2, '0')}</td>
+              <td class="two-col-table__label">{row.label}</td>
+              <td class="two-col-table__value">{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Wrapper unique sous SlideTitle pour que le centrage vertical fonctionne */
+  /* meme avec intro present. Sans, intro prend tout l'espace flex et le    */
+  /* tableau passe sous le bord visible.                                     */
+  .two-col-table__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  .two-col-table__intro {
+    font-size: 20px;
+    color: #6B6F84;
+    text-align: center;
+    margin: 0 auto 28px;
+    max-width: 1100px;
+    line-height: 1.5;
+  }
+
+  .two-col-table__frame {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    border-top: 2px solid #191919;
+    border-bottom: 2px solid #191919;
+  }
+
+  .two-col-table__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 21px;
+    color: #191919;
+    table-layout: fixed;
+  }
+
+  .two-col-table__col-idx { width: 64px; }
+  .two-col-table__col-label { width: 38%; }
+  .two-col-table__col-value { width: auto; }
+
+  /* En-tête jaune LM. Bord bas noir pour ancrer le bloc. */
+  .two-col-table__table thead tr {
+    background: #FFD838;
+  }
+  .two-col-table__table thead th {
+    text-align: left;
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #191919;
+    border-bottom: 2px solid #191919;
+  }
+  .two-col-table__table thead th.two-col-table__idx {
+    text-align: center;
+    color: rgba(25, 25, 25, 0.55);
+  }
+
+  /* Lignes alternées : crème (fond du slide) et blanc pur pour le contraste. */
+  .two-col-table__table tbody tr:nth-child(odd) {
+    background: #FFFFFF;
+  }
+  .two-col-table__table tbody tr:nth-child(even) {
+    background: rgba(25, 25, 25, 0.04);
+  }
+  .two-col-table__table tbody tr.is-empty {
+    background: transparent;
+  }
+
+  .two-col-table__table tbody td {
+    padding: 14px 24px;
+    border-top: 1px solid rgba(25, 25, 25, 0.08);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .two-col-table__table tbody td.two-col-table__idx {
+    font-family: 'Space Grotesk', 'Hanken Grotesk', sans-serif;
+    font-feature-settings: 'tnum';
+    font-size: 14px;
+    color: rgba(25, 25, 25, 0.35);
+    text-align: center;
+    letter-spacing: 0.04em;
+    padding-top: 17px;
+  }
+
+  .two-col-table__table tbody td.two-col-table__label {
+    font-weight: 600;
+    color: #191919;
+  }
+
+  .two-col-table__table tbody td.two-col-table__value {
+    color: #6B6F84;
+  }
+
+  .two-col-table__table tbody tr.is-empty td {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-top-color: rgba(25, 25, 25, 0.04);
+  }
+</style>
