@@ -282,7 +282,7 @@ const titleParts = splitHighlight(title, italicPart);
 
   .cover-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -292,7 +292,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .cover-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -338,7 +338,7 @@ const titleParts = splitHighlight(title, italicPart);
 
   .cover-hero__eyebrow {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
+    font-size: var(--fs-eyebrow);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.42em;
@@ -350,8 +350,8 @@ const titleParts = splitHighlight(title, italicPart);
   /* text-align: left override le default global :where(.reveal) h1 { text-align: center } */
   .cover-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(110px, 11vw, 188px);
-    line-height: 0.95;
+    font-size: var(--fs-cover);
+    line-height: var(--lh-title);
     letter-spacing: -0.025em;
     font-weight: 600;
     margin: 0;
@@ -378,7 +378,7 @@ const titleParts = splitHighlight(title, italicPart);
     margin: 0;
     padding-top: 88px;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.32em;

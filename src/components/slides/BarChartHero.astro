@@ -110,12 +110,12 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px; font-weight: 700; text-transform: uppercase;
+    font-size: var(--fs-brand); font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
   }
   .bar-chart-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px; font-weight: 500; text-transform: uppercase;
+    font-size: var(--fs-brand-sub); font-weight: 500; text-transform: uppercase;
     letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
   }
   .bar-chart-hero__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
@@ -132,8 +132,8 @@ const hasEmphasis = items.some((it) => it.emphasis);
   .bar-chart-hero__heading { flex: 0 0 auto; }
   .bar-chart-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(40px, 4vw, 64px);
-    line-height: 1.06; font-weight: 600; letter-spacing: -0.02em;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em;
     margin: 0; color: var(--c-ink); text-wrap: balance; text-align: left;
   }
   .bar-chart-hero__title-italic {
@@ -142,7 +142,7 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px; line-height: 1.4; font-weight: 500; color: var(--c-muted);
+    font-size: var(--fs-lead); line-height: var(--lh-lead); font-weight: 500; color: var(--c-muted);
     margin: 12px 0 0; max-width: 1200px;
   }
 
@@ -159,7 +159,7 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__value {
     font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
-    font-size: 26px; font-weight: 700; color: var(--c-ink);
+    font-size: var(--fs-body); font-weight: 700; color: var(--c-ink);
     font-variant-numeric: tabular-nums; text-align: right;
   }
   .bar-chart-hero__track {
@@ -174,7 +174,7 @@ const hasEmphasis = items.some((it) => it.emphasis);
   }
   .bar-chart-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px; font-weight: 600; line-height: 1.25;
+    font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-body);
     color: var(--c-ink); text-align: left;
   }
   .bar-chart-hero__row.is-dim .bar-chart-hero__fill { background: color-mix(in srgb, var(--c-accent) 34%, transparent); }

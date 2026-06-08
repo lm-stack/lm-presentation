@@ -98,7 +98,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .section-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -107,7 +107,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .section-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -148,8 +148,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .section-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(72px, 7vw, 116px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -184,14 +184,14 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .section-hero__person-name {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 600;
     margin: 0;
     color: var(--c-ink);
   }
   .section-hero__person-role {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 16px;
+    font-size: var(--fs-source);
     font-weight: 400;
     margin: 4px 0 0;
     color: var(--c-muted);

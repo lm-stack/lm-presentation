@@ -95,7 +95,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .section-split__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -104,7 +104,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .section-split__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -124,8 +124,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .section-split__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(72px, 7vw, 116px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -144,7 +144,7 @@ const titleParts = splitHighlight(title, italicPart);
     align-items: center;
     gap: 12px;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
     font-weight: 500;
     color: var(--c-muted);
     margin: 24px 0 32px;
@@ -159,10 +159,10 @@ const titleParts = splitHighlight(title, italicPart);
 
   .section-split__text {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
-    line-height: 1.55;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     color: var(--c-muted);
     margin: 0;
-    max-width: 720px;
+    max-width: var(--measure-s);
   }
 </style>

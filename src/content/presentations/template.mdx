@@ -5,6 +5,7 @@ short: "Template"
 date: 2026-05-29
 type: cours
 unlisted: true
+autoClosing: false
 description: "Catalogue de référence des layouts ExecEd-style transposés en charte Lausanne Marketing : les composants de slide du repo, organisés par famille."
 ---
 
@@ -15,7 +16,8 @@ import ImageGridHero from '@/components/slides/ImageGridHero.astro';
 import SectionHero from '@/components/slides/SectionHero.astro';
 import QuoteImage from '@/components/slides/QuoteImage.astro';
 import BigImageHero from '@/components/slides/BigImageHero.astro';
-import ClosingHero from '@/components/slides/ClosingHero.astro';
+import QuestionsHero from '@/components/slides/QuestionsHero.astro';
+import MerciHero from '@/components/slides/MerciHero.astro';
 import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import ListImageHero from '@/components/slides/ListImageHero.astro';
 import WorkshopHero from '@/components/slides/WorkshopHero.astro';
@@ -605,11 +607,22 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<ClosingHero
-  title="Merci beaucoup!"
-  highlight="beaucoup!"
-  tagline="et à bientôt!"
-  url="lausanne.marketing"
+{/* Slides de fin (auto-injectés par la route selon le contexte ; ici en vitrine
+    manuelle car le template a autoClosing: false).
+    - QuestionsHero : deck dans un parcours, pas le dernier -> carte cliquable
+      vers le prochain sujet. Titre figé "Des questions ?".
+    - MerciHero : one-shot ou dernier deck du parcours. Titre figé "Merci beaucoup". */}
+<QuestionsHero
+  nextSlug="template"
+  nextTitle="Titre du prochain sujet"
+  nextShort="Une accroche courte sur ce que couvre le prochain deck du parcours."
+  nextCover="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&h=506&fit=crop"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<MerciHero
+  tagline="et à bientôt !"
   image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"

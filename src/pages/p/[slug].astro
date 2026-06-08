@@ -2,16 +2,35 @@
 // src/pages/p/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Deck from '@/layouts/Deck.astro';
+import QuestionsHero from '@/components/slides/QuestionsHero.astro';
+import MerciHero from '@/components/slides/MerciHero.astro';
 
 export async function getStaticPaths() {
   const decks = await getCollection('presentations');
-  return decks.map((d) => ({
-    params: { slug: d.id },
-    props: { entry: d },
-  }));
+  const parcoursList = await getCollection('parcours');
+
+  return decks.map((d) => {
+    // Contexte de fin : on cherche le premier parcours qui contient ce deck,
+    // puis on en déduit le deck suivant (carte preview) ou, à défaut, une fin
+    // "Merci" (one-shot ou dernier deck du parcours).
+    const parcours = parcoursList.find((p) => p.data.decks.includes(d.id));
+    let nextDeck = null;
+    if (parcours) {
+      const idx = parcours.data.decks.indexOf(d.id);
+      const nextSlug = parcours.data.decks[idx + 1];
+      if (nextSlug) {
+        const found = decks.find((x) => x.id === nextSlug);
+        if (found) nextDeck = found;
+      }
+    }
+    return {
+      params: { slug: d.id },
+      props: { entry: d, parcours: parcours ?? null, nextDeck },
+    };
+  });
 }
 
-const { entry } = Astro.props;
+const { entry, parcours, nextDeck } = Astro.props;
 const { Content } = await render(entry);
 
 function formatDate(d: Date) {
@@ -20,6 +39,12 @@ function formatDate(d: Date) {
   return `${day}.${month}.${d.getFullYear()}`;
 }
 const updatedLabel = entry.data.updated ?? formatDate(entry.data.date);
+
+// Header de marque du slide de fin : dans un parcours, le titre du parcours
+// fait office de marque et le titre du deck de sous-titre ; en one-shot, le
+// deck porte sa propre marque.
+const endingBrand = parcours?.data.title ?? entry.data.title;
+const endingBrandSub = parcours ? entry.data.title : entry.data.subtitle;
 ---
 <Deck
   title={entry.data.title}
@@ -31,4 +56,22 @@ const updatedLabel = entry.data.updated ?? formatDate(entry.data.date);
   scheme={entry.data.scheme}
 >
   <Content />
+  {entry.data.autoClosing && (
+    nextDeck ? (
+      <QuestionsHero
+        nextSlug={nextDeck.id}
+        nextTitle={nextDeck.data.title}
+        nextShort={nextDeck.data.short ?? nextDeck.data.subtitle}
+        nextCover={nextDeck.data.cover}
+        brand={endingBrand}
+        brandSub={endingBrandSub}
+      />
+    ) : (
+      <MerciHero
+        image={entry.data.cover}
+        brand={endingBrand}
+        brandSub={endingBrandSub}
+      />
+    )
+  )}
 </Deck>

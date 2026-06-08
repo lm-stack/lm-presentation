@@ -89,7 +89,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .subsection-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -99,7 +99,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .subsection-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -157,11 +157,11 @@ const titleParts = splitHighlight(title, italicPart);
   .subsection-hero__text {
     flex: 1 1 auto;
     min-width: 0;
-    max-width: 1280px;
+    max-width: var(--measure-xl);
   }
   .subsection-hero__kicker {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.34em;
@@ -174,8 +174,8 @@ const titleParts = splitHighlight(title, italicPart);
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(68px, 7vw, 128px);
-    line-height: 1.0;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
     letter-spacing: -0.015em;
     margin: 0;
     color: var(--c-ink);
@@ -186,19 +186,19 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .subsection-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 27px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 400;
     color: var(--c-muted);
     margin: 32px 0 0;
-    max-width: 1280px;
+    max-width: var(--measure-xl);
     white-space: nowrap;
     opacity: 0;
     animation: ss-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both;
   }
   .subsection-hero__subtitle--wrap {
     white-space: normal;
-    max-width: 1100px;
+    max-width: var(--measure-l);
   }
 
   @keyframes ss-scale-in {

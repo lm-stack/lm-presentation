@@ -106,7 +106,7 @@ const termParts = splitHighlight(term, termItalicPart);
   }
   .definition-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -116,7 +116,7 @@ const termParts = splitHighlight(term, termItalicPart);
   }
   .definition-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -141,7 +141,7 @@ const termParts = splitHighlight(term, termItalicPart);
     align-items: center;
     gap: 14px;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 20px;
+    font-size: var(--fs-eyebrow);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.28em;
@@ -159,7 +159,7 @@ const termParts = splitHighlight(term, termItalicPart);
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(76px, 8vw, 140px);
+    font-size: var(--fs-term);
     line-height: 0.98;
     letter-spacing: -0.02em;
     margin: 0;
@@ -170,8 +170,8 @@ const termParts = splitHighlight(term, termItalicPart);
   /* Definition : GROS texte, cale a gauche comme l'eyebrow et le terme. */
   .definition-hero__definition {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(30px, 2.6vw, 42px);
-    line-height: 1.4;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 400;
     color: var(--c-ink);
     margin: 0;

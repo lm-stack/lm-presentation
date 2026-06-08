@@ -19,7 +19,6 @@ import DemoHero from '@/components/slides/DemoHero.astro';
 import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
 import StatementHero from '@/components/slides/StatementHero.astro';
-import ClosingHero from '@/components/slides/ClosingHero.astro';
 
 {/*
   MAPPING workflows-avances.mdx -> workflows-avances-new.mdx
@@ -261,16 +260,4 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
       value: "Toujours valider sur un petit volume avant la production. Évite de propager massivement une erreur sur toute la base.",
     },
   ]}
-/>
-
-{/* Slide 11 : Questions et réponses
-    variant="qa" dans l'original -> titre "Questions & réponses" + image cover réutilisée. */}
-<ClosingHero
-  title="Questions & réponses"
-  highlight="réponses"
-  tagline="Ensuite : IA et automatisation."
-  url="lausanne.marketing"
-  image="/decks/workflows-avances/cover-rocket.jpg"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />

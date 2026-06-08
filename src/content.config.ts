@@ -20,6 +20,11 @@ const presentations = defineCollection({
     cover: z.string().optional(),
     description: z.string().optional(),
     scheme: z.enum(['lm', 'execed']).default('lm'),
+    // Slide de fin auto-injecté par la route (QuestionsHero dans un parcours
+    // non terminal, MerciHero pour un one-shot ou le dernier deck du parcours).
+    // `false` => la route n'ajoute rien (le deck gère sa propre fin, ex. le
+    // template qui en fait la vitrine manuelle).
+    autoClosing: z.boolean().default(true),
   }),
 });
 

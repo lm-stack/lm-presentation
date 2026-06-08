@@ -83,7 +83,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .form-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -93,7 +93,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .form-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -121,8 +121,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .form-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(56px, 5.6vw, 96px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -137,12 +137,12 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .form-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 400;
     color: var(--c-muted);
     margin: 28px 0 0;
-    max-width: 640px;
+    max-width: var(--measure-s);
   }
 
   /* Maquette de formulaire. */
@@ -166,7 +166,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .form-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 18px;
+    font-size: var(--fs-body);
     font-weight: 600;
     color: var(--c-ink);
   }
@@ -182,7 +182,7 @@ const titleParts = splitHighlight(title, italicPart);
     align-self: stretch;
     text-align: center;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 700;
     color: var(--c-on-accent);
     background: var(--c-accent);
