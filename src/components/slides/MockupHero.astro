@@ -1,37 +1,29 @@
 ---
 // src/components/slides/MockupHero.astro
-// Mockup de device "ExecEd-style", 100% CSS. Encadre une image OU un faux site
-// web (mode webform) dans un cadre tablette, mobile ou laptop.
-//   - tablet / mobile : texte à gauche, device à droite.
-//   - desktop (laptop) : titre optionnel en haut, device centré (juste l'écran).
-// Pas de data-section-title : c'est un slide de contenu, il ne doit pas
-// apparaître dans la table des matières.
+// Mockup de device "ExecEd-style". Encadre une image OU un faux site web (mode
+// webform) dans un cadre tablette, mobile, laptop, iPhone (PNG détouré), ou
+// "duo" (deux iPhones détourés du SVG : un de dos à gauche derrière, un de face
+// à droite devant ; l'écran de la face est PERCÉ dans le PNG et le faux site
+// passe derrière, donc le châssis le borde proprement, sans débordement).
+//   - tablet / mobile / iphone / duo : texte à gauche, device(s) à droite.
+//   - desktop (laptop) : titre optionnel en haut, device centré.
 import { splitHighlight } from '@/utils/highlight';
 interface WebForm {
-  /** Nom de domaine affiché dans la barre du navigateur (ex "cedric.ch"). */
   url?: string;
-  /** Marque affichée dans la nav du faux site. */
   siteName?: string;
-  /** Accroche du hero. */
   headline?: string;
-  /** Sous-texte du hero. */
   blurb?: string;
-  /** Champs du formulaire (labels). */
   fields?: string[];
-  /** Libellé du bouton. */
   button?: string;
 }
 interface Props {
-  /** 'iphone' : mockup photoréaliste (asset PNG détouré) ; les autres sont 100% CSS. */
-  device: 'tablet' | 'mobile' | 'desktop' | 'iphone';
+  device: 'tablet' | 'mobile' | 'desktop' | 'iphone' | 'duo';
   title?: string;
   italicPart?: string;
   subtitle?: string;
   body?: string;
-  /** Image affichée plein écran dans le device. */
   image?: string;
   alt?: string;
-  /** Faux site web + formulaire dans l'écran (prioritaire sur image). */
   webform?: WebForm;
   brand?: string;
   brandSub?: string;
@@ -49,7 +41,7 @@ const {
   brandSub,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
-const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone';
+const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone' || device === 'duo';
 const isPhoto = device === 'iphone';
 const wf = webform ?? {};
 const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
@@ -81,35 +73,78 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     )}
 
     <div class="mockup-hero__stage">
+      {device === 'duo' ? (
+        <div class="mockup-hero__duo">
+          <img class="mockup-hero__phone-back" src="/decks/mockups/phone-back.png" alt="" aria-hidden="true" decoding="async" />
+          <div class="mockup-hero__phone-front">
+            <div class="mockup-hero__screen mockup-hero__screen--duo">
+              <div class="mockup-hero__site">
+                <div class="mockup-hero__statusbar">
+                  <span class="mockup-hero__sb-time">9:41</span>
+                  <span class="mockup-hero__sb-icons"><i class="sig"></i><i class="wifi"></i><i class="batt"></i></span>
+                </div>
+                <div class="mockup-hero__browser">
+                  <span class="mockup-hero__addr">
+                    <svg class="mockup-hero__lock" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-24V56a56 56 0 0 0-112 0v24H48a24 24 0 0 0-24 24v96a24 24 0 0 0 24 24h160a24 24 0 0 0 24-24v-96a24 24 0 0 0-24-24M96 56a32 32 0 0 1 64 0v24H96Zm112 144H48v-96h160Z"/></svg>
+                    <span class="mockup-hero__url">{wf.url ?? 'cedric.ch'}</span>
+                  </span>
+                </div>
+                <div class="mockup-hero__site-body">
+                  <div class="mockup-hero__site-hero">
+                    <span class="mockup-hero__eyebrow">Guide offert</span>
+                    <h3 class="mockup-hero__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
+                    <p class="mockup-hero__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
+                  </div>
+                  <div class="mockup-hero__form-card">
+                    <form class="mockup-hero__form" onsubmit="return false">
+                      {fields.map((f) => (
+                        <label class="mockup-hero__field">
+                          <span class="mockup-hero__field-label">{f}</span>
+                          <span class="mockup-hero__field-input"></span>
+                        </label>
+                      ))}
+                      <span class="mockup-hero__submit">{wf.button ?? 'Envoyer'}</span>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <img class="mockup-hero__phone-front-img" src="/decks/mockups/phone-front.png" alt="" aria-hidden="true" decoding="async" />
+          </div>
+        </div>
+      ) : (
       <div class:list={['mockup-hero__device', isPhoto && 'mockup-hero__device--photo']}>
         {isPhoto && <img class="mockup-hero__photo" src="/decks/mockups/iphone16-front.png" alt="" aria-hidden="true" decoding="async" />}
         <div class="mockup-hero__screen">
           {webform ? (
             <div class="mockup-hero__site">
+              <div class="mockup-hero__statusbar">
+                <span class="mockup-hero__sb-time">9:41</span>
+                <span class="mockup-hero__sb-icons"><i class="sig"></i><i class="wifi"></i><i class="batt"></i></span>
+              </div>
               <div class="mockup-hero__browser">
-                <span class="mockup-hero__dot"></span>
-                <span class="mockup-hero__dot"></span>
-                <span class="mockup-hero__dot"></span>
-                <span class="mockup-hero__url">{wf.url ?? 'cedric.ch'}</span>
+                <span class="mockup-hero__addr">
+                  <svg class="mockup-hero__lock" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-24V56a56 56 0 0 0-112 0v24H48a24 24 0 0 0-24 24v96a24 24 0 0 0 24 24h160a24 24 0 0 0 24-24v-96a24 24 0 0 0-24-24M96 56a32 32 0 0 1 64 0v24H96Zm112 144H48v-96h160Z"/></svg>
+                  <span class="mockup-hero__url">{wf.url ?? 'cedric.ch'}</span>
+                </span>
               </div>
               <div class="mockup-hero__site-body">
-                <div class="mockup-hero__site-nav">
-                  <span class="mockup-hero__site-logo">{wf.siteName ?? 'Cédric'}</span>
-                  <span class="mockup-hero__site-links">
-                    <span></span><span></span><span></span>
-                  </span>
+                <div class="mockup-hero__site-hero">
+                  <span class="mockup-hero__eyebrow">Guide offert</span>
+                  <h3 class="mockup-hero__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
+                  <p class="mockup-hero__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
                 </div>
-                <h3 class="mockup-hero__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
-                <p class="mockup-hero__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
-                <form class="mockup-hero__form" onsubmit="return false">
-                  {fields.map((f) => (
-                    <label class="mockup-hero__field">
-                      <span class="mockup-hero__field-label">{f}</span>
-                      <span class="mockup-hero__field-input"></span>
-                    </label>
-                  ))}
-                  <span class="mockup-hero__submit">{wf.button ?? 'Envoyer'}</span>
-                </form>
+                <div class="mockup-hero__form-card">
+                  <form class="mockup-hero__form" onsubmit="return false">
+                    {fields.map((f) => (
+                      <label class="mockup-hero__field">
+                        <span class="mockup-hero__field-label">{f}</span>
+                        <span class="mockup-hero__field-input"></span>
+                      </label>
+                    ))}
+                    <span class="mockup-hero__submit">{wf.button ?? 'Envoyer'}</span>
+                  </form>
+                </div>
               </div>
             </div>
           ) : (
@@ -119,6 +154,7 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
         {device === 'mobile' && <span class="mockup-hero__notch" aria-hidden="true"></span>}
         {device === 'tablet' && <span class="mockup-hero__cam" aria-hidden="true"></span>}
       </div>
+      )}
       {device === 'desktop' && <span class="mockup-hero__laptop-base" aria-hidden="true"></span>}
     </div>
   </div>
@@ -178,14 +214,10 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     font-weight: 400; color: var(--c-muted); margin: 20px 0 0; max-width: 640px;
   }
 
-  /* Scène qui contient le device, centré. */
   .mockup-hero__stage {
     flex: 1 1 auto; min-width: 0; min-height: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  /* Tablette / mobile : ancrés EN HAUT (on voit le haut du device), décalés un
-     peu vers le bas, et le bas du device plonge hors de la slide. Desktop reste
-     centré. */
   .mockup-hero--tablet .mockup-hero__stage,
   .mockup-hero--mobile .mockup-hero__stage,
   .mockup-hero--iphone .mockup-hero__stage {
@@ -228,9 +260,6 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
   }
 
   /* ---- iPhone photoréaliste (asset PNG détouré) ---- */
-  /* Le châssis vient de l'image (boutons, antennes, reflets bakés). On pose
-     l'écran (le faux site) en absolu, calé sur la zone vitre du smart object
-     d'origine, sous le châssis qui le borde. */
   .mockup-hero__device--photo {
     position: relative;
     height: 1000px; flex-shrink: 0; margin-top: 28px;
@@ -242,27 +271,38 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     position: absolute; inset: 0; width: 100%; height: 100%;
     display: block; z-index: 1; pointer-events: none;
   }
-  /* Écran (faux site) AU-DESSUS du châssis, calé sur la zone vitre du PNG
-     (coords du smart object d'origine). Le châssis borde tout autour. */
   .mockup-hero__device--photo .mockup-hero__screen {
     position: absolute;
     left: 3.54%; top: 1.16%; width: 93.40%; height: 97.82%;
     border-radius: 52px; overflow: hidden; z-index: 2; background: var(--c-surface);
   }
 
-  /* Chrome navigateur version mobile (pas de pastilles macOS, URL centrée). */
-  .mockup-hero--iphone .mockup-hero__browser { justify-content: center; padding: 10px 14px 12px; }
-  .mockup-hero--iphone .mockup-hero__dot { display: none; }
-  .mockup-hero--iphone .mockup-hero__url { margin-left: 0; flex: 0 1 auto; text-align: center; font-size: 16px; }
-  /* Contenu du site adapté à la largeur étroite de l'écran. */
-  .mockup-hero--iphone .mockup-hero__site-body { padding: 22px 24px 26px; }
-  .mockup-hero--iphone .mockup-hero__site-nav { margin-bottom: 24px; }
-  .mockup-hero--iphone .mockup-hero__site-logo { font-size: 20px; }
-  .mockup-hero--iphone .mockup-hero__site-headline { font-size: 28px; margin-bottom: 10px; }
-  .mockup-hero--iphone .mockup-hero__site-blurb { font-size: 16px; margin-bottom: 22px; max-width: 100%; }
-  .mockup-hero--iphone .mockup-hero__form { gap: 16px; }
-  .mockup-hero--iphone .mockup-hero__field-input { height: 42px; }
-  .mockup-hero--iphone .mockup-hero__submit { font-size: 17px; padding: 13px 26px; margin-top: 10px; }
+  /* ---- Duo : iPhone de dos (gauche, derrière) + iPhone de face (droite, devant) ----
+     L'écran de la face est PERCÉ dans le PNG : le faux site est posé DERRIÈRE
+     (z-index 1) et le châssis (PNG, z-index 2) passe par-dessus et le borde. */
+  .mockup-hero--duo .mockup-hero__stage { align-self: stretch; }
+  .mockup-hero__duo { position: relative; width: 100%; height: 100%; min-height: 0; }
+  .mockup-hero__phone-back {
+    position: absolute; top: 50%; left: 38%; transform: translate(-50%, -50%);
+    height: 76%; width: auto; z-index: 1;
+    filter: drop-shadow(0 24px 42px color-mix(in srgb, var(--c-ink) 22%, transparent));
+  }
+  .mockup-hero__phone-front {
+    position: absolute; top: 50%; left: 63%; transform: translate(-50%, -50%);
+    height: 90%; aspect-ratio: 436 / 882; z-index: 2;
+    filter: drop-shadow(0 32px 52px color-mix(in srgb, var(--c-ink) 32%, transparent));
+  }
+  .mockup-hero__phone-front-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    display: block; z-index: 1; pointer-events: none;
+  }
+  /* Le faux site est posé PAR-DESSUS le PNG (écran noir), calé sur la vitre avec
+     ses coins arrondis : le bezel du PNG fait le bord, rien ne dépasse. */
+  .mockup-hero__screen--duo {
+    position: absolute;
+    left: 3.9%; top: 2.4%; width: 92.4%; height: 95.2%;
+    border-radius: 30px; overflow: hidden; background: #FFFFFF; z-index: 2;
+  }
 
   /* ---- Desktop (laptop 16:10) ---- */
   .mockup-hero--desktop .mockup-hero__device {
@@ -283,46 +323,62 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     width: 140px; height: 9px; border-radius: 0 0 9px 9px; background: #8d92a1;
   }
 
-  /* ---- Faux site web (mode webform) ---- */
-  .mockup-hero__site { display: flex; flex-direction: column; height: 100%; background: #FBFBFD; }
-  .mockup-hero__browser {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
-    padding: 11px 14px; background: #ECEDF1; border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+  /* ---- Faux site web (mode webform) : landing mobile soignée ---- */
+  .mockup-hero__site {
+    display: flex; flex-direction: column; height: 100%; background: #FFFFFF;
+    font-family: 'Hanken Grotesk', sans-serif;
   }
-  .mockup-hero__dot { width: 10px; height: 10px; border-radius: 50%; background: #C7CAD3; }
+  .mockup-hero__statusbar {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 34px 4px;
+  }
+  .mockup-hero__sb-time { font-size: 15px; font-weight: 700; color: #15151E; }
+  .mockup-hero__sb-icons { display: inline-flex; align-items: center; gap: 5px; }
+  .mockup-hero__sb-icons i { display: block; height: 11px; width: 16px; border-radius: 2px; background: #15151E; }
+  .mockup-hero__sb-icons .batt { width: 23px; }
+  .mockup-hero__browser { flex: 0 0 auto; display: flex; justify-content: center; padding: 6px 16px 14px; }
+  .mockup-hero__addr {
+    display: inline-flex; align-items: center; gap: 7px; max-width: 92%;
+    background: #EEEEF2; border-radius: 999px; padding: 9px 18px;
+  }
+  .mockup-hero__lock { width: 13px; height: 13px; color: #8A8A98; flex: 0 0 auto; }
   .mockup-hero__url {
-    margin-left: 10px; flex: 1 1 auto; background: var(--c-surface); border-radius: 6px;
-    padding: 5px 12px; font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; color: var(--c-muted);
+    font-size: 15px; font-weight: 500; color: #3C3C46;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .mockup-hero__site-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; padding: 26px 30px 30px; }
-  .mockup-hero__site-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-  .mockup-hero__site-logo {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; font-weight: 700;
-    letter-spacing: -0.01em; color: var(--c-ink);
+  .mockup-hero__site-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .mockup-hero__site-hero {
+    flex: 0 0 auto; color: #FFFFFF; padding: 30px 28px 72px;
+    background: linear-gradient(150deg, #4F46E5 0%, #7C3AED 100%);
   }
-  .mockup-hero__site-links { display: flex; gap: 14px; }
-  .mockup-hero__site-links span { display: block; width: 36px; height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--c-ink) 14%, transparent); }
+  .mockup-hero__eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.16); padding: 5px 13px; border-radius: 999px; margin-bottom: 16px;
+  }
   .mockup-hero__site-headline {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-    font-style: italic; font-weight: 400; font-size: 34px; line-height: 1.15; margin: 0 0 8px; color: var(--c-ink);
+    font-style: italic; font-weight: 400; font-size: 33px; line-height: 1.12; margin: 0 0 10px; color: #FFFFFF;
   }
   .mockup-hero__site-blurb {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; line-height: 1.45;
-    color: var(--c-muted); margin: 0 0 22px; max-width: 90%;
+    font-size: 16px; line-height: 1.45; color: rgba(255, 255, 255, 0.88); margin: 0;
   }
-  .mockup-hero__form { display: flex; flex-direction: column; gap: 14px; }
-  .mockup-hero__field { display: flex; flex-direction: column; gap: 6px; }
-  .mockup-hero__field-label {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-muted);
+  .mockup-hero__form-card {
+    flex: 1 1 auto; min-height: 0; margin: -48px 20px 22px;
+    background: #FFFFFF; border-radius: 22px;
+    box-shadow: 0 22px 44px -22px rgba(20, 20, 40, 0.35);
+    padding: 26px 24px 28px; display: flex; flex-direction: column;
   }
+  .mockup-hero__form { display: flex; flex-direction: column; gap: 16px; flex: 1 1 auto; }
+  .mockup-hero__field { display: flex; flex-direction: column; gap: 7px; }
+  .mockup-hero__field-label { font-size: 13px; font-weight: 600; color: #6B6B7B; }
   .mockup-hero__field-input {
-    display: block; height: 40px; border-radius: 6px; background: var(--c-surface);
-    border: 1px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    display: block; height: 46px; border-radius: 11px; background: #F5F5F9; border: 1px solid #E4E4EC;
   }
   .mockup-hero__submit {
-    margin-top: 8px; align-self: flex-start; background: var(--c-accent); color: var(--c-on-accent);
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 17px; font-weight: 700;
-    padding: 12px 26px; border-radius: 6px;
+    margin-top: auto; align-self: stretch; text-align: center; color: #FFFFFF;
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    border-radius: 13px; padding: 16px; font-size: 17px; font-weight: 700;
+    box-shadow: 0 12px 24px -10px rgba(79, 70, 229, 0.5);
   }
 </style>

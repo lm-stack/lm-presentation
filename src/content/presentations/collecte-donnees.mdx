@@ -18,6 +18,10 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
 import MockupHero from '@/components/slides/MockupHero.astro';
 import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
+import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
+import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
+import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
+import QuoteImage from '@/components/slides/QuoteImage.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import ListImageHero from '@/components/slides/ListImageHero.astro';
 import TableHero from '@/components/slides/TableHero.astro';
@@ -57,6 +61,30 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
     { icon: 'ph:table', label: 'Fichier Excel', value: "Votre liste de clients, tenue à la main." },
     { icon: 'ph:browser', label: 'Formulaire en ligne', value: "Quelqu'un remplit, vous recevez ses infos." },
   ]}
+/>
+
+<CompareColumnsHero
+  title="Structurées ou non structurées ?"
+  italicPart="non structurées"
+  subtitle="Avant le canal, la nature de la donnée : rangée dans des champs, ou en vrac."
+  left={{
+    heading: "Structurées",
+    items: ["Champs définis, prêts à filtrer (nom, email, date)", "Formulaires, transactions, lignes d'un tableur", "Directement exploitables par un CRM"],
+  }}
+  right={{
+    heading: "Non structurées",
+    items: ["Texte libre, sans cases (emails, notes, PDF)", "Cartes de visite, avis clients, images, audio", "À interpréter avant de pouvoir s'en servir"],
+  }}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<QuoteImage
+  icon="ph:lightbulb"
+  text="La majeure partie des données d'une entreprise est non structurée : emails, PDF, cartes de visite, notes d'appels. Tout l'enjeu de la collecte est de transformer ce vrac en données structurées, propres et exploitables par un CRM."
+  image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&h=1080&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <ImageGridHero
@@ -119,7 +147,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 />
 
 <MockupHero
-  device="iphone"
+  device="duo"
   title="Ce qu'on voit"
   italicPart="voit"
   subtitle="Côté visiteur : un formulaire épuré, trois champs, un bouton. C'est tout ce qu'il perçoit."
@@ -133,38 +161,6 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   }}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-/>
-
-<TableHero
-  title="Ce qu'on voit pas"
-  italicPart="voit pas"
-  subtitle="Pendant que le visiteur remplit trois champs, le formulaire en capte une dizaine d'autres, à son insu."
-  headers={["Champ caché", "Ce qu'il capte", "À quoi ça sert"]}
-  caption="Champs cachés injectés automatiquement dans le formulaire : invisibles pour le visiteur, précieux pour vous."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  rows={[
-    ["utm_source, utm_medium, utm_campaign", "Canal, support et campagne d'origine", "Attribuer le lead au bon canal"],
-    ["referrer", "La page qui a amené le visiteur", "Reconstituer le parcours"],
-    ["lead magnet, page", "Le contenu qui a déclenché l'inscription", "Mesurer ce qui convertit"],
-    ["timestamp", "Date et heure exactes de l'envoi", "Lancer la séquence au bon moment"],
-    ["IP, pays, langue", "Localisation et langue approximatives", "Segmenter par zone"],
-    ["user agent", "Navigateur et appareil utilisés", "Adapter le suivi, repérer les bots"],
-  ]}
-/>
-
-<InfoCardsGrid
-  title="Quatre règles de bonne capture"
-  italicPart="bonne capture"
-  subtitle="La donnée la plus propre est celle qu'on n'a pas eu à nettoyer. Prévenir coûte dix fois moins que réparer."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: 'ph:funnel', label: "Minimum de champs", value: "Ne demandez que ce qui sert à filtrer ou personnaliser. Chaque champ en plus fait chuter la conversion." },
-    { icon: 'ph:check-circle', label: "Validation à la source", value: "Email, téléphone, champs requis : un formulaire qui refuse une saisie fausse évite l'erreur en aval." },
-    { icon: 'ph:tag', label: "Capture du contexte", value: "UTM, lead magnet, page d'origine, timestamp, IP : des champs cachés précieux pour la suite." },
-    { icon: 'ph:shield-check', label: "Consentement explicite", value: "Case non pré-cochée, mention LPD/RGPD. Sans base légale, les séquences en aval sont illégales." },
-  ]}
 />
 
 <CompareColumnsHero
@@ -182,6 +178,110 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   note="Chaque champ en plus fait baisser la conversion : ne demandez que ce que vous ne pouvez pas déduire."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+<InfoCardsGrid
+  title="Quatre règles de bonne capture"
+  italicPart="bonne capture"
+  subtitle="La donnée la plus propre est celle qu'on n'a pas eu à nettoyer. Prévenir coûte dix fois moins que réparer."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:funnel', label: "Minimum de champs", value: "Ne demandez que ce qui sert à filtrer ou personnaliser. Chaque champ en plus fait chuter la conversion." },
+    { icon: 'ph:check-circle', label: "Validation à la source", value: "Email, téléphone, champs requis : un formulaire qui refuse une saisie fausse évite l'erreur en aval." },
+    { icon: 'ph:tag', label: "Capture du contexte", value: "UTM, lead magnet, page d'origine, timestamp, IP : des champs cachés précieux pour la suite." },
+    { icon: 'ph:shield-check', label: "Consentement explicite", value: "Case non pré-cochée, mention LPD/RGPD. Sans base légale, les séquences en aval sont illégales." },
+  ]}
+/>
+
+<TableHero
+  title="Ce qu'on voit pas"
+  italicPart="voit pas"
+  subtitle="Pendant que le visiteur remplit trois champs, le formulaire en capte une dizaine d'autres, à son insu."
+  headers={["Champ caché", "Ce qu'il capte", "À quoi ça sert"]}
+  caption="Champs cachés injectés automatiquement dans le formulaire : invisibles pour le visiteur, précieux pour vous."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Paramètres d'URL", "D'où vient le clic : source, canal, campagne", "Attribuer le lead à la bonne campagne"],
+    ["referrer", "La page qui a amené le visiteur", "Reconstituer le parcours"],
+    ["lead magnet, page", "Le contenu qui a déclenché l'inscription", "Mesurer ce qui convertit"],
+    ["timestamp", "Date et heure exactes de l'envoi", "Lancer la séquence au bon moment"],
+    ["IP, pays, langue", "Localisation et langue approximatives", "Segmenter par zone"],
+    ["user agent", "Navigateur et appareil utilisés", "Adapter le suivi, repérer les bots"],
+  ]}
+/>
+
+<CodeExamplesHero
+  title="Les UTMs, c'est quoi ?"
+  italicPart="UTMs"
+  subtitle="Des paramètres ajoutés à la fin d'une URL pour savoir d'où vient un visiteur. Les trois essentiels : la source, le canal et la campagne."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  link="https://ga-dev-tools.google/campaign-url-builder/"
+  linkLabel="Google Campaign URL Builder"
+  columns={1}
+  examples={[
+    {
+      label: "Newsletter",
+      base: "easyjet.com",
+      params: [
+        { key: "utm_source", value: "newsletter" },
+        { key: "utm_medium", value: "email" },
+        { key: "utm_campaign", value: "promo-ete" },
+      ],
+    },
+    {
+      label: "Publicité Google",
+      base: "easyjet.com",
+      params: [
+        { key: "utm_source", value: "google" },
+        { key: "utm_medium", value: "cpc" },
+        { key: "utm_campaign", value: "city-break" },
+      ],
+    },
+  ]}
+/>
+
+<TableHero
+  title="Les six paramètres UTM"
+  italicPart="six paramètres"
+  subtitle="Le tableau de référence : ce que mesure chaque paramètre, du plus courant au plus pointu."
+  source="Google Campaign URL Builder"
+  sourceUrl="https://ga-dev-tools.google/campaign-url-builder/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  headers={["Paramètre", "Requis", "Exemple", "À quoi il sert"]}
+  rows={[
+    ["utm_id", "Non", "abc.123", "Identifie une campagne publicitaire précise (ID de campagne ads)."],
+    ["utm_source", "Oui", "google", "La source : moteur de recherche, nom de newsletter, plateforme."],
+    ["utm_medium", "Oui", "cpc", "Le canal : email, cpc (payant), social, etc."],
+    ["utm_campaign", "Non", "spring_sale", "Le nom de l'opération : promotion ou campagne stratégique."],
+    ["utm_term", "Non", "running+shoes", "Les mots-clés, pour le référencement payant (SEA)."],
+    ["utm_content", "Non", "logolink", "Distingue deux liens vers la même URL (tests A/B)."],
+  ]}
+/>
+
+<UtmGeneratorHero
+  title="Générateur d'UTMs"
+  italicPart="UTMs"
+  subtitle="On choisit la source, le canal et la campagne : le lien tagué se construit tout seul."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<NumberedSplit
+  title="Pourquoi un générateur ?"
+  italicPart="générateur"
+  subtitle="Taguer à la main marche cinq minutes. À l'échelle d'une équipe, un générateur évite trois pièges."
+  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Cohérence : tout le monde tague avec les mêmes valeurs. Fini les « Newsletter », « newsletter » et « NL » qui éclatent un même canal en trois lignes de rapport." },
+    { text: "Zéro erreur : pas de faute de frappe ni de paramètre oublié, le lien reste toujours valide et mesurable." },
+    { text: "Accessible à tous : n'importe qui dans l'équipe produit un lien correct en quelques clics, sans connaître la syntaxe UTM." },
+  ]}
 />
 
 <DemoHero
@@ -213,6 +313,12 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
     ["Rapport qualité-prix", "Zoho Forms", "dès 12 CHF", "Complet et abordable, intégré au CRM Zoho"],
     ["Conversationnelle", "Typeform", "dès 50 CHF", "Une question à la fois, design soigné, fort taux de réponse"],
   ]}
+/>
+
+<MatrixRainHero
+  title="À grande échelle"
+  italicPart="grande échelle"
+  subtitle="Le scraping récolte la donnée publique en masse, automatiquement."
 />
 
 <SubSectionHero

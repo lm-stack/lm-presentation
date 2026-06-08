@@ -24,6 +24,8 @@ interface Props {
   italicPart?: string;
   subtitle?: string;
   images: ImageItem[];
+  /** Mode logos : image "contain" centrée sur fond clair (au lieu de "cover"), pour des logos non rognés. */
+  logos?: boolean;
   brand?: string;
   brandSub?: string;
 }
@@ -33,6 +35,7 @@ const {
   italicPart,
   subtitle,
   images,
+  logos = false,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -40,7 +43,7 @@ const titleParts = splitHighlight(title, italicPart);
 const count = Math.min(Math.max(images.length, 1), 5);
 const variantClass = `image-grid-hero__grid--${count}`;
 ---
-<section class="image-grid-hero" data-layout="image-grid-hero">
+<section class={`image-grid-hero ${logos ? 'image-grid-hero--logos' : ''}`} data-layout="image-grid-hero">
   <header class="image-grid-hero__header">
     <div class="image-grid-hero__brand-text">
       <p class="image-grid-hero__brand-main">{brand}</p>
@@ -239,6 +242,20 @@ const variantClass = `image-grid-hero__grid--${count}`;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* Mode logos : logo centré "contain" sur fond clair, avec de l'air autour. */
+  .image-grid-hero--logos .image-grid-hero__media {
+    background: var(--c-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 44px;
+  }
+  .image-grid-hero--logos .image-grid-hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   .image-grid-hero__card-body {

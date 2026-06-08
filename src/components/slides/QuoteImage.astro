@@ -16,8 +16,8 @@ interface Props {
   text: string;
   author?: string;
   role?: string;
-  image: string;
-  /** Icône Phosphor dans la pastille jaune, ex. "ph:lightbulb". Défaut "ph:quotes-thin". */
+  image?: string;
+  /** Icône Phosphor dans la pastille (défaut "ph:quotes-thin" ; ex "ph:lightbulb"). */
   icon?: string;
   logos?: LogoItem[];
   brand?: string;
@@ -34,11 +34,13 @@ const {
   brandSub,
 } = Astro.props;
 ---
-<section class="quote-image" data-layout="quote-image">
-  <div class="quote-image__bg" aria-hidden="true">
-    <img src={image} alt="" loading="lazy" decoding="async" />
-    <div class="quote-image__overlay"></div>
-  </div>
+<section class:list={['quote-image', !image && 'quote-image--plain']} data-layout="quote-image">
+  {image && (
+    <div class="quote-image__bg" aria-hidden="true">
+      <img src={image} alt="" loading="lazy" decoding="async" />
+      <div class="quote-image__overlay"></div>
+    </div>
+  )}
 
   <header class="quote-image__header">
     <div class="quote-image__brand-text">
@@ -86,6 +88,8 @@ const {
     grid-template-rows: auto 1fr auto;
     background: var(--c-cream);
   }
+  /* Sans image de fond : encart épuré sur le dégradé pearl du deck. */
+  .quote-image--plain { background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%); }
 
   .quote-image__bg {
     position: absolute;

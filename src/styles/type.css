@@ -1,0 +1,44 @@
+/* src/styles/type.css : échelle typographique partagée des slides.
+   Tokens scheme-indépendants (les tailles ne changent pas entre LM et ExecEd).
+
+   RÈGLE (cf. .claude/rules/typographie.md) : dans un composant slide,
+   AUCUN font-size en px brut ni clamp ad hoc. On utilise ces tokens.
+   Pendant de la règle « pas de hex en dur » pour la couleur.
+
+   NOTE : ce fichier n'est PAS encore importé (inerte) tant que la migration
+   n'a pas démarré. Import prévu depuis slides.css au début de la migration. */
+:root {
+  /* ---- Titres (clamp min / vw / max ; le max = rendu réel en 1920x1080) ---- */
+  --fs-cover:      clamp(110px, 11vw, 188px); /* CoverHero (slide unique) */
+  --fs-hero-xl:    clamp(72px, 7vw, 120px);   /* sections / transitions / statements */
+  --fs-hero-l:     clamp(56px, 5.5vw, 96px);  /* contenu standard */
+  --fs-hero-m:     clamp(40px, 4vw, 72px);    /* contenu dense (tables, charts, grilles) */
+  --fs-term:       clamp(76px, 8vw, 140px);   /* DefinitionHero (terme serif, cas spécial) */
+
+  /* ---- Textes de contenu & méta ---- */
+  --fs-lead:       26px; /* sous-titre / lead sous le titre */
+  --fs-body:       22px; /* corps, descriptions : PLANCHER ABSOLU, jamais en dessous */
+  --fs-card-title: 30px; /* titre de card */
+  --fs-label:      16px; /* label méta en majuscules */
+  --fs-eyebrow:    20px; /* eyebrow */
+
+  /* ---- Chrome (header de marque + source) : déjà uniforme, on tokenise ---- */
+  --fs-brand:      22px;
+  --fs-brand-sub:  14px;
+  --fs-source:     16px;
+
+  /* ---- Line-heights associées ---- */
+  --lh-title: 1.05; /* titres (exception admise : 0.9-1.0 pour les display monumentaux) */
+  --lh-lead:  1.45;
+  --lh-body:  1.5;
+
+  /* ---- Espacement vertical du bloc titre (grille 4px) ---- */
+  --space-title-lead: 16px; /* titre -> sous-titre / lead */
+  --space-title-body: 48px; /* bloc titre -> contenu (grille / liste / table) */
+
+  /* ---- Mesure : largeur de ligne lisible (~45 / 60 / 75ch puis intercalaire) ---- */
+  --measure-s:  640px;
+  --measure-m:  820px;
+  --measure-l:  1100px;
+  --measure-xl: 1280px;
+}
