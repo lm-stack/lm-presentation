@@ -14,9 +14,11 @@ interface LogoItem {
 }
 interface Props {
   text: string;
-  author: string;
+  author?: string;
   role?: string;
   image: string;
+  /** Icône Phosphor dans la pastille jaune, ex. "ph:lightbulb". Défaut "ph:quotes-thin". */
+  icon?: string;
   logos?: LogoItem[];
   brand?: string;
   brandSub?: string;
@@ -26,6 +28,7 @@ const {
   author,
   role,
   image,
+  icon = 'ph:quotes-thin',
   logos,
   brand = 'Titre de la présentation',
   brandSub,
@@ -49,13 +52,15 @@ const {
 
   <div class="quote-image__body">
     <span class="quote-image__mark" aria-hidden="true">
-      <Icon name="ph:quotes-thin" />
+      <Icon name={icon} />
     </span>
     <blockquote class="quote-image__text">{text}</blockquote>
-    <p class="quote-image__author">
-      <span class="quote-image__author-name">{author}</span>
-      {role && <span class="quote-image__author-role">, {role}</span>}
-    </p>
+    {author && (
+      <p class="quote-image__author">
+        <span class="quote-image__author-name">{author}</span>
+        {role && <span class="quote-image__author-role">, {role}</span>}
+      </p>
+    )}
   </div>
 
   {logos && logos.length > 0 && (

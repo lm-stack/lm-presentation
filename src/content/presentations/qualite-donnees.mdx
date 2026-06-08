@@ -2,21 +2,40 @@
 title: "Qualité des données"
 subtitle: "CRM, Data & Automation"
 short: "Qualité des données"
-date: 2026-06-03
+date: 2026-06-08
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop"
-description: "Qualité des données : nettoyer, enrichir et fiabiliser la donnée collectée. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+cover: "/decks/qualite-donnees/cover-filter.jpg"
+description: "Qualité des données : importance et techniques de cleaning, enrichment (Apollo, Clay, Explorium, IA), qualité comme processus. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import CoverHero from '@/components/slides/CoverHero.astro';
 import StatementHero from '@/components/slides/StatementHero.astro';
+import QuoteImage from '@/components/slides/QuoteImage.astro';
+import SubSectionHero from '@/components/slides/SubSectionHero.astro';
+import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
+import StatRingsHero from '@/components/slides/StatRingsHero.astro';
+import TableHero from '@/components/slides/TableHero.astro';
+import VideoHero from '@/components/slides/VideoHero.astro';
+import SpreadsheetHero from '@/components/slides/SpreadsheetHero.astro';
+import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import ClosingHero from '@/components/slides/ClosingHero.astro';
 
-{/* Deck en chantier : on verra plus tard ce qu'on en fait. Pour l'instant il accueille
-    le slide pivot "Collecter ne suffit pas" déplacé depuis collecte-donnees-new.
-    Cover : image et eyebrow à confirmer (placeholder repris de Collecte). */}
+{/*
+  Deck reconstruit le 2026-06-08 sur la base du contenu d'origine (commit 628dbc1,
+  vidé en stub au commit e309f4a), modernisé au style Hero des decks voisins
+  (collecte, architecture, segmentation). Ajouts par rapport à l'origine :
+  - un slide "importance du cleaning" (le coût de la donnée sale),
+  - un slide "stack d'enrichment moderne" (point APIs, Apollo, Clay, Explorium, IA),
+  - un deep-dive Clay (waterfall enrichment + Claygent).
+  Conventions : pas de Calendar (vit dans Introduction), Workshop + Brief fusionnés
+  en un seul WorkshopHero, eyebrow en " : ", aucun em-dash, accents complets.
+*/}
 
+{/* Slide 1 : Cover. Métaphore du café filtré (filtrer = nettoyer, raffiner). */}
 <CoverHero
   title="Qualité des données"
   italicPart="données"
@@ -24,15 +43,278 @@ import StatementHero from '@/components/slides/StatementHero.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  image="/decks/qualite-donnees/cover-filter.jpg"
   theme="halo-gold"
 />
 
+{/* Ouverture : poser l'enjeu IA. Données pas prêtes = projets d'IA qui échouent
+    (Gartner, communiqué « Lack of AI-Ready Data Puts AI Projects at Risk », 26/02/2025 ;
+    enquête T3 2024, 248 responsables data). gartner.com bloque le fetch (403) :
+    chiffres du communiqué officiel, citables tels quels. */}
+<StatRingsHero
+  title="L'IA bute sur des données pas prêtes"
+  italicPart="pas prêtes"
+  subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
+  items={[
+    { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
+    { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
+  ]}
+  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
+  sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 2 : Section 01 - Le cleaning. */}
+<SubSectionHero
+  kicker="Mise au propre"
+  index="01"
+  title="Le cleaning"
+  italicPart="cleaning"
+  subtitle="Mettre la donnée brute en état d'être exploitée. Six réflexes suffisent."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : Pivot en citation (pastille icône ampoule), ouvre la section cleaning.
+    Texte général, sans mention du fil rouge Cédric. */}
+<QuoteImage
+  icon="ph:lightbulb"
+  text="Collecter ne suffit pas : tout le monde collecte, presque personne n'exploite."
+  image="/decks/qualite-donnees/cover-filter.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 4 : L'importance du cleaning, par le coût de la donnée sale. */}
+<InfoCardsGrid
+  title="Ce que la donnée sale coûte vraiment"
+  italicPart="coûte vraiment"
+  subtitle="Une base sale ne plante pas d'un coup : elle érode, silencieusement, jusqu'à coûter cher."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:envelope-simple', label: "Délivrabilité", value: "Les emails invalides font grimper les bounces. Gmail et Outlook sanctionnent : même vos bons emails finissent en spam. La réputation se répare en mois, pas en jours." },
+    { icon: 'ph:copy', label: "Doublons", value: "Le même contact en triple, c'est trois emails au lieu d'un, des comptages faux et un commercial qui rappelle un client déjà signé. La base gonfle, la confiance baisse." },
+    { icon: 'ph:user-focus', label: "Personnalisation ratée", value: "Bonjour MARIE en majuscules avec un emoji collé : la perso se retourne contre vous. Une donnée sale visible, et la crédibilité du message tombe." },
+    { icon: 'ph:gear', label: "Automatisation cassée", value: "Un workflow ne vaut que la donnée qui l'alimente. Téléphone mal formaté, champ vide, doublon : l'automatisation propage l'erreur à grande échelle, sans broncher." },
+  ]}
+/>
+
+{/* Slide 5 : Les six techniques de cleaning par type de donnée.
+    Pas de mention d'automation ici (traitée dans un module ultérieur). */}
+<TableHero
+  title="Six techniques qui couvrent 90 % des cas"
+  italicPart="90 % des cas"
+  subtitle="Pour chaque type de donnée, le bon réflexe de nettoyage."
+  headers={["Donnée", "Technique de cleaning", "Outils"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Email", "Lowercase, trim, validation MX du domaine", "NeverBounce, ZeroBounce, Hunter"],
+    ["Téléphone", "Format international E.164 (+41 79 ...)", "libphonenumber, Twilio Lookup"],
+    ["Nom et prénom", "Title Case, trim, retrait des emojis et espaces invisibles", "Natif tableur ou script, IA"],
+    ["Doublons", "Match strict sur l'email, fuzzy sur nom + société", "Dedupe.io, natif CRM"],
+    ["Dates et codes postaux", "Format ISO pour les dates, CP suisse sur 4 chiffres", "Natif tableur ou CRM"],
+    ["Listes de valeurs", "Harmoniser les référentiels : pays, civilité, secteur (Suisse = CH = Switzerland)", "Picklists CRM, table de correspondance"],
+  ]}
+/>
+
+{/* Fonctions Excel fréquentes, en style tableur (avant la démo live).
+    Deux onglets cliquables : Nettoyage (FR) et Cleaning (EN). Colonnes Avant
+    (donnée brute) et Après (résultat). Barre de formule = la vraie formule
+    SUBSTITUE sur l'avant (cellule active D5 = son résultat). */}
+<SpreadsheetHero
+  title="Les fonctions Excel fréquentes"
+  italicPart="Excel"
+  subtitle="Six formules qui couvrent l'essentiel du nettoyage. Onglet Cleaning pour la version anglaise."
+  sheets={[
+    {
+      name: "Nettoyage",
+      formula: '=SUBSTITUE(C5;" ";"")',
+      activeCell: "D5",
+      columns: ["Formules", "Ce que ça fait", "Avant", "Après"],
+      rows: [
+        ["SUPPRESPACE()", "Enlève les espaces en trop", "  Jean  Dupont ", "Jean Dupont"],
+        ["MINUSCULE()", "Met tout en petites lettres", "JEAN@X.COM", "jean@x.com"],
+        ["NOMPROPRE()", "Une majuscule au début de chaque mot", "jean dupont", "Jean Dupont"],
+        ["SUBSTITUE()", "Remplace un caractère par un autre (ici, enlève les espaces)", "+41 79 123 45 67", "+41791234567"],
+        ["DATEVAL()", "Transforme une date écrite en texte en vraie date (puis format Date)", "28.06.26", "28.06.2026"],
+        ["RECHERCHEX()", "Va chercher la valeur correspondante dans une table", "CH", "Suisse"],
+      ],
+    },
+    {
+      name: "Cleaning",
+      formula: '=SUBSTITUTE(C5," ","")',
+      activeCell: "D5",
+      columns: ["Formulas", "What it does", "Before", "After"],
+      rows: [
+        ["TRIM()", "Removes extra spaces", "  Jean  Dupont ", "Jean Dupont"],
+        ["LOWER()", "Makes everything lowercase", "JEAN@X.COM", "jean@x.com"],
+        ["PROPER()", "One capital at the start of each word", "jean dupont", "Jean Dupont"],
+        ["SUBSTITUTE()", "Replaces one character with another (here, removes spaces)", "+41 79 123 45 67", "+41791234567"],
+        ["DATEVALUE()", "Turns a text date into a real date (then set Date format)", "28.06.26", "2026-06-28"],
+        ["XLOOKUP()", "Looks up the matching value in a table", "CH", "Switzerland"],
+      ],
+    },
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démo vidéo NeverBounce (screen recording).
+    Vidéo déposée. Le poster (thumbnail PDF) est généré à `posterTime` (0:43) par
+    `npm run build:posters` (ffmpeg, aussi en prebuild) vers
+    neverbounce-cleaning-poster.jpg, dérivé du nom de la vidéo. */}
+<VideoHero
+  title="Cleaning avec NeverBounce"
+  italicPart="NeverBounce"
+  align="left"
+  video="/decks/qualite-donnees/neverbounce-cleaning.mp4"
+  posterTime="0:43"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Section 02 - L'enrichment. */}
+<SubSectionHero
+  kicker="Ne demande pas, déduis"
+  index="02"
+  title="L'enrichment"
+  italicPart="enrichment"
+  subtitle="Le formulaire le plus court convertit le mieux. Déduire plutôt que demander."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 7 : Quatre cas d'enrichment qui épargnent un champ au formulaire. */}
+<NumberedSplit
+  title="Quatre cas d'enrichment qui changent la donne"
+  italicPart="changent la donne"
+  subtitle="Chacun épargne un champ au formulaire. Cumulés, ils baissent la friction et enrichissent le CRM."
+  image="/decks/qualite-donnees/cover-filter.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Genre depuis le prénom : Genderize.io déduit le genre et un indice de confiance. On personnalise (Cher, Chère) sans demander. Le champ Genre quitte le formulaire, la conversion monte." },
+    { text: "Société depuis l'email pro : Apollo, Clearbit ou Hunter retrouvent société, secteur, taille et LinkedIn depuis jean@acme.com. Le champ Société devient optionnel." },
+    { text: "Géolocalisation depuis l'IP : IPstack ou ipapi donnent pays et région au moment du remplissage. Fini le menu déroulant pays, friction inutile dans 95 % des cas." },
+    { text: "Structuration par IA : Claude ou GPT transforment un titre de poste ou un message libre en champs structurés (séniorité, secteur, intention). Juste une bonne instruction." },
+  ]}
+/>
+
+{/* Slide 8 : La stack d'enrichment moderne, du plus simple au plus puissant. */}
+<TableHero
+  title="La stack d'enrichment moderne"
+  italicPart="enrichment"
+  subtitle="Du plus simple au plus puissant : quatre niveaux d'outils, selon le besoin et le budget."
+  headers={["Niveau", "Outils", "Quand l'utiliser"]}
+  caption="Noms et ordres de grandeur indicatifs : à calibrer selon vos volumes et votre budget."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Point API (une donnée)", "Genderize, IPstack, Hunter, NeverBounce", "Compléter un champ précis, pour quelques centimes par appel"],
+    ["Base de données B2B", "Apollo (275M contacts), Clearbit, Cognism", "Retrouver société, poste, email pro depuis un nom ou un domaine"],
+    ["Orchestration waterfall", "Clay, Explorium", "Couverture maximale : une cascade de sources jusqu'à trouver"],
+    ["Structuration par IA", "Claude, GPT", "Transformer du texte libre en champs structurés"],
+  ]}
+/>
+
+{/* Slide 9 : Deep-dive Clay - le waterfall enrichment. */}
+<NumberedSplit
+  title="Le waterfall enrichment de Clay"
+  italicPart="waterfall"
+  subtitle="L'enrichissement de niveau entreprise rendu accessible : la couverture maximale, sans payer le vide."
+  image="/decks/qualite-donnees/cover-filter.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Le point de départ : une liste d'emails ou de domaines, comme un tableur. Clay, c'est un Google Sheets sous stéroïdes, branché sur des dizaines de fournisseurs." },
+    { text: "La cascade : pour chaque champ manquant, Clay interroge une source, puis une deuxième si la première est vide, puis une troisième, jusqu'à trouver." },
+    { text: "Le résultat : un taux de couverture très supérieur à n'importe quel outil seul, en ne payant que les appels qui aboutissent." },
+    { text: "Claygent, l'agent IA : il lit un site web ou un profil pour répondre à une question libre (quelle techno ? ont-ils levé des fonds ?) quand aucune base ne sait." },
+  ]}
+/>
+
+{/* Slide 10 : Statement pivot - garbage in, garbage out + ne demande pas, déduis. */}
 <StatementHero
-  eyebrow="Le problème"
-  title={"Collecter\nne suffit pas"}
-  italicPart="suffit pas"
-  body="Tout le monde collecte, presque personne n'exploite. Sans stratégie derrière, la donnée reste dormante."
+  eyebrow="Le principe"
+  title="Ne demande que ce que tu ne peux pas déduire"
+  italicPart="déduire"
+  body="Garbage in, garbage out : si le formulaire est mal construit, aucun cleaning ne sauvera la base. Et si vous demandez ce qu'un service tiers déduit en 200 millisecondes, vous laissez de la conversion sur la table. La qualité d'un CRM est un système, pas un effort ponctuel : capture rigoureuse, cleaning automatisé, enrichment intelligent."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 11 : Section 03 - La qualité comme processus. */}
+<SubSectionHero
+  kicker="Dans la durée"
+  index="03"
+  title="La qualité comme processus"
+  italicPart="processus"
+  subtitle="Une base propre se dégrade seule avec le temps. Trois leviers pour que ça tienne."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 12 : Trois piliers pour maintenir la qualité dans le temps. */}
+<NumberedSplit
+  title="Trois piliers pour tenir la qualité dans le temps"
+  italicPart="dans le temps"
+  subtitle="Sans ces trois, la base se dégrade en six mois et l'outil retombe en désuétude."
+  image="/decks/qualite-donnees/cover-filter.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Métriques visibles : taux de complétion par champ, doublons détectés, bounces, désinscriptions. Affichées sur un dashboard, suivies chaque mois. Sans mesure, pas de pilotage." },
+    { text: "Routines de nettoyage : mensuelle (déduplication, emails inactifs), trimestrielle (audit des champs vides, revue des règles de capture). À calendariser comme un processus métier." },
+    { text: "Ownership clair : une personne nommée, responsable de la qualité. Ni le commercial ni l'IT par défaut, mais un rôle dédié (data steward) ou une part du poste du CRM manager." },
+  ]}
+/>
+
+{/* Slide 13 : Démo live - pipeline n8n du fil rouge Cédric. */}
+<DemoHero
+  title="Le pipeline cleaning + enrichment de Cédric"
+  italicPart="Cédric"
+  subtitle="Construction live dans n8n : sortie du formulaire de Cédric (sujet 1), nettoyage, enrichment, puis routage dans le CRM avec tous les champs renseignés."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
+  caption="Pipeline n8n : formulaire vers cleaning vers enrichment vers CRM (capture à remplacer)"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "n8n : webhook du formulaire de Cédric en entrée, noeuds de transformation, sortie vers le CRM." },
+    { label: "Cleaning", value: "Lowercase et trim sur l'email, format E.164 sur le téléphone, Title Case sur le nom." },
+    { label: "Enrichment", value: "Genderize pour le genre, société déduite si l'email est professionnel (Apollo ou Clearbit)." },
+    { label: "À retenir", value: "Un seul pipeline, branché une fois, qui tourne sur chaque nouveau contact sans intervention." },
+  ]}
+/>
+
+{/* Slide 14 : Workshop - pipeline de la boîte de chaque groupe (Workshop + Brief fusionnés). */}
+<WorkshopHero
+  title="Le pipeline de votre boîte"
+  italicPart="votre boîte"
+  subtitle="En groupes, reprenez votre formulaire et concevez le pipeline cleaning + enrichment derrière."
+  defaultMinutes={30}
+  presets={[15, 20, 30]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Format", value: "Mêmes groupes qu'au sujet 1, même formulaire que celui que vous avez refondu." },
+    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution en plénière." },
+    { label: "Étapes", value: "5 min : règles de cleaning par champ (lowercase, trim, format, validation) / 5 min : choisir 1 à 2 enrichments pertinents pour votre secteur / 10 min : dessiner le pipeline complet, du formulaire au CRM." },
+    { label: "Output", value: "Un diagramme du pipeline sur paperboard, avec les champs finaux côté CRM annotés." },
+    { label: "Bonus IA", value: "Soumettez votre pipeline à Claude ou ChatGPT : qu'est-ce que j'oublie ? quels enrichments pour mon secteur ?" },
+    { label: "Restitution", value: "1 à 2 minutes par groupe, focus sur les enrichments retenus et pourquoi." },
+  ]}
+/>
+
+{/* Slide 15 : Closing Q&R, transition vers le sujet 3 Architecture. */}
+<ClosingHero
+  title="Questions & réponses"
+  highlight="réponses"
+  tagline="Ensuite : structurer la donnée propre (Architecture des données)."
+  url="lausanne.marketing"
+  image="/decks/qualite-donnees/cover-filter.jpg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
