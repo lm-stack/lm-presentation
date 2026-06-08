@@ -10,9 +10,7 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
-const fullTitle = title === 'Lausanne Marketing : Présentations'
-  ? title
-  : `${title} : Lausanne Marketing`;
+const fullTitle = `${title} | Lausanne Marketing`;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <!DOCTYPE html>
