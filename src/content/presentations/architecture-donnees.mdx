@@ -19,7 +19,6 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
 import WorkshopHero from '@/components/slides/WorkshopHero.astro';
-import ClosingHero from '@/components/slides/ClosingHero.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
 import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
@@ -332,17 +331,4 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
     { label: "Output", value: "Un ERD dessiné sur une feuille A3." },
     { label: "Restitution", value: "3 à 4 minutes par groupe." },
   ]}
-/>
-
-{/* Slide 14 : Questions & réponses (ex-Closing variant="qa")
-    ClosingHero ne gère pas de variants ; traduit en title + highlight + tagline.
-    Image : cover-blueprint.jpg (seule image locale disponible). */}
-<ClosingHero
-  title="Questions & réponses"
-  highlight="réponses"
-  tagline="On prend le temps de restituer les ERDs."
-  url="lausanne.marketing"
-  image="/decks/architecture-donnees/cover-blueprint.jpg"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />

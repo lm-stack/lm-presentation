@@ -23,7 +23,7 @@ Conséquence : changer une taille = changer UN token, pas 34 composants.
 | Token | Valeur | Palier | Composants |
 |---|---|---|---|
 | `--fs-cover` | clamp(110px, 11vw, 188px) | Cover | `CoverHero` |
-| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `SectionHero`, `SubSectionHero`, `AboutHero`, `SectionSplit`, `StatementHero`, `PauseHero`, `MatrixRainHero`, `ClosingHero` |
+| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `SectionHero`, `SubSectionHero`, `AboutHero`, `SectionSplit`, `StatementHero`, `PauseHero`, `MatrixRainHero`, `ClosingHero`, `QuestionsHero`, `MerciHero` |
 | `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCardsGrid`, `NumberedSplit`, `ProgrammeHero`, `FormHero`, `ListImageHero`, `ExchangeHero`, `WorkshopHero`, `PeopleCards`, `MockupHero`, `CodeExamplesHero`, `TitleSplitImage`, `DemoHero`, `UtmGeneratorHero` |
 | `--fs-hero-m` | clamp(40px, 4vw, 72px) | Contenu dense | `ImageGridHero`, `PollHero`, `WordCloudHero`, `CompareColumnsHero`, `BarChartHero`, `TableHero`, `MediaHero`, `SpreadsheetHero`, `StatRingsHero`, `VideoHero`, `SchemaTriptych` |
 | `--fs-term` | clamp(76px, 8vw, 140px) | Spécial | `DefinitionHero` (terme serif) |
