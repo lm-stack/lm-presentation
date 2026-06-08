@@ -35,6 +35,9 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import MockupHero from '@/components/slides/MockupHero.astro';
 import TableHero from '@/components/slides/TableHero.astro';
+import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
+import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
+import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
@@ -451,8 +454,6 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 />
 
 <WorkshopHero
-  title="Workshop"
-  italicPart="Workshop"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
   rows={[
@@ -471,6 +472,34 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   button="Envoyer"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
+/>
+
+<CodeExamplesHero
+  title="Exemples de code"
+  italicPart="code"
+  subtitle="Grille 2x2 de boxes de code : les clés des paramètres sont surlignées (ex : les UTM d'une URL)."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  examples={[
+    { label: "Newsletter", base: "exemple.ch", params: [{ key: "utm_source", value: "newsletter" }, { key: "utm_medium", value: "email" }, { key: "utm_campaign", value: "promo" }] },
+    { label: "Publicité payante", base: "exemple.ch", params: [{ key: "utm_source", value: "google" }, { key: "utm_medium", value: "cpc" }, { key: "utm_campaign", value: "lancement" }] },
+    { label: "Réseaux sociaux", base: "exemple.ch", params: [{ key: "utm_source", value: "linkedin" }, { key: "utm_medium", value: "social" }, { key: "utm_campaign", value: "webinaire" }] },
+    { label: "Affichage imprimé", base: "exemple.ch", params: [{ key: "utm_source", value: "flyer" }, { key: "utm_medium", value: "print" }, { key: "utm_campaign", value: "salon" }] },
+  ]}
+/>
+
+<UtmGeneratorHero
+  title="Générateur d'UTMs"
+  italicPart="UTMs"
+  subtitle="Interactif : trois selects (source, médium, campagne), le lien tagué se construit en direct, avec bouton copier."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+<MatrixRainHero
+  title="Matrix rain"
+  italicPart="rain"
+  subtitle="Slide d'ambiance plein cadre : pluie de caractères animée, titre optionnel en surimpression."
 />
 
 <PauseHero

@@ -5,15 +5,12 @@
 // matrix rain "papier-pluie" (canvas, repris de CoverHero) surmonté du minuteur
 // (TimerControl, centré, sans barre de progression). Charte LM light.
 import TimerControl from '@/components/slides/TimerControl.astro';
-import { splitHighlight } from '@/utils/highlight';
 
 interface WorkshopRow {
   label: string;
   value: string;
 }
 interface Props {
-  title?: string;
-  italicPart?: string;
   subtitle?: string;
   rows: WorkshopRow[];
   /** Durée par défaut du minuteur, en minutes (temps de l'atelier). */
@@ -24,8 +21,6 @@ interface Props {
   brandSub?: string;
 }
 const {
-  title = 'Workshop',
-  italicPart,
   subtitle,
   rows,
   defaultMinutes = 20,
@@ -33,7 +28,6 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
-const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="workshop-hero" data-layout="workshop-hero">
   <header class="workshop-hero__header">
@@ -60,9 +54,7 @@ const titleParts = splitHighlight(title, italicPart);
 
     <div class="workshop-hero__main">
       <h2 class="workshop-hero__title">
-        {titleParts
-          ? <>{titleParts.before}<em class="workshop-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
-          : title}
+        <em class="workshop-hero__title-italic"><span class="underline">Workshop</span></em>
       </h2>
       {subtitle && <p class="workshop-hero__subtitle">{subtitle}</p>}
 

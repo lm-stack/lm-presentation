@@ -138,3 +138,11 @@ Le bandeau marque peut être **masqué** (`hideBrand`) dans les cas exceptionnel
 ⚠️ **Le texte de contenu d'une slide ne descend jamais sous 22px** : titres, sous-titres, corps, items de liste, titres et descriptions de cards et de légendes. À 1920×1080 projeté en salle, en dessous ça devient illisible au fond.
 
 Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes de source / attribution (16–18px), watermarks décoratifs.
+
+## Titre d'un slide Workshop — RÈGLE ABSOLUE
+
+⚠️ Le titre d'un `WorkshopHero` est **TOUJOURS** « Workshop ». Aucune variante thématique (« L'ERD de votre boîte », « Construction d'un funnel », « Atelier de modélisation », etc.) : le mot « Workshop » est l'ancrage visuel récurrent qui signale un temps d'atelier dans le parcours.
+
+- Le sujet précis de l'atelier va dans le `subtitle` et les `rows` (Format, Temps, Objectif, Output, Restitution), **jamais** dans le titre.
+- Côté MDX : ne plus passer de `title` ni d'`italicPart` sur un `<WorkshopHero>`. Ces props **n'existent plus** dans l'interface du composant.
+- Durci dans le code : le `<h2>` de `src/components/slides/WorkshopHero.astro` est **codé en dur** sur « Workshop » (rendu en italique souligné, le traitement d'ancrage), props `title` / `italicPart` retirées. La règle est donc inviolable, pas seulement conventionnelle.
