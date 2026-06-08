@@ -1,0 +1,303 @@
+---
+// src/components/slides/SchemaTriptych.astro
+// Triptyque "Entité / Champ / Relation" rendu en SVG (data-objects), à la place
+// de photos : net en 1920x1080 et en PDF, thémé via les tokens (accent execed/LM),
+// cohérent par construction. Structure (header marque + logo, fond pearl, grille
+// de 3 cards) calquée sur ImageGridHero. Les trois concepts sont figés dans le
+// composant ; il prend juste title / subtitle / brand.
+import { splitHighlight } from '@/utils/highlight';
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="triptych" data-layout="triptych">
+  <header class="triptych__header">
+    <div class="triptych__brand-text">
+      <p class="triptych__brand-main">{brand}</p>
+      {brandSub && <p class="triptych__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="triptych__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="triptych__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="triptych__body">
+    {(title || subtitle) && (
+      <div class="triptych__heading">
+        {title && (
+          <h2 class="triptych__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="triptych__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="triptych__subtitle">{subtitle}</p>}
+      </div>
+    )}
+
+    <div class="triptych__grid">
+      <article class="triptych__item" style="--i: 0">
+        <div class="triptych__viz">
+          <svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect class="v-card" x="55" y="24" width="110" height="102" rx="9" />
+            <rect class="v-accent" x="68" y="38" width="16" height="16" rx="3" />
+            <line class="v-strong" x1="92" y1="46" x2="150" y2="46" />
+            <line class="v-line" x1="68" y1="72" x2="152" y2="72" />
+            <line class="v-line" x1="68" y1="90" x2="152" y2="90" />
+            <line class="v-line" x1="68" y1="108" x2="126" y2="108" />
+          </svg>
+        </div>
+        <div class="triptych__card-body">
+          <h3 class="triptych__card-title">Entité</h3>
+          <p class="triptych__card-text">Un type d'objet que vous suivez : Contact, Société, Affaire. Une table par entité.</p>
+        </div>
+      </article>
+
+      <article class="triptych__item" style="--i: 1">
+        <div class="triptych__viz">
+          <svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect class="v-card" x="55" y="24" width="110" height="102" rx="9" />
+            <line class="v-faint" x1="68" y1="46" x2="150" y2="46" />
+            <rect class="v-accent-soft" x="62" y="62" width="96" height="26" rx="5" />
+            <line class="v-strong" x1="72" y1="75" x2="116" y2="75" />
+            <circle class="v-dot" cx="146" cy="75" r="4.5" />
+            <line class="v-faint" x1="68" y1="106" x2="150" y2="106" />
+          </svg>
+        </div>
+        <div class="triptych__card-body">
+          <h3 class="triptych__card-title">Champ</h3>
+          <p class="triptych__card-text">Une caractéristique de l'entité : email, téléphone, date, montant, oui/non.</p>
+        </div>
+      </article>
+
+      <article class="triptych__item" style="--i: 2">
+        <div class="triptych__viz">
+          <svg viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <rect class="v-card" x="22" y="40" width="74" height="70" rx="8" />
+            <rect class="v-card" x="124" y="40" width="74" height="70" rx="8" />
+            <line class="v-line" x1="34" y1="58" x2="84" y2="58" />
+            <line class="v-line" x1="34" y1="74" x2="72" y2="74" />
+            <line class="v-line" x1="136" y1="58" x2="186" y2="58" />
+            <line class="v-line" x1="136" y1="74" x2="174" y2="74" />
+            <path class="v-link" d="M96 75 H124" />
+            <circle class="v-dot" cx="96" cy="75" r="4.5" />
+            <circle class="v-dot" cx="124" cy="75" r="4.5" />
+          </svg>
+        </div>
+        <div class="triptych__card-body">
+          <h3 class="triptych__card-title">Relation</h3>
+          <p class="triptych__card-text">Un lien entre deux entités : un Contact appartient à une Société.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .triptych {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .triptych__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .triptych__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .triptych__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .triptych__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .triptych__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    gap: 48px;
+  }
+  .triptych__heading {
+    text-align: left;
+  }
+  .triptych__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(44px, 4.4vw, 72px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .triptych__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .triptych__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 26px;
+    line-height: 1.45;
+    margin: 12px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+
+  .triptych__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    flex: 0 0 auto;
+  }
+  .triptych__item {
+    display: flex;
+    flex-direction: column;
+    height: 540px;
+    background: var(--c-surface);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+    min-height: 0;
+    animation: triptych-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.08s) both;
+  }
+
+  .triptych__viz {
+    flex: 1 1 auto;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: linear-gradient(180deg, var(--c-surface) 0%, color-mix(in srgb, var(--c-ink) 5%, var(--c-surface)) 100%);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .triptych__viz svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Tokens du dessin (thémé : encre + accent du schéma actif). */
+  .v-card {
+    fill: var(--c-surface);
+    stroke: color-mix(in srgb, var(--c-ink) 26%, transparent);
+    stroke-width: 2.5;
+  }
+  .v-line {
+    stroke: color-mix(in srgb, var(--c-ink) 30%, transparent);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .v-faint {
+    stroke: color-mix(in srgb, var(--c-ink) 14%, transparent);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .v-strong {
+    stroke: var(--c-ink);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+  .v-accent {
+    fill: var(--c-accent);
+  }
+  .v-accent-soft {
+    fill: color-mix(in srgb, var(--c-accent) 16%, transparent);
+    stroke: color-mix(in srgb, var(--c-accent) 45%, transparent);
+    stroke-width: 1.5;
+  }
+  .v-dot {
+    fill: var(--c-accent);
+  }
+  .v-link {
+    stroke: var(--c-accent);
+    stroke-width: 4;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .triptych__card-body {
+    flex: 0 0 auto;
+    padding: 22px 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .triptych__card-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--c-ink);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-align: left;
+  }
+  .triptych__card-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  @keyframes triptych-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

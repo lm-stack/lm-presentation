@@ -20,6 +20,8 @@ interface Props {
   sourceUrl?: string;
   brand?: string;
   brandSub?: string;
+  /** Affiche une animation "réseau" (noeuds reliés) dans la colonne de droite. */
+  network?: boolean;
 }
 import { splitHighlight } from '@/utils/highlight';
 const {
@@ -33,6 +35,7 @@ const {
   sourceUrl,
   brand = 'Titre de la présentation',
   brandSub,
+  network = false,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
 ---
@@ -66,6 +69,12 @@ const titleParts = splitHighlight(title, italicPart);
       <div class="statement-hero__stat-block">
         <span class="statement-hero__stat">{stat}</span>
         {statCaption && <span class="statement-hero__stat-caption">{statCaption}</span>}
+      </div>
+    )}
+
+    {network && (
+      <div class="statement-hero__network" aria-hidden="true">
+        <canvas class="statement-hero__network-canvas"></canvas>
       </div>
     )}
   </div>
@@ -205,6 +214,21 @@ const titleParts = splitHighlight(title, italicPart);
     max-width: 420px;
     text-align: center;
   }
+
+  /* Colonne droite : champ de noeuds reliés (canvas), bleed sans cadre. */
+  .statement-hero__network {
+    flex: 0 0 38%;
+    align-self: stretch;
+    position: relative;
+    overflow: hidden;
+  }
+  .statement-hero__network-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
 </style>
 
 <style is:global>
@@ -230,3 +254,97 @@ const titleParts = splitHighlight(title, italicPart);
     text-decoration: underline;
   }
 </style>
+
+<script>
+  // Champ de noeuds reliés ("réseau" entités/relations) pour la colonne droite
+  // du StatementHero quand network={true}. Même esprit que le matrix rain, motif
+  // différent : des points qui dérivent, reliés par une ligne quand ils sont proches.
+  function initStatementNetwork(canvas: HTMLCanvasElement) {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const slide = canvas.closest<HTMLElement>('[data-layout="statement-hero"]');
+    const cs = getComputedStyle(slide ?? document.documentElement);
+    const accent = cs.getPropertyValue('--c-accent').trim() || '#C8A24B';
+    const ink = cs.getPropertyValue('--c-ink').trim() || '#191919';
+
+    let W = 0, H = 0;
+    interface Pt { x: number; y: number; vx: number; vy: number; }
+    let nodes: Pt[] = [];
+    const LINK = 150;
+
+    function build() {
+      W = canvas.width = parent!.offsetWidth;
+      H = canvas.height = parent!.offsetHeight;
+      const count = Math.max(14, Math.min(40, Math.floor((W * H) / 16000)));
+      nodes = [];
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+        });
+      }
+    }
+    build();
+
+    function step() {
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > W) n.vx = -n.vx;
+        if (n.y < 0 || n.y > H) n.vy = -n.vy;
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, W, H);
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK) {
+            ctx!.globalAlpha = (1 - d / LINK) * 0.22;
+            ctx!.strokeStyle = ink;
+            ctx!.lineWidth = 1;
+            ctx!.beginPath();
+            ctx!.moveTo(a.x, a.y);
+            ctx!.lineTo(b.x, b.y);
+            ctx!.stroke();
+          }
+        }
+      }
+      ctx!.globalAlpha = 0.85;
+      ctx!.fillStyle = accent;
+      for (const n of nodes) {
+        ctx!.beginPath();
+        ctx!.arc(n.x, n.y, 3, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+      ctx!.globalAlpha = 1;
+    }
+
+    let running = true;
+    new IntersectionObserver(([e]) => { running = e.isIntersecting; }, { threshold: 0 }).observe(canvas);
+    new ResizeObserver(() => build()).observe(parent);
+
+    function loop() { if (running) { step(); draw(); } requestAnimationFrame(loop); }
+    loop();
+  }
+
+  function initStatementNetworks() {
+    document.querySelectorAll<HTMLCanvasElement>('.statement-hero__network-canvas').forEach((c) => {
+      if (c.dataset.netInit) return;
+      c.dataset.netInit = '1';
+      initStatementNetwork(c);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStatementNetworks);
+  } else {
+    initStatementNetworks();
+  }
+</script>
