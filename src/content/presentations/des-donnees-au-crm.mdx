@@ -1,0 +1,77 @@
+---
+title: "Des données au CRM"
+subtitle: "CRM, Data & Automation"
+short: "Des données au CRM"
+date: 2026-06-08
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "/decks/architecture-donnees/cover-blueprint.jpg"
+description: "Des données au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import CoverHero from '@/components/slides/CoverHero.astro';
+import ImageGridHero from '@/components/slides/ImageGridHero.astro';
+import DemoHero from '@/components/slides/DemoHero.astro';
+
+{/* Slide 1 : Cover. Image : placeholder cover-blueprint d'architecture-donnees, à remplacer. */}
+<CoverHero
+  title="Des données au CRM"
+  italicPart="CRM"
+  eyebrow="Jour 1 : Sujet 4"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  theme="halo-gold"
+/>
+
+{/* Slide 2 : Les 4 plus grands CRM (grille logos, mode contain).
+    Logos locaux pleine couleur. DYNAMICS : placeholder logo Microsoft (officiel,
+    couleur), à remplacer par le vrai logo Dynamics 365. */}
+<ImageGridHero
+  logos={true}
+  title="Les quatre grands"
+  italicPart="grands"
+  subtitle="Les CRM les plus déployés au monde : puissants, complets, facturés en conséquence."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/des-donnees-au-crm/logos/salesforce.svg", alt: "Salesforce", title: "Salesforce", text: "Leader mondial, très puissant, cher et complexe." },
+    { src: "/decks/des-donnees-au-crm/logos/hubspot.svg", alt: "HubSpot", title: "HubSpot", text: "Tout-en-un marketing et CRM, démarre gratuit, grimpe vite." },
+    { src: "/decks/des-donnees-au-crm/logos/dynamics365.svg", alt: "Microsoft Dynamics 365", title: "Dynamics 365", text: "Intégré à l'écosystème Microsoft, pour grandes structures." },
+    { src: "/decks/des-donnees-au-crm/logos/zoho.svg", alt: "Zoho CRM", title: "Zoho CRM", text: "Complet et abordable, bon rapport qualité-prix pour PME." },
+  ]}
+/>
+
+{/* Slide 3 : Alternatives bon marché (grille logos, mode contain). */}
+<ImageGridHero
+  logos={true}
+  title="Les alternatives abordables"
+  italicPart="abordables"
+  subtitle="Pas besoin d'un poids lourd pour bien démarrer : le schéma compte plus que l'outil."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/des-donnees-au-crm/logos/googlesheets.svg", alt: "Google Sheets", title: "Google Sheets / Excel", text: "Le point de départ : gratuit, universel, parfait pour une TPE." },
+    { src: "/decks/des-donnees-au-crm/logos/brevo.svg", alt: "Brevo", title: "Brevo", text: "Email et marketing avec un CRM léger intégré, abordable." },
+    { src: "/decks/des-donnees-au-crm/logos/airtable.svg", alt: "Airtable", title: "Airtable", text: "Base de données flexible, CRM sur-mesure sans coder." },
+    { src: "/decks/des-donnees-au-crm/logos/notion.svg", alt: "Notion", title: "Notion", text: "Tout-en-un notes et bases, CRM léger très bon marché." },
+  ]}
+/>
+
+{/* Slide 4 : Démo Zoho CRM en live (pas de vidéo). Image : placeholder dashboard
+    Unsplash, A REMPLACER par une vraie capture Zoho CRM. */}
+<DemoHero
+  title="Zoho CRM en pratique"
+  italicPart="en pratique"
+  subtitle="On construit le schéma Contact, Société, Affaire en direct, sans quitter l'outil."
+  image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=1000&fit=crop"
+  caption="Démo live (capture d'illustration, à remplacer par Zoho CRM)."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Édition", value: "Zoho CRM gratuit, jusqu'à 3 utilisateurs." },
+    { label: "En direct", value: "Créer les entités, ajouter des champs, tracer la première relation." },
+  ]}
+/>

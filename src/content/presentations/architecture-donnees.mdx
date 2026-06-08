@@ -20,6 +20,9 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 import DemoHero from '@/components/slides/DemoHero.astro';
 import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 import ClosingHero from '@/components/slides/ClosingHero.astro';
+import BarChartHero from '@/components/slides/BarChartHero.astro';
+import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
+import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 
 {/*
   MIGRATION : architecture-donnees.mdx -> architecture-donnees-new.mdx
@@ -132,31 +135,82 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : Section 01 — Pourquoi l'architecture compte */}
+{/* Intercalaire §01 : Pourquoi c'est votre sujet (ouverture) */}
 <SubSectionHero
-  kicker="Le bénéfice métier"
+  kicker="L'enjeu"
   index="01"
-  title="Pourquoi l'architecture compte"
-  italicPart="l'architecture"
-  subtitle="Cinq raisons concrètes, observables, qui parlent au métier et pas au développeur."
+  title="Pourquoi c'est votre sujet"
+  italicPart="votre sujet"
+  subtitle="Avant le comment : ce qui fait échouer les projets, et où se trouve le vrai levier."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 4 : Cinq raisons (ex-NumberedCards 1 col, 5 items)
-    Condensés en format "Titre : phrase courte".
+{/* Stat : données pas prêtes pour l'IA (Gartner, février 2025) */}
+<BarChartHero
+  title="L'IA bute sur des données pas prêtes"
+  italicPart="pas prêtes"
+  subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
+  items={[
+    { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
+    { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
+  ]}
+  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
+  sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Le modèle appartient au métier (CMO), pas à l'IT */}
+<CompareColumnsHero
+  title="Le modèle appartient au métier"
+  italicPart="au métier"
+  subtitle="Le marketing décide du sens des données ; l'informatique les héberge et les sécurise."
+  left={{ heading: "L'informatique met en œuvre", items: ["Stockage, sécurité, sauvegardes", "Conformité technique (RGPD / LPD)", "Intégrations et performance"] }}
+  right={{ heading: "Le métier (CMO) décide", items: ["Ce qu'est un lead, un client, une affaire", "Les étapes du cycle de vente", "Les champs utiles aux campagnes et à l'attribution", "Les questions auxquelles la donnée doit répondre"] }}
+  note="Confier le schéma à la seule IT donne une base techniquement propre qui ne répond pas aux questions du marketing."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : Section 01 — Pourquoi l'architecture compte */}
+<SubSectionHero
+  kicker="Le bénéfice métier"
+  index="02"
+  title="Pourquoi l'architecture compte"
+  italicPart="l'architecture"
+  subtitle="Six raisons concrètes, observables, qui parlent au métier et pas au développeur."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Raisons (1/2) : trois gains immédiats (ex-Cinq raisons, scindé 3/3)
     Image : cover-blueprint.jpg (à remplacer par un visuel ERD ou schéma). */}
 <NumberedSplit
-  title="Cinq raisons de s'embêter avec l'architecture"
-  italicPart="s'embêter"
+  title="Trois gains immédiats"
+  italicPart="immédiats"
   subtitle="L'architecture n'est pas un sujet technique : c'est ce qui décide si votre CRM vous fait gagner ou perdre du temps."
   image="/decks/architecture-donnees/cover-blueprint.jpg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
     { text: "Retrouver l'info en 3 secondes : avec un schéma propre, filtrer remplace 30 minutes de fouille manuelle." },
-    { text: "Permettre à l'IA de vous aider : données structurées, IA utile ; données chaotiques, IA inutile." },
     { text: "Faire parler l'équipe le même langage : le schéma fixe le vocabulaire commun (lead, prospect, deal)." },
+    { text: "Décider sur des chiffres justes : un schéma propre donne des rapports fiables ; des données éclatées donnent des KPI faux et des décisions à l'aveugle." },
+  ]}
+/>
+
+{/* Raisons (2/2) : trois gains dans la durée (ex-Cinq raisons, scindé 3/3)
+    Image : cover-blueprint.jpg (à remplacer par un visuel ERD ou schéma). */}
+<NumberedSplit
+  title="Trois gains dans la durée"
+  italicPart="durée"
+  subtitle="Au-delà du quotidien, l'architecture est ce qui tient quand l'entreprise grandit et change d'outils."
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Permettre à l'IA de vous aider : données structurées, IA utile ; données chaotiques, IA inutile." },
     { text: "Changer d'outil sans tout refaire : un schéma clair migre d'Excel à Airtable à Salesforce sans douleur." },
     { text: "Grossir sans casser : l'architecture est l'invariant qui supporte la croissance, du freelance à la multinationale." },
   ]}
@@ -165,28 +219,21 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 5 : Section 02 — Le vocabulaire de base */}
 <SubSectionHero
   kicker="Trois mots"
-  index="02"
+  index="03"
   title="Le vocabulaire de base"
   italicPart="vocabulaire"
-  subtitle="Trois concepts suffisent pour modéliser n'importe quel système de données, sans jargon de base de données."
+  subtitle="Trois concepts suffisent pour modéliser n'importe quel système de données sans jargon."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 6 : Entité, champ, relation (ex-NumberedCards 1 col, 3 items)
-    Image : cover-blueprint.jpg (à remplacer par un schéma ERD simple). */}
-<NumberedSplit
+{/* Slide 6 : Entité, champ, relation — triptyque SVG sur mesure (data-objects). */}
+<SchemaTriptych
   title="Entité, champ, relation"
   italicPart="champ"
   subtitle="Trois mots. Une fois compris, vous lisez n'importe quel CRM comme une partition."
-  image="/decks/architecture-donnees/cover-blueprint.jpg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  items={[
-    { text: "Entité : un type d'objet que vous suivez (Contact, Société, Affaire, Événement). Une table par entité." },
-    { text: "Champ : une caractéristique de l'entité. Email, téléphone, date, oui/non, lien vers une autre entité." },
-    { text: "Relation : un lien entre deux entités. Un Contact appartient à une Société ; ces liens forment un système connecté." },
-  ]}
 />
 
 {/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
@@ -194,6 +241,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   eyebrow="Le schéma minimal"
   title="Quatre entités couvrent 80% des CRM"
   italicPart="80%"
+  network={true}
   body="Contact, Société, Affaire, Événement. Un Contact appartient à une Société. Une Société peut avoir plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) devient un Événement, rattaché au Contact ou à l'Affaire. Ce schéma sera notre fil rouge tout au long du cours."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -202,7 +250,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 8 : Section 03 — Les cinq pièges à éviter */}
 <SubSectionHero
   kicker="Les erreurs classiques"
-  index="03"
+  index="04"
   title="Les cinq pièges à éviter"
   italicPart="cinq pièges"
   subtitle="Ces erreurs se retrouvent dans la quasi-totalité des CRM mal conçus : les éviter dès le départ vous épargne des mois de refonte."
@@ -243,7 +291,7 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
 {/* Slide 11 : Section 04 — Trois outils, un seul schéma */}
 <SubSectionHero
   kicker="Démonstration"
-  index="04"
+  index="05"
   title="Trois outils, un seul schéma"
   italicPart="un seul schéma"
   subtitle="Excel pour la TPE, Airtable pour la PME en croissance, Zoho pour la grande structure : trois véhicules, un schéma."
@@ -270,23 +318,19 @@ import ClosingHero from '@/components/slides/ClosingHero.astro';
   ]}
 />
 
-{/* Slide 13 : Workshop (ex-Workshop slide 14 + WorkshopBrief slide 15 fusionnés)
-    Étapes (array de 3 strings) aplaties en une seule string séparée par " ; ". */}
+{/* Slide 13 : Workshop — atelier ERD final du module. */}
 <WorkshopHero
-  title="L'ERD de votre boîte"
-  italicPart="boîte"
-  subtitle="En groupes de trois à quatre, vous allez modéliser le métier de l'un de vos membres."
-  defaultMinutes={30}
-  presets={[15, 30, 45]}
+  title="Workshop"
+  subtitle="En groupes de quatre à six, vous allez modéliser l'architecture des données de l'un de vos membres."
+  defaultMinutes={25}
+  presets={[20, 25, 45]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
-    { label: "Format", value: "Groupes de 3 à 4 personnes. Désignez une boîte parmi vous comme cas d'étude." },
-    { label: "Temps", value: "20 minutes en groupe, 10 minutes de restitution en plénière." },
-    { label: "Étapes", value: "5 min : identifier les 3 à 5 entités principales ; 5 min : lister 3 à 5 champs par entité (appliquez le piège 1) ; 10 min : tracer les relations 1:N et N:N." },
-    { label: "Output", value: "Un ERD dessiné au feutre sur paperboard ou feuille A3, prêt à présenter." },
-    { label: "Bonus IA", value: "Soumettez votre schéma à Claude ou ChatGPT : \"qu'est-ce qui manque ?\" ou \"où est le piège ?\"" },
-    { label: "Restitution", value: "1 à 2 minutes par groupe, focus sur ce qui a coincé et ce qui a émergé." },
+    { label: "Format", value: "Groupes de 4 à 6 personnes." },
+    { label: "Temps", value: "25 minutes en groupe, 20 minutes de restitution en plénière." },
+    { label: "Output", value: "Un ERD dessiné sur une feuille A3." },
+    { label: "Restitution", value: "3 à 4 minutes par groupe." },
   ]}
 />
 
