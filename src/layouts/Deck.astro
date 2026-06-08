@@ -27,7 +27,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
     <link rel="shortcut icon" href="/favicon.png" />
-    <title>{title} : Lausanne Marketing</title>
+    <title>{title} | Lausanne Marketing</title>
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="noindex" />
     <link rel="canonical" href={canonical} />
@@ -174,6 +174,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       // /presenter), on pose la classe body.is-presenter pour afficher les
       // boutons admin (Demarrer, Figer, Reset) sur les slides poll/wordcloud.
       const presenterToken = initPresenterMode();
+
+      // Logo de marque : en thème ExecEd, le logo (déjà swappé visuellement via
+      // --logo-url dans themes.css) doit pointer vers execed.unil.ch et non vers
+      // lausanne.marketing. Les composants de slide ont tous le même lien en dur ;
+      // on le réécrit ici en un seul endroit, selon le scheme porté par le <body>.
+      if (document.body.dataset.scheme === 'execed') {
+        document.querySelectorAll('a[href="https://lausanne.marketing"]').forEach((a) => {
+          a.setAttribute('href', 'https://execed.unil.ch');
+          a.setAttribute('aria-label', 'Executive Education HEC Lausanne');
+        });
+      }
 
       const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || 'https://lm-polls.hello-cb2.workers.dev';
       const DECK_SLUG = window.location.pathname.split('/').filter(Boolean)[1] || 'unknown';

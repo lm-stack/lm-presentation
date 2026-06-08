@@ -343,7 +343,7 @@ const WALL_HTML = `<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
-<title>Accès aux présentations : Lausanne Marketing</title>
+<title>Accès aux présentations | Lausanne Marketing</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
