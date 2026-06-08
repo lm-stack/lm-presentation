@@ -31,10 +31,16 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontsPreload />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-    <link rel="shortcut icon" href="/favicon.png" />
+    {scheme === 'execed' ? (
+      <link rel="icon" type="image/svg+xml" href="/favicon-execed.svg" />
+    ) : (
+      <Fragment>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+      </Fragment>
+    )}
     <title>{`${title} | Handout ${mode}up | Lausanne Marketing`}</title>
     <meta name="robots" content="noindex" />
     {/* IMPORTANT : <style>{`...`}</style> seul ne marche PAS dans Astro pour */}
@@ -64,6 +70,18 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
     </main>
 
     <script is:inline define:vars={{ mode, perPage }}>
+      // Logo de marque : en thème ExecEd, le logo cliquable des composants de
+      // slide pointe en dur vers lausanne.marketing. On le réécrit vers
+      // execed.unil.ch selon le scheme porté par le <body>, comme dans Deck.astro.
+      // Pertinent aussi pour le PDF : le worker lm-pdf (Puppeteer) exécute ce
+      // script avant l'impression et préserve les <a href> en liens cliquables.
+      if (document.body.dataset.scheme === 'execed') {
+        document.querySelectorAll('a[href="https://lausanne.marketing"]').forEach((a) => {
+          a.setAttribute('href', 'https://execed.unil.ch');
+          a.setAttribute('aria-label', 'Executive Education HEC Lausanne');
+        });
+      }
+
       // Post-mount : groupe les <section> sources par paquets, scale, pagine.
       const source = document.getElementById('handout-source');
       const target = document.getElementById('handout-pages');
