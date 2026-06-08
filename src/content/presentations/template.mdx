@@ -35,6 +35,8 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 import BarChartHero from '@/components/slides/BarChartHero.astro';
 import MockupHero from '@/components/slides/MockupHero.astro';
 import TableHero from '@/components/slides/TableHero.astro';
+import SpreadsheetHero from '@/components/slides/SpreadsheetHero.astro';
+import VideoHero from '@/components/slides/VideoHero.astro';
 import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
 import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
 import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
@@ -356,6 +358,41 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
+{/* Tableur façon Excel : barre de formule, colonnes A/B/C, numéros de lignes,
+    cellule active surlignée en vert. Multi-feuilles via `sheets` : les onglets en
+    bas sont CLIQUABLES (bascule la feuille). La 1re feuille est celle capturée au PDF. */}
+<SpreadsheetHero
+  title="Un tableur façon Excel"
+  italicPart="tableur"
+  subtitle="Barre de formule, colonnes A/B/C, onglets cliquables. La 1re feuille part au PDF."
+  sheets={[
+    {
+      name: "Feuille A",
+      formula: '=SUPPRESPACE(C2)',
+      activeCell: "D2",
+      columns: ["Fonction", "Rôle", "Avant", "Après"],
+      rows: [
+        ["SUPPRESPACE()", "Enlève les espaces", "  Texte ", "Texte"],
+        ["MINUSCULE()", "Met en minuscules", "TEXTE", "texte"],
+        ["NOMPROPRE()", "Majuscule initiale", "jean dupont", "Jean Dupont"],
+      ],
+    },
+    {
+      name: "Feuille B",
+      formula: '=TRIM(C2)',
+      activeCell: "D2",
+      columns: ["Function", "Role", "Before", "After"],
+      rows: [
+        ["TRIM()", "Removes spaces", "  Text ", "Text"],
+        ["LOWER()", "Lowercases", "TEXT", "text"],
+        ["PROPER()", "Initial capital", "jean dupont", "Jean Dupont"],
+      ],
+    },
+  ]}
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
 <SubSectionHero
   kicker="Catalogue"
   index="5"
@@ -390,7 +427,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   index="6"
   title="Démo, atelier et média"
   italicPart="atelier"
-  subtitle="Démonstration, image plein cadre, déclaration chiffrée, workshop, formulaire et pause."
+  subtitle="Démonstration, vidéo, image plein cadre, déclaration chiffrée, workshop, formulaire et pause."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
@@ -409,6 +446,21 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     { label: "Étapes", value: "Les 3 ou 4 manipulations clés à observer." },
     { label: "À retenir", value: "Le point pédagogique de la démonstration." },
   ]}
+/>
+
+{/* Vidéo : screencast en grand (object-fit contain, jamais rognée). En live :
+    lecture avec contrôles. En PDF : la frame `poster` est capturée (thumbnail).
+    Sans `poster` explicite, il est dérivé de `video` (-poster.jpg) et généré au
+    build à `posterTime` par `npm run build:posters` (ffmpeg).
+    Panneau 2.5:1 (1728x691 sur 1920x1080) : filmer en 2.5:1, ex. 1920x768 ou 2560x1024. */}
+<VideoHero
+  title="Une vidéo en grand"
+  italicPart="vidéo"
+  video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  poster="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=900&fit=crop"
+  posterTime="0:05"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 {/* Image plein cadre : full-bleed sans titre ni cadre. Pour une image 16:9.
