@@ -109,7 +109,7 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -119,7 +119,7 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -152,8 +152,8 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(44px, 4.4vw, 72px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -168,8 +168,8 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     margin: 12px 0 0;
     color: var(--c-muted);
     text-align: left;
@@ -267,7 +267,7 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__card-title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 30px;
+    font-size: var(--fs-card-title);
     font-weight: 700;
     color: var(--c-ink);
     margin: 0;
@@ -277,11 +277,11 @@ const variantClass = `image-grid-hero__grid--${count}`;
   }
   .image-grid-hero__card-text {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 400;
     color: var(--c-muted);
     margin: 0;
-    line-height: 1.45;
+    line-height: var(--lh-body);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;

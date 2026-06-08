@@ -2,6 +2,7 @@
 @import 'reveal.js/reveal.css';
 @import './global.css';
 @import './themes.css';
+@import './type.css';
 
 /* Fond unique creme pour tout le deck : body + slides partagent --slide-bg.
    Plus de mecanique seamless (JS qui suit la couleur de la slide courante) :

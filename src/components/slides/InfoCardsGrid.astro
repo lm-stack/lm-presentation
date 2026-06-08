@@ -93,7 +93,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .info-cards-grid__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -102,7 +102,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .info-cards-grid__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -127,8 +127,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .info-cards-grid__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(64px, 6vw, 100px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0 0 16px;
@@ -143,12 +143,12 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .info-cards-grid__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 400;
     margin: 0 0 48px;
     color: var(--c-muted);
-    max-width: 1100px;
+    max-width: var(--measure-l);
     text-align: left;
   }
 
@@ -181,7 +181,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .info-cards-grid__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 15px;
+    font-size: var(--fs-label);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -190,9 +190,9 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .info-cards-grid__value {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
     font-weight: 500;
-    line-height: 1.4;
+    line-height: var(--lh-lead);
     margin: 0;
     color: var(--c-ink);
   }

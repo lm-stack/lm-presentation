@@ -95,7 +95,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -105,7 +105,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -131,8 +131,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(44px, 4.2vw, 68px);
-    line-height: 1.08;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -147,8 +147,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     margin: 12px 0 0;
     color: var(--c-muted);
     text-align: left;
@@ -172,7 +172,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__col-head {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 16px;
+    font-size: var(--fs-label);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.16em;
@@ -191,8 +191,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__list li {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
-    line-height: 1.3;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 500;
     color: var(--c-ink);
     padding-left: 26px;
@@ -210,7 +210,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .compare-cols__note {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     font-weight: 500;
     color: var(--c-muted);
     margin: 0;

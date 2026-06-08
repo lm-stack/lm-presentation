@@ -117,7 +117,7 @@ const titleParts = splitHighlight(title, highlight);
 
   .closing-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -126,7 +126,7 @@ const titleParts = splitHighlight(title, highlight);
   }
   .closing-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -145,8 +145,8 @@ const titleParts = splitHighlight(title, highlight);
 
   .closing-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(96px, 9.5vw, 156px);
-    line-height: 1.0;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
     letter-spacing: -0.02em;
     font-weight: 600;
     margin: 0;
@@ -161,14 +161,14 @@ const titleParts = splitHighlight(title, highlight);
 
   .closing-hero__tagline {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 36px;
+    font-size: var(--fs-lead);
     font-weight: 400;
     margin: 32px 0 0;
     color: var(--c-muted);
   }
   .closing-hero__url {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 18px;
+    font-size: var(--fs-source);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.32em;

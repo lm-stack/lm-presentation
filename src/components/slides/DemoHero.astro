@@ -95,7 +95,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .demo-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -105,7 +105,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .demo-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -138,8 +138,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .demo-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(48px, 5vw, 84px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -154,9 +154,9 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .demo-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
     font-weight: 500;
-    line-height: 1.45;
+    line-height: var(--lh-lead);
     color: var(--c-muted);
     margin: 16px 0 0;
   }
@@ -176,7 +176,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .demo-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 20px;
+    font-size: var(--fs-eyebrow);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -185,9 +185,9 @@ const titleParts = splitHighlight(title, italicPart);
   .demo-hero__value {
     margin: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 400;
-    line-height: 1.4;
+    line-height: var(--lh-body);
     color: var(--c-muted);
   }
 
@@ -217,7 +217,7 @@ const titleParts = splitHighlight(title, italicPart);
   .demo-hero__caption {
     margin: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 16px;
+    font-size: var(--fs-source);
     font-weight: 500;
     color: var(--c-muted);
     text-align: center;

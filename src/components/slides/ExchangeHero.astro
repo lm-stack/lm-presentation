@@ -107,7 +107,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .exchange-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -117,7 +117,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .exchange-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -150,7 +150,7 @@ const titleParts = splitHighlight(title, italicPart);
     align-items: center;
     gap: 12px;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 20px;
+    font-size: var(--fs-eyebrow);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -169,8 +169,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .exchange-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(56px, 5.6vw, 92px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -188,12 +188,12 @@ const titleParts = splitHighlight(title, italicPart);
 
   .exchange-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 400;
     color: var(--c-muted);
     margin: 28px 0 0;
-    max-width: 820px;
+    max-width: var(--measure-m);
     opacity: 0;
     animation: ex-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
   }
@@ -206,7 +206,7 @@ const titleParts = splitHighlight(title, italicPart);
     display: flex;
     flex-direction: column;
     gap: 18px;
-    max-width: 820px;
+    max-width: var(--measure-m);
     opacity: 0;
     animation: ex-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both;
   }
@@ -215,8 +215,8 @@ const titleParts = splitHighlight(title, italicPart);
     align-items: flex-start;
     gap: 18px;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 24px;
-    line-height: 1.4;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
     font-weight: 400;
     color: var(--c-ink);
   }

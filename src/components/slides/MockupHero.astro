@@ -178,11 +178,11 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     padding-bottom: 40px; border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .mockup-hero__brand-main {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; font-weight: 700;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-brand); font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
   }
   .mockup-hero__brand-sub {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 500;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-brand-sub); font-weight: 500;
     text-transform: uppercase; letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
   }
   .mockup-hero__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
@@ -197,8 +197,8 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
   .mockup-hero__text { flex: 0 0 42%; max-width: 42%; }
   .mockup-hero__body--stack .mockup-hero__text { flex: 0 0 auto; max-width: 1100px; }
   .mockup-hero__title {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: clamp(48px, 5vw, 88px);
-    line-height: 1.04; font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--c-ink);
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-hero-l);
+    line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--c-ink);
     text-wrap: balance; text-align: left;
   }
   .mockup-hero__title-italic {
@@ -206,12 +206,12 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     font-style: italic; font-weight: 400;
   }
   .mockup-hero__subtitle {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 26px; line-height: 1.45;
-    font-weight: 500; color: var(--c-muted); margin: 28px 0 0; max-width: 640px;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-lead); line-height: var(--lh-lead);
+    font-weight: 500; color: var(--c-muted); margin: 28px 0 0; max-width: var(--measure-s);
   }
   .mockup-hero__text-body {
-    font-family: 'Hanken Grotesk', sans-serif; font-size: 22px; line-height: 1.5;
-    font-weight: 400; color: var(--c-muted); margin: 20px 0 0; max-width: 640px;
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-body); line-height: var(--lh-body);
+    font-weight: 400; color: var(--c-muted); margin: 20px 0 0; max-width: var(--measure-s);
   }
 
   .mockup-hero__stage {

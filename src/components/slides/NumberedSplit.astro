@@ -100,7 +100,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .numbered-split__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -110,7 +110,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .numbered-split__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -181,8 +181,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .numbered-split__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(60px, 6vw, 96px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -198,7 +198,7 @@ const titleParts = splitHighlight(title, italicPart);
 
   .numbered-split__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
     font-weight: 500;
     color: var(--c-muted);
     margin: 24px 0 64px;
@@ -243,8 +243,8 @@ const titleParts = splitHighlight(title, italicPart);
     flex: 1 1 auto;
     margin: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
-    line-height: 1.45;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     color: var(--c-ink);
   }
 </style>

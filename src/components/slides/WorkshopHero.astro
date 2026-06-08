@@ -261,7 +261,7 @@ const {
   }
   .workshop-hero__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -271,7 +271,7 @@ const {
   }
   .workshop-hero__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -364,8 +364,8 @@ const {
 
   .workshop-hero__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(64px, 6.2vw, 104px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0;
@@ -380,10 +380,11 @@ const {
   }
   .workshop-hero__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
     font-weight: 500;
     color: var(--c-muted);
-    margin: 16px 0 0;
+    margin: var(--space-title-lead) 0 0;
   }
 
   /* Tableau label / valeur. */
@@ -401,7 +402,7 @@ const {
   }
   .workshop-hero__label {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-lead);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -410,9 +411,9 @@ const {
   .workshop-hero__value {
     margin: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 28px;
+    font-size: var(--fs-card-title);
     font-weight: 400;
-    line-height: 1.4;
+    line-height: var(--lh-lead);
     color: var(--c-muted);
   }
 </style>

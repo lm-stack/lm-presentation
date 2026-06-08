@@ -5,8 +5,7 @@
    AUCUN font-size en px brut ni clamp ad hoc. On utilise ces tokens.
    Pendant de la règle « pas de hex en dur » pour la couleur.
 
-   NOTE : ce fichier n'est PAS encore importé (inerte) tant que la migration
-   n'a pas démarré. Import prévu depuis slides.css au début de la migration. */
+   Importé par slides.css (donc disponible sur tous les decks + le handout). */
 :root {
   /* ---- Titres (clamp min / vw / max ; le max = rendu réel en 1920x1080) ---- */
   --fs-cover:      clamp(110px, 11vw, 188px); /* CoverHero (slide unique) */

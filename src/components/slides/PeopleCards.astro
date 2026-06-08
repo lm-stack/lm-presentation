@@ -90,7 +90,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .people-cards__brand-main {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-brand);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -99,7 +99,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .people-cards__brand-sub {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-brand-sub);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -118,8 +118,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   .people-cards__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: clamp(48px, 5vw, 80px);
-    line-height: 1.05;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
     font-weight: 600;
     letter-spacing: -0.02em;
     margin: 0 0 48px;
@@ -162,7 +162,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .people-cards__person-name {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: 600;
     margin: 0;
     color: var(--c-ink);
@@ -175,7 +175,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .people-cards__person-role {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 13px;
+    font-size: var(--fs-source);
     font-weight: 500;
     color: var(--c-muted);
     margin: 4px 0 0;
