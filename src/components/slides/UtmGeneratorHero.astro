@@ -1,0 +1,389 @@
+---
+// src/components/slides/UtmGeneratorHero.astro
+// Slide "générateur d'UTM" interactif, ExecEd-style : header marque + logo
+// (RÈGLE ABSOLUE), fond pearl, titre + sous-titre, puis un panneau en deux
+// colonnes : à gauche un formulaire (URL de destination fixe + 3 selects
+// Source / Médium / Campagne), à droite le lien généré en direct avec les clés
+// utm_* surlignées + un bouton "Copier".
+// Tout en <select> : aucune saisie clavier, donc pas de conflit avec la
+// navigation clavier de Reveal. Logique reprise du générateur execed-tools
+// (concaténation des utm_* + copie clipboard avec repli execCommand).
+import { splitHighlight } from '@/utils/highlight';
+
+interface UtmOption {
+  value: string;
+  label: string;
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  /** URL de destination, fixe, affichée en lecture seule. */
+  baseUrl?: string;
+  sources?: UtmOption[];
+  mediums?: UtmOption[];
+  campaigns?: UtmOption[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  baseUrl = 'https://www.easyjet.com',
+  sources = [
+    { value: 'newsletter', label: 'Newsletter' },
+    { value: 'google', label: 'Google' },
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'linkedin', label: 'LinkedIn' },
+  ],
+  mediums = [
+    { value: 'email', label: 'Email' },
+    { value: 'cpc', label: 'CPC (payant)' },
+    { value: 'social', label: 'Réseaux sociaux' },
+    { value: 'referral', label: 'Site référent' },
+  ],
+  campaigns = [
+    { value: 'promo-ete', label: 'Promo été' },
+    { value: 'geneve-barcelone', label: 'Genève-Barcelone' },
+    { value: 'black-friday', label: 'Black Friday' },
+    { value: 'city-break', label: 'City break' },
+  ],
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="utm-generator-hero" data-layout="utm-generator-hero">
+  <header class="utm-generator-hero__header">
+    <div class="utm-generator-hero__brand">
+      <p class="utm-generator-hero__brand-main">{brand}</p>
+      {brandSub && <p class="utm-generator-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="utm-generator-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="utm-generator-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="utm-generator-hero__body">
+    <h2 class="utm-generator-hero__title">
+      {titleParts
+        ? <>{titleParts.before}<em class="utm-generator-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+        : title}
+    </h2>
+    {subtitle && <p class="utm-generator-hero__subtitle">{subtitle}</p>}
+
+    <div class="utm-generator-hero__panel" data-utm-generator data-base-url={baseUrl}>
+      <div class="utm-generator-hero__form">
+        <div class="utm-generator-hero__field">
+          <span class="utm-generator-hero__label">URL de destination</span>
+          <div class="utm-generator-hero__url">{baseUrl}</div>
+        </div>
+        <div class="utm-generator-hero__field">
+          <label class="utm-generator-hero__label" for="utm-gen-source">Source</label>
+          <select class="utm-generator-hero__select" id="utm-gen-source" data-utm="source">
+            {sources.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        <div class="utm-generator-hero__field">
+          <label class="utm-generator-hero__label" for="utm-gen-medium">Médium</label>
+          <select class="utm-generator-hero__select" id="utm-gen-medium" data-utm="medium">
+            {mediums.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        <div class="utm-generator-hero__field">
+          <label class="utm-generator-hero__label" for="utm-gen-campaign">Campagne</label>
+          <select class="utm-generator-hero__select" id="utm-gen-campaign" data-utm="campaign">
+            {campaigns.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div class="utm-generator-hero__result">
+        <span class="utm-generator-hero__result-label">Lien généré</span>
+        <code class="utm-generator-hero__output" data-utm-output aria-live="polite"></code>
+        <button type="button" class="utm-generator-hero__copy" data-utm-copy>
+          <span data-utm-copy-label>Copier le lien</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .utm-generator-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .utm-generator-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .utm-generator-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .utm-generator-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+  .utm-generator-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .utm-generator-hero__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-top: 28px;
+  }
+  .utm-generator-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(48px, 4.6vw, 76px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .utm-generator-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .utm-generator-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    line-height: 1.45;
+    font-weight: 400;
+    margin: 0 0 36px;
+    color: var(--c-muted);
+    max-width: 1000px;
+    text-align: left;
+  }
+
+  .utm-generator-hero__panel {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  /* Colonne formulaire (clair). */
+  .utm-generator-hero__form {
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .utm-generator-hero__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .utm-generator-hero__label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
+  }
+  .utm-generator-hero__url {
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', Menlo, monospace;
+    font-size: 22px;
+    color: var(--c-muted);
+    background: var(--c-cream);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+    border-radius: 4px;
+    padding: 12px 16px;
+  }
+  .utm-generator-hero__select {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--c-ink);
+    background-color: var(--c-cream);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%234C5666' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    border: 1.5px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    border-radius: 4px;
+    padding: 12px 44px 12px 16px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .utm-generator-hero__select:hover {
+    border-color: color-mix(in srgb, var(--c-ink) 28%, transparent);
+  }
+  .utm-generator-hero__select:focus {
+    border-color: var(--c-accent);
+  }
+
+  /* Colonne résultat (sombre, "blanc on-ink" : exception littérale admise). */
+  .utm-generator-hero__result {
+    background: var(--c-ink);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 18%, transparent);
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: center;
+  }
+  .utm-generator-hero__result-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: color-mix(in srgb, #FFFFFF 70%, transparent);
+  }
+  .utm-generator-hero__output {
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', Menlo, monospace;
+    font-size: 24px;
+    line-height: 1.6;
+    color: #FFFFFF;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  /* Output rendu en JS (innerHTML) : pas d'attribut de scoping Astro sur les
+     spans, donc styles ciblés en :global() ancrés au parent scopé. */
+  .utm-generator-hero :global(.utm-generator-hero__o-base) { color: color-mix(in srgb, #FFFFFF 75%, transparent); }
+  .utm-generator-hero :global(.utm-generator-hero__o-punct) { color: color-mix(in srgb, #FFFFFF 45%, transparent); }
+  .utm-generator-hero :global(.utm-generator-hero__o-key) { color: color-mix(in srgb, #FFFFFF 55%, transparent); }
+  .utm-generator-hero :global(.utm-generator-hero__o-val) { color: var(--c-accent); font-weight: 700; }
+
+  .utm-generator-hero__copy {
+    align-self: flex-start;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--c-on-accent);
+    background: var(--c-accent);
+    border: none;
+    border-radius: 4px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .utm-generator-hero__copy:hover { filter: brightness(1.05); }
+  .utm-generator-hero__copy:active { transform: scale(0.97); }
+  .utm-generator-hero__copy.is-copied { filter: brightness(0.95); }
+</style>
+
+<script>
+  // Générateur d'UTM : concatène l'URL fixe + les 3 selects en query string,
+  // surligne les clés utm_*, et met à jour en direct. Tout en <select> (event
+  // "change"), aucune saisie clavier : pas de conflit avec Reveal.
+  function initUtmGenerator() {
+    const panel = document.querySelector('[data-utm-generator]');
+    if (!panel) return;
+    const baseUrl = panel.getAttribute('data-base-url') || '';
+    const output = panel.querySelector('[data-utm-output]');
+    const copyBtn = panel.querySelector('[data-utm-copy]');
+    const copyLabel = panel.querySelector('[data-utm-copy-label]');
+    if (!output) return;
+
+    const val = (k) => {
+      const el = panel.querySelector('select[data-utm="' + k + '"]');
+      return el ? el.value : '';
+    };
+
+    const currentUrl = () =>
+      baseUrl + '?utm_source=' + val('source') + '&utm_medium=' + val('medium') + '&utm_campaign=' + val('campaign');
+
+    const part = (key, value, sep) =>
+      '<span class="utm-generator-hero__o-punct">' + sep + '</span>' +
+      '<span class="utm-generator-hero__o-key">' + key + '</span>' +
+      '<span class="utm-generator-hero__o-punct">=</span>' +
+      '<span class="utm-generator-hero__o-val">' + value + '</span>';
+
+    const render = () => {
+      output.innerHTML =
+        '<span class="utm-generator-hero__o-base">' + baseUrl + '</span>' +
+        part('utm_source', val('source'), '?') +
+        part('utm_medium', val('medium'), '&') +
+        part('utm_campaign', val('campaign'), '&');
+    };
+
+    panel.querySelectorAll('select[data-utm]').forEach((el) => {
+      el.addEventListener('change', render);
+    });
+
+    const fallbackCopy = (text) => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+      document.body.removeChild(ta);
+    };
+
+    if (copyBtn && copyLabel) {
+      copyBtn.addEventListener('click', () => {
+        const text = currentUrl();
+        const done = () => {
+          const prev = copyLabel.textContent;
+          copyLabel.textContent = 'Copié !';
+          copyBtn.classList.add('is-copied');
+          setTimeout(() => {
+            copyLabel.textContent = prev;
+            copyBtn.classList.remove('is-copied');
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, () => { fallbackCopy(text); done(); });
+        } else {
+          fallbackCopy(text);
+          done();
+        }
+      });
+    }
+
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initUtmGenerator);
+  } else {
+    initUtmGenerator();
+  }
+</script>

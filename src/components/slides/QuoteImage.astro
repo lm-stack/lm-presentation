@@ -14,9 +14,11 @@ interface LogoItem {
 }
 interface Props {
   text: string;
-  author: string;
+  author?: string;
   role?: string;
-  image: string;
+  image?: string;
+  /** Icône Phosphor dans la pastille (défaut "ph:quotes-thin" ; ex "ph:lightbulb"). */
+  icon?: string;
   logos?: LogoItem[];
   brand?: string;
   brandSub?: string;
@@ -26,16 +28,19 @@ const {
   author,
   role,
   image,
+  icon = 'ph:quotes-thin',
   logos,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
 ---
-<section class="quote-image" data-layout="quote-image">
-  <div class="quote-image__bg" aria-hidden="true">
-    <img src={image} alt="" loading="lazy" decoding="async" />
-    <div class="quote-image__overlay"></div>
-  </div>
+<section class:list={['quote-image', !image && 'quote-image--plain']} data-layout="quote-image">
+  {image && (
+    <div class="quote-image__bg" aria-hidden="true">
+      <img src={image} alt="" loading="lazy" decoding="async" />
+      <div class="quote-image__overlay"></div>
+    </div>
+  )}
 
   <header class="quote-image__header">
     <div class="quote-image__brand-text">
@@ -49,13 +54,15 @@ const {
 
   <div class="quote-image__body">
     <span class="quote-image__mark" aria-hidden="true">
-      <Icon name="ph:quotes-thin" />
+      <Icon name={icon} />
     </span>
     <blockquote class="quote-image__text">{text}</blockquote>
-    <p class="quote-image__author">
-      <span class="quote-image__author-name">{author}</span>
-      {role && <span class="quote-image__author-role">, {role}</span>}
-    </p>
+    {author && (
+      <p class="quote-image__author">
+        <span class="quote-image__author-name">{author}</span>
+        {role && <span class="quote-image__author-role">, {role}</span>}
+      </p>
+    )}
   </div>
 
   {logos && logos.length > 0 && (
@@ -81,6 +88,8 @@ const {
     grid-template-rows: auto 1fr auto;
     background: var(--c-cream);
   }
+  /* Sans image de fond : encart épuré sur le dégradé pearl du deck. */
+  .quote-image--plain { background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%); }
 
   .quote-image__bg {
     position: absolute;
