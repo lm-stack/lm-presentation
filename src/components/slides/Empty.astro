@@ -1,0 +1,144 @@
+---
+// src/components/slides/Empty.astro
+// Slide "vide" : juste le header de marque ExecEd (brand gauche + logo LM droite
+// + border-bottom) sur fond pearl, puis un slot libre centre dans l'espace
+// restant. Successeur de l'ancien Default : sert de canevas quand aucun layout
+// specialise ne s'applique, le contenu MDX libre est stylise via les tokens.
+// Aucune zone titre imposee : pour un titre, utiliser un layout dedie.
+interface Props {
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="empty-slide" data-layout="empty">
+  <header class="empty-slide__header">
+    <div class="empty-slide__brand-text">
+      <p class="empty-slide__brand-main">{brand}</p>
+      {brandSub && <p class="empty-slide__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="empty-slide__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="empty-slide__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="empty-slide__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .empty-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width : brand gauche + logo LM droite + border-bottom (RÈGLE). */
+  .empty-slide__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .empty-slide__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .empty-slide__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .empty-slide__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps : slot libre centre dans l'espace restant sous le header. */
+  .empty-slide__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: var(--measure-xl);
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 32px;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    color: var(--c-muted);
+  }
+
+  /* Typographie du contenu MDX libre injecte via le slot (tokenisee). */
+  .empty-slide__body :global(h2),
+  .empty-slide__body :global(h3) {
+    font-weight: 700;
+    color: var(--c-ink);
+    margin: 32px 0 16px;
+    line-height: var(--lh-title);
+  }
+  .empty-slide__body :global(h2) { font-size: var(--fs-hero-m); }
+  .empty-slide__body :global(h3) { font-size: var(--fs-card-title); }
+  .empty-slide__body :global(p) {
+    margin: 0 0 16px;
+    font-size: var(--fs-body);
+  }
+  .empty-slide__body :global(p:last-child) { margin-bottom: 0; }
+  .empty-slide__body :global(ul),
+  .empty-slide__body :global(ol) {
+    margin: 0 0 16px;
+    padding-left: 28px;
+  }
+  .empty-slide__body :global(li) { margin-bottom: 8px; }
+  .empty-slide__body :global(li:last-child) { margin-bottom: 0; }
+  .empty-slide__body :global(strong) {
+    color: var(--c-ink);
+    font-weight: 600;
+  }
+  .empty-slide__body :global(a) {
+    color: var(--c-ink);
+    text-decoration-color: var(--c-accent);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 2px;
+  }
+  .empty-slide__body :global(code) {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.9em;
+    background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .empty-slide__body :global(blockquote) {
+    border-left: 4px solid var(--c-accent);
+    padding: 8px 24px;
+    margin: 16px 0;
+    color: var(--c-ink);
+    font-size: var(--fs-lead);
+  }
+</style>

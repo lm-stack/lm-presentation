@@ -42,6 +42,11 @@ import VideoHero from '@/components/slides/VideoHero.astro';
 import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
 import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
 import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
+import Empty from '@/components/slides/Empty.astro';
+import Conventions from '@/components/slides/Conventions.astro';
+import Calendar from '@/components/slides/Calendar.astro';
+import AgendaFull from '@/components/slides/AgendaFull.astro';
+import AgendaLight from '@/components/slides/AgendaLight.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
@@ -606,6 +611,88 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
+
+<SubSectionHero
+  kicker="Catalogue"
+  index="8"
+  title="Agendas, calendrier et canevas"
+  italicPart="canevas"
+  subtitle="Programme dense, agenda compact, calendrier de journée, conventions et slide vide."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+{/* Programme dense : 6 à 8 points sur deux colonnes numérotées. */}
+<AgendaFull
+  title="Programme du jour"
+  italicPart="Programme"
+  subtitle="Six à huit temps forts, sur deux colonnes."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  items={[
+    { time: "09:00", duration: "45 min", title: "Accueil et cadrage", description: "Tour de table et objectifs de la journée." },
+    { time: "09:45", duration: "60 min", title: "Fondamentaux", description: "Les concepts clés posés ensemble." },
+    { time: "11:00", duration: "45 min", title: "Étude de cas", description: "Un exemple réel décortiqué." },
+    { time: "11:45", duration: "30 min", title: "Atelier express", description: "Première mise en pratique." },
+    { time: "13:30", duration: "60 min", title: "Approfondissement", description: "On va plus loin sur la méthode." },
+    { time: "14:30", duration: "45 min", title: "Workshop", description: "Production en sous-groupes." },
+    { time: "15:30", duration: "45 min", title: "Restitution", description: "Présentation et retours croisés." },
+    { time: "16:15", duration: "30 min", title: "Synthèse", description: "Ce qu'on retient et la suite." },
+  ]}
+/>
+
+{/* Agenda compact : 4 à 6 points + image éditoriale à droite. */}
+<AgendaLight
+  title="Agenda de la session"
+  italicPart="Agenda"
+  subtitle="Quatre à six temps, avec une image éditoriale."
+  eyebrow="Programme"
+  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1000&h=1250&fit=crop"
+  imageAlt="Salle de cours"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  items={[
+    { time: "09:00", title: "Ouverture", description: "Cadrage et objectifs." },
+    { time: "10:00", title: "Module théorique", description: "Les fondamentaux." },
+    { time: "11:00", title: "Atelier", description: "Mise en pratique encadrée." },
+    { time: "13:30", title: "Étude de cas", description: "Analyse collective." },
+    { time: "15:00", title: "Synthèse", description: "Bilan et prochaines étapes." },
+  ]}
+/>
+
+{/* Calendrier d'une journée : libellé jour vertical + tableau horaire. */}
+<Calendar
+  title="Calendrier de la journée"
+  italicPart="Calendrier"
+  subtitle="Horaires, sujets et intervenants."
+  day="Jour 1"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  slots={[
+    { time: "09:00 - 10:30", subject: "Introduction et fondamentaux", speaker: "Thomas Rouaud" },
+    { time: "10:45 - 12:15", subject: "Étude de cas pratique", speaker: "Thomas Rouaud" },
+    { time: "13:30 - 15:00", subject: "Atelier en sous-groupes", speaker: "Équipe" },
+    { time: "15:15 - 16:30", subject: "Restitution et synthèse", speaker: "Thomas Rouaud" },
+  ]}
+/>
+
+{/* Conventions du support : 3 cartes à grand disc coloré (signalisation). */}
+<Conventions
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+{/* Slide vide : juste le header de marque + un contenu MDX libre centré. */}
+<Empty
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+>
+  ## Un canevas libre
+
+  Le composant `Empty` ne rend que le header de marque et un slot centré.
+  On y dépose du **contenu MDX libre** quand aucun layout dédié ne convient :
+  titres, paragraphes, listes, citations, liens.
+</Empty>
 
 {/* Slides de fin (auto-injectés par la route selon le contexte ; ici en vitrine
     manuelle car le template a autoClosing: false).
