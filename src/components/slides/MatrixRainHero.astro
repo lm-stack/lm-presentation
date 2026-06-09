@@ -101,9 +101,12 @@ const titleParts = title ? splitHighlight(title, italicPart) : null;
   // un caractère vert en tête de chaque colonne. Pause hors-vue via
   // IntersectionObserver (pas de calcul quand la slide n'est pas affichée).
   function initMatrixRain() {
-    const canvas = document.querySelector('[data-matrix-canvas]');
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-matrix-canvas]');
     if (!canvas || !canvas.getContext) return;
-    const ctx = canvas.getContext('2d');
+    // getContext('2d') ne renvoie null que si le canvas est deja en mode WebGL ;
+    // le garde !canvas.getContext ci-dessus couvre le cas absent. Assertion non-null
+    // pour que ctx reste utilisable dans la fonction hoistee draw().
+    const ctx = canvas.getContext('2d')!;
     const W = (canvas.width = 1920);
     const H = (canvas.height = 1080);
 

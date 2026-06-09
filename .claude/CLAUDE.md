@@ -29,7 +29,7 @@ Parcours documentés :
 
 ## Structure
 
-- `src/components/slides/` : layouts visuels génériques (Cover, Statement, TableSlide, etc.)
+- `src/components/slides/` : layouts visuels génériques (famille Hero : CoverHero, StatementHero, TableHero, etc.)
 - `src/components/SlideTitle.astro` : composant titre unifié, utilisé par tous les slides à contenu
 - `src/content/presentations/` : fichiers MDX, un par présentation
 - `src/layouts/Deck.astro` : mode présentation (Reveal init)

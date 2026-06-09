@@ -3,6 +3,7 @@
 import '@/styles/slides.css';
 import PdfModal from '@/components/deck/PdfModal.astro';
 import FontsPreload from '@/components/FontsPreload.astro';
+import Favicons from '@/components/Favicons.astro';
 
 interface Props {
   title: string;
@@ -23,16 +24,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontsPreload />
-    {scheme === 'execed' ? (
-      <link rel="icon" type="image/svg+xml" href="/favicon-execed.svg" />
-    ) : (
-      <Fragment>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-        <link rel="shortcut icon" href="/favicon.png" />
-      </Fragment>
-    )}
+    <Favicons scheme={scheme} />
     <title>{title} | Lausanne Marketing</title>
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="noindex" />
@@ -175,6 +167,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       } from '@/scripts/deck/deck-chrome';
       import { initDeckSearch } from '@/scripts/deck/deck-search';
       import { initPollSlides, syncPolling } from '@/scripts/deck/polls';
+      import { LM_POLLS_URL } from '@/utils/polls-url';
 
       // Presenter d'abord : si un token est present en sessionStorage (emis par
       // /presenter), on pose la classe body.is-presenter pour afficher les
@@ -192,7 +185,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         });
       }
 
-      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || 'https://lm-polls.hello-cb2.workers.dev';
       const DECK_SLUG = window.location.pathname.split('/').filter(Boolean)[1] || 'unknown';
 
       // Inits qui ne dependent pas de Reveal : on les lance immediatement, en

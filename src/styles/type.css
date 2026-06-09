@@ -14,9 +14,16 @@
   --fs-hero-m:     clamp(40px, 4vw, 72px);    /* contenu dense (tables, charts, grilles) */
   --fs-term:       clamp(76px, 8vw, 140px);   /* DefinitionHero (terme serif, cas spécial) */
 
+  /* ---- Titre des slides à SlideTitle (legacy + fallback handout) ---- */
+  /* La famille Hero pose son propre titre via --fs-hero-* ; ce palier ne sert
+     qu'aux slides à <h2> SlideTitle et au rendu handout. Tokenisé pour que
+     slides.css ne porte plus de px brut (cf. .claude/rules/typographie.md). */
+  --fs-slide-title: 56px;
+
   /* ---- Textes de contenu & méta ---- */
   --fs-lead:       26px; /* sous-titre / lead sous le titre */
   --fs-body:       22px; /* corps, descriptions : PLANCHER ABSOLU, jamais en dessous */
+  --fs-code:       24px; /* contenu « code » monospace (CodeExamplesHero, UtmGeneratorHero) */
   --fs-card-title: 30px; /* titre de card */
   --fs-label:      16px; /* label méta en majuscules */
   --fs-eyebrow:    20px; /* eyebrow */

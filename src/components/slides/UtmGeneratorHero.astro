@@ -276,7 +276,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .utm-generator-hero__output {
     font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', Menlo, monospace;
-    font-size: 24px;
+    font-size: var(--fs-code);
     line-height: 1.6;
     color: #FFFFFF;
     word-break: break-word;
@@ -320,23 +320,28 @@ const titleParts = splitHighlight(title, italicPart);
     const copyLabel = panel.querySelector('[data-utm-copy-label]');
     if (!output) return;
 
-    const val = (k) => {
-      const el = panel.querySelector('select[data-utm="' + k + '"]');
+    const val = (k: string) => {
+      const el = panel.querySelector<HTMLSelectElement>('select[data-utm="' + k + '"]');
       return el ? el.value : '';
     };
+
+    // Les valeurs viennent des <option> figées en MDX (author-controlled), mais on
+    // echappe quand meme avant injection innerHTML : defense in depth du sink.
+    const esc = (s: string) =>
+      s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
 
     const currentUrl = () =>
       baseUrl + '?utm_source=' + val('source') + '&utm_medium=' + val('medium') + '&utm_campaign=' + val('campaign');
 
-    const part = (key, value, sep) =>
+    const part = (key: string, value: string, sep: string) =>
       '<span class="utm-generator-hero__o-punct">' + sep + '</span>' +
-      '<span class="utm-generator-hero__o-key">' + key + '</span>' +
+      '<span class="utm-generator-hero__o-key">' + esc(key) + '</span>' +
       '<span class="utm-generator-hero__o-punct">=</span>' +
-      '<span class="utm-generator-hero__o-val">' + value + '</span>';
+      '<span class="utm-generator-hero__o-val">' + esc(value) + '</span>';
 
     const render = () => {
       output.innerHTML =
-        '<span class="utm-generator-hero__o-base">' + baseUrl + '</span>' +
+        '<span class="utm-generator-hero__o-base">' + esc(baseUrl) + '</span>' +
         part('utm_source', val('source'), '?') +
         part('utm_medium', val('medium'), '&') +
         part('utm_campaign', val('campaign'), '&');
@@ -346,7 +351,7 @@ const titleParts = splitHighlight(title, italicPart);
       el.addEventListener('change', render);
     });
 
-    const fallbackCopy = (text) => {
+    const fallbackCopy = (text: string) => {
       const ta = document.createElement('textarea');
       ta.value = text;
       ta.style.position = 'fixed';

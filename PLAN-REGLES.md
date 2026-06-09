@@ -59,10 +59,8 @@ _(rien encore)_
 - **Enforcement** : tokens CSS (`src/styles/type.css`) + règle `.claude/rules/typographie.md` (« pas de taille en dur »).
 - **Décidé** : ambition totale = tokens + migration complète des heroes.
 - **Fait** : `type.css` (tokens, inerte / pas encore importé) + `typographie.md` (règle + mapping palier→composant) poussés sur `main`.
-- **Reste** : importer `type.css` ; migrer les 34 heroes vers les tokens ; corriger les violations sub-22px (`TitleSplitImage`, `ListImageHero`, `PeopleCards`) ; maj `slides.md` + table du `CLAUDE.md` ; vérif dev server + visuel deck par deck ; commit.
-- **Séquence** : migration sur `main` propre APRÈS le push du travail parallèle (collecte-donnees + 3 heroes WIP `CodeExamplesHero`/`MatrixRainHero`/`UtmGeneratorHero` + `slides.css`) et la fin des worktrees `architecture-donnees` / `qualite-donnees`.
-- **À valider** : les valeurs des tokens dans `type.css` (paliers titres 188/120/96/72, lead 26, body 22, espacements 16/48, mesures 640/820/1100/1280).
-- **Statut** : fondation faite, migration en attente.
+- **Reste** : néant pour la fondation. Suivi continu des entorses résiduelles documentées dans `typographie.md`.
+- **Statut** : FAIT. `type.css` est importé par `slides.css`, la famille Hero consomme les tokens (cf. `typographie.md`, statut « MIGRÉ 2026-06-08 »). Nettoyage 2026-06-09 : 20 composants legacy pré-Hero supprimés, tokens `--fs-slide-title` / `--fs-code` ajoutés, `slides.css` ne porte plus de px brut.
 
 ## Fait
 

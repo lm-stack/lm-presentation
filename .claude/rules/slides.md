@@ -18,12 +18,12 @@ Rythme imposé dans `src/styles/slides.css` :
 **Aucun `eyebrow`, badge, intro, ou autre élément ne doit s'insérer entre le titre et la bordure jaune.** Si un composant viole ça (eyebrow rendu avant le SlideTitle par exemple), retirer l'élément du composant ET de tous les appels MDX.
 
 Cas particuliers admis (slides "structurelles" avec leur propre identité visuelle, qui n'utilisent PAS SlideTitle) :
-- `Cover` : page de garde, h1 monumental + watermark, peut avoir un eyebrow
-- `Section` : transition de section, gros numéro + h2 + rule
-- `Closing` : fin de deck, watermark glyph + h1
-- `AboutMe`, `AboutMeBullets` : présentations de l'intervenant
-- `Timer` : pause avec compte à rebours
-- `Statement`, `Quote` : citations / déclarations fortes
+- `CoverHero` : page de garde, h1 monumental + watermark, peut avoir un eyebrow
+- `SectionHero` / `SubSectionHero` : transition de section, gros numéro + h2 + rule
+- `AboutHero` : présentation de l'intervenant
+- `PauseHero` : pause avec compte à rebours (via `TimerControl`)
+- `StatementHero`, `QuoteImage`, `DefinitionHero` : citations / déclarations fortes
+- Fin de deck : auto-injectée (`QuestionsHero` / `MerciHero`), jamais écrite à la main
 
 ## Centrage vertical du contenu — RÈGLE ABSOLUE (lis attentivement, Claude)
 
@@ -51,7 +51,7 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - Si le body est `display: flex; flex-direction: column` → ajouter `justify-content: center`
 - Si le body est `display: flex; flex-direction: row` → ajouter `align-items: center`
 
-**Slides "structurelles"** (Cover, Section, Closing, AboutMe, AboutMeBullets, Statement, Quote, Timer, BigImage, ImageGrid, Title) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
+**Slides "structurelles"** (`CoverHero`, `SectionHero`, `SubSectionHero`, `AboutHero`, `StatementHero`, `QuoteImage`, `DefinitionHero`, `PauseHero`, `BigImageHero`) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
 
 **Ne jamais** :
 - Ajouter `justify-content: center` sur `.reveal section` global → casse la position du titre

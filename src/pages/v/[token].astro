@@ -193,7 +193,9 @@ export function getStaticPaths() {
     </main>
 
     <script>
-      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || 'https://lm-polls.hello-cb2.workers.dev';
+      import { LM_POLLS_URL } from '@/utils/polls-url';
+      import type { PollPublicInfo } from '@/scripts/deck/types';
+
       const pathParts = window.location.pathname.split('/').filter(Boolean);
       const token = pathParts[pathParts.length - 1];
 
@@ -268,7 +270,7 @@ export function getStaticPaths() {
             showMessage('⚠️', 'Erreur', 'Impossible de charger le sondage.');
             return;
           }
-          const info = await res.json();
+          const info = await res.json() as PollPublicInfo;
           setStatus('open', 'Vote ouvert');
           renderForm(info);
         } catch (err) {
@@ -278,9 +280,7 @@ export function getStaticPaths() {
         }
       }
 
-      type PollInfo = { type: 'choice' | 'word'; question: string; options?: string[] };
-
-      function renderForm(info: PollInfo) {
+      function renderForm(info: PollPublicInfo) {
         body.innerHTML = '';
         const h = document.createElement('h1');
         h.className = 'vote-question';
@@ -358,7 +358,7 @@ export function getStaticPaths() {
         }
       }
 
-      async function submitWord(word: string, info: PollInfo) {
+      async function submitWord(word: string, info: PollPublicInfo) {
         try {
           const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
             method: 'POST',

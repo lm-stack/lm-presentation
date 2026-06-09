@@ -8,6 +8,7 @@ import '@/styles/global.css';
 import FontsPreload from '@/components/FontsPreload.astro';
 import ParcoursSchemeSwitcher from '@/components/ParcoursSchemeSwitcher.astro';
 import ParcoursMatrixRain from '@/components/ParcoursMatrixRain.astro';
+import Favicons from '@/components/Favicons.astro';
 import { splitHighlight } from '@/utils/highlight';
 
 export async function getStaticPaths() {
@@ -31,6 +32,15 @@ const decksData = await Promise.all(
     if (!deck) {
       throw new Error(
         `Parcours "${parcoursSlug}" reference le deck "${slug}" qui n'existe pas dans src/content/presentations/.`
+      );
+    }
+    // Regle slides.md : un deck de parcours DOIT laisser la fin auto
+    // (QuestionsHero / MerciHero) injectee par la route. autoClosing:false est
+    // reserve aux one-shot qui gerent leur propre fin. Seule exception documentee :
+    // le deck "template" (vitrine qui appelle QuestionsHero / MerciHero a la main).
+    if (deck.data.autoClosing === false && slug !== 'template') {
+      throw new Error(
+        `Parcours "${parcoursSlug}" : le deck "${slug}" a "autoClosing: false". La fin auto est obligatoire dans un parcours (slide QuestionsHero vers le deck suivant, ou MerciHero pour le dernier). Retire "autoClosing: false" du frontmatter.`
       );
     }
     return { slug, ...deck.data };
@@ -77,16 +87,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontsPreload />
-    {scheme === 'execed' ? (
-      <link rel="icon" type="image/svg+xml" href="/favicon-execed.svg" />
-    ) : (
-      <Fragment>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-        <link rel="shortcut icon" href="/favicon.png" />
-      </Fragment>
-    )}
+    <Favicons scheme={scheme} />
     <title>{data.title} | Lausanne Marketing</title>
     {data.description && <meta name="description" content={data.description} />}
     <link rel="canonical" href={canonical} />
@@ -116,7 +117,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
           {hasDays && (
             <>
               <span class="parcours-hero__sep" aria-hidden="true">·</span>
-              <span>{dayChips.length} jours</span>
+              <span>{dayChips.length} {dayChips.length > 1 ? 'jours' : 'jour'}</span>
             </>
           )}
           {data.updated && (

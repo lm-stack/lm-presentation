@@ -211,12 +211,12 @@ body.is-fullscreen .deck-footer {
    Rythme : 4px entre titre et sous-titre, 32px entre sous-titre et bordure.
    Toute violation casse la coherence visuelle du deck — voir .claude/CLAUDE.md. */
 :where(.reveal, .handout-doc) h2 {
-  font-size: 56px;
+  font-size: var(--fs-slide-title);
   margin-bottom: 4px;
 }
 
 :where(.reveal, .handout-doc) h2 + .slide-subtitle {
-  font-size: 24px;
+  font-size: var(--fs-lead);
   color: var(--c-muted);
   text-align: center;
   margin-bottom: 32px;

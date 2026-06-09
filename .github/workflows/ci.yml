@@ -1,0 +1,34 @@
+name: CI
+
+# Gate qualite sur les PR : type-check (astro check) + build statique (astro
+# build). Empeche de merger un deck ou un composant qui casse la compilation
+# MDX / le typage. Cf. PLAN-REGLES.md (niveau d'enforcement « gated en CI »).
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Type-check (astro check)
+        run: npm run check
+
+      # Le prebuild (extraction des posters video) est non bloquant par design.
+      - name: Build statique
+        run: npm run build

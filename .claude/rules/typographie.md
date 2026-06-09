@@ -57,7 +57,11 @@ de fond reste >= `--fs-body`. Chrome/méta (brand-sub, source, badges) admis en 
 
 ## Hors scope
 
-Les composants **legacy** (non importés par les decks : `Cover`, `Section`, `Default`, `Statement`,
-`AboutMe(Bullets)`, `Closing`, `Title`, `Calendar`, `ImageGrid`, `Workshop`, `Demo`, `Exchange`,
-`Conventions`, `Table/TwoColumnTable`, `Numbered*`, `Agenda*`, `Timer`, `BigImage`, `IconCatalog`,
-`Custom`, `Poll`, `WordCloud`) ne sont pas migrés : à archiver, pas à harmoniser.
+Composants **legacy restants** (non importés par les decks, pas encore adoptés : `Default`,
+`Title`, `Calendar`, `Conventions`, `AgendaFull`, `AgendaLight`, `Timer`, `IconCatalog`, `Custom`)
+ne sont pas migrés : à archiver, pas à harmoniser.
+
+Les autres composants legacy (versions pré-Hero) ont été **supprimés lors du nettoyage 2026-06-09**,
+remplacés par leur équivalent Hero : `Cover`, `Section`, `Closing`/`ClosingHero`, `Statement`,
+`Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Demo`, `Exchange`, `ImageGrid`,
+`BigImage`, `TableSlide`/`TwoColumnTable`, `NumberedCards`/`NumberedCardWithDetail`, `Poll`, `WordCloud`.
