@@ -47,6 +47,7 @@ import Conventions from '@/components/slides/Conventions.astro';
 import Calendar from '@/components/slides/Calendar.astro';
 import AgendaFull from '@/components/slides/AgendaFull.astro';
 import AgendaLight from '@/components/slides/AgendaLight.astro';
+import IconCatalog from '@/components/slides/IconCatalog.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
@@ -474,7 +475,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     Légende optionnelle en box blanche (captionTitle + caption + source/sourceUrl),
     à poser dans le coin le plus vide (vérification visuelle) : captionPosition =
     "top-left" | "top-right" | "bottom-left" | "bottom-right" (défaut "bottom-left").
-    hideBrand masque le bandeau marque si l'image doit parler seule. */}
+    Rien d'autre que la légende : pas de titre, pas de cadre, pas de bandeau marque. */}
 <BigImageHero
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=1080&fit=crop"
   alt="Exemple d'image plein cadre 16:9"
@@ -483,8 +484,6 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   source="Nom de la source"
   sourceUrl="https://lausanne.marketing"
   captionPosition="bottom-left"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
 />
 
 <StatementHero
@@ -693,6 +692,13 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   On y dépose du **contenu MDX libre** quand aucun layout dédié ne convient :
   titres, paragraphes, listes, citations, liens.
 </Empty>
+
+{/* Catalogue d'icônes Phosphor : échantillon + lien source vers la bibliothèque
+    complète (phosphoricons.com). Sans `items`, un jeu représentatif s'affiche. */}
+<IconCatalog
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
 
 {/* Slides de fin (auto-injectés par la route selon le contexte ; ici en vitrine
     manuelle car le template a autoClosing: false).

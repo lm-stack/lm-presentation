@@ -127,11 +127,9 @@ Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#F
 
 ## Image plein cadre (`BigImageHero`) + légende en box — RÈGLE
 
-`BigImageHero` affiche une image en **bleed total** (1920×1080), **sans titre ni cadre**. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.
+`BigImageHero` affiche une image en **bleed total** (1920×1080), **sans titre, sans cadre et sans bandeau marque** : rien d'autre que la légende. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.
 
-Légende optionnelle rendue dans une **box blanche à bordure légère** — style card global : `var(--c-surface)`, bordure `color-mix(in srgb, var(--c-ink) 8%, transparent)`, `border-radius: 4px`, drop-shadow légère. Champs : `captionTitle` (titre gras), `caption` (description), et `source` + `sourceUrl` (ligne **source cliquable tout en bas de la box**, au format `.slide-source` : 16px, `--c-faint`). Positionnable dans un des **4 coins** via `captionPosition` : `"top-left" | "top-right" | "bottom-left" | "bottom-right"` (défaut `bottom-left`).
-
-Le bandeau marque peut être **masqué** (`hideBrand`) dans les cas exceptionnels où l'image doit parler seule.
+Légende optionnelle rendue dans une **box blanche à bordure légère** — style card global : `var(--c-surface)`, bordure `color-mix(in srgb, var(--c-ink) 8%, transparent)`, `border-radius: 4px`, drop-shadow légère. Champs : `captionTitle` (titre gras), `caption` (description), et `source` + `sourceUrl` (ligne **source bleue soulignée tout en bas de la box**, même convention que `.slide-source`). Positionnable dans un des **4 coins** via `captionPosition` : `"top-left" | "top-right" | "bottom-left" | "bottom-right"` (défaut `bottom-left`).
 
 ⚠️ **Toujours vérifier visuellement** quel coin de l'image est le plus vide **avant** de poser la box, pour ne jamais recouvrir un élément important. Le coin **haut-gauche est occupé par le bandeau marque** (la box top-left est décalée dessous) : préférer un autre coin quand c'est possible.
 

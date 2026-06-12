@@ -1,95 +1,221 @@
 ---
 // src/components/slides/IconCatalog.astro
-// Catalogue d'icônes Phosphor utilisées dans le repo. Affiche chaque
-// icône avec son nom astro-icon ('ph:xxx') et la liste des composants
-// qui l'utilisent. Sert de slide référence dans le template, mais
-// peut être réutilisé dans n'importe quel deck pour inventorier la
-// bibliothèque graphique.
-import SlideTitle from '@/components/SlideTitle.astro';
+// Catalogue d'icônes Phosphor : header marque + logo LM (RÈGLE), fond pearl,
+// titre body + sous-titre, grille d'icônes (disc coloré + nom astro-icon), et
+// source bleue soulignée en bas à gauche vers la bibliothèque complète
+// (phosphoricons.com). Sert de slide référence depuis le template pour montrer
+// les icônes disponibles ; la bibliothèque entière se parcourt via le lien source.
 import { Icon } from 'astro-icon/components';
+import { splitHighlight } from '@/utils/highlight';
 
 interface IconEntry {
   name: string;
-  usedIn: string;
+  usedIn?: string;
+  /** Couleur du disc (semantique, passee en data). Defaut : ink. */
   color?: string;
 }
 
 interface Props {
   title?: string;
+  italicPart?: string;
   subtitle?: string;
-  highlight?: string;
-  items: IconEntry[];
+  items?: IconEntry[];
+  brand?: string;
+  brandSub?: string;
 }
 
+// Jeu representatif d'icones Phosphor employees dans les composants du repo.
+const DEFAULT_ITEMS: IconEntry[] = [
+  { name: 'ph:identification-card', usedIn: 'InfoCardsGrid' },
+  { name: 'ph:envelope-simple', usedIn: 'InfoCardsGrid' },
+  { name: 'ph:table', usedIn: 'InfoCardsGrid' },
+  { name: 'ph:shield-check', usedIn: 'InfoCardsGrid' },
+  { name: 'ph:chats-circle-fill', usedIn: 'Conventions' },
+  { name: 'ph:cursor-click-fill', usedIn: 'Conventions' },
+  { name: 'ph:pencil-simple-line-bold', usedIn: 'Conventions' },
+  { name: 'ph:certificate', usedIn: 'InfoCardsGrid' },
+  { name: 'ph:calendar-blank', usedIn: 'ProgrammeHero' },
+  { name: 'ph:chart-line-up', usedIn: 'StatRingsHero' },
+  { name: 'ph:database', usedIn: 'SchemaTriptych' },
+  { name: 'ph:lightning', usedIn: 'MockupHero' },
+];
+
 const {
-  title = "Icônes Phosphor utilisées",
-  subtitle = "Inventaire des icônes employées dans les slides. Bibliothèque astro-icon plus @iconify-json/ph.",
-  highlight = "Phosphor",
-  items,
+  title = 'Icônes Phosphor',
+  italicPart = 'Phosphor',
+  subtitle = 'Un échantillon des icônes employées dans les slides. La bibliothèque complète se parcourt sur phosphoricons.com.',
+  items = DEFAULT_ITEMS,
+  brand = 'Titre de la présentation',
+  brandSub,
 } = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="icon-catalog" data-layout="icon-catalog">
-  <SlideTitle title={title} subtitle={subtitle} highlight={highlight} />
-  <div class="icon-catalog__grid">
-    {items.map((item) => (
-      <article class="icon-catalog__card" style={`--accent: ${item.color ?? '#191919'}`}>
-        <span class="icon-catalog__disc" aria-hidden="true">
-          <Icon name={item.name} />
-        </span>
-        <code class="icon-catalog__name">{item.name}</code>
-        <p class="icon-catalog__usage">{item.usedIn}</p>
-      </article>
-    ))}
+  <header class="icon-catalog__header">
+    <div class="icon-catalog__brand-text">
+      <p class="icon-catalog__brand-main">{brand}</p>
+      {brandSub && <p class="icon-catalog__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="icon-catalog__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="icon-catalog__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="icon-catalog__body">
+    <div class="icon-catalog__heading">
+      <h2 class="icon-catalog__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="icon-catalog__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="icon-catalog__subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="icon-catalog__grid">
+      {items.map((item) => (
+        <article class="icon-catalog__card" style={`--accent: ${item.color ?? 'var(--c-ink)'}`}>
+          <span class="icon-catalog__disc" aria-hidden="true">
+            <Icon name={item.name} />
+          </span>
+          <code class="icon-catalog__name">{item.name}</code>
+          {item.usedIn && <p class="icon-catalog__usage">{item.usedIn}</p>}
+        </article>
+      ))}
+    </div>
   </div>
+
+  <a class="slide-source" href="https://phosphoricons.com" target="_blank" rel="noopener">Toutes les icônes : phosphoricons.com</a>
 </section>
 
 <style>
+  .icon-catalog {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width : brand gauche + logo LM droite + border-bottom (RÈGLE). */
+  .icon-catalog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .icon-catalog__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .icon-catalog__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .icon-catalog__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .icon-catalog__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    padding-top: 28px;
+  }
+  .icon-catalog__heading { flex: 0 0 auto; }
+  .icon-catalog__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .icon-catalog__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .icon-catalog__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 12px 0 0;
+    max-width: var(--measure-l);
+    text-align: left;
+  }
+
   .icon-catalog__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 56px 48px;
-    max-width: 1600px;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 40px 32px;
     width: 100%;
-    align-content: center;
   }
   .icon-catalog__card {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 18px;
+    gap: 14px;
     margin: 0;
   }
   .icon-catalog__disc {
-    width: 128px;
-    height: 128px;
+    width: 104px;
+    height: 104px;
     border-radius: 50%;
-    background: var(--accent, #191919);
+    background: var(--accent, var(--c-ink));
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FAF8F3;
-    box-shadow: 0 14px 32px -18px var(--accent, rgba(0, 0, 0, 0.4));
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .icon-catalog__disc :global(svg) {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
   }
   .icon-catalog__name {
-    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: 18px;
-    color: #191919;
-    background: rgba(255, 216, 56, 0.22);
+    font-family: 'Space Grotesk', monospace;
+    font-size: var(--fs-source);
+    color: var(--c-ink);
+    background: color-mix(in srgb, var(--c-accent) 22%, transparent);
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: 4px;
     letter-spacing: 0.01em;
   }
   .icon-catalog__usage {
-    font-size: 17px;
-    color: #6B6F84;
+    font-size: var(--fs-source);
+    color: var(--c-muted);
     margin: 0;
-    line-height: 1.45;
+    line-height: var(--lh-body);
     max-width: 280px;
   }
 </style>

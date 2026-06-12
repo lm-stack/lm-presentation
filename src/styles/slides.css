@@ -923,31 +923,31 @@ body.is-fullscreen .deck-search {
 /* Footer "Source" activable sur N'IMPORTE QUEL slide (section avec data-layout) :
    en bas a gauche, discret, cliquable quand un lien est fourni. Rendre dans le
    composant : <p class="slide-source"> ou <a class="slide-source" href>. */
+/* RÈGLE : une source est TOUJOURS bleue, soulignée, en bas à gauche, que ce soit
+   un <p class="slide-source"> ou un <a class="slide-source" href>. La couleur
+   vient de --c-secondary (bleu dans les deux schémas, cf. themes.css). */
 [data-layout] .slide-source {
   position: absolute;
   left: 96px;
   bottom: 40px;
   margin: 0;
+  width: fit-content;
   font-family: 'Hanken Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--c-faint);
+  font-size: var(--fs-source);
+  font-weight: 600;
+  color: var(--c-secondary);
   letter-spacing: 0.01em;
   z-index: 3;
   text-decoration: none;
-  transition: color 0.15s ease;
+  border-bottom: 1px solid color-mix(in srgb, var(--c-secondary) 38%, transparent);
+  padding-bottom: 2px;
+  transition: filter 0.15s ease;
 }
-/* Source CLIQUABLE (un lien fourni) : look "lien" (couleur secondaire, souligné,
-   icône lien externe via masque CSS), toujours en bas à gauche. Les sources sans
-   lien (rendues en <p>) gardent le style discret ci-dessus. */
+/* Source CLIQUABLE (lien fourni) : même look bleu souligné + icône lien externe. */
 [data-layout] a.slide-source {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--c-secondary);
-  font-weight: 600;
-  border-bottom: 1px solid color-mix(in srgb, var(--c-secondary) 38%, transparent);
-  padding-bottom: 2px;
 }
 [data-layout] a.slide-source::after {
   content: "";

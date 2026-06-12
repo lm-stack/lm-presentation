@@ -1,14 +1,12 @@
 ---
 // src/components/slides/BigImageHero.astro
-// Image pleine slide en bleed total, header marque overlay top-left,
-// légende optionnelle en box (style card global), plaçable dans un des 4 coins.
-// Pas de titre ni de cadre.
+// Image pleine slide en bleed total. RIEN d'autre que la légende : pas de titre,
+// pas de cadre, pas de bandeau marque. L'image parle seule, seule une box légende
+// optionnelle (style card global) peut être posée dans un des 4 coins.
 // Inspiration slide 4 du PPTX ExecEd.
 //
 // Différent de BigImage existant : BigImage encadre une image sous un
-// SlideTitle standard avec divider jaune. BigImageHero est full-bleed
-// sans titre, conçu pour une image qui parle seule (ambiance, salle,
-// public).
+// SlideTitle standard avec divider jaune. BigImageHero est full-bleed.
 interface Props {
   image: string;
   alt?: string;
@@ -16,14 +14,10 @@ interface Props {
   captionTitle?: string;
   /** Description de la légende, sous le titre. Optionnel. */
   caption?: string;
-  /** Source citée tout en bas de la box (même convention que .slide-source). */
+  /** Source citée tout en bas de la box (bleu souligné, même convention que .slide-source). */
   source?: string;
   /** Lien rendant la source cliquable. */
   sourceUrl?: string;
-  brand?: string;
-  brandSub?: string;
-  /** Masque le bandeau marque (cas exceptionnel : image qui doit parler seule). */
-  hideBrand?: boolean;
   /** Position de la légende, dans un des 4 coins (défaut "bottom-left").
       Toujours choisir le coin le plus vide de l'image (vérification visuelle). */
   captionPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
@@ -35,9 +29,6 @@ const {
   caption,
   source,
   sourceUrl,
-  brand = 'Titre de la présentation',
-  brandSub,
-  hideBrand = false,
   captionPosition = 'bottom-left',
 } = Astro.props;
 ---
@@ -48,13 +39,6 @@ const {
   <div class="big-image-hero__bg" aria-hidden={alt === ''}>
     <img src={image} alt={alt} loading="eager" decoding="async" />
   </div>
-
-  {!hideBrand && (
-    <header class="big-image-hero__header">
-      <p class="big-image-hero__brand-main">{brand}</p>
-      {brandSub && <p class="big-image-hero__brand-sub">{brandSub}</p>}
-    </header>
-  )}
 
   {(captionTitle || caption || source) && (
     <div class="big-image-hero__caption">
@@ -102,35 +86,6 @@ const {
     pointer-events: none;
   }
 
-  .big-image-hero__header {
-    position: absolute;
-    top: 48px;
-    left: 96px;
-    z-index: 1;
-    padding: 14px 20px;
-    background: color-mix(in srgb, var(--c-cream) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-radius: 4px;
-  }
-  .big-image-hero__brand-main {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin: 0;
-    color: var(--c-ink);
-  }
-  .big-image-hero__brand-sub {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    margin: 4px 0 0;
-    color: var(--c-muted);
-  }
-
   /* Légende en box blanche à bordure légère (style card global), placée dans
      un des 4 coins. Titre (gras) + description. Toujours choisir le coin le
      plus vide de l'image. */
@@ -170,23 +125,24 @@ const {
     color: var(--c-muted);
     margin: 0;
   }
-  /* Source en bas de box : même convention que .slide-source (16px, faint, lien). */
+  /* Source en bas de box : bleu souligné, même convention que .slide-source. */
   .big-image-hero__caption-source {
+    width: fit-content;
     margin: 6px 0 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: var(--fs-source);
+    font-weight: 600;
     letter-spacing: 0.01em;
-    color: var(--c-faint);
+    color: var(--c-secondary);
     text-decoration: none;
-    transition: color 0.15s ease;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-secondary) 38%, transparent);
+    padding-bottom: 2px;
+    transition: filter 0.15s ease;
   }
   a.big-image-hero__caption-source:hover {
-    color: var(--c-ink);
-    text-decoration: underline;
+    filter: brightness(1.12);
   }
-  /* Coin haut-gauche : décalé sous le bandeau marque pour ne pas le recouvrir. */
-  .big-image-hero--caption-top-left .big-image-hero__caption { top: 132px; left: 96px; }
+  .big-image-hero--caption-top-left .big-image-hero__caption { top: 48px; left: 96px; }
   .big-image-hero--caption-top-right .big-image-hero__caption { top: 48px; right: 96px; }
   .big-image-hero--caption-bottom-left .big-image-hero__caption { bottom: 48px; left: 96px; }
   .big-image-hero--caption-bottom-right .big-image-hero__caption { bottom: 48px; right: 96px; }
