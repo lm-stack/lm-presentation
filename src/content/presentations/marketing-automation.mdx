@@ -10,25 +10,25 @@ cover: "/decks/marketing-automation/cover-robot.jpg"
 description: "Marketing automation : pourquoi automatiser, les APIs, le JSON, le no-code, et la place de l'IA. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import BigImageHero from '@/components/slides/BigImageHero.astro';
-import DefinitionHero from '@/components/slides/DefinitionHero.astro';
-import BarChartHero from '@/components/slides/BarChartHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import PollHero from '@/components/slides/PollHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Media from '@/components/slides/Media.astro';
+import ImageFull from '@/components/slides/ImageFull.astro';
+import Definition from '@/components/slides/Definition.astro';
+import BarChart from '@/components/slides/BarChart.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Poll from '@/components/slides/Poll.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
 {/* Reprise intégrale du deck marketing-automation (ancien format) en ExecEd-style.
     Images réutilisées telles quelles depuis public/decks/marketing-automation/.
-    Mapping : Cover->CoverHero, BigImage->MediaHero, Section->SubSectionHero,
-    ImageGrid->ImageGridHero, TwoColumnTable->InfoCardsGrid, Statement->MediaHero,
-    Poll->PollHero, WordCloud->WordCloudHero, Closing->ClosingHero. */}
+    Mapping : Cover->Cover, BigImage->Media, Section->SubSection,
+    ImageGrid->ImageGrid, TwoColumnTable->InfoCards, Statement->Media,
+    Poll->Poll, WordCloud->WordCloud, Closing->ClosingHero. */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Marketing automation"
   italicPart="automation"
   eyebrow="Module 23"
@@ -40,7 +40,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* État des lieux : intercalaire d'ouverture, juste avant le comparatif */}
-<SubSectionHero
+<SubSection
   index="01"
   title="État des lieux"
   italicPart="lieux"
@@ -50,7 +50,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Définition : c'est quoi un outil d'automation (introduit la notion avant la comparaison) */}
-<DefinitionHero
+<Definition
   eyebrow="Définition"
   term="Outil d'automation"
   termItalicPart="automation"
@@ -64,7 +64,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
     TODO images à fournir dans public/decks/marketing-automation/ :
     - etat-avant-2024-n8n.png : capture d'un workflow n8n
     - etat-apres-2024-ia.jpg  : visuel outils d'automation + outils IA */}
-<ImageGridHero
+<ImageGrid
   title="Avant et après 2024"
   italicPart="2024"
   subtitle="L'arrivée de l'IA générative a élargi la boîte à outils."
@@ -77,7 +77,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Les outils d'automation : grille 4 images (logos/captures à fournir) */}
-<ImageGridHero
+<ImageGrid
   title="Les outils d'automation"
   italicPart="automation"
   subtitle="Du no-code grand public à l'open-source, jusqu'à l'écosystème Microsoft."
@@ -93,7 +93,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 
 {/* Le spectre de l'automation IA (diagramme Zapier) : image plein cadre, sans titre ni cadre.
     L'attribution Zapier est déjà visible dans l'image. */}
-<BigImageHero
+<ImageFull
   image="/decks/marketing-automation/automation-spectrum.jpg"
   alt="Le spectre de l'automation IA : workflow, AI workflow, agentic workflow, agent (source Zapier)"
   captionTitle="Après 2024 : l'IA dans les workflows"
@@ -104,7 +104,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 2 : Chart ZHAW Technologies pertinentes */}
-<MediaHero
+<Media
   title="Technologies marketing pertinentes"
   italicPart="pertinentes"
   subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
@@ -115,7 +115,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 3 : Chart ZHAW Objectifs */}
-<MediaHero
+<Media
   title="Objectifs marketing digitaux"
   italicPart="Objectifs"
   subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
@@ -126,7 +126,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 4 : Vos objectifs (Poll) */}
-<PollHero
+<Poll
   id="objectifs-marketing"
   question="Et chez vous, quel objectif marketing digital est le plus important ?"
   italicPart="le plus important"
@@ -143,7 +143,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 5 : Section 01 */}
-<SubSectionHero
+<SubSection
   kicker="Idée reçue"
   index="02"
   title="C'est moins compliqué qu'il n'y paraît"
@@ -155,7 +155,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 6 : Imagination vs Réalité */}
-<ImageGridHero
+<ImageGrid
   title="Imagination versus réalité"
   italicPart="réalité"
   subtitle="Le mythe du processus complexe à compétences informatiques pointues."
@@ -168,7 +168,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 7 : Définition (3 cards) */}
-<ImageGridHero
+<ImageGrid
   title="Définition et applications"
   italicPart="Définition"
   subtitle="L'ensemble des techniques pour automatiser les tâches répétitives à faible valeur ajoutée."
@@ -182,7 +182,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 8 : Exemple Facebook Lead Ads */}
-<MediaHero
+<Media
   title="Exemple : Facebook Lead Ads"
   italicPart="Lead Ads"
   subtitle="Annonce sponsorisée, formulaire intégré, capture en un clic."
@@ -193,7 +193,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 9 : Partage d'expérience Facebook Lead Ads */}
-<InfoCardsGrid
+<InfoCards
   title="Partage d'expérience"
   italicPart="expérience"
   subtitle="Cinq questions pour confronter Facebook Lead Ads à vos pratiques."
@@ -209,7 +209,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 10 : Chart ZHAW Avantages */}
-<MediaHero
+<Media
   title="Avantages principaux"
   italicPart="Avantages"
   subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
@@ -220,7 +220,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 11 : Vos avantages (Poll) */}
-<PollHero
+<Poll
   id="avantages-ma"
   question="Selon vous, quel avantage du marketing automation pèse le plus lourd ?"
   italicPart="le plus lourd"
@@ -237,7 +237,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 12 : Vos expériences (WordCloud) */}
-<WordCloudHero
+<WordCloud
   id="vos-experiences-ma"
   question="Votre expérience du marketing automation, en un mot ?"
   italicPart="en un mot"
@@ -247,7 +247,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 13 : Section 02 */}
-<SubSectionHero
+<SubSection
   kicker="Pourquoi"
   index="03"
   title="Pourquoi le marketing automation ?"
@@ -259,7 +259,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 14 : Quatre dynamiques convergentes */}
-<ImageGridHero
+<ImageGrid
   title="Quatre dynamiques convergentes"
   italicPart="dynamiques"
   subtitle="Le marketing automation est né de la nécessité de gérer simultanément plus de données, d'outils, de contenu et de touchpoints."
@@ -274,7 +274,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 15 : 175 ZB datasphere */}
-<MediaHero
+<Media
   title="Multiplication des données"
   italicPart="données"
   subtitle="Eric Schmidt, 2010 : tous les deux jours, autant d'informations que depuis deux millions d'années."
@@ -286,7 +286,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 16 : MartechMap */}
-<MediaHero
+<Media
   title="Multiplication des outils"
   italicPart="outils"
   subtitle="De 150 outils en 2011 à 9'932 en 2022, +6'521 % en onze ans."
@@ -298,7 +298,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 17 : PME vs grandes entreprises */}
-<ImageGridHero
+<ImageGrid
   title="Des stacks aussi variés que les organisations"
   italicPart="variés"
   subtitle="Chaque département marketing dispose d'outils propres et distincts."
@@ -311,7 +311,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 18 : Philips stack */}
-<MediaHero
+<Media
   title="L'ensemble des outils digitaux constitue le stack"
   italicPart="stack"
   subtitle="Exemple : le stack utilisé par Philips, organisé en onze catégories distinctes."
@@ -323,7 +323,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 19 : Types d'outils */}
-<InfoCardsGrid
+<InfoCards
   title="Quelques familles d'outils dans un stack"
   italicPart="familles"
   subtitle="Cinq catégories qu'on retrouve à peu près partout."
@@ -339,7 +339,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 20 : Growth marketing WordCloud */}
-<WordCloudHero
+<WordCloud
   id="growth-marketing-def"
   question="Le growth marketing en un mot, c'est quoi pour vous ?"
   italicPart="en un mot"
@@ -349,7 +349,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 21 : Multiplication des contenus */}
-<ImageGridHero
+<ImageGrid
   title="Multiplication des contenus"
   italicPart="contenus"
   subtitle="Les organisations sont présentes sur toujours plus de supports avec toujours plus de contenus à produire."
@@ -363,7 +363,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 22 : Touchpoints */}
-<ImageGridHero
+<ImageGrid
   title="Multiplication des touchpoints"
   italicPart="touchpoints"
   subtitle="Avec l'omnicanal, la conversion est nucléarisée. Suivre le parcours réel devient un défi."
@@ -377,7 +377,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 23 : Limites et freins (Poll) */}
-<PollHero
+<Poll
   id="freins-automatisation"
   question="Quel est le plus gros frein à l'automatisation dans votre organisation ?"
   italicPart="le plus gros frein"
@@ -394,7 +394,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 23b : Les vrais freins a l'IA (chart reconstruit, ZHAW 2024) */}
-<BarChartHero
+<BarChart
   title="Les vrais freins à l'IA"
   italicPart="freins"
   subtitle="Ce qui bloque l'adoption de l'IA en marketing, selon les entreprises."
@@ -413,7 +413,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 24 : Section 03 */}
-<SubSectionHero
+<SubSection
   kicker="Sous le capot"
   index="04"
   title="Les APIs, la colonne vertébrale"
@@ -425,7 +425,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 25 : Une technologie spécifique */}
-<MediaHero
+<Media
   title="Une technologie spécifique : l'API"
   italicPart="l'API"
   subtitle="Le marketing automation a surtout été rendu possible par cette brique technique."
@@ -438,7 +438,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 26 : Qu'est-ce qu'une API */}
-<MediaHero
+<Media
   title="Une API connecte des applications"
   italicPart="connecte"
   subtitle="API signifie Application Programming Interface."
@@ -451,7 +451,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 27 : Partage d'expérience APIs */}
-<InfoCardsGrid
+<InfoCards
   title="Partage d'expérience : les APIs"
   italicPart="les APIs"
   subtitle="Quatre questions pour situer votre familiarité avec la technologie."
@@ -466,7 +466,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 28 : JSON */}
-<MediaHero
+<Media
   title="JSON, le langage des APIs"
   italicPart="JSON"
   subtitle="JSON : JavaScript Object Notation."
@@ -479,7 +479,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 29 : Applications du JSON */}
-<ImageGridHero
+<ImageGrid
   title="Applications du JSON"
   italicPart="JSON"
   subtitle="De plus en plus utilisé en marketing, et notamment dans trois cas typiques."
@@ -493,7 +493,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 30 : Verbes HTTP */}
-<MediaHero
+<Media
   title="GET, POST, PUT, DELETE"
   subtitle="Une requête API : une URL et une action."
   image="/decks/marketing-automation/chart-http-verbs-30.png"
@@ -503,7 +503,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 31 : Documentation d'API (Stripe, Twilio, Spotify) */}
-<ImageGridHero
+<ImageGrid
   title="Documentation d'API"
   italicPart="Documentation"
   subtitle="Chaque API a son propre fonctionnement. Avant de coder, on lit la doc."
@@ -517,7 +517,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 32 : Démonstration sur Postman */}
-<MediaHero
+<Media
   title="Démonstration sur Postman"
   italicPart="Postman"
   subtitle="Un client graphique gratuit pour explorer une API sans écrire une ligne de code."
@@ -529,7 +529,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 33 : Résultat de la démonstration */}
-<MediaHero
+<Media
   title="Résultat de la démonstration"
   italicPart="Résultat"
   subtitle="Requête GET sur api.genderize.io, réponse JSON renvoyée en 237 ms."
@@ -540,7 +540,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 34 : No-code et low-code */}
-<ImageGridHero
+<ImageGrid
   title="No-code et low-code"
   italicPart="No-code"
   subtitle="Les APIs sont essentielles pour le fonctionnement des outils no-code comme low-code."
@@ -553,7 +553,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 35 : Automatisations simples du quotidien */}
-<ImageGridHero
+<ImageGrid
   title="Automatisations simples du quotidien"
   italicPart="quotidien"
   subtitle="Les outils digitaux que nous utilisons sont déjà partiellement no-code. Vous en avez déjà créés."

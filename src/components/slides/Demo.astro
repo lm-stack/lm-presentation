@@ -1,0 +1,225 @@
+---
+// src/components/slides/Demo.astro
+// Slide "Démonstration" ExecEd-style : header marque + logo (44/40), à gauche
+// titre + tableau label/valeur (style Workshop) qui résume les grandes
+// lignes de la démo, à droite une capture d'écran encadrée. Charte LM light.
+interface DemoRow {
+  label: string;
+  value: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  /** Capture d'écran de la démo (idéalement format paysage). */
+  image: string;
+  /** Légende optionnelle sous la capture. */
+  caption?: string;
+  rows: DemoRow[];
+  brand?: string;
+  brandSub?: string;
+}
+import { splitHighlight } from '@/utils/highlight';
+const {
+  title = 'Démonstration',
+  italicPart,
+  subtitle,
+  image,
+  caption,
+  rows,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="demo" data-layout="demo">
+  <header class="demo__header">
+    <div class="demo__brand-text">
+      <p class="demo__brand-main">{brand}</p>
+      {brandSub && <p class="demo__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="demo__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="demo__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="demo__content">
+    <div class="demo__main">
+      <h2 class="demo__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="demo__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="demo__subtitle">{subtitle}</p>}
+
+      <dl class="demo__table">
+        {rows.map((row) => (
+          <div class="demo__row">
+            <dt class="demo__label">{row.label}</dt>
+            <dd class="demo__value">{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="demo__media">
+      <div class="demo__screenshot">
+        <img src={image} alt={caption ?? ''} loading="lazy" decoding="async" />
+      </div>
+      {caption && <p class="demo__caption">{caption}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width : brand gauche + logo LM droite + border-bottom (44/40). */
+  .demo__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 96px 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .demo__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .demo__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .demo__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Sous le header : tableau (gauche) + capture (droite), centrés verticalement. */
+  .demo__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: 64px;
+    padding: 36px 96px 56px;
+  }
+  .demo__main {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .demo__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .demo__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .demo__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    line-height: var(--lh-lead);
+    color: var(--c-muted);
+    margin: 16px 0 0;
+  }
+
+  /* Tableau label / valeur, style Workshop (un peu compacté). */
+  .demo__table {
+    margin: 44px 0 0;
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .demo__row {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .demo__label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-ink);
+  }
+  .demo__value {
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 400;
+    line-height: var(--lh-body);
+    color: var(--c-muted);
+  }
+
+  /* Capture d'écran encadrée. */
+  .demo__media {
+    flex: 0 0 auto;
+    width: 760px;
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .demo__screenshot {
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .demo__screenshot img {
+    width: 100%;
+    height: auto;
+    max-height: 720px;
+    object-fit: cover;
+    display: block;
+  }
+  .demo__caption {
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 500;
+    color: var(--c-muted);
+    text-align: center;
+  }
+</style>

@@ -10,14 +10,14 @@ cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&f
 description: "Ouverture du parcours CRM, Data & Automation : présentation de l'intervenant et vue d'ensemble des trois jours de formation."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import AboutHero from '@/components/slides/AboutHero.astro';
-import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import ListImageHero from '@/components/slides/ListImageHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
+import Cover from '@/components/slides/Cover.astro';
+import About from '@/components/slides/About.astro';
+import Programme from '@/components/slides/Programme.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import ListImage from '@/components/slides/ListImage.astro';
+import Steps from '@/components/slides/Steps.astro';
 
-<CoverHero
+<Cover
   title="CRM, Data & Automation"
   italicPart="Automation"
   eyebrow="Formation continue"
@@ -28,7 +28,7 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
   theme="halo-gold"
 />
 
-<ListImageHero
+<ListImage
   title="Le CAS en Marketing digital"
   italicPart="Marketing digital"
   subtitle="5 modules, 15 jours, 5 mois."
@@ -45,7 +45,7 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
   ]}
 />
 
-<NumberedSplit
+<Steps
   title="Vos objectifs"
   italicPart="objectifs"
   subtitle="À l'issue des trois jours, vous serez capable de :"
@@ -59,7 +59,7 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
   ]}
 />
 
-<AboutHero
+<About
   firstName="Thomas"
   lastName="Rouaud"
   photo="/assets/thomas-rouaud.jpg"
@@ -84,7 +84,7 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Tour de table"
   italicPart="table"
   subtitle="Faisons connaissance avant de plonger dans la donnée."
@@ -101,7 +101,7 @@ import NumberedSplit from '@/components/slides/NumberedSplit.astro';
   ]}
 />
 
-<ProgrammeHero
+<Programme
   title="Agenda"
   italicPart="Agenda"
   brand="CRM, Data & Automation"

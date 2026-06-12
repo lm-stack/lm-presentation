@@ -64,7 +64,7 @@ export async function initPollSlides(config: PollsConfig): Promise<void> {
     try { await document.fonts.ready; } catch {}
   }
 
-  const slides = document.querySelectorAll<HTMLElement>('section[data-layout="poll"], section[data-layout="wordcloud"], section[data-layout="poll-hero"], section[data-layout="wordcloud-hero"]');
+  const slides = document.querySelectorAll<HTMLElement>('section[data-layout="poll"], section[data-layout="wordcloud"]');
   slides.forEach((section) => {
     const pollId = section.dataset.pollId!;
     // Idempotence : si la slide a deja ete wired (hot-reload, re-init), on skip.

@@ -10,18 +10,18 @@ cover: "/decks/architecture-donnees/cover-blueprint.jpg"
 description: "Architecture des données : entités, champs, relations, les cinq pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import ExchangeHero from '@/components/slides/ExchangeHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
-import BarChartHero from '@/components/slides/BarChartHero.astro';
-import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
-import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Media from '@/components/slides/Media.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import BarChart from '@/components/slides/BarChart.astro';
+import Compare from '@/components/slides/Compare.astro';
+import Schema from '@/components/slides/Schema.astro';
 
 {/*
   MIGRATION : architecture-donnees.mdx -> architecture-donnees-new.mdx
@@ -32,48 +32,48 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 
   MAPPING SLIDE PAR SLIDE
   =======================
-  Slide 1  Cover             -> CoverHero
+  Slide 1  Cover             -> Cover
              eyebrow "Jour 1 — Sujet 3" conservé tel quel (la barre est un
              tiret dans le titre original : remplacé par " : " conformément
              à la règle no-em-dash).
   Slide 2  Calendar          -> SUPPRIMÉ (vit dans Introduction uniquement).
-  Slide 3  Exchange          -> ExchangeHero
+  Slide 3  Exchange          -> Exchange
              subtitle long (2 phrases) condensé en subtitle + prompts.
-  Slide 4  Section 01        -> SubSectionHero (kicker="Le bénéfice métier",
+  Slide 4  Section 01        -> SubSection (kicker="Le bénéfice métier",
              index="01"). Subtitle original ~130 chars ; forcé subtitleWrap=true
              car dépasse la limite ~85 chars de la règle nowrap.
-  Slide 5  NumberedCards 1 col (5 items) -> NumberedSplit
-             5 items ne tiennent pas dans un NumberedSplit standard (3 items).
+  Slide 5  NumberedCards 1 col (5 items) -> Steps
+             5 items ne tiennent pas dans un Steps standard (3 items).
              Décision : conserver les 5 items mais le composant accepte un array
              items[] sans limite dure ; visuellement les items sont petits donc
              ça passe. Si trop serré, l'auteur peut scinder en deux slides.
              Image : cover-blueprint.jpg (seule image locale disponible).
-  Slide 6  Section 02        -> SubSectionHero (kicker="Trois mots", index="02").
-  Slide 7  NumberedCards 1 col (3 items) -> NumberedSplit
+  Slide 6  Section 02        -> SubSection (kicker="Trois mots", index="02").
+  Slide 7  NumberedCards 1 col (3 items) -> Steps
              3 items, mapping direct. Image : cover-blueprint.jpg (fallback,
              à remplacer par une image schéma ERD ou diagramme).
-  Slide 8  Statement sans image -> StatementHero
+  Slide 8  Statement sans image -> Statement
              subtitle + children fusionnés en body. Pas de stat/statCaption car
              aucune figure chiffrée isolée.
-  Slide 9  Section 03        -> SubSectionHero (kicker="Les erreurs classiques",
+  Slide 9  Section 03        -> SubSection (kicker="Les erreurs classiques",
              index="03"). Subtitle long : subtitleWrap=true.
-  Slide 10 NumberedCards 1 col (5 items) -> NumberedSplit
+  Slide 10 NumberedCards 1 col (5 items) -> Steps
              5 items, même décision que slide 5. Image : cover-blueprint.jpg
              (à remplacer).
              Chaque item est dense : condensé en format "Titre : phrase courte"
              (symptôme + réflexe fusionnés ; la conséquence résumée en corps).
              Voir CONDENSATIONS ci-dessous.
-  Slide 11 Statement sans image -> StatementHero
+  Slide 11 Statement sans image -> Statement
              eyebrow="Principe clé", subtitle + children -> body.
-  Slide 12 Section 04        -> SubSectionHero (kicker="Démonstration",
+  Slide 12 Section 04        -> SubSection (kicker="Démonstration",
              index="04"). Subtitle long : subtitleWrap=true.
-  Slide 13 Demo (transition bare, pas de screenshot) -> DemoHero
+  Slide 13 Demo (transition bare, pas de screenshot) -> Demo
              Pas de capture réelle disponible. Image : placeholder Unsplash
              "database schema" + caption "(à remplacer)".
              Tableau authorship : Outil / Cible / Étapes / À retenir (résumé de
              la description originale qui listait les 3 outils).
-  Slide 14 Workshop          -> WorkshopHero (fusionné avec slide 15)
-  Slide 15 WorkshopBrief     -> fusionné dans WorkshopHero (slide 14)
+  Slide 14 Workshop          -> Workshop (fusionné avec slide 15)
+  Slide 15 WorkshopBrief     -> fusionné dans Workshop (slide 14)
              rows : Étapes était un array de 3 strings -> flatten en une string
              séparée par " | " (règle : pas de tiret, pas d'em-dash).
   Slide 16 Closing variant="qa" -> ClosingHero
@@ -93,9 +93,9 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 
   PLACEHOLDERS
   ============
-  - DemoHero image : Unsplash https://images.unsplash.com/photo-1558494949-ef010cbdcc31?
+  - Demo image : Unsplash https://images.unsplash.com/photo-1558494949-ef010cbdcc31?
     w=1600&h=1000&fit=crop (schéma ERD / base de données). Caption "(à remplacer)".
-  - NumberedSplit image slides 5, 7, 10 : cover-blueprint.jpg (seule image locale
+  - Steps image slides 5, 7, 10 : cover-blueprint.jpg (seule image locale
     disponible dans public/decks/architecture-donnees/). À remplacer par des
     visuels ERD ou schémas pertinents si disponibles.
 
@@ -109,7 +109,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Architecture des données"
   italicPart="données"
   eyebrow="Jour 1 : Sujet 3"
@@ -121,7 +121,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 2 : Échange d'ouverture (ex-Exchange slide 3 — Calendar slide 2 supprimé) */}
-<ExchangeHero
+<Exchange
   title="Où vivent vos contacts aujourd'hui ?"
   italicPart="contacts"
   subtitle="Tour de table express : peu importe l'outil, c'est le schéma qui compte."
@@ -135,7 +135,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Intercalaire §01 : Pourquoi c'est votre sujet (ouverture) */}
-<SubSectionHero
+<SubSection
   kicker="L'enjeu"
   index="01"
   title="Pourquoi c'est votre sujet"
@@ -146,7 +146,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Stat : données pas prêtes pour l'IA (Gartner, février 2025) */}
-<BarChartHero
+<BarChart
   title="L'IA bute sur des données pas prêtes"
   italicPart="pas prêtes"
   subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
@@ -161,7 +161,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Le modèle appartient au métier (CMO), pas à l'IT */}
-<CompareColumnsHero
+<Compare
   title="Le modèle appartient au métier"
   italicPart="au métier"
   subtitle="Le marketing décide du sens des données ; l'informatique les héberge et les sécurise."
@@ -173,7 +173,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 3 : Section 01 — Pourquoi l'architecture compte */}
-<SubSectionHero
+<SubSection
   kicker="Le bénéfice métier"
   index="02"
   title="Pourquoi l'architecture compte"
@@ -185,7 +185,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 
 {/* Raisons (1/2) : trois gains immédiats (ex-Cinq raisons, scindé 3/3)
     Image : cover-blueprint.jpg (à remplacer par un visuel ERD ou schéma). */}
-<NumberedSplit
+<Steps
   title="Trois gains immédiats"
   italicPart="immédiats"
   subtitle="L'architecture n'est pas un sujet technique : c'est ce qui décide si votre CRM vous fait gagner ou perdre du temps."
@@ -201,7 +201,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 
 {/* Raisons (2/2) : trois gains dans la durée (ex-Cinq raisons, scindé 3/3)
     Image : cover-blueprint.jpg (à remplacer par un visuel ERD ou schéma). */}
-<NumberedSplit
+<Steps
   title="Trois gains dans la durée"
   italicPart="durée"
   subtitle="Au-delà du quotidien, l'architecture est ce qui tient quand l'entreprise grandit et change d'outils."
@@ -216,7 +216,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 5 : Section 02 — Le vocabulaire de base */}
-<SubSectionHero
+<SubSection
   kicker="Trois mots"
   index="03"
   title="Le vocabulaire de base"
@@ -227,7 +227,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 6 : Entité, champ, relation — triptyque SVG sur mesure (data-objects). */}
-<SchemaTriptych
+<Schema
   title="Entité, champ, relation"
   italicPart="champ"
   subtitle="Trois mots. Une fois compris, vous lisez n'importe quel CRM comme une partition."
@@ -236,7 +236,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="Le schéma minimal"
   title="Quatre entités couvrent 80% des CRM"
   italicPart="80%"
@@ -247,7 +247,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 8 : Section 03 — Les cinq pièges à éviter */}
-<SubSectionHero
+<SubSection
   kicker="Les erreurs classiques"
   index="04"
   title="Les cinq pièges à éviter"
@@ -261,7 +261,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 {/* Slide 9 : Cinq pièges (ex-NumberedCards 1 col, 5 items, dense)
     Condensation : symptôme + réflexe fusionnés en text ; conséquence résumée.
     Image : cover-blueprint.jpg (à remplacer). */}
-<NumberedSplit
+<Steps
   title="Cinq pièges à éviter dès le départ"
   italicPart="pièges"
   subtitle="Pour chaque piège : le symptôme observable et le réflexe correctif."
@@ -278,7 +278,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 10 : Le schéma compte plus que l'outil (ex-Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="Principe clé"
   title="Le schéma compte plus que l'outil"
   italicPart="schéma"
@@ -288,7 +288,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 11 : Section 04 — Trois outils, un seul schéma */}
-<SubSectionHero
+<SubSection
   kicker="Démonstration"
   index="05"
   title="Trois outils, un seul schéma"
@@ -301,7 +301,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 {/* Slide 12 : Démonstration live (ex-Demo bare, pas de screenshot disponible)
     Image placeholder Unsplash "ERD / database schema" — à remplacer par une
     capture réelle de la démo (Excel ou Airtable). */}
-<DemoHero
+<Demo
   title="Même schéma, trois tailles d'entreprise"
   italicPart="trois tailles"
   subtitle="Construction live du modèle Contact + Société + Affaire + Événement dans trois outils calibrés sur trois profils."
@@ -318,7 +318,7 @@ import SchemaTriptych from '@/components/slides/SchemaTriptych.astro';
 />
 
 {/* Slide 13 : Workshop — atelier ERD final du module. */}
-<WorkshopHero
+<Workshop
   title="Workshop"
   subtitle="En groupes de quatre à six, vous allez modéliser l'architecture des données de l'un de vos membres."
   defaultMinutes={25}

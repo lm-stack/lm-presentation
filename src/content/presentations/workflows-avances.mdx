@@ -10,15 +10,15 @@ cover: "/decks/workflows-avances/cover-rocket.jpg"
 description: "Workflows avancés : limites des workflows uniques, automatiser l'automatisation avec n8n, devenir flowgrammer et appliquer les six piliers d'une automation durable. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import ExchangeHero from '@/components/slides/ExchangeHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Media from '@/components/slides/Media.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Steps from '@/components/slides/Steps.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Statement from '@/components/slides/Statement.astro';
 
 {/*
   MAPPING workflows-avances.mdx -> workflows-avances-new.mdx
@@ -26,17 +26,17 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 
   Composants source -> cible :
   ┌─────────────────────────────────────────────────────────────────────────────┐
-  │ Slide 1  Cover           -> CoverHero                                       │
+  │ Slide 1  Cover           -> Cover                                       │
   │ Slide 2  Calendar        -> SUPPRIMÉ (vit uniquement dans le deck Intro)    │
-  │ Slide 3  Exchange        -> ExchangeHero                                    │
-  │ Slide 4  ImageGrid       -> ImageGridHero                                   │
-  │ Slide 5  Statement+image -> MediaHero (fit="cover", image locale)           │
-  │ Slide 6  Exchange        -> ExchangeHero                                    │
-  │ Slide 7  Demo            -> DemoHero                                        │
-  │ Slide 8  Section         -> SubSectionHero (index="01")                     │
-  │ Slide 9  NumberedCards cols=1 (5 items) -> NumberedSplit                    │
-  │ Slide 10 Section         -> SubSectionHero (index="02")                     │
-  │ Slide 11 NumberedCards cols=2 (6 items) -> InfoCardsGrid                   │
+  │ Slide 3  Exchange        -> Exchange                                    │
+  │ Slide 4  ImageGrid       -> ImageGrid                                   │
+  │ Slide 5  Statement+image -> Media (fit="cover", image locale)           │
+  │ Slide 6  Exchange        -> Exchange                                    │
+  │ Slide 7  Demo            -> Demo                                        │
+  │ Slide 8  Section         -> SubSection (index="01")                     │
+  │ Slide 9  NumberedCards cols=1 (5 items) -> Steps                    │
+  │ Slide 10 Section         -> SubSection (index="02")                     │
+  │ Slide 11 NumberedCards cols=2 (6 items) -> InfoCards                   │
   │ Slide 12 Closing variant="qa" -> ClosingHero                                │
   └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -46,32 +46,32 @@ import StatementHero from '@/components/slides/StatementHero.astro';
     Le calendrier jour 3 est supprimé conformément à la règle du parcours
     (il vit uniquement dans le deck Introduction). Résultat : 12 slides -> 11 slides.
 
-  SLIDE 4 - ImageGridHero (Trois limites) :
+  SLIDE 4 - ImageGrid (Trois limites) :
     Images locales réutilisées telles quelles depuis public/decks/workflows-avances/.
     Les propriétés `alt` n'existaient pas dans l'ancien ImageGrid ; textes alt rédigés
     à partir des titres et descriptions d'origine.
 
-  SLIDE 5 - MediaHero (Statement + image) :
+  SLIDE 5 - Media (Statement + image) :
     Ancien Statement avec image automatiser-lightbulb.jpeg. Le body de l'ancien
     composant (children) est passé en prop `body`. Le `subtitle` reprend le champ
     subtitle d'origine. fit="cover" car photo.
 
-  SLIDE 7 - DemoHero (Démonstration n8n) :
+  SLIDE 7 - Demo (Démonstration n8n) :
     L'ancienne Demo était une slide de transition bare (pas de capture, pas de rows).
-    DemoHero REQUIERT image + rows. DÉCISION :
+    Demo REQUIERT image + rows. DÉCISION :
     - Image placeholder : zapier-workflow.png (seule capture technique disponible
       dans le deck ; à remplacer par une vraie capture n8n).
     - Rows synthétisées à partir du contexte pédagogique du deck (logique
       d'orchestration n8n, workflow paramétrable).
     HUMAIN : remplacer l'image par une capture n8n réelle et ajuster les rows.
 
-  SLIDE 9 - NumberedSplit (Cinq vérités) :
-    5 items, colonnes=1 dans l'original -> NumberedSplit avec image locale
+  SLIDE 9 - Steps (Cinq vérités) :
+    5 items, colonnes=1 dans l'original -> Steps avec image locale
     flowgrammer-3d.jpeg. Items reformatés "Titre : description" en une seule
-    prop `text` par item (format attendu par NumberedSplit).
+    prop `text` par item (format attendu par Steps).
 
-  SLIDE 11 - InfoCardsGrid (Six piliers) :
-    6 items, colonnes=2 dans l'original -> InfoCardsGrid (grille cards).
+  SLIDE 11 - InfoCards (Six piliers) :
+    6 items, colonnes=2 dans l'original -> InfoCards (grille cards).
     Icônes Phosphor choisies par affinité sémantique :
     01 Simplicité   -> ph:arrows-clockwise (simplification, itération)
     02 Maintenance  -> ph:wrench
@@ -84,7 +84,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Workflows avancés"
   italicPart="avancés"
   eyebrow="Module 33"
@@ -98,7 +98,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 {/* Slide 2 : Exchange — quelles sont les limites du workflow d'hier ?
     Reprise du workflow Zapier construit lors du module précédent pour
     interpeller la classe avant d'aborder les limites structurelles. */}
-<ExchangeHero
+<Exchange
   title="Quelles sont les limites du workflow d'hier ?"
   italicPart="limites"
   subtitle="Reprenez le workflow Zapier construit lors du module précédent. Qu'est-ce qui pourrait mal se passer à l'échelle ?"
@@ -107,7 +107,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 />
 
 {/* Slide 3 : Trois limites des workflows uniques */}
-<ImageGridHero
+<ImageGrid
   title="Trois limites des workflows uniques"
   italicPart="limites"
   subtitle="Créer un workflow par processus entraîne des externalités négatives qu'il faut mitiger rapidement."
@@ -136,7 +136,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 />
 
 {/* Slide 4 : Automatiser l'automatisation (pivot conceptuel) */}
-<MediaHero
+<Media
   title="Automatiser l'automatisation"
   italicPart="automatisation"
   subtitle="Construire un workflow qui reste valable à chaque nouvel événement, sans dupliquer ni reconfigurer."
@@ -149,7 +149,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 />
 
 {/* Slide 5 : Exchange — modéliser un processus BPMN ensemble */}
-<ExchangeHero
+<Exchange
   title="Modélisons un processus BPMN ensemble"
   italicPart="ensemble"
   subtitle="Choisissez un processus récurrent de votre organisation. On le modélise en direct, prêt pour n8n."
@@ -161,7 +161,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
     PLACEHOLDER : image zapier-workflow.png réutilisée (seule capture technique
     du deck) — à remplacer par une vraie capture n8n. Rows synthétisées à partir
     du contexte pédagogique : workflow paramétrable orchestrant plusieurs événements. */}
-<DemoHero
+<Demo
   title="Démonstration sur n8n"
   italicPart="n8n"
   subtitle="Construction live d'un workflow paramétrable qui orchestre plusieurs événements à partir d'une seule logique."
@@ -178,7 +178,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 />
 
 {/* Slide 7 : Section — Devenir flowgrammer */}
-<SubSectionHero
+<SubSection
   kicker="Mindset"
   index="01"
   title="Devenir flowgrammer"
@@ -188,9 +188,9 @@ import StatementHero from '@/components/slides/StatementHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 8 : Cinq vérités sur le flowgramming (NumberedCards cols=1 -> NumberedSplit)
+{/* Slide 8 : Cinq vérités sur le flowgramming (NumberedCards cols=1 -> Steps)
     Image locale flowgrammer-3d.jpeg disponible dans le deck. */}
-<NumberedSplit
+<Steps
   title="Cinq vérités sur le flowgramming"
   italicPart="flowgramming"
   subtitle="C'est en testant que vous deviendrez flowgrammer. La pratique sur vos propres cas vaut mille tutoriels."
@@ -207,7 +207,7 @@ import StatementHero from '@/components/slides/StatementHero.astro';
 />
 
 {/* Slide 9 : Section — Les fondations d'une automation durable */}
-<SubSectionHero
+<SubSection
   kicker="Six piliers"
   index="02"
   title="Les fondations d'une automation durable"
@@ -217,12 +217,12 @@ import StatementHero from '@/components/slides/StatementHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 10 : Les six piliers de l'automatisation (NumberedCards cols=2 -> InfoCardsGrid)
+{/* Slide 10 : Les six piliers de l'automatisation (NumberedCards cols=2 -> InfoCards)
     Icônes Phosphor choisies par affinité sémantique (voir commentaire mapping en haut).
     Image piliers-columns.jpg disponible dans le deck mais non utilisée ici car
-    InfoCardsGrid n'a pas de prop image — elle pourrait servir dans une MediaHero
+    InfoCards n'a pas de prop image — elle pourrait servir dans une Media
     introductive si le contenu de la grille paraît chargé. */}
-<InfoCardsGrid
+<InfoCards
   title="Les six piliers de l'automatisation"
   italicPart="piliers"
   subtitle="Réussir une stratégie d'automatisation efficace et durable demande plus qu'un simple enchaînement d'actions."

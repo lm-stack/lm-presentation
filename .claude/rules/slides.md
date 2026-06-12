@@ -18,12 +18,12 @@ Rythme imposé dans `src/styles/slides.css` :
 **Aucun `eyebrow`, badge, intro, ou autre élément ne doit s'insérer entre le titre et la bordure jaune.** Si un composant viole ça (eyebrow rendu avant le SlideTitle par exemple), retirer l'élément du composant ET de tous les appels MDX.
 
 Cas particuliers admis (slides "structurelles" avec leur propre identité visuelle, qui n'utilisent PAS SlideTitle) :
-- `CoverHero` : page de garde, h1 monumental + watermark, peut avoir un eyebrow
-- `SectionHero` / `SubSectionHero` : transition de section, gros numéro + h2 + rule
-- `AboutHero` : présentation de l'intervenant
-- `PauseHero` : pause avec compte à rebours (via `TimerControl`)
-- `StatementHero`, `QuoteImage`, `DefinitionHero` : citations / déclarations fortes
-- Fin de deck : auto-injectée (`QuestionsHero` / `MerciHero`), jamais écrite à la main
+- `Cover` : page de garde, h1 monumental + watermark, peut avoir un eyebrow
+- `Section` / `SubSection` : transition de section, gros numéro + h2 + rule
+- `About` : présentation de l'intervenant
+- `Pause` : pause avec compte à rebours (via `TimerControl`)
+- `Statement`, `Quote`, `Definition` : citations / déclarations fortes
+- Fin de deck : auto-injectée (`Questions` / `Merci`), jamais écrite à la main
 
 ## Centrage vertical du contenu — RÈGLE ABSOLUE (lis attentivement, Claude)
 
@@ -51,7 +51,7 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - Si le body est `display: flex; flex-direction: column` → ajouter `justify-content: center`
 - Si le body est `display: flex; flex-direction: row` → ajouter `align-items: center`
 
-**Slides "structurelles"** (`CoverHero`, `SectionHero`, `SubSectionHero`, `AboutHero`, `StatementHero`, `QuoteImage`, `DefinitionHero`, `PauseHero`, `BigImageHero`) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
+**Slides "structurelles"** (`Cover`, `Section`, `SubSection`, `About`, `Statement`, `Quote`, `Definition`, `Pause`, `ImageFull`) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
 
 **Ne jamais** :
 - Ajouter `justify-content: center` sur `.reveal section` global → casse la position du titre
@@ -66,7 +66,7 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 
 **Minimum non négociable : 48px en haut ET en bas.**
 
-Implémentation : le `padding-top` et `padding-bottom` du conteneur `<section>` racine de chaque composant slide doit être ≥ 48px. La convention LM établie utilise `padding: 64px 96px !important` pour les composants ExecEd-style (`CoverHero`, `SectionHero`, `QuoteImage`, `AboutHero`, `ImageGridHero`, etc.), et 80px pour les slides à SlideTitle (`Default`, `BigImage`, etc.).
+Implémentation : le `padding-top` et `padding-bottom` du conteneur `<section>` racine de chaque composant slide doit être ≥ 48px. La convention LM établie utilise `padding: 64px 96px !important` pour les composants ExecEd-style (`Cover`, `Section`, `Quote`, `About`, `ImageGrid`, etc.), et 80px pour les slides à SlideTitle (`Default`, `BigImage`, etc.).
 
 Si un layout requiert plus d'air pour respirer, monter le padding (96px, 120px). **Ne jamais descendre sous 48px.**
 
@@ -76,9 +76,9 @@ Concrètement pour les nouvelles grilles ou listes : les items doivent être con
 
 ⚠️ **Toutes les cards et toutes les images encadrées d'un slide doivent utiliser `border-radius: 4px`.**
 
-Pas de 8px, 12px, 16px ou autre valeur arbitraire. Le 4px uniforme garantit un langage visuel cohérent à travers tous les composants : `InfoCardsGrid`, `PeopleCards`, `NumberedSplit`, `ImageGridHero`, `AboutHero` photo, `CoverHero` image-card, `SectionHero` image, `TitleSplitImage` image, etc.
+Pas de 8px, 12px, 16px ou autre valeur arbitraire. Le 4px uniforme garantit un langage visuel cohérent à travers tous les composants : `InfoCards`, `People`, `Steps`, `ImageGrid`, `About` photo, `Cover` image-card, `Section` image, `SplitImage` image, etc.
 
-Exception unique : les cercles décoratifs (rond jaune `QuoteImage`, `Conventions__disc`, pastilles de profil avatars circulaires) qui utilisent `border-radius: 50%`.
+Exception unique : les cercles décoratifs (rond jaune `Quote`, `Conventions__disc`, pastilles de profil avatars circulaires) qui utilisent `border-radius: 50%`.
 
 ## Drop-shadow cards et images — RÈGLE ABSOLUE
 
@@ -92,27 +92,27 @@ Pas de shadows monumentales `0 32px 64px -16px rgba(25, 25, 25, 0.18)` qui font 
 
 - **Brand text à gauche** : `brand` en CAPS 22px bold + `brandSub` optionnel en 14px medium gris
 - **Logo LM cliquable à droite** : 48px de haut, lien `https://lausanne.marketing` `target="_blank"` `rel="noopener"` avec `aria-label="Lausanne Marketing"`
-- **Border-bottom full width** : `1px solid rgba(25, 25, 25, 0.12)` qui traverse toute la largeur de la slide (même pour les layouts split type `NumberedSplit`, `SectionSplit`, `ProgrammeHero` : le header est full-width, les colonnes commencent EN DESSOUS)
+- **Border-bottom full width** : `1px solid rgba(25, 25, 25, 0.12)` qui traverse toute la largeur de la slide (même pour les layouts split type `Steps`, `SectionSplit`, `Programme` : le header est full-width, les colonnes commencent EN DESSOUS)
 - **Padding bottom** : 24px sous le brand + logo, avant la border
 - **align-items: center** sur le header pour aligner logo et brand text verticalement
 
-Vaut pour : `CoverHero`, `AboutHero`, `SectionHero`, `QuoteImage`, `BigImageHero`, `ClosingHero`, `NumberedSplit`, `SectionSplit`, `TitleSplitImage`, `InfoCardsGrid`, `PeopleCards`, `ImageGridHero`, `ProgrammeHero`, et tout futur composant ExecEd-style.
+Vaut pour : `Cover`, `About`, `Section`, `Quote`, `ImageFull`, `ClosingHero`, `Steps`, `SectionSplit`, `SplitImage`, `InfoCards`, `People`, `ImageGrid`, `Programme`, et tout futur composant ExecEd-style.
 
-**Exception — slides de fin (`QuestionsHero`, `MerciHero`)** : même header (brand text à gauche, logo 48px à droite, border-bottom full width), mais le **logo est une image NON cliquable** (pas de `<a>`, pas de lien `https://lausanne.marketing`). Sur `QuestionsHero`, le SEUL lien de la slide est la carte de preview vers le deck suivant ; sur `MerciHero`, aucun lien du tout (fin chaleureuse, sans appel à l'action externe). Le swap de logo par thème reste assuré sans lien par le sélecteur `[class$="__brand-logo"]` de `themes.css`.
+**Exception — slides de fin (`Questions`, `Merci`)** : même header (brand text à gauche, logo 48px à droite, border-bottom full width), mais le **logo est une image NON cliquable** (pas de `<a>`, pas de lien `https://lausanne.marketing`). Sur `Questions`, le SEUL lien de la slide est la carte de preview vers le deck suivant ; sur `Merci`, aucun lien du tout (fin chaleureuse, sans appel à l'action externe). Le swap de logo par thème reste assuré sans lien par le sélecteur `[class$="__brand-logo"]` de `themes.css`.
 
 ## Fond uniforme des slides à contenu — RÈGLE ABSOLUE
 
 ⚠️ **Toutes les slides à contenu ExecEd-style partagent le MÊME fond** : le dégradé pearl `linear-gradient(180deg, #FFFFFF 0%, #EFEFF2 100%)`. Aucun saut de fond d'une slide à l'autre.
 
-Vaut pour : `ImageGridHero`, `NumberedSplit`, `SectionSplit`, `WorkshopHero`, `SectionHero`, `ListImageHero`, `InfoCardsGrid`, `PeopleCards`, `ProgrammeHero`, `AboutHero`, `QuoteImage`, et tout futur composant à contenu.
+Vaut pour : `ImageGrid`, `Steps`, `SectionSplit`, `Workshop`, `Section`, `ListImage`, `InfoCards`, `People`, `Programme`, `About`, `Quote`, et tout futur composant à contenu.
 
-Seules exceptions admises : les slides **structurelles** plein cadre qui ont leur propre identité visuelle, `CoverHero` (thème `--ch-bg`) et `ClosingHero` (image + voile). Elles ne sont pas soumises à l'uniformité.
+Seules exceptions admises : les slides **structurelles** plein cadre qui ont leur propre identité visuelle, `Cover` (thème `--ch-bg`) et `ClosingHero` (image + voile). Elles ne sont pas soumises à l'uniformité.
 
-Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#FAF8F3`, créant un saut visible dans le deck `collecte-donnees`. Aligné sur le dégradé pearl.
+Incident 2026-06-02 : `InfoCards` était resté sur l'ancien fond crème `#FAF8F3`, créant un saut visible dans le deck `collecte-donnees`. Aligné sur le dégradé pearl.
 
-## Intercalaire de sous-section (SubSectionHero) — sous-titre sur une seule ligne
+## Intercalaire de sous-section (SubSection) — sous-titre sur une seule ligne
 
-⚠️ Le sous-titre (`subtitle`) d'un `<SubSectionHero>` tient **toujours sur une seule ligne**, bien remplie. Le composant force `white-space: nowrap` sur `.subsection-hero__subtitle`, et la largeur du bloc texte (`.subsection-hero__text`) comme du sous-titre est portée à `max-width: 1280px` (≈ toute la largeur utile à droite du grand numéro).
+⚠️ Le sous-titre (`subtitle`) d'un `<SubSection>` tient **toujours sur une seule ligne**, bien remplie. Le composant force `white-space: nowrap` sur `.subsection-hero__subtitle`, et la largeur du bloc texte (`.subsection-hero__text`) comme du sous-titre est portée à `max-width: 1280px` (≈ toute la largeur utile à droite du grand numéro).
 
 - Densité visée : remplir la ligne (~85 caractères), pas une phrase courte.
 - Au-delà de ~90 caractères (~1260px à 27px), le texte est **coupé à droite** (overflow caché de la section), pas renvoyé à la ligne. Calibrer le texte en conséquence.
@@ -120,14 +120,14 @@ Incident 2026-06-02 : `InfoCardsGrid` était resté sur l'ancien fond crème `#F
 
 ## Numérotation des slides de section — RÈGLE ABSOLUE
 
-⚠️ **Tout slide de section / intercalaire (`SubSectionHero`, `SectionHero`) DOIT porter un numéro** via la prop `index` (le grand chiffre coloré, ancre graphique de l'intercalaire). Jamais d'intercalaire sans numéro.
+⚠️ **Tout slide de section / intercalaire (`SubSection`, `Section`) DOIT porter un numéro** via la prop `index` (le grand chiffre coloré, ancre graphique de l'intercalaire). Jamais d'intercalaire sans numéro.
 
 - Numéro court : `00`, `01`, `1.2`. Un chiffre court rend mieux qu'un long nombre.
 - Pour un intercalaire d'ouverture placé **avant** la section `01` (mise en contexte, état des lieux), utiliser `00` plutôt que de renuméroter toutes les sections suivantes.
 
-## Image plein cadre (`BigImageHero`) + légende en box — RÈGLE
+## Image plein cadre (`ImageFull`) + légende en box — RÈGLE
 
-`BigImageHero` affiche une image en **bleed total** (1920×1080), **sans titre, sans cadre et sans bandeau marque** : rien d'autre que la légende. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.
+`ImageFull` affiche une image en **bleed total** (1920×1080), **sans titre, sans cadre et sans bandeau marque** : rien d'autre que la légende. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.
 
 Légende optionnelle rendue dans une **box blanche à bordure légère** — style card global : `var(--c-surface)`, bordure `color-mix(in srgb, var(--c-ink) 8%, transparent)`, `border-radius: 4px`, drop-shadow légère. Champs : `captionTitle` (titre gras), `caption` (description), et `source` + `sourceUrl` (ligne **source bleue soulignée tout en bas de la box**, même convention que `.slide-source`). Positionnable dans un des **4 coins** via `captionPosition` : `"top-left" | "top-right" | "bottom-left" | "bottom-right"` (défaut `bottom-left`).
 
@@ -141,22 +141,22 @@ Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes 
 
 ## Titre d'un slide Workshop — RÈGLE ABSOLUE
 
-⚠️ Le titre d'un `WorkshopHero` est **TOUJOURS** « Workshop ». Aucune variante thématique (« L'ERD de votre boîte », « Construction d'un funnel », « Atelier de modélisation », etc.) : le mot « Workshop » est l'ancrage visuel récurrent qui signale un temps d'atelier dans le parcours.
+⚠️ Le titre d'un `Workshop` est **TOUJOURS** « Workshop ». Aucune variante thématique (« L'ERD de votre boîte », « Construction d'un funnel », « Atelier de modélisation », etc.) : le mot « Workshop » est l'ancrage visuel récurrent qui signale un temps d'atelier dans le parcours.
 
 - Le sujet précis de l'atelier va dans le `subtitle` et les `rows` (Format, Temps, Objectif, Output, Restitution), **jamais** dans le titre.
-- Côté MDX : ne plus passer de `title` ni d'`italicPart` sur un `<WorkshopHero>`. Ces props **n'existent plus** dans l'interface du composant.
-- Durci dans le code : le `<h2>` de `src/components/slides/WorkshopHero.astro` est **codé en dur** sur « Workshop » (rendu en italique souligné, le traitement d'ancrage), props `title` / `italicPart` retirées. La règle est donc inviolable, pas seulement conventionnelle.
+- Côté MDX : ne plus passer de `title` ni d'`italicPart` sur un `<Workshop>`. Ces props **n'existent plus** dans l'interface du composant.
+- Durci dans le code : le `<h2>` de `src/components/slides/Workshop.astro` est **codé en dur** sur « Workshop » (rendu en italique souligné, le traitement d'ancrage), props `title` / `italicPart` retirées. La règle est donc inviolable, pas seulement conventionnelle.
 
-## Slide de fin auto (`QuestionsHero` / `MerciHero`) — RÈGLE ABSOLUE
+## Slide de fin auto (`Questions` / `Merci`) — RÈGLE ABSOLUE
 
 ⚠️ **La slide de fin d'un deck n'est jamais écrite à la main dans le MDX.** Elle est **auto-injectée** par la route `src/pages/p/[slug].astro`, après `<Content />`, en fonction de la position du deck dans son parcours.
 
-- **`QuestionsHero`** (titre figé « Des questions ? ») : deck appartenant à un parcours et **qui n'en est PAS le dernier**. Affiche une **carte de preview cliquable** vers le deck suivant (cover + titre + accroche `short`/`subtitle`). C'est le SEUL lien de la slide.
-- **`MerciHero`** (titre figé « Merci beaucoup ») : présentation **one-shot** (hors parcours) OU **dernier deck** d'un parcours. Fond pearl par défaut ; image full-bleed floutée + voile clair si `cover` est défini. Aucun lien.
+- **`Questions`** (titre figé « Des questions ? ») : deck appartenant à un parcours et **qui n'en est PAS le dernier**. Affiche une **carte de preview cliquable** vers le deck suivant (cover + titre + accroche `short`/`subtitle`). C'est le SEUL lien de la slide.
+- **`Merci`** (titre figé « Merci beaucoup ») : présentation **one-shot** (hors parcours) OU **dernier deck** d'un parcours. Fond pearl par défaut ; image full-bleed floutée + voile clair si `cover` est défini. Aucun lien.
 
 Règles associées :
 
-- **Titres durcis, comme `WorkshopHero`.** Le `<h2>` est codé en dur dans chaque composant (« Des questions ? » / « Merci beaucoup », mot final en italique serif souligné gold). Pas de prop `title`. Inviolable.
+- **Titres durcis, comme `Workshop`.** Le `<h2>` est codé en dur dans chaque composant (« Des questions ? » / « Merci beaucoup », mot final en italique serif souligné gold). Pas de prop `title`. Inviolable.
 - **Header de marque** : dans un parcours, `brand` = titre du parcours, `brandSub` = titre du deck ; en one-shot, `brand` = titre du deck, `brandSub` = son `subtitle`. Calculé par la route, ne pas dupliquer côté MDX.
-- **`autoClosing`** (frontmatter, défaut `true`) : passer `autoClosing: false` UNIQUEMENT quand le deck gère sa propre fin (ex. `template.mdx`, vitrine qui appelle `QuestionsHero` / `MerciHero` à la main avec des données d'exemple). Sinon, laisser la route faire.
-- **Ne jamais remettre un `ClosingHero` / `Closing` manuel** en bas d'un deck de parcours : la migration 2026-06-08 les a tous retirés au profit de la fin auto. Un « Merci » manuel ferait doublon avec le `MerciHero` injecté.
+- **`autoClosing`** (frontmatter, défaut `true`) : passer `autoClosing: false` UNIQUEMENT quand le deck gère sa propre fin (ex. `template.mdx`, vitrine qui appelle `Questions` / `Merci` à la main avec des données d'exemple). Sinon, laisser la route faire.
+- **Ne jamais remettre un `ClosingHero` / `Closing` manuel** en bas d'un deck de parcours : la migration 2026-06-08 les a tous retirés au profit de la fin auto. Un « Merci » manuel ferait doublon avec le `Merci` injecté.

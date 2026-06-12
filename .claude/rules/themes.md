@@ -30,9 +30,9 @@ activer un schéma.
   élément `var(--c-ink)`), les couleurs réalistes (device mockup), les voiles
   blancs sur image, et le chrome des widgets de réglage.
 - Exceptions **nommées** (mockups / effets self-contained, hex réalistes non
-  tokenisables, à ne PAS signaler en audit) : `SpreadsheetHero` (vert Excel
-  `#217346`, quadrillage gris), `MockupHero` (couleurs et rayons physiques des
-  devices), `MatrixRainHero` (vert « matrix »).
+  tokenisables, à ne PAS signaler en audit) : `Spreadsheet` (vert Excel
+  `#217346`, quadrillage gris), `Mockup` (couleurs et rayons physiques des
+  devices), `MatrixRain` (vert « matrix »).
 
 Conséquence : un nouveau composant naît dans les deux schémas sans travail en plus.
 

@@ -3,7 +3,7 @@
 // Widget flottant pour basculer entre les 4 thèmes de fond ExecEd-style.
 // Inclut dans `template-execed.mdx` uniquement. Le script ajoute le
 // widget au <body>, le style global s'applique aux 5 composants gradient
-// (CoverHero, SectionHero, NumberedSplit, SectionSplit, TitleSplitImage)
+// (Cover, Section, Steps, SectionSplit, SplitImage)
 // via le sélecteur body[data-template-theme].
 //
 // Persistance localStorage : le thème choisi est mémorisé entre les visites
@@ -84,8 +84,8 @@
      de chaque composant. */
 
   /* Cream Mist */
-  body[data-template-theme="cream-mist"] .cover-hero,
-  body[data-template-theme="cream-mist"] .section-hero,
+  body[data-template-theme="cream-mist"] .cover,
+  body[data-template-theme="cream-mist"] .section,
   body[data-template-theme="cream-mist"] .numbered-split,
   body[data-template-theme="cream-mist"] .section-split,
   body[data-template-theme="cream-mist"] .title-split-image {
@@ -93,8 +93,8 @@
   }
 
   /* Warm Blush */
-  body[data-template-theme="warm-blush"] .cover-hero,
-  body[data-template-theme="warm-blush"] .section-hero,
+  body[data-template-theme="warm-blush"] .cover,
+  body[data-template-theme="warm-blush"] .section,
   body[data-template-theme="warm-blush"] .numbered-split,
   body[data-template-theme="warm-blush"] .section-split,
   body[data-template-theme="warm-blush"] .title-split-image {
@@ -102,8 +102,8 @@
   }
 
   /* Pearl Stone */
-  body[data-template-theme="pearl-stone"] .cover-hero,
-  body[data-template-theme="pearl-stone"] .section-hero,
+  body[data-template-theme="pearl-stone"] .cover,
+  body[data-template-theme="pearl-stone"] .section,
   body[data-template-theme="pearl-stone"] .numbered-split,
   body[data-template-theme="pearl-stone"] .section-split,
   body[data-template-theme="pearl-stone"] .title-split-image {
@@ -111,8 +111,8 @@
   }
 
   /* Halo Gold (par défaut, mais on l'expose pour le toggle) */
-  body[data-template-theme="halo-gold"] .cover-hero,
-  body[data-template-theme="halo-gold"] .section-hero,
+  body[data-template-theme="halo-gold"] .cover,
+  body[data-template-theme="halo-gold"] .section,
   body[data-template-theme="halo-gold"] .numbered-split,
   body[data-template-theme="halo-gold"] .section-split,
   body[data-template-theme="halo-gold"] .title-split-image {

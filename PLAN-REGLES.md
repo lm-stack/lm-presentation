@@ -46,7 +46,7 @@ _(rien encore)_
 ## Bugs à régler
 
 ### Bande blanche en bas du slide en plein écran
-- **Symptôme** : en mode plein écran, une bande blanche horizontale apparaît tout en bas du slide, sous le dégradé pearl du contenu. Asymétrique (bas uniquement, rien en haut). Constaté sur `WorkshopHero` en thème ExecEd (capture `bande-blanche.png`).
+- **Symptôme** : en mode plein écran, une bande blanche horizontale apparaît tout en bas du slide, sous le dégradé pearl du contenu. Asymétrique (bas uniquement, rien en haut). Constaté sur `Workshop` en thème ExecEd (capture `bande-blanche.png`).
 - **Cause** : inconnue, à investiguer (ne pas spéculer en cascade). Pistes de départ dans `slides.css` : le calcul aspect-ratio 16:9 de `.deck-stage` vs le `100vh` réel en plein écran ; ce qui apparaît derrière le slide (`.reveal` est `transparent`, `body` = `--c-cream`, mais `html` est blanc par défaut) ; le sizing/scaling propre de Reveal.js en plein écran laissant un gap en bas qui expose une couche blanche.
 - **Repro** : passer un deck en plein écran (bouton ou touche), observer le bas. Inspecter quel élément reçoit `:fullscreen` et le fond des couches `html` / `body` / `.deck-stage`.
 - **Statut** : à investiguer (pas urgent, mais visible en salle).
@@ -66,7 +66,7 @@ _(rien encore)_
 
 ### Titre des slides Workshop figé sur « Workshop »
 - Pourquoi    : « Workshop » est l'ancrage visuel récurrent des temps d'atelier ; aucune variante thématique.
-- Concerne    : `WorkshopHero.astro` + 6 decks (architecture-donnees suivra via son worktree).
+- Concerne    : `Workshop.astro` + 6 decks (architecture-donnees suivra via son worktree).
 - Enforcement : hardcode (h2 en dur + props retirées) **et** doc.
 - Cible       : `.claude/rules/slides.md`.
 - Statut      : fait : commit `a9be662` sur `main`.

@@ -2,8 +2,8 @@
 // src/pages/p/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Deck from '@/layouts/Deck.astro';
-import QuestionsHero from '@/components/slides/QuestionsHero.astro';
-import MerciHero from '@/components/slides/MerciHero.astro';
+import Questions from '@/components/slides/Questions.astro';
+import Merci from '@/components/slides/Merci.astro';
 
 export async function getStaticPaths() {
   const decks = await getCollection('presentations');
@@ -58,7 +58,7 @@ const endingBrandSub = parcours ? entry.data.title : entry.data.subtitle;
   <Content />
   {entry.data.autoClosing && (
     nextDeck ? (
-      <QuestionsHero
+      <Questions
         nextSlug={nextDeck.id}
         nextTitle={nextDeck.data.title}
         nextShort={nextDeck.data.short ?? nextDeck.data.subtitle}
@@ -67,7 +67,7 @@ const endingBrandSub = parcours ? entry.data.title : entry.data.subtitle;
         brandSub={endingBrandSub}
       />
     ) : (
-      <MerciHero
+      <Merci
         image={entry.data.cover}
         brand={endingBrand}
         brandSub={endingBrandSub}

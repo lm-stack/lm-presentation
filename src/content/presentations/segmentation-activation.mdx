@@ -10,14 +10,14 @@ cover: "/decks/segmentation-activation/cover-archer.jpg"
 description: "Segmentation et activation : 5 axes de segmentation, persona vs segment, leviers IA, 4 modes d'activation. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Statement from '@/components/slides/Statement.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Media from '@/components/slides/Media.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
 
 {/*
   MIGRATION segmentation-activation.mdx -> segmentation-activation-new.mdx
@@ -26,59 +26,59 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   Format cible  : ExecEd-style Hero (charte Lausanne Marketing).
 
   MAPPING slide par slide :
-  - Slide 1  Cover                   -> CoverHero
+  - Slide 1  Cover                   -> Cover
   - Slide 2  Calendar                -> SUPPRIMÉ (vit dans Introduction, cf. workflows-new.mdx)
-  - Slide 3  Statement (sans image)  -> StatementHero
-  - Slide 4  Section 01              -> SubSectionHero
-  - Slide 5  Statement "spray/pray" (sans image) -> StatementHero
-  - Slide 6  Section 02              -> SubSectionHero
-  - Slide 7  NumberedCards 1 col ×5  -> NumberedSplit (séquence; image: cover-archer.jpg réutilisée; 5 items)
-  - Slide 8  TwoColumnTable 2 lignes -> InfoCardsGrid (2 cards: Persona / Segment)
-  - Slide 9  NumberedCards 1 col ×3  -> NumberedSplit (séquence; image Unsplash placeholder)
-  - Slide 10 Section 03              -> SubSectionHero
-  - Slide 11 Statement (sans image)  -> StatementHero
-  - Slide 12 NumberedCards 1 col ×4  -> NumberedSplit (séquence; image Unsplash placeholder)
-  - Slide 13 Section 04              -> SubSectionHero
-  - Slide 14 Demo (sans screenshot)  -> DemoHero (image placeholder Unsplash + rows rédigés; à remplacer)
-  - Slide 15 Workshop                -> fusionné avec Slide 16 WorkshopBrief -> WorkshopHero (1 slide)
-  - Slide 16 WorkshopBrief           -> fusionné dans WorkshopHero ci-dessus
+  - Slide 3  Statement (sans image)  -> Statement
+  - Slide 4  Section 01              -> SubSection
+  - Slide 5  Statement "spray/pray" (sans image) -> Statement
+  - Slide 6  Section 02              -> SubSection
+  - Slide 7  NumberedCards 1 col ×5  -> Steps (séquence; image: cover-archer.jpg réutilisée; 5 items)
+  - Slide 8  TwoColumnTable 2 lignes -> InfoCards (2 cards: Persona / Segment)
+  - Slide 9  NumberedCards 1 col ×3  -> Steps (séquence; image Unsplash placeholder)
+  - Slide 10 Section 03              -> SubSection
+  - Slide 11 Statement (sans image)  -> Statement
+  - Slide 12 NumberedCards 1 col ×4  -> Steps (séquence; image Unsplash placeholder)
+  - Slide 13 Section 04              -> SubSection
+  - Slide 14 Demo (sans screenshot)  -> Demo (image placeholder Unsplash + rows rédigés; à remplacer)
+  - Slide 15 Workshop                -> fusionné avec Slide 16 WorkshopBrief -> Workshop (1 slide)
+  - Slide 16 WorkshopBrief           -> fusionné dans Workshop ci-dessus
   - Slide 17 Closing variant="qa"    -> ClosingHero
 
   TOTAL : 17 slides source -> 15 slides cible (Calendar supprimé, Workshop+WorkshopBrief fusionnés)
 
   DÉCISIONS ET PLACEHOLDERS :
   1. Calendar (slide 2) supprimé : convention workspace (cf. workflows-new.mdx commentaire).
-  2. NumberedCards 1 col : mappé sur NumberedSplit car c'est une liste séquencée.
-     Items à 5 (axes de segmentation) -> NumberedSplit supporte N items; image: cover-archer.jpg
+  2. NumberedCards 1 col : mappé sur Steps car c'est une liste séquencée.
+     Items à 5 (axes de segmentation) -> Steps supporte N items; image: cover-archer.jpg
      (unique image locale disponible) réutilisée pour éviter un placeholder.
-  3. NumberedCards IA (3 items, slide 9) -> NumberedSplit avec image Unsplash
+  3. NumberedCards IA (3 items, slide 9) -> Steps avec image Unsplash
      (https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1000&h=1400&fit=crop)
      "réseau neuronal" conceptuel. Caption : "(à remplacer)".
-  4. NumberedCards activation (4 items, slide 12) -> NumberedSplit avec image Unsplash
+  4. NumberedCards activation (4 items, slide 12) -> Steps avec image Unsplash
      (https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1000&h=1400&fit=crop)
      "email marketing / activation". Caption : "(à remplacer)".
-  5. TwoColumnTable Persona/Segment (slide 8) : 2 lignes de définition -> InfoCardsGrid 2 cards.
+  5. TwoColumnTable Persona/Segment (slide 8) : 2 lignes de définition -> InfoCards 2 cards.
      Icons : ph:user-circle (Persona) et ph:funnel (Segment).
      Les valeurs reprennent le texte source, condensé pour tenir dans une card.
   6. Demo (slide 14) : le source était un <Demo> sans screenshot ni image fournie.
-     Conformément à la règle "DemoHero REQUIRES image + rows", on utilise une image
+     Conformément à la règle "Demo REQUIRES image + rows", on utilise une image
      Unsplash placeholder (Zoho CRM dashboard concept) + rows rédigés à partir du
      contexte du slide source. Caption : "Zoho CRM : création de segments (à remplacer)".
-  7. Workshop+WorkshopBrief fusionnés (slides 15+16) en un seul WorkshopHero.
+  7. Workshop+WorkshopBrief fusionnés (slides 15+16) en un seul Workshop.
      Les rows du WorkshopBrief sont aplatis : le champ "Étapes" (tableau) est converti
      en une seule string, les sous-items reliés par " / ".
      defaultMinutes=30 (20 min groupe + 10 min restitution, total WorkshopBrief).
      presets=[15, 20, 30].
   8. Closing variant="qa" -> ClosingHero (title="Questions & réponses", highlight="réponses").
      Image : cover-archer.jpg (seule image locale disponible).
-  9. Tous les SubSectionHero.subtitle calibrés à ~85 caractères (règle white-space nowrap).
+  9. Tous les SubSection.subtitle calibrés à ~85 caractères (règle white-space nowrap).
   10. italicPart vérifié : toujours sous-chaîne exacte du title.
   11. Aucun em-dash ni en-dash dans le contenu des slides.
   12. Accents complets conservés partout.
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Segmentation et activation"
   italicPart="activation"
   eyebrow="Jour 1 : Sujet 4"
@@ -89,10 +89,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   theme="halo-gold"
 />
 
-{/* Slide 2 : StatementHero - recap des trois modules précédents + pivot vers l'usage.
+{/* Slide 2 : Statement - recap des trois modules précédents + pivot vers l'usage.
     Source : Statement sans image (slide 3). Le titre long est gardé tel quel (il est
     le message principal). Body = fusion subtitle + children du Statement source. */}
-<StatementHero
+<Statement
   eyebrow="Récapitulatif"
   title="Vous avez la donnée propre et structurée. Maintenant, vous l'utilisez."
   italicPart="l'utilisez."
@@ -101,8 +101,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : SubSectionHero - Section 01 Pourquoi segmenter */}
-<SubSectionHero
+{/* Slide 3 : SubSection - Section 01 Pourquoi segmenter */}
+<SubSection
   kicker="Le bénéfice"
   index="01"
   title="Pourquoi segmenter"
@@ -112,9 +112,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 4 : StatementHero - "Spray and pray". Source : Statement sans image (slide 5).
+{/* Slide 4 : Statement - "Spray and pray". Source : Statement sans image (slide 5).
     Body = fusion subtitle + children du Statement source. */}
-<StatementHero
+<Statement
   eyebrow="Spray and pray"
   title="Spray and pray, le luxe qu'on ne peut plus s'offrir"
   italicPart="Spray and pray"
@@ -123,8 +123,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 5 : SubSectionHero - Section 02 Les axes de segmentation */}
-<SubSectionHero
+{/* Slide 5 : SubSection - Section 02 Les axes de segmentation */}
+<SubSection
   kicker="Les critères"
   index="02"
   title="Les axes de segmentation"
@@ -134,10 +134,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 6 : NumberedSplit - Cinq axes classiques. Source : NumberedCards 1 col ×5.
+{/* Slide 6 : Steps - Cinq axes classiques. Source : NumberedCards 1 col ×5.
     Image : cover-archer.jpg réutilisée (seule image locale disponible).
-    5 items séquencés. Le composant NumberedSplit supporte N items. */}
-<NumberedSplit
+    5 items séquencés. Le composant Steps supporte N items. */}
+<Steps
   title="Cinq axes de segmentation classiques"
   italicPart="cinq axes"
   subtitle="Le plus puissant : croiser deux ou trois axes. La finesse vient de la combinaison choisie."
@@ -153,10 +153,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 7 : InfoCardsGrid - Persona vs Segment. Source : TwoColumnTable 2 lignes.
+{/* Slide 7 : InfoCards - Persona vs Segment. Source : TwoColumnTable 2 lignes.
     Mapping en 2 cards (icon + label + value). Icons : ph:user-circle / ph:funnel.
     Les définitions sont condensées depuis les valeurs du TwoColumnTable source. */}
-<InfoCardsGrid
+<InfoCards
   title="Persona et segment, deux concepts à ne pas confondre"
   italicPart="deux concepts"
   subtitle="Le vocabulaire flotte souvent dans les équipes. Clarifier coupe court à des heures de discussions."
@@ -168,9 +168,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 8 : NumberedSplit - Trois leviers d'IA. Source : NumberedCards 1 col ×3.
+{/* Slide 8 : Steps - Trois leviers d'IA. Source : NumberedCards 1 col ×3.
     PLACEHOLDER IMAGE : Unsplash réseau neuronal / IA conceptuel (à remplacer). */}
-<NumberedSplit
+<Steps
   title="Trois leviers d'IA qui accélèrent la segmentation"
   italicPart="trois leviers"
   subtitle="L'IA ne remplace pas le jugement, elle traite la masse. Vous gardez la stratégie, l'algorithme gère le volume."
@@ -184,8 +184,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 9 : SubSectionHero - Section 03 L'activation */}
-<SubSectionHero
+{/* Slide 9 : SubSection - Section 03 L'activation */}
+<SubSection
   kicker="Du segment au geste"
   index="03"
   title="L'activation"
@@ -195,9 +195,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 10 : StatementHero - "Segmenter sans activer c'est perdre son temps".
+{/* Slide 10 : Statement - "Segmenter sans activer c'est perdre son temps".
     Source : Statement sans image (slide 11). Body = fusion subtitle + children. */}
-<StatementHero
+<Statement
   eyebrow="Discipline clé"
   title="Segmenter sans activer, c'est perdre son temps"
   italicPart="perdre son temps"
@@ -206,9 +206,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 11 : NumberedSplit - Quatre modes d'activation. Source : NumberedCards 1 col ×4.
+{/* Slide 11 : Steps - Quatre modes d'activation. Source : NumberedCards 1 col ×4.
     PLACEHOLDER IMAGE : Unsplash email / marketing activation conceptuel (à remplacer). */}
-<NumberedSplit
+<Steps
   title="Quatre modes d'activation à connecter à vos segments"
   italicPart="quatre modes"
   subtitle="Chaque segment appelle un mode dominant. Associer un mode à un segment, et faire vivre la paire."
@@ -223,8 +223,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 12 : SubSectionHero - Section 04 Mettre en pratique */}
-<SubSectionHero
+{/* Slide 12 : SubSection - Section 04 Mettre en pratique */}
+<SubSection
   kicker="Démonstration et workshop"
   index="04"
   title="Mettre en pratique"
@@ -234,11 +234,11 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 13 : DemoHero - Trois segments Cédric, trois activations.
-    Source : Demo sans screenshot ni image (slide 14). Règle : DemoHero REQUIRES image + rows.
+{/* Slide 13 : Demo - Trois segments Cédric, trois activations.
+    Source : Demo sans screenshot ni image (slide 14). Règle : Demo REQUIRES image + rows.
     PLACEHOLDER IMAGE : Unsplash tableau de bord CRM (à remplacer par capture Zoho réelle).
     Rows rédigés à partir du contexte du slide source (base Cédric, Zoho CRM, 15 min). */}
-<DemoHero
+<Demo
   title="Trois segments Cédric, trois activations"
   italicPart="Cédric"
   subtitle="Live dans Zoho : création de trois segments depuis la base nettoyée au sujet 2 Qualité. Pour chacun, une activation cohérente déclenchée."
@@ -254,10 +254,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 14 : WorkshopHero - fusion Workshop (slide 15) + WorkshopBrief (slide 16).
+{/* Slide 14 : Workshop - fusion Workshop (slide 15) + WorkshopBrief (slide 16).
     Rows : les 6 champs du WorkshopBrief aplatis (arrays -> une seule string via " / ").
     defaultMinutes=30 (20 min groupe + 10 min restitution). presets=[15, 20, 30]. */}
-<WorkshopHero
+<Workshop
   subtitle="En groupes de trois à quatre, définissez 3 segments pertinents et associez à chacun un mode d'activation."
   defaultMinutes={30}
   presets={[15, 20, 30]}

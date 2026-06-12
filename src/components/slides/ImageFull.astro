@@ -1,0 +1,158 @@
+---
+// src/components/slides/ImageFull.astro
+// Image pleine slide en bleed total. RIEN d'autre que la légende : pas de titre,
+// pas de cadre, pas de bandeau marque. L'image parle seule, seule une box légende
+// optionnelle (style card global) peut être posée dans un des 4 coins.
+// Inspiration slide 4 du PPTX ExecEd.
+//
+// Différent de BigImage existant : BigImage encadre une image sous un
+// SlideTitle standard avec divider jaune. ImageFull est full-bleed.
+interface Props {
+  image: string;
+  alt?: string;
+  /** Titre de la légende (gras), dans la box. Optionnel. */
+  captionTitle?: string;
+  /** Description de la légende, sous le titre. Optionnel. */
+  caption?: string;
+  /** Source citée tout en bas de la box (bleu souligné, même convention que .slide-source). */
+  source?: string;
+  /** Lien rendant la source cliquable. */
+  sourceUrl?: string;
+  /** Position de la légende, dans un des 4 coins (défaut "bottom-left").
+      Toujours choisir le coin le plus vide de l'image (vérification visuelle). */
+  captionPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+}
+const {
+  image,
+  alt = '',
+  captionTitle,
+  caption,
+  source,
+  sourceUrl,
+  captionPosition = 'bottom-left',
+} = Astro.props;
+---
+<section
+  class:list={['image-full', `image-full--caption-${captionPosition}`]}
+  data-layout="image-full"
+>
+  <div class="image-full__bg" aria-hidden={alt === ''}>
+    <img src={image} alt={alt} loading="eager" decoding="async" />
+  </div>
+
+  {(captionTitle || caption || source) && (
+    <div class="image-full__caption">
+      <span class="image-full__caption-dot" aria-hidden="true"></span>
+      <div class="image-full__caption-body">
+        {captionTitle && <p class="image-full__caption-title">{captionTitle}</p>}
+        {caption && <p class="image-full__caption-text">{caption}</p>}
+        {source && (sourceUrl
+          ? <a class="image-full__caption-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+          : <p class="image-full__caption-source">Source : {source}</p>)}
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  .image-full {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: var(--c-cream);
+    color: var(--c-ink);
+    display: block !important;
+  }
+
+  .image-full__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .image-full__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Voile crème dégradé bas + halo gold coin haut-droit pour assurer la
+     lisibilité des chips dark sans masquer le sujet de l'image. */
+  .image-full__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 22%, rgba(239, 239, 242, 0) 78%, rgba(239, 239, 242, 0.62) 100%);
+    pointer-events: none;
+  }
+
+  /* Légende en box blanche à bordure légère (style card global), placée dans
+     un des 4 coins. Titre (gras) + description. Toujours choisir le coin le
+     plus vide de l'image. */
+  .image-full__caption {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 0;
+    max-width: 620px;
+    padding: 22px 28px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .image-full__caption-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .image-full__caption-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+    margin: 0;
+  }
+  .image-full__caption-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--c-muted);
+    margin: 0;
+  }
+  /* Source en bas de box : bleu souligné, même convention que .slide-source. */
+  .image-full__caption-source {
+    width: fit-content;
+    margin: 6px 0 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--c-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-secondary) 38%, transparent);
+    padding-bottom: 2px;
+    transition: filter 0.15s ease;
+  }
+  a.image-full__caption-source:hover {
+    filter: brightness(1.12);
+  }
+  .image-full--caption-top-left .image-full__caption { top: 48px; left: 96px; }
+  .image-full--caption-top-right .image-full__caption { top: 48px; right: 96px; }
+  .image-full--caption-bottom-left .image-full__caption { bottom: 48px; left: 96px; }
+  .image-full--caption-bottom-right .image-full__caption { bottom: 48px; right: 96px; }
+  .image-full__caption-dot {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    margin-top: 11px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    display: inline-block;
+  }
+</style>

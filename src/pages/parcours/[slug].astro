@@ -35,12 +35,12 @@ const decksData = await Promise.all(
       );
     }
     // Regle slides.md : un deck de parcours DOIT laisser la fin auto
-    // (QuestionsHero / MerciHero) injectee par la route. autoClosing:false est
+    // (Questions / Merci) injectee par la route. autoClosing:false est
     // reserve aux one-shot qui gerent leur propre fin. Seule exception documentee :
-    // le deck "template" (vitrine qui appelle QuestionsHero / MerciHero a la main).
+    // le deck "template" (vitrine qui appelle Questions / Merci a la main).
     if (deck.data.autoClosing === false && slug !== 'template') {
       throw new Error(
-        `Parcours "${parcoursSlug}" : le deck "${slug}" a "autoClosing: false". La fin auto est obligatoire dans un parcours (slide QuestionsHero vers le deck suivant, ou MerciHero pour le dernier). Retire "autoClosing: false" du frontmatter.`
+        `Parcours "${parcoursSlug}" : le deck "${slug}" a "autoClosing: false". La fin auto est obligatoire dans un parcours (slide Questions vers le deck suivant, ou Merci pour le dernier). Retire "autoClosing: false" du frontmatter.`
       );
     }
     return { slug, ...deck.data };

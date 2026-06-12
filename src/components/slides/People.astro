@@ -1,0 +1,205 @@
+---
+// src/components/slides/People.astro
+// Grille de cartes "personne" : prénom + nom (avec nom en italique serif)
+// + titre de poste + photo. Auto-fit selon le nombre de cartes : 2, 3 ou
+// 4 fonctionnent bien. Pour les profils d'intervenants, témoignages,
+// équipe pédagogique.
+// Inspiration slides 10/11/12 du PPTX ExecEd.
+import { splitHighlight } from '@/utils/highlight';
+interface Person {
+  /** Prénom (affiché en regular). */
+  firstName: string;
+  /** Nom (affiché en italique serif). */
+  lastName: string;
+  /** Titre de poste affiché sous le nom. */
+  role: string;
+  /** Photo portrait carrée idéalement. */
+  photo?: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  people: Person[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  people,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="people" data-layout="people">
+  <header class="people__header">
+    <div class="people__brand">
+      <p class="people__brand-main">{brand}</p>
+      {brandSub && <p class="people__brand-sub">{brandSub}</p>}
+    </div>
+  </header>
+
+  <div class="people__body">
+    {title && (
+      <h2 class="people__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="people__title-italic">{titleParts.match}</em>{titleParts.after}</>
+          : title}
+      </h2>
+    )}
+
+    <div class={`people__grid people__grid--cols-${Math.min(people.length, 4)}`}>
+      {people.map((person) => (
+        <article class="people__card">
+          <div class="people__card-head">
+            <p class="people__person-name">
+              <span class="people__person-first">{person.firstName}</span>{' '}
+              <em class="people__person-last">{person.lastName}</em>
+            </p>
+            <p class="people__person-role">{person.role}</p>
+          </div>
+          <div class="people__photo" aria-hidden="true">
+            {person.photo
+              ? <img src={person.photo} alt="" loading="lazy" decoding="async" />
+              : <span class="people__photo-placeholder"></span>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .people {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: var(--c-cream);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .people__header {
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .people__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .people__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+
+  .people__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-top: 32px;
+  }
+
+  .people__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 48px;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .people__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .people__grid {
+    display: grid;
+    gap: 32px;
+    justify-content: center;
+    max-width: 1700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .people__grid--cols-1 { grid-template-columns: minmax(260px, 380px); }
+  .people__grid--cols-2 { grid-template-columns: repeat(2, minmax(260px, 420px)); }
+  .people__grid--cols-3 { grid-template-columns: repeat(3, minmax(220px, 360px)); }
+  .people__grid--cols-4 { grid-template-columns: repeat(4, minmax(200px, 320px)); }
+
+  .people__card {
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    display: flex;
+    flex-direction: column;
+  }
+  .people__card-head {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    text-align: center;
+  }
+  .people__person-name {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .people__person-first { font-weight: 600; }
+  .people__person-last {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .people__person-role {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 4px 0 0;
+  }
+  .people__photo {
+    background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+  .people__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .people__photo-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(45deg, color-mix(in srgb, var(--c-ink) 4%, transparent) 25%, transparent 25%),
+      linear-gradient(-45deg, color-mix(in srgb, var(--c-ink) 4%, transparent) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, color-mix(in srgb, var(--c-ink) 4%, transparent) 75%),
+      linear-gradient(-45deg, transparent 75%, color-mix(in srgb, var(--c-ink) 4%, transparent) 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  }
+</style>

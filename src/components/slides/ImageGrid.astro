@@ -1,0 +1,305 @@
+---
+// src/components/slides/ImageGrid.astro
+// Grille de cards (image + titre + texte) "ExecEd-style" : header
+// marque + logo LM cliquable, fond pearl-stone, titre serif italique
+// partiel, layout adaptatif selon le nombre d'images (2/3/4/5).
+//
+// Différent du composant ImageGrid existant : ImageGrid utilise
+// SlideTitle (h2 + barre jaune divider) sur fond crème par défaut.
+// ImageGrid remplace le titre par notre header marque + logo et
+// applique le fond pearl-stone du template ExecEd.
+interface ImageItem {
+  src: string;
+  alt?: string;
+  title?: string;
+  text?: string;
+  // Point de focus de l'image : valeur CSS object-position (ex: 'center 80%',
+  // 'top', 'center bottom'). Par défaut 'center' (centre vertical), qui peut
+  // couper le sujet quand la carte est plus large que l'image (la carte fait
+  // ~3.2:1, l'image source souvent 3:2 : object-fit cover rogne le haut/bas).
+  focal?: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  images: ImageItem[];
+  /** Mode logos : image "contain" centrée sur fond clair (au lieu de "cover"), pour des logos non rognés. */
+  logos?: boolean;
+  brand?: string;
+  brandSub?: string;
+}
+import { splitHighlight } from '@/utils/highlight';
+const {
+  title,
+  italicPart,
+  subtitle,
+  images,
+  logos = false,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const count = Math.min(Math.max(images.length, 1), 5);
+const variantClass = `image-grid__grid--${count}`;
+---
+<section class={`image-grid ${logos ? 'image-grid--logos' : ''}`} data-layout="image-grid">
+  <header class="image-grid__header">
+    <div class="image-grid__brand-text">
+      <p class="image-grid__brand-main">{brand}</p>
+      {brandSub && <p class="image-grid__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="image-grid__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="image-grid__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="image-grid__body">
+    {(title || subtitle) && (
+      <div class="image-grid__heading">
+        {title && (
+          <h2 class="image-grid__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="image-grid__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="image-grid__subtitle">{subtitle}</p>}
+      </div>
+    )}
+
+    <div class={`image-grid__grid ${variantClass}`}>
+      {images.map((img, i) => (
+        <article class="image-grid__item" style={`--i: ${i}`}>
+          <div class="image-grid__media">
+            <img src={img.src} alt={img.alt ?? ''} loading="lazy" decoding="async" style={img.focal ? `object-position: ${img.focal};` : undefined} />
+          </div>
+          {(img.title || img.text) && (
+            <div class="image-grid__card-body">
+              {img.title && <h3 class="image-grid__card-title">{img.title}</h3>}
+              {img.text && <p class="image-grid__card-text">{img.text}</p>}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .image-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .image-grid__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .image-grid__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .image-grid__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .image-grid__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Bloc (titre + grille) centré verticalement dans l'espace sous le header,
+     pour des marges haut/bas égales sur toutes les variantes de grille.
+     La grille ne grandit plus (flex 0 0 auto) : c'est ce qui permet le
+     centrage du bloc complet plutôt qu'un titre épinglé en haut. */
+  .image-grid__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    gap: 48px;
+  }
+
+  .image-grid__heading {
+    text-align: left;
+  }
+  .image-grid__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .image-grid__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .image-grid__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    margin: 12px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+
+  /* Grilles — mêmes proportions que ImageGrid LM. La grille prend
+     l'espace restant du body via flex 1 1 auto pour que le titre
+     reste à la même hauteur sur toutes les variantes (1 à 5). */
+  .image-grid__grid {
+    display: grid;
+    gap: 24px;
+    width: 100%;
+    align-content: center;
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+  /* Toutes les variantes : cards bridées en hauteur pour ne jamais coller
+     le bord top/bottom de la section. Cf. règle absolue Safe area dans
+     `lm-presentation/.claude/CLAUDE.md`. */
+  /* Variante 1 image : grid sans max-width pour prendre toute la largeur
+     du body. La hauteur reste bridée via max-height sur l'item. */
+  .image-grid__grid--1 {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    justify-items: stretch;
+  }
+  .image-grid__grid--1 .image-grid__item {
+    height: 540px;
+    width: 100%;
+  }
+  .image-grid__grid--1 .image-grid__media {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+  .image-grid__grid--1 .image-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .image-grid__grid--2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+  .image-grid__grid--2 .image-grid__item { height: 540px; }
+  .image-grid__grid--3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr; }
+  .image-grid__grid--3 .image-grid__item { height: 540px; }
+  .image-grid__grid--4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr; }
+  .image-grid__grid--4 .image-grid__item { height: 540px; }
+  .image-grid__grid--5 { grid-template-columns: repeat(5, 1fr); grid-template-rows: 1fr; }
+  .image-grid__grid--5 .image-grid__item { height: 540px; }
+
+  .image-grid__item {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-surface);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+    min-height: 0;
+    animation: image-grid-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.08s) both;
+  }
+
+  .image-grid__media {
+    flex: 1 1 auto;
+    min-height: 120px;
+    overflow: hidden;
+    background: var(--c-ink);
+  }
+  .image-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Mode logos : logo centré "contain" sur fond clair, avec de l'air autour. */
+  .image-grid--logos .image-grid__media {
+    background: var(--c-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 44px;
+  }
+  .image-grid--logos .image-grid__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .image-grid__card-body {
+    flex: 0 0 auto;
+    padding: 22px 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .image-grid__card-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    color: var(--c-ink);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-align: left;
+  }
+  .image-grid__card-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 0;
+    line-height: var(--lh-body);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .image-grid__grid--4 .image-grid__card-text,
+  .image-grid__grid--5 .image-grid__card-text {
+    -webkit-line-clamp: 2;
+  }
+
+  @keyframes image-grid-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

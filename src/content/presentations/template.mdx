@@ -9,39 +9,39 @@ autoClosing: false
 description: "Catalogue de référence des layouts ExecEd-style transposés en charte Lausanne Marketing : les composants de slide du repo, organisés par famille."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import AboutHero from '@/components/slides/AboutHero.astro';
-import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import SectionHero from '@/components/slides/SectionHero.astro';
-import QuoteImage from '@/components/slides/QuoteImage.astro';
-import BigImageHero from '@/components/slides/BigImageHero.astro';
-import QuestionsHero from '@/components/slides/QuestionsHero.astro';
-import MerciHero from '@/components/slides/MerciHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import ListImageHero from '@/components/slides/ListImageHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import DefinitionHero from '@/components/slides/DefinitionHero.astro';
-import FormHero from '@/components/slides/FormHero.astro';
-import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import PauseHero from '@/components/slides/PauseHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import PeopleCards from '@/components/slides/PeopleCards.astro';
+import Cover from '@/components/slides/Cover.astro';
+import About from '@/components/slides/About.astro';
+import Programme from '@/components/slides/Programme.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Section from '@/components/slides/Section.astro';
+import Quote from '@/components/slides/Quote.astro';
+import ImageFull from '@/components/slides/ImageFull.astro';
+import Questions from '@/components/slides/Questions.astro';
+import Merci from '@/components/slides/Merci.astro';
+import Steps from '@/components/slides/Steps.astro';
+import ListImage from '@/components/slides/ListImage.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Definition from '@/components/slides/Definition.astro';
+import Form from '@/components/slides/Form.astro';
+import Compare from '@/components/slides/Compare.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Pause from '@/components/slides/Pause.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import People from '@/components/slides/People.astro';
 import SectionSplit from '@/components/slides/SectionSplit.astro';
-import TitleSplitImage from '@/components/slides/TitleSplitImage.astro';
-import PollHero from '@/components/slides/PollHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
-import BarChartHero from '@/components/slides/BarChartHero.astro';
-import MockupHero from '@/components/slides/MockupHero.astro';
-import TableHero from '@/components/slides/TableHero.astro';
-import SpreadsheetHero from '@/components/slides/SpreadsheetHero.astro';
-import VideoHero from '@/components/slides/VideoHero.astro';
-import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
-import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
-import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
+import SplitImage from '@/components/slides/SplitImage.astro';
+import Poll from '@/components/slides/Poll.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
+import BarChart from '@/components/slides/BarChart.astro';
+import Mockup from '@/components/slides/Mockup.astro';
+import Table from '@/components/slides/Table.astro';
+import Spreadsheet from '@/components/slides/Spreadsheet.astro';
+import Video from '@/components/slides/Video.astro';
+import CodeExamples from '@/components/slides/CodeExamples.astro';
+import UtmGenerator from '@/components/slides/UtmGenerator.astro';
+import MatrixRain from '@/components/slides/MatrixRain.astro';
 import Empty from '@/components/slides/Empty.astro';
 import Conventions from '@/components/slides/Conventions.astro';
 import Calendar from '@/components/slides/Calendar.astro';
@@ -51,7 +51,7 @@ import IconCatalog from '@/components/slides/IconCatalog.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
-<CoverHero
+<Cover
   title="Titre de la présentation"
   italicPart="présentation"
   eyebrow="Sur-titre de la présentation"
@@ -62,7 +62,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   theme="halo-gold"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="1"
   title="Couvertures et sections"
@@ -72,7 +72,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<AboutHero
+<About
   firstName="Thomas"
   lastName="Rouaud"
   photo="/assets/thomas-rouaud.jpg"
@@ -97,7 +97,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ProgrammeHero
+<Programme
   title="Agenda"
   italicPart="Agenda"
   brand="Titre de la présentation"
@@ -112,7 +112,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<QuoteImage
+<Quote
   text="Le marketing a totalement changé en trois ans. Ceux qui suivent les conventions de 2022 perdent du terrain chaque semaine. Il faut maintenant penser data, automation et IA dès l'amont, pas en couche de vernis après coup, sinon on accumule de la dette opérationnelle qu'on paiera plus tard."
   author="Thomas Rouaud"
   role="Senior consultant CRM, Data, IA"
@@ -121,7 +121,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="2"
   title="Grilles"
@@ -131,7 +131,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<ImageGridHero
+<ImageGrid
   title="Grille 1 image"
   italicPart="1 image"
   subtitle="Image hero unique"
@@ -146,7 +146,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Grille 2 images"
   italicPart="2 images"
   subtitle="Comparatif ou diptyque"
@@ -166,7 +166,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Grille 3 images"
   italicPart="3 images"
   subtitle="Triptyque pédagogique"
@@ -191,7 +191,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Grille 4 images"
   italicPart="4 images"
   subtitle="Mosaïque carrée"
@@ -221,7 +221,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Grille 5 images"
   italicPart="5 images"
   subtitle="Cinq cartes côte à côte"
@@ -256,7 +256,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<InfoCardsGrid
+<InfoCards
   title="Grille de cartes info"
   italicPart="cartes info"
   subtitle="Icône Phosphor, label en capitales, courte valeur. Deux colonnes, idéal pour 2 ou 4 cartes."
@@ -270,7 +270,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="3"
   title="Listes"
@@ -280,7 +280,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<NumberedSplit
+<Steps
   title="Liste numérotée"
   italicPart="numérotée"
   subtitle="Lorem ipsum dolor sit amet consectetur"
@@ -294,7 +294,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<ListImageHero
+<ListImage
   title="Liste sur Image"
   italicPart="Image"
   subtitle="Lorem ipsum dolor sit amet, consectetur."
@@ -311,7 +311,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<CompareColumnsHero
+<Compare
   title="Deux colonnes à opposer"
   italicPart="opposer"
   subtitle="Gauche neutre, droite accent jaune. Ex : à demander vs à inférer."
@@ -322,7 +322,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="4"
   title="Graphiques"
@@ -332,7 +332,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<BarChartHero
+<BarChart
   title="Graphique en barres"
   italicPart="barres"
   subtitle="Valeurs et barres à gauche, descriptions à droite. Une barre peut être mise en avant."
@@ -349,7 +349,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<TableHero
+<Table
   title="Tableau comparatif"
   italicPart="comparatif"
   subtitle="Jusqu'à quatre colonnes et environ huit lignes. Première colonne en gras, lignes zébrées, source optionnelle."
@@ -369,7 +369,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 {/* Tableur façon Excel : barre de formule, colonnes A/B/C, numéros de lignes,
     cellule active surlignée en vert. Multi-feuilles via `sheets` : les onglets en
     bas sont CLIQUABLES (bascule la feuille). La 1re feuille est celle capturée au PDF. */}
-<SpreadsheetHero
+<Spreadsheet
   title="Un tableur façon Excel"
   italicPart="tableur"
   subtitle="Barre de formule, colonnes A/B/C, onglets cliquables. La 1re feuille part au PDF."
@@ -401,7 +401,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="5"
   title="Sondages"
@@ -411,7 +411,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<PollHero
+<Poll
   id="template-poll"
   question="Cette session t'a paru claire ?"
   italicPart="claire"
@@ -421,7 +421,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<WordCloudHero
+<WordCloud
   id="template-wordcloud"
   question="Un mot pour résumer la séance ?"
   italicPart="résumer"
@@ -430,7 +430,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="6"
   title="Démo, atelier et média"
@@ -440,7 +440,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<DemoHero
+<Demo
   title="Démonstration"
   italicPart="Démonstration"
   subtitle="Une capture de l'outil, et les grandes lignes en tableau."
@@ -461,7 +461,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     Sans `poster` explicite, il est dérivé de `video` (-poster.jpg) et généré au
     build à `posterTime` par `npm run build:posters` (ffmpeg).
     Panneau 2.5:1 (1728x691 sur 1920x1080) : filmer en 2.5:1, ex. 1920x768 ou 2560x1024. */}
-<VideoHero
+<Video
   title="Une vidéo en grand"
   italicPart="vidéo"
   video="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
@@ -476,7 +476,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     à poser dans le coin le plus vide (vérification visuelle) : captionPosition =
     "top-left" | "top-right" | "bottom-left" | "bottom-right" (défaut "bottom-left").
     Rien d'autre que la légende : pas de titre, pas de cadre, pas de bandeau marque. */}
-<BigImageHero
+<ImageFull
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=1080&fit=crop"
   alt="Exemple d'image plein cadre 16:9"
   captionTitle="Titre de la légende"
@@ -486,7 +486,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   captionPosition="bottom-left"
 />
 
-<StatementHero
+<Statement
   eyebrow="Le problème"
   title="Déclaration ou chiffre-clé"
   italicPart="chiffre-clé"
@@ -500,8 +500,8 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 {/* Définition : introduit un concept. Terme en grand serif italique + définition
     en gros texte (tout calé à gauche). image optionnelle en fond, floutée + voile
-    clair façon QuoteImage. */}
-<DefinitionHero
+    clair façon Quote. */}
+<Definition
   eyebrow="Définition"
   term="Le terme à définir"
   termItalicPart="définir"
@@ -511,7 +511,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<WorkshopHero
+<Workshop
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
   rows={[
@@ -522,7 +522,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<FormHero
+<Form
   title="Un formulaire"
   italicPart="formulaire"
   subtitle="Maquette : champs + bouton (Nom, Prénom, Email)."
@@ -532,7 +532,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<CodeExamplesHero
+<CodeExamples
   title="Exemples de code"
   italicPart="code"
   subtitle="Grille 2x2 de boxes de code : les clés des paramètres sont surlignées (ex : les UTM d'une URL)."
@@ -546,7 +546,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   ]}
 />
 
-<UtmGeneratorHero
+<UtmGenerator
   title="Générateur d'UTMs"
   italicPart="UTMs"
   subtitle="Interactif : trois selects (source, médium, campagne), le lien tagué se construit en direct, avec bouton copier."
@@ -554,13 +554,13 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<MatrixRainHero
+<MatrixRain
   title="Matrix rain"
   italicPart="rain"
   subtitle="Slide d'ambiance plein cadre : pluie de caractères animée, titre optionnel en surimpression."
 />
 
-<PauseHero
+<Pause
   title="Pause"
   italicPart="Pause"
   subtitle="Café, eau, étirements. On reprend ensemble."
@@ -569,7 +569,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="7"
   title="Mockups"
@@ -579,7 +579,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<MockupHero
+<Mockup
   device="tablet"
   title="Mockup tablette"
   italicPart="tablette"
@@ -590,7 +590,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<MockupHero
+<Mockup
   device="mobile"
   title="Mockup mobile"
   italicPart="mobile"
@@ -601,7 +601,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<MockupHero
+<Mockup
   device="desktop"
   title="Mockup desktop"
   italicPart="desktop"
@@ -611,7 +611,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Catalogue"
   index="8"
   title="Agendas, calendrier et canevas"
@@ -702,10 +702,10 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 {/* Slides de fin (auto-injectés par la route selon le contexte ; ici en vitrine
     manuelle car le template a autoClosing: false).
-    - QuestionsHero : deck dans un parcours, pas le dernier -> carte cliquable
+    - Questions : deck dans un parcours, pas le dernier -> carte cliquable
       vers le prochain sujet. Titre figé "Des questions ?".
-    - MerciHero : one-shot ou dernier deck du parcours. Titre figé "Merci beaucoup". */}
-<QuestionsHero
+    - Merci : one-shot ou dernier deck du parcours. Titre figé "Merci beaucoup". */}
+<Questions
   nextSlug="template"
   nextTitle="Titre du prochain sujet"
   nextShort="Une accroche courte sur ce que couvre le prochain deck du parcours."
@@ -714,7 +714,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<MerciHero
+<Merci
   tagline="et à bientôt !"
   image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop"
   brand="Titre de la présentation"

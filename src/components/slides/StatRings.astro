@@ -1,0 +1,214 @@
+---
+// src/components/slides/StatRings.astro
+// KPIs en anneaux (donuts) "ExecEd-style" : chrome marque + logo, titre serif
+// italique partiel + sous-titre, puis une rangée d'anneaux. Chaque anneau reprend
+// la technique du minuteur de Workshop : deux <circle> en pathLength="100",
+// l'arc se remplissant via stroke-dashoffset = 100 - pourcentage. Le chiffre est
+// affiché au centre. Source citée via .slide-source. Même forme de props que
+// BarChart (title/items/source...) pour pouvoir échanger les deux.
+import { splitHighlight } from '@/utils/highlight';
+interface RingItem {
+  label: string;
+  value: number;
+  emphasis?: boolean;
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  items: RingItem[];
+  /** Valeur max de l'échelle (défaut 100 pour des pourcentages). */
+  max?: number;
+  /** Suffixe affiché après chaque valeur (défaut "%"). */
+  unit?: string;
+  source?: string;
+  sourceUrl?: string;
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  items,
+  max = 100,
+  unit = '%',
+  source,
+  sourceUrl,
+  brand = 'Titre de la présentation',
+  brandSub,
+  tocLabel,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const hasEmphasis = items.some((it) => it.emphasis);
+---
+<section class="stat-rings" data-layout="stat-rings">
+  <header class="stat-rings__header">
+    <div class="stat-rings__brand-text">
+      <p class="stat-rings__brand-main">{brand}</p>
+      {brandSub && <p class="stat-rings__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="stat-rings__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="stat-rings__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="stat-rings__body">
+    <div class="stat-rings__heading">
+      <h2 class="stat-rings__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="stat-rings__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="stat-rings__subtitle">{subtitle}</p>}
+    </div>
+
+    <ul class="stat-rings__grid">
+      {items.map((item, i) => {
+        const pct = Math.max(0, Math.min(100, (item.value / max) * 100));
+        const dim = hasEmphasis && !item.emphasis;
+        return (
+          <li class:list={['stat-rings__item', dim && 'is-dim']}>
+            <div class="stat-rings__ring">
+              <svg class="stat-rings__svg" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="stat-rings__track" cx="50" cy="50" r="42" pathLength="100"></circle>
+                <circle class="stat-rings__fill" cx="50" cy="50" r="42" pathLength="100" style={`--off: ${100 - pct}; --delay: ${i * 0.12}s;`}></circle>
+              </svg>
+              <span class="stat-rings__value">{item.value}{unit}</span>
+            </div>
+            <p class="stat-rings__label">{item.label}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+
+  {source && (sourceUrl
+    ? <a class="slide-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+    : <p class="slide-source">Source : {source}</p>)}
+</section>
+
+<style>
+  .stat-rings {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+  .stat-rings__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .stat-rings__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
+  }
+  .stat-rings__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub); font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
+  }
+  .stat-rings__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
+
+  .stat-rings__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 28px;
+    gap: 56px;
+  }
+  .stat-rings__heading { flex: 0 0 auto; }
+  .stat-rings__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em;
+    margin: 0; color: var(--c-ink); text-wrap: balance; text-align: left;
+  }
+  .stat-rings__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic; font-weight: 400;
+  }
+  .stat-rings__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead); line-height: var(--lh-lead); font-weight: 500; color: var(--c-muted);
+    margin: 12px 0 0; max-width: 1200px;
+  }
+
+  /* Rangée d'anneaux centrée. */
+  .stat-rings__grid {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; align-items: flex-start; justify-content: center;
+    gap: clamp(64px, 8vw, 140px);
+  }
+  .stat-rings__item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 28px; max-width: 460px;
+  }
+  .stat-rings__ring {
+    position: relative;
+    width: clamp(240px, 17vw, 300px);
+    aspect-ratio: 1 / 1;
+    flex: 0 0 auto;
+  }
+  .stat-rings__svg { width: 100%; height: 100%; display: block; }
+  .stat-rings__track {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 8%, transparent);
+    stroke-width: 8;
+  }
+  /* Arc rempli : pathLength 100 => stroke-dashoffset = 100 - pourcentage.
+     Animé de vide (100) vers la valeur au reveal, comme les barres. */
+  .stat-rings__fill {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: var(--off, 100);
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    animation: stat-rings-fill 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--delay, 0s);
+  }
+  .stat-rings__value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', sans-serif;
+    font-size: clamp(52px, 5.2vw, 76px);
+    font-weight: 700;
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .stat-rings__label {
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead); font-weight: 600; line-height: var(--lh-lead);
+    color: var(--c-ink); text-align: center;
+  }
+
+  /* KPI non mis en avant : arc et texte atténués (comme BarChart). */
+  .stat-rings__item.is-dim .stat-rings__fill { stroke: color-mix(in srgb, var(--c-accent) 34%, transparent); }
+  .stat-rings__item.is-dim .stat-rings__value,
+  .stat-rings__item.is-dim .stat-rings__label { color: var(--c-muted); }
+
+  @keyframes stat-rings-fill {
+    from { stroke-dashoffset: 100; }
+  }
+</style>

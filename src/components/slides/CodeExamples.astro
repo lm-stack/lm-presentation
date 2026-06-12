@@ -1,0 +1,213 @@
+---
+// src/components/slides/CodeExamples.astro
+// Slide "exemples de code" ExecEd-style : header marque + logo (RÈGLE ABSOLUE),
+// fond pearl, titre serif italique partiel + sous-titre, puis une grille 2x2 de
+// "boxes de code". Chaque box montre une URL avec ses paramètres de requête : les
+// valeurs (ex : la valeur d'un utm_*) sont surlignées en pill (accent-soft) pour
+// les mettre en évidence, lisible dans les deux schémas. Lien de référence
+// optionnel (link / linkLabel) rendu via le footer global .slide-source (bas à
+// gauche, cliquable). Calqué sur InfoCards.
+import { splitHighlight } from '@/utils/highlight';
+
+interface CodeParam {
+  /** Clé du paramètre (ex : "utm_source"). */
+  key: string;
+  /** Valeur du paramètre, surlignée (ex : "newsletter"). */
+  value: string;
+}
+interface CodeExample {
+  /** Libellé du cas d'usage, affiché en CAPS au-dessus du code. */
+  label: string;
+  /** Base de l'URL affichée avant le "?" (ex : "easyjet.com"). */
+  base: string;
+  /** Paramètres de requête : clé = valeur surlignée. */
+  params: CodeParam[];
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  examples: CodeExample[];
+  /** Nombre de colonnes de la grille (défaut 2). 1 = boxes en pleine largeur. */
+  columns?: number;
+  /** Lien de référence optionnel (ex : outil officiel), rendu en bas à gauche. */
+  link?: string;
+  linkLabel?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  examples,
+  columns = 2,
+  link,
+  linkLabel,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="code-examples" data-layout="code-examples">
+  <header class="code-examples__header">
+    <div class="code-examples__brand">
+      <p class="code-examples__brand-main">{brand}</p>
+      {brandSub && <p class="code-examples__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="code-examples__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="code-examples__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="code-examples__body">
+    <h2 class="code-examples__title">
+      {titleParts
+        ? <>{titleParts.before}<em class="code-examples__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+        : title}
+    </h2>
+    {subtitle && <p class="code-examples__subtitle">{subtitle}</p>}
+
+    <div class="code-examples__grid" data-cols={columns}>
+      {examples.map((ex) => (
+        <article class="code-examples__box">
+          <p class="code-examples__label">{ex.label}</p>
+          <code class="code-examples__code"><span class="code-examples__base">{ex.base}</span><span class="code-examples__punct">?</span>{ex.params.map((p, i) => (<>{i > 0 && <span class="code-examples__punct">&</span>}<span class="code-examples__key">{p.key}</span><span class="code-examples__punct">=</span><span class="code-examples__val">{p.value}</span></>))}</code>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  {link && (
+    <a class="slide-source" href={link} target="_blank" rel="noopener">{linkLabel ?? link}</a>
+  )}
+</section>
+
+<style>
+  .code-examples {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .code-examples__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .code-examples__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .code-examples__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+  .code-examples__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .code-examples__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    padding-top: 32px;
+    padding-bottom: 24px;
+  }
+  .code-examples__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .code-examples__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .code-examples__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    margin: 0 0 44px;
+    color: var(--c-muted);
+    max-width: none;
+    text-align: left;
+  }
+
+  .code-examples__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .code-examples__grid[data-cols="1"] {
+    grid-template-columns: 1fr;
+  }
+  .code-examples__box {
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .code-examples__label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 0;
+    color: var(--c-muted);
+  }
+  .code-examples__code {
+    font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', Menlo, monospace;
+    font-size: var(--fs-code);
+    line-height: 1.65;
+    color: var(--c-ink);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .code-examples__base { color: var(--c-muted); }
+  .code-examples__punct { color: var(--c-faint); }
+  .code-examples__key { color: var(--c-muted); }
+  .code-examples__val {
+    background: var(--c-accent-soft);
+    color: var(--c-ink);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-weight: 600;
+  }
+</style>

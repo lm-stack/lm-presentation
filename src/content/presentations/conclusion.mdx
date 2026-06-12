@@ -10,10 +10,10 @@ cover: "/decks/conclusion/cover-smile.jpg"
 description: "Conclusion du parcours CRM, Data & Automation : la stratégie avant les outils, un stack abordable pour petites structures, retour de feedback collectif. HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import TableHero from '@/components/slides/TableHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import Media from '@/components/slides/Media.astro';
+import Table from '@/components/slides/Table.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
 {/*
   MIGRATION conclusion.mdx -> conclusion-new.mdx
@@ -22,22 +22,22 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 
   MAPPING COMPOSANTS
   ──────────────────
-  Slide 1  Cover        -> CoverHero
+  Slide 1  Cover        -> Cover
              eyebrow = "Module 35" (conservé tel quel)
              italicPart = "Conclusion" (titre mono-mot, italicPart = titre entier)
              footer = "HEC Lausanne : Juin 2026"
              image = /decks/conclusion/cover-smile.jpg (image locale confirmée)
              theme = "halo-gold"
 
-  Slide 2  Statement    -> MediaHero
+  Slide 2  Statement    -> Media
              Le composant Statement originel avait une image + un bloc children
-             (texte libre sous le subtitle). MediaHero absorbe les deux :
+             (texte libre sous le subtitle). Media absorbe les deux :
              subtitle = texte du subtitle original,
              body = texte children original (C'est la clarté...),
              image = /decks/conclusion/strategie-outils.jpeg (image locale confirmée),
              fit = "cover" (photo/illustration, pas un diagram).
 
-  Slide 3  TableSlide   -> TableHero
+  Slide 3  TableSlide   -> Table
              title, headers, rows portés à l'identique.
              italicPart = "50 CHF" (chiffre clé mis en avant dans le titre —
              ATTENTION : "50 CHF" est un substring exact de
@@ -47,7 +47,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
              emphasizeFirstCol = true (défaut) : colonne "Outil" en gras.
              Montants conservés exactement (13 CHF, Gratuit, 11 CHF, 25 CHF).
 
-  Slide 4  WordCloud    -> WordCloudHero
+  Slide 4  WordCloud    -> WordCloud
              id conservé : "feedback-formation"
              question conservée.
              subtitle conservé (consigne de vote).
@@ -68,17 +68,17 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   IMAGES
   ──────
   Images locales disponibles dans public/decks/conclusion/ :
-    - cover-smile.jpg      → utilisée pour CoverHero et ClosingHero
-    - strategie-outils.jpeg → utilisée pour MediaHero slide 2
+    - cover-smile.jpg      → utilisée pour Cover et ClosingHero
+    - strategie-outils.jpeg → utilisée pour Media slide 2
   Aucun placeholder Unsplash nécessaire : toutes les images sont présentes.
 
   DÉCISIONS / JUGEMENTS
   ──────────────────────
-  - italicPart du CoverHero : "Conclusion" = titre complet → valide (règle :
+  - italicPart du Cover : "Conclusion" = titre complet → valide (règle :
     single-word title, italicPart = whole word).
-  - italicPart du TableHero : "50 CHF" est un substring exact du titre.
+  - italicPart du Table : "50 CHF" est un substring exact du titre.
     Visuellement c'est le chiffre-clé du message, logique de le mettre en serif.
-  - italicPart du WordCloudHero : "un mot" dans "Votre takeaway principal de
+  - italicPart du WordCloud : "un mot" dans "Votre takeaway principal de
     la formation, en un mot ?" — substring exact, mot clé de la consigne.
   - Aucun em-dash dans le contenu (vérifié).
   - Accents complets préservés partout.
@@ -87,7 +87,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 */}
 
 {/* Slide 1 : Cover — dernier module du parcours, clôture sur une note positive */}
-<CoverHero
+<Cover
   title="Conclusion"
   italicPart="Conclusion"
   eyebrow="Module 35"
@@ -99,7 +99,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 2 : La stratégie avant les outils — message clé de la formation */}
-<MediaHero
+<Media
   title="La stratégie avant les outils"
   italicPart="stratégie"
   subtitle="Dans un monde où les outils se multiplient et évoluent sans cesse, ce n'est pas la technologie qui crée la différence."
@@ -112,7 +112,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 3 : Stack pour petite structure — tableau 3 colonnes, 8 lignes */}
-<TableHero
+<Table
   title="Un stack complet pour moins de 50 CHF par mois"
   italicPart="50 CHF"
   subtitle="C'est une illusion de penser que les outils digitaux nécessitent des investissements élevés."
@@ -133,7 +133,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
 />
 
 {/* Slide 4 : Feedback collectif fin de formation — WordCloud interactif */}
-<WordCloudHero
+<WordCloud
   id="feedback-formation"
   question="Votre takeaway principal de la formation, en un mot ?"
   italicPart="un mot"

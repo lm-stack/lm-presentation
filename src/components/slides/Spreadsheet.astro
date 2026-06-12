@@ -1,0 +1,363 @@
+---
+// src/components/slides/Spreadsheet.astro
+// Slide "style tableur Excel" : même chrome que Table (header marque + logo,
+// titre serif italique partiel + sous-titre), mais le corps est une grille façon
+// Excel : barre de formule (name box + fx + formule), en-têtes de colonnes A/B/C,
+// numéros de lignes, cellules avec quadrillage, cellule active surlignée en vert.
+//
+// Multi-feuilles : prop `sheets` (1..n). Les onglets en bas sont CLIQUABLES (script
+// client) et basculent la feuille affichée. La 1re feuille est visible par défaut
+// (donc c'est elle qui est capturée à l'export PDF).
+import { splitHighlight } from '@/utils/highlight';
+interface Sheet {
+  name: string;
+  /** En-têtes de la 1re ligne (ligne 1, en gras). */
+  columns: string[];
+  /** Lignes de données (ligne 2 et suivantes). */
+  rows: string[][];
+  /** Formule affichée dans la barre de formule, ex. "=SUPPRESPACE(C2)". */
+  formula?: string;
+  /** Cellule active surlignée + affichée dans le name box, ex. "D2". */
+  activeCell?: string;
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  sheets: Sheet[];
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  sheets,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+function activeOf(cell?: string) {
+  const m = (cell ?? '').match(/^([A-Za-z]+)(\d+)$/);
+  return {
+    col: m ? m[1].toUpperCase().charCodeAt(0) - 65 : -1,
+    row: m ? parseInt(m[2], 10) : -1,
+  };
+}
+---
+<section class="sheet-hero" data-layout="spreadsheet">
+  <header class="sheet-hero__header">
+    <div class="sheet-hero__brand-text">
+      <p class="sheet-hero__brand-main">{brand}</p>
+      {brandSub && <p class="sheet-hero__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="sheet-hero__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="sheet-hero__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="sheet-hero__body">
+    <div class="sheet-hero__heading">
+      <h2 class="sheet-hero__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="sheet-hero__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="sheet-hero__subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="xl">
+      {sheets.map((sheet, s) => {
+        const colLetters = sheet.columns.map((_, i) => String.fromCharCode(65 + i));
+        const active = activeOf(sheet.activeCell);
+        return (
+          <div class="xl__sheet" data-sheet={String(s)} hidden={s !== 0}>
+            <div class="xl__formulabar">
+              <span class="xl__namebox">{sheet.activeCell ?? 'A1'}</span>
+              <span class="xl__fx">fx</span>
+              <span class="xl__formula">{sheet.formula}</span>
+            </div>
+            <div class="xl__grid-wrap">
+              <table class="xl__grid">
+                <thead>
+                  <tr>
+                    <th class="xl__corner"></th>
+                    {colLetters.map((L) => <th class="xl__colhead">{L}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th class="xl__rownum">1</th>
+                    {sheet.columns.map((c) => <td class="xl__cell xl__cell--head">{c}</td>)}
+                  </tr>
+                  {sheet.rows.map((row, i) => (
+                    <tr>
+                      <th class="xl__rownum">{i + 2}</th>
+                      {row.map((cell, j) => (
+                        <td class:list={['xl__cell', i + 2 === active.row && j === active.col && 'xl__cell--active']}>{cell}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      })}
+      <div class="xl__tabs">
+        {sheets.map((sheet, s) => (
+          <button type="button" class:list={['xl__tab', s === 0 && 'xl__tab--active']} data-sheet={String(s)}>{sheet.name}</button>
+        ))}
+        <span class="xl__tab xl__tab--add" aria-hidden="true">+</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initSpreadsheetHero() {
+    document.querySelectorAll('[data-layout="spreadsheet"]').forEach((root) => {
+      if (root.hasAttribute('data-xl-ready')) return;
+      root.setAttribute('data-xl-ready', '');
+      const tabs = Array.from(root.querySelectorAll('.xl__tab[data-sheet]'));
+      const sheets = Array.from(root.querySelectorAll<HTMLElement>('.xl__sheet'));
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const idx = tab.getAttribute('data-sheet');
+          tabs.forEach((t) => t.classList.toggle('xl__tab--active', t === tab));
+          sheets.forEach((sh) => { sh.hidden = sh.getAttribute('data-sheet') !== idx; });
+        });
+      });
+    });
+  }
+  if (document.readyState !== 'loading') initSpreadsheetHero();
+  else document.addEventListener('DOMContentLoaded', initSpreadsheetHero);
+  document.addEventListener('astro:page-load', initSpreadsheetHero);
+</script>
+
+<style>
+  .sheet-hero {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width : brand gauche + logo LM droite + border-bottom. */
+  .sheet-hero__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .sheet-hero__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .sheet-hero__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .sheet-hero__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .sheet-hero__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 36px;
+    padding-top: 28px;
+  }
+  .sheet-hero__heading {
+    flex: 0 0 auto;
+  }
+  .sheet-hero__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .sheet-hero__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .sheet-hero__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 12px 0 0;
+    max-width: 1500px;
+  }
+
+  /* Bloc tableur Excel. Police Calibri-like, quadrillage gris, accents verts. */
+  .xl {
+    flex: 0 0 auto;
+    font-family: 'Calibri', 'Segoe UI', 'Aptos', system-ui, sans-serif;
+    border: 1px solid #b7b7b7;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.18);
+    background: #fff;
+  }
+  .xl__sheet[hidden] {
+    display: none;
+  }
+
+  /* Barre de formule : name box + fx + formule. */
+  .xl__formulabar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: #f6f6f6;
+    border-bottom: 1px solid #d0d0d0;
+    height: 52px;
+  }
+  .xl__namebox {
+    min-width: 120px;
+    padding: 0 18px;
+    font-size: var(--fs-body);
+    color: #333;
+    border-right: 1px solid #d0d0d0;
+    line-height: 52px;
+  }
+  .xl__fx {
+    padding: 0 18px;
+    font-style: italic;
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: var(--fs-body);
+    color: #888;
+    border-right: 1px solid #d0d0d0;
+    line-height: 52px;
+  }
+  .xl__formula {
+    padding: 0 18px;
+    font-size: var(--fs-body);
+    color: #1a1a1a;
+    white-space: pre;
+  }
+
+  .xl__grid-wrap {
+    overflow: hidden;
+  }
+  .xl__grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  /* En-têtes de colonnes (A, B, C...) et coin haut-gauche. */
+  .xl__corner,
+  .xl__colhead {
+    background: #f0f0f0;
+    color: #5f6368;
+    font-weight: 600;
+    font-size: var(--fs-eyebrow);
+    text-align: center;
+    border: 1px solid #d4d4d4;
+    height: 38px;
+  }
+  .xl__corner {
+    width: 56px;
+  }
+  /* Numéros de lignes (1, 2, 3...). */
+  .xl__rownum {
+    background: #f0f0f0;
+    color: #5f6368;
+    font-weight: 600;
+    font-size: var(--fs-eyebrow);
+    text-align: center;
+    border: 1px solid #d4d4d4;
+    width: 56px;
+  }
+  /* Cellules de données. */
+  .xl__cell {
+    border: 1px solid #dfe1e5;
+    padding: 11px 16px;
+    font-size: var(--fs-body);
+    line-height: 1.3;
+    color: #1f1f1f;
+    text-align: left;
+    white-space: pre-wrap;
+    background: #fff;
+  }
+  .xl__cell--head {
+    font-weight: 700;
+    color: #0f0f0f;
+    background: #fbfbfb;
+  }
+  /* Cellule active : cadre vert Excel (inset pour ne pas décaler la grille). */
+  .xl__cell--active {
+    box-shadow: inset 0 0 0 3px #217346;
+    background: #f3faf5;
+  }
+
+  /* Onglets de feuille en bas, cliquables. */
+  .xl__tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    background: #f0f0f0;
+    border-top: 1px solid #d0d0d0;
+    padding: 0 8px;
+    height: 46px;
+  }
+  .xl__tab {
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    font-family: inherit;
+    font-size: var(--fs-eyebrow);
+    color: #5f6368;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .xl__tab:hover:not(.xl__tab--active):not(.xl__tab--add) {
+    background: #e6e6e6;
+  }
+  .xl__tab--active {
+    background: #fff;
+    color: #217346;
+    font-weight: 700;
+    border-top: 3px solid #217346;
+    border-left: 1px solid #d0d0d0;
+    border-right: 1px solid #d0d0d0;
+    cursor: default;
+  }
+  .xl__tab--add {
+    color: #9aa0a6;
+    cursor: default;
+  }
+</style>

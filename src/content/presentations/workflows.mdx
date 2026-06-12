@@ -10,33 +10,33 @@ cover: "/decks/workflow/cover-whiteboard.jpg"
 description: "Workflow : modéliser les processus, choisir les outils, construire des automatisations no-code et low-code. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import PollHero from '@/components/slides/PollHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import ExchangeHero from '@/components/slides/ExchangeHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import Poll from '@/components/slides/Poll.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Demo from '@/components/slides/Demo.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Media from '@/components/slides/Media.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Workshop from '@/components/slides/Workshop.astro';
 
 {/* Reprise du deck workflow (ancien format SlideTitle) en ExecEd-style. Images
     réutilisées telles quelles depuis public/decks/workflow/.
-    Mapping : Cover->CoverHero, Poll->PollHero, ImageGrid->ImageGridHero,
-    Demo->DemoHero, Section->SubSectionHero, BigImage/Statement->MediaHero,
-    NumberedCards (2 col)/TwoColumnTable->InfoCardsGrid, NumberedCards (1 col)->
-    NumberedSplit, Statement sans image->StatementHero, Exchange->ExchangeHero
-    (nouveau composant), Workshop+WorkshopBrief->WorkshopHero, Closing->ClosingHero.
+    Mapping : Cover->Cover, Poll->Poll, ImageGrid->ImageGrid,
+    Demo->Demo, Section->SubSection, BigImage/Statement->Media,
+    NumberedCards (2 col)/TwoColumnTable->InfoCards, NumberedCards (1 col)->
+    Steps, Statement sans image->Statement, Exchange->Exchange
+    (nouveau composant), Workshop+WorkshopBrief->Workshop, Closing->ClosingHero.
     Décisions de migration :
     - Calendrier du Jour 2 supprimé (comme collecte/qualité/IA : il vit dans Introduction).
     - Démo Zoho : capture placeholder (à remplacer) ; démo Zapier fusionnée avec
       son slide "Résultat" (capture zapier-workflow-result.png).
-    - NumberedCardWithDetail (Données à collecter) condensé en MediaHero. */}
+    - NumberedCardWithDetail (Données à collecter) condensé en Media. */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Workflow"
   italicPart="Workflow"
   eyebrow="Module 24"
@@ -48,7 +48,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 2 : Vos pratiques (Poll, warmup interactif) */}
-<PollHero
+<Poll
   id="workflow-pratique"
   question="Avez-vous déjà mis en place une automatisation complexe ?"
   italicPart="complexe"
@@ -64,7 +64,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 3 : Trois exemples d'automatisations complexes */}
-<ImageGridHero
+<ImageGrid
   title="Automatisations complexes"
   italicPart="complexes"
   subtitle="Interfacer plusieurs outils. Seules limites : votre imagination et quelques contraintes techniques."
@@ -93,7 +93,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 4 : Démonstration live Zoho (capture placeholder à remplacer) */}
-<DemoHero
+<Demo
   title="Démonstration sur Zoho"
   italicPart="Zoho"
   subtitle="Bascule sur la console Zoho CRM pour observer un workflow en production."
@@ -110,7 +110,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 5 : Section 01 - Identifier les besoins */}
-<SubSectionHero
+<SubSection
   kicker="Avant les outils"
   index="01"
   title="Identifier les besoins"
@@ -121,7 +121,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 6 : Identifier avant d'automatiser (Statement + image chaos) */}
-<MediaHero
+<Media
   title="Identifiez les processus avant de les automatiser"
   italicPart="avant"
   subtitle="Comme lors de l'implémentation d'un CRM ou de n'importe quel outil digital."
@@ -134,7 +134,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 7 : BPMN, l'exemple de référence (gros schéma Trisotech) */}
-<MediaHero
+<Media
   title="Business Process Model and Notation"
   italicPart="Notation"
   subtitle="Le standard mondial pour modéliser un processus métier, plus communément appelé BPMN."
@@ -146,7 +146,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 8 : Les quatre notions clés du BPMN */}
-<InfoCardsGrid
+<InfoCards
   title="Les quatre notions clés du BPMN"
   italicPart="quatre notions clés"
   subtitle="Quelques éléments simples suffisent pour modéliser un processus."
@@ -160,8 +160,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 9 : Échange - modéliser ensemble (nouveau composant ExchangeHero) */}
-<ExchangeHero
+{/* Slide 9 : Échange - modéliser ensemble (nouveau composant Exchange) */}
+<Exchange
   title="Modélisons ensemble un processus métier"
   italicPart="ensemble"
   subtitle="Choisissez un processus de votre organisation. On le cartographie en direct avec la notation BPMN."
@@ -170,7 +170,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 10 : Section 02 - Identifier les outils */}
-<SubSectionHero
+<SubSection
   kicker="Les briques"
   index="02"
   title="Identifier les outils"
@@ -181,7 +181,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 11 : Outils d'édition BPMN, focus MIRO */}
-<MediaHero
+<Media
   title="Beaucoup d'outils peuvent éditer des processus BPMN"
   italicPart="éditer"
   subtitle="Le plus connu, popularisé par le télétravail, reste MIRO. Lucidchart en est une alternative robuste."
@@ -193,7 +193,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 12 : Trois outils no-code de référence */}
-<InfoCardsGrid
+<InfoCards
   title="Trois outils no-code pour créer des workflows"
   italicPart="no-code"
   subtitle="En plus des automatisations natives, plusieurs plateformes connectent les applications entre elles."
@@ -207,7 +207,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 13 : Section 03 - Construire un workflow */}
-<SubSectionHero
+<SubSection
   kicker="Pas-à-pas"
   index="03"
   title="Construire un workflow"
@@ -218,7 +218,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 14 : Formuler vos objectifs (liste numérotée) */}
-<NumberedSplit
+<Steps
   title="Formuler vos objectifs"
   italicPart="objectifs"
   subtitle="Une fois le processus modélisé, on liste tous les objectifs avant de toucher au moindre outil."
@@ -234,7 +234,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 15 : Tout commence par les applications (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="Les applications"
   title="Tout commence d'abord avec des applications"
   italicPart="applications"
@@ -244,7 +244,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 16 : Le trigger (Statement + capture Google Forms) */}
-<MediaHero
+<Media
   title="Pour connecter des applications, il faut un trigger"
   italicPart="trigger"
   subtitle="Le trigger est l'événement qui déclenche un workflow. Il en existe des milliers de différents."
@@ -256,7 +256,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 17 : Les actions (Statement + capture Slack) */}
-<MediaHero
+<Media
   title="Puis on paramètre l'ensemble des actions"
   italicPart="actions"
   subtitle="Une action est le résultat qu'on souhaite obtenir après le déclenchement du trigger."
@@ -268,7 +268,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 18 : Actions spéciales pour affiner le workflow */}
-<InfoCardsGrid
+<InfoCards
   title="Affiner le workflow avec des actions spéciales"
   italicPart="spéciales"
   subtitle="Trois briques transversales qu'on retrouve dans tous les outils no-code."
@@ -282,7 +282,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 19 : Finaliser le workflow (Statement + whiteboard) */}
-<MediaHero
+<Media
   title="L'ensemble d'étapes constitue un workflow"
   italicPart="workflow"
   subtitle="Sur Zapier on appelle ça un Zap, sur Make un scénario, sur n8n un workflow. Même concept, branding différent."
@@ -295,7 +295,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 20 : Différence entre workflow et modélisation */}
-<ImageGridHero
+<ImageGrid
   title="Différence entre workflow et modélisation"
   italicPart="modélisation"
   subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
@@ -318,7 +318,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 21 : Données à collecter à chaque étape (NumberedCardWithDetail condensé) */}
-<MediaHero
+<Media
   title="Données à collecter à chaque étape"
   italicPart="données"
   subtitle="Au-delà du design du workflow, lister les données collectées à chaque étape est crucial."
@@ -331,7 +331,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 22 : Application maison ou pas intégrée (Statement + Doc Brown) */}
-<MediaHero
+<Media
   title="Et si j'utilise une application in-house ?"
   italicPart="in-house"
   subtitle="De plus en plus d'applications sont intégrées aux outils no-code. Certaines ne le sont pas encore."
@@ -344,7 +344,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 23 : Définition du webhook (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="Webhook"
   title="Un webhook est une requête qui envoie des données"
   italicPart="webhook"
@@ -354,7 +354,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 24 : Démonstration Zapier + résultat fusionnés */}
-<DemoHero
+<Demo
   title="Démonstration sur Zapier"
   italicPart="Zapier"
   subtitle="Construction live d'un workflow Google Forms vers Slack, HubSpot, MailChimp et Gmail."
@@ -371,7 +371,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 25 : Workshop (transition + brief fusionnés) */}
-<WorkshopHero
+<Workshop
   subtitle="À vous de jouer : modélisez et concevez un workflow applicable à votre organisation."
   defaultMinutes={45}
   presets={[15, 30, 45]}

@@ -1,0 +1,208 @@
+---
+// src/components/slides/Questions.astro
+// Slide de fin d'un deck DANS un parcours (pas le dernier) : titre figé
+// "Des questions ?" + carte de preview cliquable vers le deck suivant du
+// parcours. Aucun lien externe (pas de logo-lien Lausanne Marketing) : le
+// SEUL lien de la slide est la carte vers le prochain sujet.
+//
+// Titre durci : le <h2> est codé en dur sur "Des questions ?" (mot
+// "questions ?" souligné gold), pas de prop title. Règle inviolable, comme
+// Workshop figé sur "Workshop".
+//
+// Auto-injecté par src/pages/p/[slug].astro quand le deck appartient à un
+// parcours et n'en est pas le dernier. La vitrine du template l'appelle à la
+// main avec des données d'exemple.
+interface Props {
+  /** Slug du deck suivant dans le parcours (route /p/<slug>/). */
+  nextSlug: string;
+  /** Titre du deck suivant. */
+  nextTitle: string;
+  /** Accroche courte du deck suivant (frontmatter short / subtitle). */
+  nextShort?: string;
+  /** Cover du deck suivant (image de la carte preview). */
+  nextCover?: string;
+  /** Libellé eyebrow de la carte, défaut "Prochain sujet". */
+  nextEyebrow?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  nextSlug,
+  nextTitle,
+  nextShort,
+  nextCover,
+  nextEyebrow = 'Prochain sujet',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="questions" data-layout="questions">
+  <header class="questions__header">
+    <div class="questions__brand-text">
+      <p class="questions__brand-main">{brand}</p>
+      {brandSub && <p class="questions__brand-sub">{brandSub}</p>}
+    </div>
+    <img src="/assets/lm-logo.svg" class="questions__brand-logo" alt="Lausanne Marketing" />
+  </header>
+
+  <div class="questions__body">
+    <h2 class="questions__title">
+      Des <em class="questions__title-italic"><span class="underline">questions ?</span></em>
+    </h2>
+
+    <a class="questions__next" href={`/p/${nextSlug}/`} aria-label={`Prochain sujet : ${nextTitle}`}>
+      {nextCover && (
+        <span class="questions__next-media" aria-hidden="true">
+          <img src={nextCover} alt="" loading="lazy" decoding="async" />
+        </span>
+      )}
+      <span class="questions__next-text">
+        <span class="questions__next-eyebrow">{nextEyebrow}</span>
+        <span class="questions__next-title">{nextTitle}</span>
+        {nextShort && <span class="questions__next-short">{nextShort}</span>}
+      </span>
+      <svg class="questions__next-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+        <path d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z" />
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  .questions {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+  }
+
+  .questions__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .questions__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+  .questions__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .questions__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+
+  .questions__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 56px;
+  }
+
+  .questions__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .questions__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* Carte de preview du deck suivant : seul lien de la slide. */
+  .questions__next {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    max-width: var(--measure-l);
+    padding: 24px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .questions__next:hover {
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 10%, transparent);
+    transform: translateY(-2px);
+  }
+  .questions__next-media {
+    flex: 0 0 auto;
+    width: 280px;
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+  }
+  .questions__next-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .questions__next-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .questions__next-eyebrow {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
+  }
+  .questions__next-title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--c-ink);
+  }
+  .questions__next-short {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    color: var(--c-muted);
+  }
+  .questions__next-arrow {
+    flex: 0 0 auto;
+    color: var(--c-muted);
+  }
+</style>
