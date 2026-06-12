@@ -16,6 +16,8 @@ import Programme from '@/components/slides/Programme.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
 <Cover
   title="CRM, Data & Automation"
@@ -99,6 +101,29 @@ import Steps from '@/components/slides/Steps.astro';
       text: 'Votre prénom, votre entreprise, et votre rapport actuel aux données.',
     },
   ]}
+/>
+
+<Exchange
+  title="Comment gérez-vous vos données aujourd'hui ?"
+  italicPart="données"
+  subtitle="État des lieux à voix haute : peu importe la taille de votre structure ou l'outil, on part de votre réalité."
+  prompts={[
+    "Des fichiers Excel éparpillés entre les équipes ?",
+    "Un CRM payé mais sous-exploité ?",
+    "Rien de structuré pour l'instant ?",
+    "Personne ne sait qui possède la donnée ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<WordCloud
+  id="intro-outils-donnees"
+  question="Avec quels outils gérez-vous vos données aujourd'hui ?"
+  italicPart="outils"
+  subtitle="Excel, HubSpot, Zoho, Brevo, rien du tout : citez-les tous, plusieurs réponses bienvenues."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <Programme
