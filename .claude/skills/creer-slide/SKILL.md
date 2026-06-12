@@ -25,17 +25,17 @@ Lire `template.mdx`, puis ce cheatsheet **intention → composant** (les props e
 
 | Intention | Composant |
 |-----------|-----------|
-| Couverture / titre | `CoverHero` |
-| Présentation intervenant | `AboutHero` |
-| Agenda du module | `ProgrammeHero` |
-| Programme / liste de modules (avec image) | `ListImageHero` |
-| Liste numérotée 3-5 items | `NumberedSplit` |
-| 1 à 5 images (grille / image hero) | `ImageGridHero` |
-| Citation | `QuoteImage` |
-| Ouverture de section | `SectionHero` / `SectionSplit` |
-| Atelier | `WorkshopHero` |
-| Pause | `PauseHero` |
-| Sondage QCM / nuage de mots | `PollHero` / `WordCloudHero` |
+| Couverture / titre | `Cover` |
+| Présentation intervenant | `About` |
+| Agenda du module | `Programme` |
+| Programme / liste de modules (avec image) | `ListImage` |
+| Liste numérotée 3-5 items | `Steps` |
+| 1 à 5 images (grille / image hero) | `ImageGrid` |
+| Citation | `Quote` |
+| Ouverture de section | `Section` / `SectionSplit` |
+| Atelier | `Workshop` |
+| Pause | `Pause` |
+| Sondage QCM / nuage de mots | `Poll` / `WordCloud` |
 | Clôture | `ClosingHero` |
 
 ### 2. Remplir les props (conventions)
@@ -43,7 +43,7 @@ Lire `template.mdx`, puis ce cheatsheet **intention → composant** (les props e
 - `italicPart` = **sous-chaîne exacte** du `title` (sinon rien ne s'italise).
 - `brand` / `brandSub` cohérents avec le reste du deck.
 - Image Unsplash : résoudre la page `unsplash.com/photos/...` vers l'**URL directe** `images.unsplash.com/photo-...` ; recadrer avec `focal` (valeur CSS `object-position`, ex `center 80%`) quand le sujet est coupé ; `alt` en français.
-- **Citer une étude** : sources **ultra-quali** uniquement (Gartner, McKinsey, IDC, Forrester, Wavestone/NewVantage, OCDE, institutions officielles, articles à comité de lecture), de préférence **récentes** (moins de 2 ans). Vérifier le chiffre à la source, pas un blog qui le recopie. Afficher la source **en bas à gauche** via le footer `.slide-source` (intégré au prop `source` de `StatementHero`).
+- **Citer une étude** : sources **ultra-quali** uniquement (Gartner, McKinsey, IDC, Forrester, Wavestone/NewVantage, OCDE, institutions officielles, articles à comité de lecture), de préférence **récentes** (moins de 2 ans). Vérifier le chiffre à la source, pas un blog qui le recopie. Afficher la source **en bas à gauche** via le footer `.slide-source` (intégré au prop `source` de `Statement`).
 
 ### 3. Insérer
 Ajouter l'`import` du composant + poser le slide au bon endroit **narratif** (ex : moi → vous → programme). Garder le bloc d'imports propre.
@@ -67,5 +67,5 @@ Ajouter l'`import` du composant + poser le slide au bon endroit **narratif** (ex
 - Vérifier l'ordre des slides via un nom de classe CSS → faux négatif (classes hoistées). Utiliser le texte de corps.
 - Tester le rendu avec des mots accentués en PowerShell → faux négatif. Utiliser des sous-chaînes ASCII.
 - Coller une URL de page Unsplash au lieu de l'URL image directe.
-- Fond incohérent : un composant du catalogue peut traîner un fond différent (ex : `InfoCardsGrid` était en crème `#FAF8F3`). Chaque slide à contenu doit être sur le dégradé pearl (RÈGLE « Fond uniforme » du CLAUDE.md) ; seules `CoverHero` / `ClosingHero` diffèrent.
-- Header non conforme : un composant peut avoir oublié le logo LM (ex : `InfoCardsGrid`). Vérifier le header RÈGLE ABSOLUE (brand à gauche + logo LM cliquable à droite + border-bottom full-width) sur chaque slide à contenu ; corriger le composant si besoin.
+- Fond incohérent : un composant du catalogue peut traîner un fond différent (ex : `InfoCards` était en crème `#FAF8F3`). Chaque slide à contenu doit être sur le dégradé pearl (RÈGLE « Fond uniforme » du CLAUDE.md) ; seules `Cover` / `ClosingHero` diffèrent.
+- Header non conforme : un composant peut avoir oublié le logo LM (ex : `InfoCards`). Vérifier le header RÈGLE ABSOLUE (brand à gauche + logo LM cliquable à droite + border-bottom full-width) sur chaque slide à contenu ; corriger le composant si besoin.

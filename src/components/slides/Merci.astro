@@ -1,0 +1,151 @@
+---
+// src/components/slides/Merci.astro
+// Slide de fin "remerciement" : titre figé "Merci beaucoup" (mot "beaucoup"
+// souligné gold). Affiché en dernier pour une présentation one-shot OU pour
+// le DERNIER deck d'un parcours. Aucun lien (le logo est une image, pas un
+// lien) : fin chaleureuse, sans appel à l'action externe.
+//
+// Titre durci : le <h2> est codé en dur sur "Merci beaucoup", pas de prop
+// title. Règle inviolable, comme Workshop et Questions.
+//
+// Fond : dégradé pearl par défaut ; si `image` est fournie, image full-bleed
+// floutée + voile clair (reprise de l'ambiance ClosingHero historique).
+//
+// Auto-injecté par src/pages/p/[slug].astro. La vitrine du template l'appelle
+// à la main.
+interface Props {
+  /** Sous-message court sous le titre, ex. "et à bientôt !". */
+  tagline?: string;
+  /** Image de fond optionnelle (full-bleed floutée). */
+  image?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const { tagline, image, brand = 'Titre de la présentation', brandSub } = Astro.props;
+---
+<section class:list={['merci', { 'merci--image': image }]} data-layout="merci">
+  {image && (
+    <div class="merci__bg" aria-hidden="true">
+      <img src={image} alt="" loading="lazy" decoding="async" />
+      <div class="merci__overlay"></div>
+    </div>
+  )}
+
+  <header class="merci__header">
+    <div class="merci__brand-text">
+      <p class="merci__brand-main">{brand}</p>
+      {brandSub && <p class="merci__brand-sub">{brandSub}</p>}
+    </div>
+    <img src="/assets/lm-logo.svg" class="merci__brand-logo" alt="Lausanne Marketing" />
+  </header>
+
+  <div class="merci__body">
+    <h2 class="merci__title">
+      Merci <em class="merci__title-italic"><span class="underline">beaucoup</span></em>
+    </h2>
+    {tagline && <p class="merci__tagline">{tagline}</p>}
+  </div>
+</section>
+
+<style>
+  .merci {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+  }
+
+  .merci__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .merci__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(3px) saturate(0.7);
+  }
+  .merci__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.88) 0%, rgba(239, 239, 242, 0.75) 100%);
+  }
+
+  .merci__header,
+  .merci__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .merci__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .merci__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+  .merci__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .merci__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+
+  .merci__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: var(--measure-l);
+  }
+
+  .merci__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .merci__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .merci__tagline {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 400;
+    margin: 32px 0 0;
+    color: var(--c-muted);
+  }
+</style>

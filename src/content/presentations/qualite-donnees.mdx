@@ -10,18 +10,18 @@ cover: "/decks/qualite-donnees/cover-filter.jpg"
 description: "Qualité des données : importance et techniques de cleaning, enrichment (Apollo, Clay, Explorium, IA), qualité comme processus. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import QuoteImage from '@/components/slides/QuoteImage.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import StatRingsHero from '@/components/slides/StatRingsHero.astro';
-import TableHero from '@/components/slides/TableHero.astro';
-import VideoHero from '@/components/slides/VideoHero.astro';
-import SpreadsheetHero from '@/components/slides/SpreadsheetHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Quote from '@/components/slides/Quote.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import StatRings from '@/components/slides/StatRings.astro';
+import Table from '@/components/slides/Table.astro';
+import Video from '@/components/slides/Video.astro';
+import Spreadsheet from '@/components/slides/Spreadsheet.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
 
 {/*
   Deck reconstruit le 2026-06-08 sur la base du contenu d'origine (commit 628dbc1,
@@ -31,11 +31,11 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   - un slide "stack d'enrichment moderne" (point APIs, Apollo, Clay, Explorium, IA),
   - un deep-dive Clay (waterfall enrichment + Claygent).
   Conventions : pas de Calendar (vit dans Introduction), Workshop + Brief fusionnés
-  en un seul WorkshopHero, eyebrow en " : ", aucun em-dash, accents complets.
+  en un seul Workshop, eyebrow en " : ", aucun em-dash, accents complets.
 */}
 
 {/* Slide 1 : Cover. Métaphore du café filtré (filtrer = nettoyer, raffiner). */}
-<CoverHero
+<Cover
   title="Qualité des données"
   italicPart="données"
   eyebrow="Jour 1 : Sujet 2"
@@ -50,7 +50,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
     (Gartner, communiqué « Lack of AI-Ready Data Puts AI Projects at Risk », 26/02/2025 ;
     enquête T3 2024, 248 responsables data). gartner.com bloque le fetch (403) :
     chiffres du communiqué officiel, citables tels quels. */}
-<StatRingsHero
+<StatRings
   title="L'IA bute sur des données pas prêtes"
   italicPart="pas prêtes"
   subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
@@ -65,7 +65,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 2 : Section 01 - Le cleaning. */}
-<SubSectionHero
+<SubSection
   kicker="Mise au propre"
   index="01"
   title="Le cleaning"
@@ -77,7 +77,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 
 {/* Slide 3 : Pivot en citation (pastille icône ampoule), ouvre la section cleaning.
     Texte général, sans mention du fil rouge Cédric. */}
-<QuoteImage
+<Quote
   icon="ph:lightbulb"
   text="Collecter ne suffit pas : tout le monde collecte, presque personne n'exploite."
   image="/decks/qualite-donnees/cover-filter.jpg"
@@ -86,7 +86,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 4 : L'importance du cleaning, par le coût de la donnée sale. */}
-<InfoCardsGrid
+<InfoCards
   title="Ce que la donnée sale coûte vraiment"
   italicPart="coûte vraiment"
   subtitle="Une base sale ne plante pas d'un coup : elle érode, silencieusement, jusqu'à coûter cher."
@@ -102,7 +102,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 
 {/* Slide 5 : Les six techniques de cleaning par type de donnée.
     Pas de mention d'automation ici (traitée dans un module ultérieur). */}
-<TableHero
+<Table
   title="Six techniques qui couvrent 90 % des cas"
   italicPart="90 % des cas"
   subtitle="Pour chaque type de donnée, le bon réflexe de nettoyage."
@@ -123,7 +123,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
     Deux onglets cliquables : Nettoyage (FR) et Cleaning (EN). Colonnes Avant
     (donnée brute) et Après (résultat). Barre de formule = la vraie formule
     SUBSTITUE sur l'avant (cellule active D5 = son résultat). */}
-<SpreadsheetHero
+<Spreadsheet
   title="Les fonctions Excel fréquentes"
   italicPart="Excel"
   subtitle="Six formules qui couvrent l'essentiel du nettoyage. Onglet Cleaning pour la version anglaise."
@@ -165,7 +165,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
     Vidéo déposée. Le poster (thumbnail PDF) est généré à `posterTime` (0:43) par
     `npm run build:posters` (ffmpeg, aussi en prebuild) vers
     neverbounce-cleaning-poster.jpg, dérivé du nom de la vidéo. */}
-<VideoHero
+<Video
   title="Cleaning avec NeverBounce"
   italicPart="NeverBounce"
   align="left"
@@ -176,7 +176,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 6 : Section 02 - L'enrichment. */}
-<SubSectionHero
+<SubSection
   kicker="Ne demande pas, déduis"
   index="02"
   title="L'enrichment"
@@ -187,7 +187,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 7 : Quatre cas d'enrichment qui épargnent un champ au formulaire. */}
-<NumberedSplit
+<Steps
   title="Quatre cas d'enrichment qui changent la donne"
   italicPart="changent la donne"
   subtitle="Chacun épargne un champ au formulaire. Cumulés, ils baissent la friction et enrichissent le CRM."
@@ -203,7 +203,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 8 : La stack d'enrichment moderne, du plus simple au plus puissant. */}
-<TableHero
+<Table
   title="La stack d'enrichment moderne"
   italicPart="enrichment"
   subtitle="Du plus simple au plus puissant : quatre niveaux d'outils, selon le besoin et le budget."
@@ -220,7 +220,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 9 : Deep-dive Clay - le waterfall enrichment. */}
-<NumberedSplit
+<Steps
   title="Le waterfall enrichment de Clay"
   italicPart="waterfall"
   subtitle="L'enrichissement de niveau entreprise rendu accessible : la couverture maximale, sans payer le vide."
@@ -236,7 +236,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 10 : Statement pivot - garbage in, garbage out + ne demande pas, déduis. */}
-<StatementHero
+<Statement
   eyebrow="Le principe"
   title="Ne demande que ce que tu ne peux pas déduire"
   italicPart="déduire"
@@ -246,7 +246,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 11 : Section 03 - La qualité comme processus. */}
-<SubSectionHero
+<SubSection
   kicker="Dans la durée"
   index="03"
   title="La qualité comme processus"
@@ -257,7 +257,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 12 : Trois piliers pour maintenir la qualité dans le temps. */}
-<NumberedSplit
+<Steps
   title="Trois piliers pour tenir la qualité dans le temps"
   italicPart="dans le temps"
   subtitle="Sans ces trois, la base se dégrade en six mois et l'outil retombe en désuétude."
@@ -272,7 +272,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 13 : Démo live - pipeline n8n du fil rouge Cédric. */}
-<DemoHero
+<Demo
   title="Le pipeline cleaning + enrichment de Cédric"
   italicPart="Cédric"
   subtitle="Construction live dans n8n : sortie du formulaire de Cédric (sujet 1), nettoyage, enrichment, puis routage dans le CRM avec tous les champs renseignés."
@@ -289,7 +289,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 14 : Workshop - pipeline de la boîte de chaque groupe (Workshop + Brief fusionnés). */}
-<WorkshopHero
+<Workshop
   title="Le pipeline de votre boîte"
   italicPart="votre boîte"
   subtitle="En groupes, reprenez votre formulaire et concevez le pipeline cleaning + enrichment derrière."

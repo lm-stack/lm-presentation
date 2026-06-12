@@ -42,3 +42,11 @@ export type PollSnapshotResponse = {
 };
 
 export type PollState = 'initial' | 'live' | 'frozen' | 'archived';
+
+// Réponse de GET /api/poll/{token}/info, consommée par la page de vote
+// publique (src/pages/v/[token].astro).
+export type PollPublicInfo = {
+  type: PollType;
+  question: string;
+  options?: string[];
+};

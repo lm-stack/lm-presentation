@@ -10,15 +10,15 @@ cover: "/decks/funnel-marketing/cover-magnifier-highway.jpg"
 description: "Funnel marketing : du TOFU au BOFU, les workflows d'automatisation pour faire progresser les leads et le lead scoring. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import TableHero from '@/components/slides/TableHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Media from '@/components/slides/Media.astro';
+import Statement from '@/components/slides/Statement.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Table from '@/components/slides/Table.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
 
 {/*
   MIGRATION funnel-marketing.mdx -> funnel-marketing-new.mdx
@@ -28,34 +28,34 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   Nouveau deck : 15 slides.
 
   MAPPING SLIDE PAR SLIDE
-  Slide  1 Cover                     -> CoverHero (slide 1)
+  Slide  1 Cover                     -> Cover (slide 1)
   Slide  2 Calendar                  -> DROP (le calendrier vit dans Introduction)
-  Slide  3 Statement + image         -> MediaHero fit="cover" (slide 2)
-  Slide  4 Statement + image         -> MediaHero fit="cover" (slide 3)
-  Slide  5 Section 01 TOFU-MOFU-BOFU -> SubSectionHero (slide 4)
-  Slide  6 NumberedCards cols=1 (séquence TOFU/MOFU/BOFU) -> NumberedSplit (slide 5)
-  Slide  7 TableSlide 4 colonnes     -> TableHero (slide 6)
-  Slide  8 Section 02 automation     -> SubSectionHero (slide 7)
-  Slide  9 NumberedCards cols=2 (concept grid 4 mécanismes) -> InfoCardsGrid (slide 8)
-  Slide 10 NumberedCardWithDetail 01 -> MediaHero (slide 9) — condensation documentée ci-dessous
-  Slide 11 Demo ActiveCampaign (bare, pas de capture) -> DemoHero avec placeholder Unsplash (slide 10)
-  Slide 12 NumberedCardWithDetail 02 -> MediaHero (slide 11) — condensation documentée ci-dessous
-  Slide 13 NumberedCardWithDetail 03 -> MediaHero (slide 12) — condensation documentée ci-dessous
-  Slide 14 NumberedCardWithDetail 04 -> MediaHero (slide 13) — condensation documentée ci-dessous
-  Slide 15 BigImage funnel complet   -> MediaHero (slide 14)
+  Slide  3 Statement + image         -> Media fit="cover" (slide 2)
+  Slide  4 Statement + image         -> Media fit="cover" (slide 3)
+  Slide  5 Section 01 TOFU-MOFU-BOFU -> SubSection (slide 4)
+  Slide  6 NumberedCards cols=1 (séquence TOFU/MOFU/BOFU) -> Steps (slide 5)
+  Slide  7 TableSlide 4 colonnes     -> Table (slide 6)
+  Slide  8 Section 02 automation     -> SubSection (slide 7)
+  Slide  9 NumberedCards cols=2 (concept grid 4 mécanismes) -> InfoCards (slide 8)
+  Slide 10 NumberedCardWithDetail 01 -> Media (slide 9) — condensation documentée ci-dessous
+  Slide 11 Demo ActiveCampaign (bare, pas de capture) -> Demo avec placeholder Unsplash (slide 10)
+  Slide 12 NumberedCardWithDetail 02 -> Media (slide 11) — condensation documentée ci-dessous
+  Slide 13 NumberedCardWithDetail 03 -> Media (slide 12) — condensation documentée ci-dessous
+  Slide 14 NumberedCardWithDetail 04 -> Media (slide 13) — condensation documentée ci-dessous
+  Slide 15 BigImage funnel complet   -> Media (slide 14)
   Slide 16 Workshop                  -> MERGE avec WorkshopBrief (slide 15)
   Slide 17 WorkshopBrief             -> MERGE avec Workshop (slide 15)
   Slide 18 Closing variant="qa"      -> ClosingHero (slide 15... décomptage total = 16)
 
   TOTAL : 18 slides -> 16 slides (1 Calendar supprimé, Workshop+WorkshopBrief fusionnés)
 
-  CONDENSATIONS NumberedCardWithDetail -> MediaHero
+  CONDENSATIONS NumberedCardWithDetail -> Media
   Chaque NumberedCardWithDetail contient : cardTitle, cardDescription, details[] (label + text) x3
   et une image. Les informations sont condensées en subtitle (cardDescription) et body (les trois
   details fusionnés en une seule phrase, séparés par des points-virgules).
 
   PLACEHOLDER IMAGES
-  - Slide 10 (DemoHero ActiveCampaign) : pas de capture locale disponible pour ActiveCampaign.
+  - Slide 10 (Demo ActiveCampaign) : pas de capture locale disponible pour ActiveCampaign.
     Utilisation d'une image Unsplash générique de workflow/automation.
     Caption : "ActiveCampaign : workflow d'engagement (capture à remplacer)".
 
@@ -63,7 +63,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Funnel marketing"
   italicPart="marketing"
   eyebrow="Module 31"
@@ -75,9 +75,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 2 : Définition principale (ex Statement avec image crystals).
-    Statement avec image -> MediaHero fit="cover". L'ancien children
+    Statement avec image -> Media fit="cover". L'ancien children
     "Sans funnel..." devient body. */}
-<MediaHero
+<Media
   title="La colonne vertébrale du plan d'action marketing"
   italicPart="vertébrale"
   subtitle="Le funnel marketing structure l'ensemble des actions que vous planifiez pour convaincre vos visiteurs de devenir clients."
@@ -90,8 +90,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 3 : Définition complémentaire (ex Statement avec image sprinter).
-    Statement avec image -> MediaHero fit="cover". */}
-<MediaHero
+    Statement avec image -> Media fit="cover". */}
+<Media
   title="C'est un processus évolutif"
   italicPart="évolutif"
   subtitle="On commence par une visualisation initiale. Avec le temps, ce plan d'action s'améliore et se précise."
@@ -104,7 +104,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 4 : Section 01 - Les trois étages du funnel */}
-<SubSectionHero
+<SubSection
   kicker="TOFU - MOFU - BOFU"
   index="01"
   title="Les trois étages du funnel"
@@ -115,9 +115,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 5 : Attirer, convertir, conclure.
-    NumberedCards cols=1 (séquence ordonnée) -> NumberedSplit.
+    NumberedCards cols=1 (séquence ordonnée) -> Steps.
     Image : cover de la loupe sur autoroute, réutilisée comme ancre visuelle. */}
-<NumberedSplit
+<Steps
   title="Attirer, convertir, conclure"
   italicPart="conclure"
   subtitle="Le funnel marketing décline trois objectifs business : générer du trafic, transformer en leads, convertir en clients."
@@ -131,9 +131,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 6 : Actions et KPIs par étage (ex TableSlide 4 colonnes) -> TableHero.
+{/* Slide 6 : Actions et KPIs par étage (ex TableSlide 4 colonnes) -> Table.
     Headers et rows repris à l'identique. intro conservé tel quel. */}
-<TableHero
+<Table
   title="Actions et KPIs par étage"
   italicPart="KPIs"
   subtitle="Vue synthétique. Certains leads convertissent en quelques clics, d'autres viennent du dark funnel impossible à tracer."
@@ -149,7 +149,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 7 : Section 02 - Faire progresser les prospects */}
-<SubSectionHero
+<SubSection
   kicker="Marketing automation"
   index="02"
   title="Faire progresser les prospects"
@@ -160,10 +160,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 8 : Quatre mécanismes d'automation.
-    NumberedCards cols=2 (grille de concepts) -> InfoCardsGrid 4 cards.
+    NumberedCards cols=2 (grille de concepts) -> InfoCards 4 cards.
     Icons choisis par analogie sémantique : analyse engagement -> ph:chart-line-up,
     lead nurturing -> ph:envelope-simple, correspondance -> ph:target, scoring -> ph:medal */}
-<InfoCardsGrid
+<InfoCards
   title="Quatre mécanismes pour faire progresser les leads"
   italicPart="quatre mécanismes"
   subtitle="Le marketing automation suit en temps réel les signaux d'engagement et déclenche les bonnes actions."
@@ -178,11 +178,11 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 9 : Workflow 01 - Analyse d'engagement.
-    CONDENSATION NumberedCardWithDetail -> MediaHero :
+    CONDENSATION NumberedCardWithDetail -> Media :
     - cardTitle + cardDescription -> subtitle
     - details[Déclencheur / Prérequis / Actions] fusionnés en body
     - image locale réutilisée, fit="cover" (photo de silhouette) */}
-<MediaHero
+<Media
   title="Workflow 01 : Analyse d'engagement"
   italicPart="engagement"
   subtitle="Détecter les signaux forts d'intérêt commercial pour déclencher l'offre au bon moment."
@@ -199,7 +199,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
     Image Unsplash générique automation/workflow utilisée.
     Caption se termine par "(à remplacer)" conformément aux règles.
     Rows : tableau récapitulatif auteur (Outil / Cible / Étapes / À retenir). */}
-<DemoHero
+<Demo
   title="Démonstration sur ActiveCampaign"
   italicPart="ActiveCampaign"
   subtitle="Construction live d'un workflow d'engagement, du tracking de page à l'envoi conditionnel."
@@ -216,10 +216,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 11 : Workflow 02 - Lead nurturing.
-    CONDENSATION NumberedCardWithDetail -> MediaHero :
+    CONDENSATION NumberedCardWithDetail -> Media :
     - details[Déclencheur / Prérequis / Actions] fusionnés en body
     - image workflow-2-flowchart.png (diagramme) -> fit par défaut (contain) */}
-<MediaHero
+<Media
   title="Workflow 02 : Lead nurturing"
   italicPart="nurturing"
   subtitle="Capitaliser sur la chaleur d'un événement avec une séquence d'emails contextuelle."
@@ -231,10 +231,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 12 : Workflow 03 - Analyse de correspondance.
-    CONDENSATION NumberedCardWithDetail -> MediaHero :
+    CONDENSATION NumberedCardWithDetail -> Media :
     - details fusionnés en body
     - image workflow-3-target.jpeg (photo de cible) -> fit="cover" */}
-<MediaHero
+<Media
   title="Workflow 03 : Analyse de correspondance"
   italicPart="correspondance"
   subtitle="Classer les nouveaux leads selon leur fit avec le client idéal pour prioriser l'équipe commerciale."
@@ -247,10 +247,10 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 13 : Workflow 04 - Lead scoring.
-    CONDENSATION NumberedCardWithDetail -> MediaHero :
+    CONDENSATION NumberedCardWithDetail -> Media :
     - details fusionnés en body
     - image workflow-4-scoring.png (graphique scoring) -> fit par défaut (contain) */}
-<MediaHero
+<Media
   title="Workflow 04 : Lead scoring"
   italicPart="scoring"
   subtitle="Quantifier la chaleur d'un lead par un score qui évolue avec ses comportements."
@@ -261,9 +261,9 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 14 : Funnel complet vu de bout en bout (ex BigImage) -> MediaHero.
+{/* Slide 14 : Funnel complet vu de bout en bout (ex BigImage) -> Media.
     Diagramme à afficher entier : fit par défaut (contain). Caption conservée. */}
-<MediaHero
+<Media
   title="Un funnel complet, vu de bout en bout"
   italicPart="bout en bout"
   subtitle="Exemple appliqué à un persona Couple sans enfants pour un produit Voyage en plongée aux Maldives."
@@ -274,7 +274,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 15 : Workshop + WorkshopBrief fusionnés -> WorkshopHero.
+{/* Slide 15 : Workshop + WorkshopBrief fusionnés -> Workshop.
     Les valeurs array du WorkshopBrief d'origine sont aplaties en une seule string
     par point de séparation " / ".
     - Temps : "30 minutes" (scalar, repris tel quel)
@@ -288,7 +288,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
                   "Essayer de couvrir un maximum de canaux"]
       -> "Faire le lien avec les sujets du cours (landing page, nurturing, scoring) ; couvrir un maximum de canaux."
     defaultMinutes=30, presets=[10, 20, 30] */}
-<WorkshopHero
+<Workshop
   subtitle="À vous de cartographier votre propre funnel sur un persona réel de votre organisation."
   defaultMinutes={30}
   presets={[10, 20, 30]}

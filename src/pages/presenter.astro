@@ -137,7 +137,7 @@ import FontsPreload from '@/components/FontsPreload.astro';
     </main>
 
     <script>
-      const LM_POLLS_URL = import.meta.env.PUBLIC_LM_POLLS_URL || 'https://lm-polls.hello-cb2.workers.dev';
+      import { LM_POLLS_URL } from '@/utils/polls-url';
       const form = document.getElementById('presenter-form') as HTMLFormElement;
       const passwordInput = document.getElementById('presenter-password') as HTMLInputElement;
       const submitBtn = document.getElementById('presenter-submit') as HTMLButtonElement;

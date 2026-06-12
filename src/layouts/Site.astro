@@ -2,6 +2,7 @@
 // src/layouts/Site.astro
 import '@/styles/global.css';
 import FontsPreload from '@/components/FontsPreload.astro';
+import Favicons from '@/components/Favicons.astro';
 
 interface Props {
   title: string;
@@ -19,10 +20,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontsPreload />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-    <link rel="shortcut icon" href="/favicon.png" />
+    <Favicons />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <meta name="robots" content="noindex" />

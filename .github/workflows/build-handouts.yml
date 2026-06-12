@@ -36,12 +36,18 @@ jobs:
 
       - name: Detect changed handouts
         id: detect
+        # L'input de dispatch est passe via env (jamais interpole directement dans
+        # le script) pour eviter une injection shell. Cf. SLUGS_INPUT ci-dessous.
+        env:
+          SLUGS_INPUT: ${{ github.event.inputs.slugs }}
         run: |
           set -euo pipefail
 
           # Manual dispatch : utiliser l'input
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            INPUT="${{ github.event.inputs.slugs }}"
+            # Sanitize : un slug est en kebab-case, separes par virgules. On ne
+            # garde que [a-z0-9,_-] pour neutraliser toute tentative d'injection.
+            INPUT=$(printf '%s' "$SLUGS_INPUT" | tr -cd 'a-z0-9,_-')
             if [ -z "$INPUT" ]; then
               echo "args=--all" >> "$GITHUB_OUTPUT"
             else

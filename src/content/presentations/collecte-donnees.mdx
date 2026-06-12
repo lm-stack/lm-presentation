@@ -10,24 +10,24 @@ cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&f
 description: "Collecte des données : les cinq sources d'entrée d'un CRM (formulaires, transactions, imports, API, saisie manuelle). Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
-import MockupHero from '@/components/slides/MockupHero.astro';
-import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
-import CodeExamplesHero from '@/components/slides/CodeExamplesHero.astro';
-import UtmGeneratorHero from '@/components/slides/UtmGeneratorHero.astro';
-import MatrixRainHero from '@/components/slides/MatrixRainHero.astro';
-import QuoteImage from '@/components/slides/QuoteImage.astro';
-import BarChartHero from '@/components/slides/BarChartHero.astro';
-import ListImageHero from '@/components/slides/ListImageHero.astro';
-import TableHero from '@/components/slides/TableHero.astro';
-import PollHero from '@/components/slides/PollHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Mockup from '@/components/slides/Mockup.astro';
+import Compare from '@/components/slides/Compare.astro';
+import CodeExamples from '@/components/slides/CodeExamples.astro';
+import UtmGenerator from '@/components/slides/UtmGenerator.astro';
+import MatrixRain from '@/components/slides/MatrixRain.astro';
+import Quote from '@/components/slides/Quote.astro';
+import BarChart from '@/components/slides/BarChart.astro';
+import ListImage from '@/components/slides/ListImage.astro';
+import Table from '@/components/slides/Table.astro';
+import Poll from '@/components/slides/Poll.astro';
 
-<CoverHero
+<Cover
   title="Collecte des données"
   italicPart="données"
   eyebrow="Jour 1 : Sujet 1"
@@ -38,7 +38,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   theme="halo-gold"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Collecte des données"
   index="1.0"
   title="Source de données"
@@ -48,7 +48,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<InfoCardsGrid
+<InfoCards
   title="Vous collectez déjà"
   italicPart="déjà"
   subtitle="Sans même y penser, vous en gardez déjà des traces, un peu partout."
@@ -62,7 +62,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<CompareColumnsHero
+<Compare
   title="Structurées ou non structurées ?"
   italicPart="non structurées"
   subtitle="Avant le canal, la nature de la donnée : rangée dans des champs, ou en vrac."
@@ -78,7 +78,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<QuoteImage
+<Quote
   icon="ph:lightbulb"
   text="La majeure partie des données d'une entreprise est non structurée : emails, PDF, cartes de visite, notes d'appels. Tout l'enjeu de la collecte est de transformer ce vrac en données structurées, propres et exploitables par un CRM."
   image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&h=1080&fit=crop"
@@ -86,7 +86,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<ImageGridHero
+<ImageGrid
   title="Cinq sources de données"
   italicPart="Cinq sources"
   subtitle="Vos données arrivent par plusieurs portes. Les repérer, c'est déjà reprendre la main."
@@ -126,7 +126,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<PollHero
+<Poll
   id="collecte-source-la-plus-utilisee"
   question="Quelle source utilisez-vous le plus ?"
   italicPart="le plus"
@@ -135,7 +135,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<SubSectionHero
+<SubSection
   kicker="Source de données"
   index="1.1"
   title="Formulaires"
@@ -145,7 +145,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<MockupHero
+<Mockup
   device="duo"
   title="Ce qu'on voit"
   italicPart="voit"
@@ -162,7 +162,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<CompareColumnsHero
+<Compare
   title="Quelles données demander ?"
   italicPart="demander"
   subtitle="La question qu'on me pose tout le temps. La règle : demander le moins possible."
@@ -179,7 +179,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<InfoCardsGrid
+<InfoCards
   title="Quatre règles de bonne capture"
   italicPart="bonne capture"
   subtitle="La donnée la plus propre est celle qu'on n'a pas eu à nettoyer. Prévenir coûte dix fois moins que réparer."
@@ -193,7 +193,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<TableHero
+<Table
   title="Ce qu'on voit pas"
   italicPart="voit pas"
   subtitle="Pendant que le visiteur remplit trois champs, le formulaire en capte une dizaine d'autres, à son insu."
@@ -211,7 +211,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<CodeExamplesHero
+<CodeExamples
   title="Les UTMs, c'est quoi ?"
   italicPart="UTMs"
   subtitle="Des paramètres ajoutés à la fin d'une URL pour savoir d'où vient un visiteur. Les trois essentiels : la source, le canal et la campagne."
@@ -242,7 +242,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<TableHero
+<Table
   title="Les six paramètres UTM"
   italicPart="six paramètres"
   subtitle="Le tableau de référence : ce que mesure chaque paramètre, du plus courant au plus pointu."
@@ -261,7 +261,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<UtmGeneratorHero
+<UtmGenerator
   title="Générateur d'UTMs"
   italicPart="UTMs"
   subtitle="On choisit la source, le canal et la campagne : le lien tagué se construit tout seul."
@@ -269,7 +269,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<NumberedSplit
+<Steps
   title="Pourquoi un générateur ?"
   italicPart="générateur"
   subtitle="Taguer à la main marche cinq minutes. À l'échelle d'une équipe, un générateur évite trois pièges."
@@ -283,7 +283,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<DemoHero
+<Demo
   title="Le formulaire de Cédric, disséqué"
   italicPart="disséqué"
   subtitle="On reprend la landing du module Growth et on regarde ce qui se joue entre le clic et la fiche CRM."
@@ -299,7 +299,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<TableHero
+<Table
   title="Trois outils, trois atouts"
   italicPart="trois atouts"
   subtitle="Selon votre priorité : le gratuit, le meilleur rapport qualité-prix, ou le plus conversationnel."
@@ -314,13 +314,13 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<MatrixRainHero
+<MatrixRain
   title="À grande échelle"
   italicPart="grande échelle"
   subtitle="Le scraping récolte la donnée publique en masse, automatiquement."
 />
 
-<SubSectionHero
+<SubSection
   kicker="Source de données"
   index="1.2"
   title="Scraping"
@@ -330,7 +330,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<BarChartHero
+<BarChart
   title="La source la moins connue"
   italicPart="moins connue"
   subtitle="D'où les entreprises complètent vraiment leurs listes de contacts. Le scraping et les fournisseurs spécialisés ferment la marche."
@@ -348,7 +348,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<CompareColumnsHero
+<Compare
   title="Quelles données scraper ?"
   italicPart="scraper"
   subtitle="On le réduit souvent à la donnée client. C'est vrai, mais le scraping ouvre un champ bien plus large."
@@ -365,7 +365,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<NumberedSplit
+<Steps
   title="Le scraping en clair"
   italicPart="en clair"
   subtitle="Récolter automatiquement de la donnée publique déjà structurée, sans la saisir à la main."
@@ -379,7 +379,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<CompareColumnsHero
+<Compare
   title="Ce que dit la loi"
   italicPart="la loi"
   subtitle="La règle simple : données publiques d'entreprises, oui. Données personnelles, non sans base légale."
@@ -396,7 +396,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<InfoCardsGrid
+<InfoCards
   title="Juridiquement, à quoi faire attention ?"
   italicPart="faire attention"
   subtitle="Quatre réflexes à avoir avant de lancer le moindre projet de scraping."
@@ -410,7 +410,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<CompareColumnsHero
+<Compare
   title="Scraping ou API ?"
   italicPart="API"
   subtitle="Avant de scraper, posez la question : une API officielle fait souvent le travail, en plus stable et plus sûr."
@@ -427,7 +427,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   brandSub="Executive Education"
 />
 
-<InfoCardsGrid
+<InfoCards
   title="Les outils pour scraper"
   italicPart="scraper"
   subtitle="Du simple clic au code sur-mesure : il existe un outil pour chaque niveau."
@@ -441,7 +441,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<ListImageHero
+<ListImage
   title="Les fournisseurs de données les plus connus"
   italicPart="les plus connus"
   subtitle="Au-delà du scraping brut : des plateformes packagent et revendent la donnée déjà collectée."
@@ -457,7 +457,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<DemoHero
+<Demo
   title="Démonstration : OpenStreetMap"
   italicPart="OpenStreetMap"
   subtitle="Récupérer de la donnée publique ouverte avec Apify, sur OpenStreetMap."
@@ -473,7 +473,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<DemoHero
+<Demo
   title="Démonstration : Apollo.io"
   italicPart="Apollo.io"
   subtitle="Trouver des décideurs ciblés et préparer une séquence, à partir d'une base de contacts B2B."
@@ -489,7 +489,7 @@ import PollHero from '@/components/slides/PollHero.astro';
   ]}
 />
 
-<NumberedSplit
+<Steps
   title="De la donnée scrapée à la fiche CRM"
   italicPart="fiche CRM"
   subtitle="Scraper n'est que la première étape : la valeur naît du traitement qui suit."

@@ -46,7 +46,7 @@ _(rien encore)_
 ## Bugs à régler
 
 ### Bande blanche en bas du slide en plein écran
-- **Symptôme** : en mode plein écran, une bande blanche horizontale apparaît tout en bas du slide, sous le dégradé pearl du contenu. Asymétrique (bas uniquement, rien en haut). Constaté sur `WorkshopHero` en thème ExecEd (capture `bande-blanche.png`).
+- **Symptôme** : en mode plein écran, une bande blanche horizontale apparaît tout en bas du slide, sous le dégradé pearl du contenu. Asymétrique (bas uniquement, rien en haut). Constaté sur `Workshop` en thème ExecEd (capture `bande-blanche.png`).
 - **Cause** : inconnue, à investiguer (ne pas spéculer en cascade). Pistes de départ dans `slides.css` : le calcul aspect-ratio 16:9 de `.deck-stage` vs le `100vh` réel en plein écran ; ce qui apparaît derrière le slide (`.reveal` est `transparent`, `body` = `--c-cream`, mais `html` est blanc par défaut) ; le sizing/scaling propre de Reveal.js en plein écran laissant un gap en bas qui expose une couche blanche.
 - **Repro** : passer un deck en plein écran (bouton ou touche), observer le bas. Inspecter quel élément reçoit `:fullscreen` et le fond des couches `html` / `body` / `.deck-stage`.
 - **Statut** : à investiguer (pas urgent, mais visible en salle).
@@ -59,16 +59,14 @@ _(rien encore)_
 - **Enforcement** : tokens CSS (`src/styles/type.css`) + règle `.claude/rules/typographie.md` (« pas de taille en dur »).
 - **Décidé** : ambition totale = tokens + migration complète des heroes.
 - **Fait** : `type.css` (tokens, inerte / pas encore importé) + `typographie.md` (règle + mapping palier→composant) poussés sur `main`.
-- **Reste** : importer `type.css` ; migrer les 34 heroes vers les tokens ; corriger les violations sub-22px (`TitleSplitImage`, `ListImageHero`, `PeopleCards`) ; maj `slides.md` + table du `CLAUDE.md` ; vérif dev server + visuel deck par deck ; commit.
-- **Séquence** : migration sur `main` propre APRÈS le push du travail parallèle (collecte-donnees + 3 heroes WIP `CodeExamplesHero`/`MatrixRainHero`/`UtmGeneratorHero` + `slides.css`) et la fin des worktrees `architecture-donnees` / `qualite-donnees`.
-- **À valider** : les valeurs des tokens dans `type.css` (paliers titres 188/120/96/72, lead 26, body 22, espacements 16/48, mesures 640/820/1100/1280).
-- **Statut** : fondation faite, migration en attente.
+- **Reste** : néant pour la fondation. Suivi continu des entorses résiduelles documentées dans `typographie.md`.
+- **Statut** : FAIT. `type.css` est importé par `slides.css`, la famille Hero consomme les tokens (cf. `typographie.md`, statut « MIGRÉ 2026-06-08 »). Nettoyage 2026-06-09 : 20 composants legacy pré-Hero supprimés, tokens `--fs-slide-title` / `--fs-code` ajoutés, `slides.css` ne porte plus de px brut.
 
 ## Fait
 
 ### Titre des slides Workshop figé sur « Workshop »
 - Pourquoi    : « Workshop » est l'ancrage visuel récurrent des temps d'atelier ; aucune variante thématique.
-- Concerne    : `WorkshopHero.astro` + 6 decks (architecture-donnees suivra via son worktree).
+- Concerne    : `Workshop.astro` + 6 decks (architecture-donnees suivra via son worktree).
 - Enforcement : hardcode (h2 en dur + props retirées) **et** doc.
 - Cible       : `.claude/rules/slides.md`.
 - Statut      : fait : commit `a9be662` sur `main`.

@@ -6,7 +6,7 @@ Cours, PPT commerciaux, workshops, événements. Mode plein écran (Reveal.js) +
 
 ## Stack
 
-Astro 6 + Tailwind v4 + MDX + Reveal.js 5. Hébergé sur Cloudflare Pages.
+Astro 6 + Tailwind v4 + MDX + Reveal.js 6. Hébergé sur Cloudflare Pages.
 
 ## Développement
 

@@ -1,0 +1,384 @@
+---
+// src/components/slides/Mockup.astro
+// Mockup de device "ExecEd-style". Encadre une image OU un faux site web (mode
+// webform) dans un cadre tablette, mobile, laptop, iPhone (PNG détouré), ou
+// "duo" (deux iPhones détourés du SVG : un de dos à gauche derrière, un de face
+// à droite devant ; l'écran de la face est PERCÉ dans le PNG et le faux site
+// passe derrière, donc le châssis le borde proprement, sans débordement).
+//   - tablet / mobile / iphone / duo : texte à gauche, device(s) à droite.
+//   - desktop (laptop) : titre optionnel en haut, device centré.
+import { splitHighlight } from '@/utils/highlight';
+interface WebForm {
+  url?: string;
+  siteName?: string;
+  headline?: string;
+  blurb?: string;
+  fields?: string[];
+  button?: string;
+}
+interface Props {
+  device: 'tablet' | 'mobile' | 'desktop' | 'iphone' | 'duo';
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  body?: string;
+  image?: string;
+  alt?: string;
+  webform?: WebForm;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  device,
+  title,
+  italicPart,
+  subtitle,
+  body,
+  image,
+  alt = '',
+  webform,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone' || device === 'duo';
+const isPhoto = device === 'iphone';
+const wf = webform ?? {};
+const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
+---
+<section class:list={['mockup', `mockup--${device}`]} data-layout="mockup">
+  <header class="mockup__header">
+    <div class="mockup__brand-text">
+      <p class="mockup__brand-main">{brand}</p>
+      {brandSub && <p class="mockup__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="mockup__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="mockup__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class:list={['mockup__body', isSplit ? 'mockup__body--split' : 'mockup__body--stack']}>
+    {(title || subtitle || body) && (
+      <div class="mockup__text">
+        {title && (
+          <h2 class="mockup__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="mockup__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="mockup__subtitle">{subtitle}</p>}
+        {body && <p class="mockup__text-body">{body}</p>}
+      </div>
+    )}
+
+    <div class="mockup__stage">
+      {device === 'duo' ? (
+        <div class="mockup__duo">
+          <img class="mockup__phone-back" src="/decks/mockups/phone-back.png" alt="" aria-hidden="true" decoding="async" />
+          <div class="mockup__phone-front">
+            <div class="mockup__screen mockup__screen--duo">
+              <div class="mockup__site">
+                <div class="mockup__statusbar">
+                  <span class="mockup__sb-time">9:41</span>
+                  <span class="mockup__sb-icons"><i class="sig"></i><i class="wifi"></i><i class="batt"></i></span>
+                </div>
+                <div class="mockup__browser">
+                  <span class="mockup__addr">
+                    <svg class="mockup__lock" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-24V56a56 56 0 0 0-112 0v24H48a24 24 0 0 0-24 24v96a24 24 0 0 0 24 24h160a24 24 0 0 0 24-24v-96a24 24 0 0 0-24-24M96 56a32 32 0 0 1 64 0v24H96Zm112 144H48v-96h160Z"/></svg>
+                    <span class="mockup__url">{wf.url ?? 'cedric.ch'}</span>
+                  </span>
+                </div>
+                <div class="mockup__site-body">
+                  <div class="mockup__site-hero">
+                    <span class="mockup__eyebrow">Guide offert</span>
+                    <h3 class="mockup__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
+                    <p class="mockup__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
+                  </div>
+                  <div class="mockup__form-card">
+                    <form class="mockup__form" onsubmit="return false">
+                      {fields.map((f) => (
+                        <label class="mockup__field">
+                          <span class="mockup__field-label">{f}</span>
+                          <span class="mockup__field-input"></span>
+                        </label>
+                      ))}
+                      <span class="mockup__submit">{wf.button ?? 'Envoyer'}</span>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <img class="mockup__phone-front-img" src="/decks/mockups/phone-front.png" alt="" aria-hidden="true" decoding="async" />
+          </div>
+        </div>
+      ) : (
+      <div class:list={['mockup__device', isPhoto && 'mockup__device--photo']}>
+        {isPhoto && <img class="mockup__photo" src="/decks/mockups/iphone16-front.png" alt="" aria-hidden="true" decoding="async" />}
+        <div class="mockup__screen">
+          {webform ? (
+            <div class="mockup__site">
+              <div class="mockup__statusbar">
+                <span class="mockup__sb-time">9:41</span>
+                <span class="mockup__sb-icons"><i class="sig"></i><i class="wifi"></i><i class="batt"></i></span>
+              </div>
+              <div class="mockup__browser">
+                <span class="mockup__addr">
+                  <svg class="mockup__lock" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208 80h-24V56a56 56 0 0 0-112 0v24H48a24 24 0 0 0-24 24v96a24 24 0 0 0 24 24h160a24 24 0 0 0 24-24v-96a24 24 0 0 0-24-24M96 56a32 32 0 0 1 64 0v24H96Zm112 144H48v-96h160Z"/></svg>
+                  <span class="mockup__url">{wf.url ?? 'cedric.ch'}</span>
+                </span>
+              </div>
+              <div class="mockup__site-body">
+                <div class="mockup__site-hero">
+                  <span class="mockup__eyebrow">Guide offert</span>
+                  <h3 class="mockup__site-headline">{wf.headline ?? 'Recevez le guide gratuit'}</h3>
+                  <p class="mockup__site-blurb">{wf.blurb ?? 'Laissez vos coordonnées, on vous envoie tout par email.'}</p>
+                </div>
+                <div class="mockup__form-card">
+                  <form class="mockup__form" onsubmit="return false">
+                    {fields.map((f) => (
+                      <label class="mockup__field">
+                        <span class="mockup__field-label">{f}</span>
+                        <span class="mockup__field-input"></span>
+                      </label>
+                    ))}
+                    <span class="mockup__submit">{wf.button ?? 'Envoyer'}</span>
+                  </form>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <img class="mockup__img" src={image} alt={alt} loading="lazy" decoding="async" />
+          )}
+        </div>
+        {device === 'mobile' && <span class="mockup__notch" aria-hidden="true"></span>}
+        {device === 'tablet' && <span class="mockup__cam" aria-hidden="true"></span>}
+      </div>
+      )}
+      {device === 'desktop' && <span class="mockup__laptop-base" aria-hidden="true"></span>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .mockup {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+  .mockup__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 40px; border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .mockup__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-brand); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
+  }
+  .mockup__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-brand-sub); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
+  }
+  .mockup__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
+
+  .mockup__body {
+    flex: 1 1 auto !important; min-height: 0; padding-top: 28px;
+    display: flex; gap: 72px;
+  }
+  .mockup__body--split { flex-direction: row; align-items: center; }
+  .mockup__body--stack { flex-direction: column; align-items: stretch; }
+
+  .mockup__text { flex: 0 0 42%; max-width: 42%; }
+  .mockup__body--stack .mockup__text { flex: 0 0 auto; max-width: 1100px; }
+  .mockup__title {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-hero-l);
+    line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--c-ink);
+    text-wrap: balance; text-align: left;
+  }
+  .mockup__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic; font-weight: 400;
+  }
+  .mockup__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-lead); line-height: var(--lh-lead);
+    font-weight: 500; color: var(--c-muted); margin: 28px 0 0; max-width: var(--measure-s);
+  }
+  .mockup__text-body {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-body); line-height: var(--lh-body);
+    font-weight: 400; color: var(--c-muted); margin: 20px 0 0; max-width: var(--measure-s);
+  }
+
+  .mockup__stage {
+    flex: 1 1 auto; min-width: 0; min-height: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .mockup--tablet .mockup__stage,
+  .mockup--mobile .mockup__stage,
+  .mockup--iphone .mockup__stage {
+    align-self: stretch;
+    justify-content: flex-start;
+  }
+
+  /* ---- Cadre commun (bezel sombre) ---- */
+  .mockup__device {
+    position: relative;
+    background: linear-gradient(150deg, #2c2c30 0%, #161618 60%, #0f0f10 100%);
+    box-shadow: 0 26px 60px -22px rgba(25, 25, 25, 0.45), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+  }
+  .mockup__screen {
+    position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--c-surface);
+  }
+  .mockup__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* ---- Tablette (portrait 3:4) ---- */
+  .mockup--tablet .mockup__device {
+    height: 980px; flex-shrink: 0; margin-top: 40px; aspect-ratio: 3 / 4;
+    border-radius: 30px; padding: 20px 18px;
+  }
+  .mockup--tablet .mockup__screen { border-radius: 12px; }
+  .mockup__cam {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #050506; box-shadow: inset 0 0 0 2px rgba(120, 130, 160, 0.4);
+  }
+
+  /* ---- Mobile (portrait 9:19) ---- */
+  .mockup--mobile .mockup__device {
+    height: 1120px; flex-shrink: 0; margin-top: 40px; aspect-ratio: 9 / 19;
+    border-radius: 46px; padding: 11px;
+  }
+  .mockup--mobile .mockup__screen { border-radius: 36px; }
+  .mockup__notch {
+    position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+    width: 36%; height: 24px; border-radius: 0 0 16px 16px; background: #0f0f10; z-index: 2;
+  }
+
+  /* ---- iPhone photoréaliste (asset PNG détouré) ---- */
+  .mockup__device--photo {
+    position: relative;
+    height: 1000px; flex-shrink: 0; margin-top: 28px;
+    aspect-ratio: 1046 / 2159;
+    background: none; padding: 0; box-shadow: none;
+    filter: drop-shadow(0 30px 48px color-mix(in srgb, var(--c-ink) 30%, transparent));
+  }
+  .mockup__photo {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: block; z-index: 1; pointer-events: none;
+  }
+  .mockup__device--photo .mockup__screen {
+    position: absolute;
+    left: 3.54%; top: 1.16%; width: 93.40%; height: 97.82%;
+    border-radius: 52px; overflow: hidden; z-index: 2; background: var(--c-surface);
+  }
+
+  /* ---- Duo : iPhone de dos (gauche, derrière) + iPhone de face (droite, devant) ----
+     L'écran de la face est PERCÉ dans le PNG : le faux site est posé DERRIÈRE
+     (z-index 1) et le châssis (PNG, z-index 2) passe par-dessus et le borde. */
+  .mockup--duo .mockup__stage { align-self: stretch; }
+  .mockup__duo { position: relative; width: 100%; height: 100%; min-height: 0; }
+  .mockup__phone-back {
+    position: absolute; top: 50%; left: 38%; transform: translate(-50%, -50%);
+    height: 76%; width: auto; z-index: 1;
+    filter: drop-shadow(0 24px 42px color-mix(in srgb, var(--c-ink) 22%, transparent));
+  }
+  .mockup__phone-front {
+    position: absolute; top: 50%; left: 63%; transform: translate(-50%, -50%);
+    height: 90%; aspect-ratio: 436 / 882; z-index: 2;
+    filter: drop-shadow(0 32px 52px color-mix(in srgb, var(--c-ink) 32%, transparent));
+  }
+  .mockup__phone-front-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    display: block; z-index: 1; pointer-events: none;
+  }
+  /* Le faux site est posé PAR-DESSUS le PNG (écran noir), calé sur la vitre avec
+     ses coins arrondis : le bezel du PNG fait le bord, rien ne dépasse. */
+  .mockup__screen--duo {
+    position: absolute;
+    left: 3.9%; top: 2.4%; width: 92.4%; height: 95.2%;
+    border-radius: 30px; overflow: hidden; background: #FFFFFF; z-index: 2;
+  }
+
+  /* ---- Desktop (laptop 16:10) ---- */
+  .mockup--desktop .mockup__device {
+    width: min(100%, 1180px); aspect-ratio: 16 / 10;
+    border-radius: 16px; padding: 16px;
+  }
+  .mockup--desktop .mockup__screen { border-radius: 6px; }
+  .mockup__laptop-base {
+    width: min(100%, 1180px); height: 26px; margin-top: -2px;
+    background: linear-gradient(180deg, #d4d6dd 0%, #a9adba 100%);
+    clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%);
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 16px 28px -16px color-mix(in srgb, var(--c-ink) 40%, transparent);
+    position: relative;
+  }
+  .mockup__laptop-base::after {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 140px; height: 9px; border-radius: 0 0 9px 9px; background: #8d92a1;
+  }
+
+  /* ---- Faux site web (mode webform) : landing mobile soignée ---- */
+  .mockup__site {
+    display: flex; flex-direction: column; height: 100%; background: #FFFFFF;
+    font-family: 'Hanken Grotesk', sans-serif;
+  }
+  .mockup__statusbar {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 34px 4px;
+  }
+  .mockup__sb-time { font-size: 15px; font-weight: 700; color: #15151E; }
+  .mockup__sb-icons { display: inline-flex; align-items: center; gap: 5px; }
+  .mockup__sb-icons i { display: block; height: 11px; width: 16px; border-radius: 2px; background: #15151E; }
+  .mockup__sb-icons .batt { width: 23px; }
+  .mockup__browser { flex: 0 0 auto; display: flex; justify-content: center; padding: 6px 16px 14px; }
+  .mockup__addr {
+    display: inline-flex; align-items: center; gap: 7px; max-width: 92%;
+    background: #EEEEF2; border-radius: 999px; padding: 9px 18px;
+  }
+  .mockup__lock { width: 13px; height: 13px; color: #8A8A98; flex: 0 0 auto; }
+  .mockup__url {
+    font-size: 15px; font-weight: 500; color: #3C3C46;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mockup__site-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .mockup__site-hero {
+    flex: 0 0 auto; color: #FFFFFF; padding: 30px 28px 72px;
+    background: linear-gradient(150deg, #4F46E5 0%, #7C3AED 100%);
+  }
+  .mockup__eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.16); padding: 5px 13px; border-radius: 999px; margin-bottom: 16px;
+  }
+  .mockup__site-headline {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+    font-style: italic; font-weight: 400; font-size: 33px; line-height: 1.12; margin: 0 0 10px; color: #FFFFFF;
+  }
+  .mockup__site-blurb {
+    font-size: 16px; line-height: 1.45; color: rgba(255, 255, 255, 0.88); margin: 0;
+  }
+  .mockup__form-card {
+    flex: 1 1 auto; min-height: 0; margin: -48px 20px 22px;
+    background: #FFFFFF; border-radius: 22px;
+    box-shadow: 0 22px 44px -22px rgba(20, 20, 40, 0.35);
+    padding: 26px 24px 28px; display: flex; flex-direction: column;
+  }
+  .mockup__form { display: flex; flex-direction: column; gap: 16px; flex: 1 1 auto; }
+  .mockup__field { display: flex; flex-direction: column; gap: 7px; }
+  .mockup__field-label { font-size: 13px; font-weight: 600; color: #6B6B7B; }
+  .mockup__field-input {
+    display: block; height: 46px; border-radius: 11px; background: #F5F5F9; border: 1px solid #E4E4EC;
+  }
+  .mockup__submit {
+    margin-top: auto; align-self: stretch; text-align: center; color: #FFFFFF;
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    border-radius: 13px; padding: 16px; font-size: 17px; font-weight: 700;
+    box-shadow: 0 12px 24px -10px rgba(79, 70, 229, 0.5);
+  }
+</style>

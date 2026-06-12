@@ -15,7 +15,10 @@
   --c-accent: #FFD838;
   --c-accent-soft: #FEE487;
   --c-on-accent: #191919;
-  --c-secondary: #191919;
+  /* --c-secondary = couleur "lien" (sources bleues soulignées). Bleu dans les
+     deux schémas pour que les liens source soient toujours bleus (cf. slides.css
+     .slide-source). N'est utilisé que par .slide-source. */
+  --c-secondary: #3578B4;
   --c-bg-start: #FFFFFF;
   --c-bg-end: #EFEFF2;
   --c-cream: #FAF8F3;

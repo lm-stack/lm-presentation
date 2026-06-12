@@ -10,15 +10,15 @@ cover: "/decks/protection-donnees/cover-classified.jpg"
 description: "Protection des données : LPD, LPrD, RGPD, données personnelles et sensibles, sous-traitance Art 9 LPD. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import CompareColumnsHero from '@/components/slides/CompareColumnsHero.astro';
-import ExchangeHero from '@/components/slides/ExchangeHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Media from '@/components/slides/Media.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Compare from '@/components/slides/Compare.astro';
+import Exchange from '@/components/slides/Exchange.astro';
 
 {/*
   MAPPING protection-donnees.mdx -> protection-donnees-new.mdx
@@ -27,7 +27,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 
   DÉCISIONS DE MIGRATION :
   ─────────────────────────────────────────────────────────────────────────────
-  Slide 1 (Cover) -> CoverHero
+  Slide 1 (Cover) -> Cover
     eyebrow="Module 32" conservé depuis l'original.
     footer="HEC Lausanne : Juin 2026" (convention du parcours).
     image="/decks/protection-donnees/cover-classified.jpg" (image locale).
@@ -37,46 +37,46 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
     Le calendrier de journée ne vit que dans le deck Introduction (règle établie
     dans workflows-new.mdx et collecte-donnees-new.mdx).
 
-  Slide 3 (Statement WITH image: definition-matrix.jpeg) -> MediaHero
+  Slide 3 (Statement WITH image: definition-matrix.jpeg) -> Media
     subtitle = ancien subtitle (une phrase).
     body = ancien children paragraph (texte libre).
     fit="cover" (illustration/photo, pas un diagramme à lire entièrement).
 
-  Slide 4 (Section 01 "Cadre légal") -> SubSectionHero
+  Slide 4 (Section 01 "Cadre légal") -> SubSection
     kicker = ancien eyebrow "Cadre légal".
     index="01". italicPart="législatifs".
     subtitle calibré ~85 chars, tient sur une ligne.
 
-  Slide 5 (ImageGrid 3 législations) -> ImageGridHero
+  Slide 5 (ImageGrid 3 législations) -> ImageGrid
     3 images locales conservées. alt ajouté (manquait dans l'original).
     italicPart="législatifs" (substring exact du titre).
 
-  Slide 6 (TwoColumnTable "Erreurs/Conséquences") -> CompareColumnsHero
+  Slide 6 (TwoColumnTable "Erreurs/Conséquences") -> Compare
     JUGEMENT : les deux colonnes sont une vraie opposition erreurs vs conséquences,
     même logique que "Autorisé vs Risqué" dans collecte-donnees-new.mdx.
-    CompareColumnsHero est le meilleur fit.
+    Compare est le meilleur fit.
     left = "Erreurs courantes" (3 items), right = "Conséquences" (3 items).
     note = synthèse tirée du subtitle original.
 
-  Slide 7 (Exchange "Qoqa RGPD?") -> ExchangeHero
+  Slide 7 (Exchange "Qoqa RGPD?") -> Exchange
     prompts ajouté pour guider l'échange (pratique établie dans workflows-new).
 
-  Slide 8 (Statement WITH image: qoqa-otter.jpeg) -> MediaHero
+  Slide 8 (Statement WITH image: qoqa-otter.jpeg) -> Media
     subtitle = phrase introductive (extraterritorialité RGPD).
     body = ancien children (cas complet Qoqa).
     fit="cover" (photo animale illustrative).
 
-  Slide 9 (Section 02 "Données personnelles et sensibles") -> SubSectionHero
+  Slide 9 (Section 02 "Données personnelles et sensibles") -> SubSection
     kicker="Catégories". index="02". italicPart="sensibles".
     subtitle calibré ~85 chars.
 
-  Slide 10 (ImageGrid 3 types de données personnelles) -> ImageGridHero
+  Slide 10 (ImageGrid 3 types de données personnelles) -> ImageGrid
     3 images locales conservées.
     italicPart="identifie" (substring exact).
 
-  Slide 11 (NumberedCards cols=1 7 items : données sensibles) -> InfoCardsGrid
-    JUGEMENT : 7 items dans un NumberedSplit serait trop dense visuellement
-    (slide 1920×1080, 7 cards numérotées ne rentrent pas). InfoCardsGrid en
+  Slide 11 (NumberedCards cols=1 7 items : données sensibles) -> InfoCards
+    JUGEMENT : 7 items dans un Steps serait trop dense visuellement
+    (slide 1920×1080, 7 cards numérotées ne rentrent pas). InfoCards en
     2 colonnes auto-fit est mieux adapté pour une liste de 7 catégories de
     protection renforcée (concept grid, pas une séquence narrative).
     Icônes choisies parmi les icônes Phosphor sûres listées dans le brief :
@@ -89,43 +89,43 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
       07 Données biométriques : ph:eye-slash (identification masquée)
     Labels condensés (InfoCard label = CAPS court, value = description).
 
-  Slide 12 (Exchange "Salaire, CV, géolocalisation") -> ExchangeHero
+  Slide 12 (Exchange "Salaire, CV, géolocalisation") -> Exchange
     prompts ajoutés pour les 3 cas à discuter.
 
-  Slide 13 (Section 03 "Traitement et sous-traitance") -> SubSectionHero
+  Slide 13 (Section 03 "Traitement et sous-traitance") -> SubSection
     kicker="Article 9 LPD". index="03". italicPart="sous-traitance".
     subtitle calibré ~85 chars.
 
-  Slide 14 (Statement WITHOUT image) -> StatementHero
+  Slide 14 (Statement WITHOUT image) -> Statement
     eyebrow="Le traitement" (tag court).
     title = original.
     body = merge du subtitle + du children original en un paragraphe.
     Pas de stat/statCaption : pas de chiffre saillant.
 
-  Slide 15 (NumberedCards cols=1 3 items : acteurs) -> NumberedSplit
-    3 items -> NumberedSplit (séquence narrative).
+  Slide 15 (NumberedCards cols=1 3 items : acteurs) -> Steps
+    3 items -> Steps (séquence narrative).
     image="/decks/protection-donnees/definition-matrix.jpeg" (réutilisation
     d'une image locale du deck, décor flou à droite).
     items[].text = "Titre : description" condensé depuis title+description.
 
-  Slide 16 (Exchange "Qui est sous-traitant ?") -> ExchangeHero
+  Slide 16 (Exchange "Qui est sous-traitant ?") -> Exchange
     prompts ajoutés (Hubspot, agence, Infomaniak).
 
-  Slide 17 (ImageGrid 3 sous-traitants) -> ImageGridHero
+  Slide 17 (ImageGrid 3 sous-traitants) -> ImageGrid
     3 images locales conservées.
     italicPart="concrets" (substring exact).
 
-  Slide 18 (NumberedCards cols=1 3 items : règles Art9) -> NumberedSplit
+  Slide 18 (NumberedCards cols=1 3 items : règles Art9) -> Steps
     image="/decks/protection-donnees/soustraitant-infomaniak.jpeg"
     (hébergeur = thème sécurité, décor flou).
     items[].text condensé depuis title+description.
 
-  Slide 19 (NumberedCards cols=1 3 items : redflags) -> NumberedSplit
+  Slide 19 (NumberedCards cols=1 3 items : redflags) -> Steps
     image="/decks/protection-donnees/juriste-livres.jpeg" (réutilisation
     anticipée, cohérente avec la slide "conseil final" qui suit).
     items[].text condensé.
 
-  Slide 20 (Statement WITH image: juriste-livres.jpeg) -> MediaHero
+  Slide 20 (Statement WITH image: juriste-livres.jpeg) -> Media
     body = merge subtitle + children.
     fit="cover" (photo illustrative).
 
@@ -146,7 +146,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Protection des données"
   italicPart="données"
   eyebrow="Module 32"
@@ -158,7 +158,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 2 : Renversement de perspective (définition) — Statement avec image */}
-<MediaHero
+<Media
   title="Protéger les individus, pas les données"
   italicPart="individus"
   subtitle="La protection des données vise les droits fondamentaux et la personnalité des personnes dont les données sont traitées."
@@ -171,7 +171,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 3 : Section 01 — Cadre légal */}
-<SubSectionHero
+<SubSection
   kicker="Cadre légal"
   index="01"
   title="Trois cadres législatifs"
@@ -182,7 +182,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 4 : Les trois législations (LPD, LPrD, RGPD) */}
-<ImageGridHero
+<ImageGrid
   title="LPD, LPrD, RGPD"
   italicPart="RGPD"
   subtitle="Trois cadres législatifs essentiels encadrent l'utilisation des données personnelles dans le contexte suisse."
@@ -210,10 +210,10 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   ]}
 />
 
-{/* Slide 5 : Erreurs RGPD vs conséquences — CompareColumnsHero
+{/* Slide 5 : Erreurs RGPD vs conséquences — Compare
     Jugement : vraie opposition structurelle erreurs/conséquences, pas une liste
-    homogène. CompareColumnsHero est le meilleur fit (cf. collecte-donnees-new). */}
-<CompareColumnsHero
+    homogène. Compare est le meilleur fit (cf. collecte-donnees-new). */}
+<Compare
   title="Mentionner le RGPD sans y être soumis vous expose"
   italicPart="expose"
   subtitle="Erreur fréquente : aligner sa politique de confidentialité sur le RGPD par défaut, alors qu'on n'est soumis qu'à la LPD."
@@ -239,7 +239,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 6 : Échange — Qoqa soumise au RGPD ? */}
-<ExchangeHero
+<Exchange
   title="Qoqa est-elle soumise au RGPD ?"
   italicPart="RGPD"
   subtitle="E-commerce suisse, site .ch, paiements en CHF. Qu'en dites-vous ?"
@@ -253,7 +253,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 7 : Réponse Qoqa — pas soumis tant que... */}
-<MediaHero
+<Media
   title="Pas soumis tant que..."
   italicPart="tant que"
   subtitle="L'extraterritorialité du RGPD se déclenche sur l'intention commerciale et le ciblage, pas sur l'accès technique au site."
@@ -266,7 +266,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 8 : Section 02 — Données personnelles et sensibles */}
-<SubSectionHero
+<SubSection
   kicker="Catégories"
   index="02"
   title="Données personnelles et sensibles"
@@ -277,7 +277,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 9 : Une donnée personnelle identifie une personne */}
-<ImageGridHero
+<ImageGrid
   title="Une donnée personnelle identifie une personne"
   italicPart="identifie"
   subtitle="Directement (nom, prénom) ou indirectement (combinaison d'informations qui permettent l'identification)."
@@ -305,13 +305,13 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   ]}
 />
 
-{/* Slide 10 : Sept catégories de données sensibles -> InfoCardsGrid
-    Jugement : 7 items. NumberedSplit à 7 lignes dépasse la safe area sur 1080px.
-    InfoCardsGrid en 2 colonnes est le seul composant existant qui accepte 7 cards
+{/* Slide 10 : Sept catégories de données sensibles -> InfoCards
+    Jugement : 7 items. Steps à 7 lignes dépasse la safe area sur 1080px.
+    InfoCards en 2 colonnes est le seul composant existant qui accepte 7 cards
     sans débordement (grille auto-fit). C'est un concept grid (catégories légales),
-    pas une séquence narrative, donc InfoCardsGrid est sémantiquement juste.
+    pas une séquence narrative, donc InfoCards est sémantiquement juste.
     Icônes : voir bloc de commentaires en tête de fichier. */}
-<InfoCardsGrid
+<InfoCards
   title="Sept catégories de données sensibles"
   italicPart="sensibles"
   subtitle="Protection renforcée car leur utilisation peut porter atteinte aux droits fondamentaux ou à la vie privée."
@@ -357,7 +357,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 11 : Échange — Salaire, CV, géolocalisation */}
-<ExchangeHero
+<Exchange
   title="Salaire, CV, géolocalisation"
   italicPart="géolocalisation"
   subtitle="Pour ces trois données, posez-vous la question : simplement personnelle ou également sensible ?"
@@ -371,7 +371,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 12 : Section 03 — Traitement et sous-traitance */}
-<SubSectionHero
+<SubSection
   kicker="Article 9 LPD"
   index="03"
   title="Traitement et sous-traitance"
@@ -381,10 +381,10 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 13 : Ce que contrôle la loi, c'est le traitement — StatementHero
+{/* Slide 13 : Ce que contrôle la loi, c'est le traitement — Statement
     Statement sans image dans l'original. eyebrow = tag court "Le traitement".
     body = merge du subtitle + children original. */}
-<StatementHero
+<Statement
   eyebrow="Le traitement"
   title="Ce que contrôle la loi, c'est le traitement"
   italicPart="traitement"
@@ -393,10 +393,10 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 14 : Trois acteurs du traitement — NumberedSplit (séquence narrative à 3)
+{/* Slide 14 : Trois acteurs du traitement — Steps (séquence narrative à 3)
     image décor : definition-matrix.jpeg (flou, thème données numériques).
     items = "Titre : description" fusionnés. */}
-<NumberedSplit
+<Steps
   title="Trois acteurs du traitement"
   italicPart="acteurs"
   subtitle="Tout traitement implique au minimum deux acteurs, souvent trois avec un sous-traitant."
@@ -411,7 +411,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 15 : Échange — Qui est sous-traitant ? */}
-<ExchangeHero
+<Exchange
   title="Qui est sous-traitant ?"
   italicPart="sous-traitant"
   subtitle="Hubspot, votre agence, Infomaniak. Lesquels sont des sous-traitants au sens de la LPD ?"
@@ -425,7 +425,7 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
 />
 
 {/* Slide 16 : Trois exemples concrets de sous-traitants */}
-<ImageGridHero
+<ImageGrid
   title="Trois exemples concrets"
   italicPart="concrets"
   subtitle="Dès qu'un fournisseur traite des données personnelles pour votre compte, il est sous-traitant au sens de la LPD."
@@ -453,9 +453,9 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   ]}
 />
 
-{/* Slide 17 : Trois règles de l'Article 9 LPD — NumberedSplit
+{/* Slide 17 : Trois règles de l'Article 9 LPD — Steps
     image décor : soustraitant-infomaniak.jpeg (hébergeur, thème sécurité). */}
-<NumberedSplit
+<Steps
   title="Trois règles de l'Article 9 LPD"
   italicPart="règles"
   subtitle="Le traitement peut être confié à un sous-traitant, mais sous conditions strictes."
@@ -469,9 +469,9 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   ]}
 />
 
-{/* Slide 18 : Trois redflags — NumberedSplit
+{/* Slide 18 : Trois redflags — Steps
     image décor : juriste-livres.jpeg (cohérent avec la slide conseil final qui suit). */}
-<NumberedSplit
+<Steps
   title="Trois redflags à connaître"
   italicPart="redflags"
   subtitle="Ce n'est pas au marketer de juger la conformité juridique, mais voici les signaux qui doivent alerter."
@@ -485,9 +485,9 @@ import ExchangeHero from '@/components/slides/ExchangeHero.astro';
   ]}
 />
 
-{/* Slide 19 : En cas de doute, appelez un juriste — MediaHero (Statement avec image)
+{/* Slide 19 : En cas de doute, appelez un juriste — Media (Statement avec image)
     body = merge du subtitle + children original. */}
-<MediaHero
+<Media
   title="En cas de doute, appelez un juriste"
   italicPart="juriste"
   subtitle="Chaque organisation obéit à des contraintes différentes : législation applicable, types de données, types d'outils, secteur d'activité."

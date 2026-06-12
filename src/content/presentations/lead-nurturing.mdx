@@ -10,82 +10,82 @@ cover: "/decks/lead-nurturing/cover-road-fall.jpg"
 description: "Lead nurturing : du customer pipeline au funnel marketing, en passant par l'omnicanal et les KPIs. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
-import SubSectionHero from '@/components/slides/SubSectionHero.astro';
-import StatementHero from '@/components/slides/StatementHero.astro';
-import MediaHero from '@/components/slides/MediaHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import InfoCardsGrid from '@/components/slides/InfoCardsGrid.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import WorkshopHero from '@/components/slides/WorkshopHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Media from '@/components/slides/Media.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Workshop from '@/components/slides/Workshop.astro';
 
 {/*
   Migration lead-nurturing.mdx -> lead-nurturing-new.mdx
   Format ancien (SlideTitle / Cover / Statement / Section / etc.)
-  -> Format ExecEd Hero (CoverHero / StatementHero / SubSectionHero / etc.)
+  -> Format ExecEd Hero (Cover / Statement / SubSection / etc.)
 
   MAPPING SLIDE PAR SLIDE
   ========================
-  Ancien slide 1  : Cover                -> CoverHero (Module 30, theme halo-gold)
-  Ancien slide 2  : WordCloud            -> WordCloudHero (id, question conservés ; subtitle ajouté)
+  Ancien slide 1  : Cover                -> Cover (Module 30, theme halo-gold)
+  Ancien slide 2  : WordCloud            -> WordCloud (id, question conservés ; subtitle ajouté)
   Ancien slide 3  : Calendar             -> DROP (vit dans Introduction uniquement, même règle que collecte/workflow)
-  Ancien slide 4  : Statement + image    -> MediaHero (definition-www.png, fit=contain ; title/subtitle/body répartis)
-  Ancien slide 5  : Statement sans image -> StatementHero (eyebrow "Confiance" ; title/body ; italicPart "confiance")
-  Ancien slide 6  : Section 01           -> SubSectionHero (kicker="Les chiffres", index="01")
-  Ancien slide 7  : Statement sans image -> StatementHero (stat="79%", source MarketingSherpa)
-  Ancien slide 8  : Statement sans image -> StatementHero (stat="50%", source Marketo)
-  Ancien slide 9  : ImageGrid 3 items    -> ImageGridHero (3 images locales, toutes présentes)
-  Ancien slide 10 : Section 02           -> SubSectionHero (kicker="Le parcours", index="02")
-  Ancien slide 11 : NumberedCards 2 col  -> InfoCardsGrid (6 cartes, icons : ph:eye, ph:user-circle,
+  Ancien slide 4  : Statement + image    -> Media (definition-www.png, fit=contain ; title/subtitle/body répartis)
+  Ancien slide 5  : Statement sans image -> Statement (eyebrow "Confiance" ; title/body ; italicPart "confiance")
+  Ancien slide 6  : Section 01           -> SubSection (kicker="Les chiffres", index="01")
+  Ancien slide 7  : Statement sans image -> Statement (stat="79%", source MarketingSherpa)
+  Ancien slide 8  : Statement sans image -> Statement (stat="50%", source Marketo)
+  Ancien slide 9  : ImageGrid 3 items    -> ImageGrid (3 images locales, toutes présentes)
+  Ancien slide 10 : Section 02           -> SubSection (kicker="Le parcours", index="02")
+  Ancien slide 11 : NumberedCards 2 col  -> InfoCards (6 cartes, icons : ph:eye, ph:user-circle,
                                            ph:tag, ph:target, ph:handshake, ph:trophy)
-  Ancien slide 12 : TwoColumnTable       -> InfoCardsGrid (2 cartes MQL/SQL,
+  Ancien slide 12 : TwoColumnTable       -> InfoCards (2 cartes MQL/SQL,
                                            ph:megaphone + ph:users)
-  Ancien slide 13 : ImageGrid 3 items    -> ImageGridHero (digitec 1-2-3, toutes locales)
-  Ancien slide 14 : ImageGrid 3 items    -> ImageGridHero (digitec 4-5-6, toutes locales)
-  Ancien slide 15 : Section 03           -> SubSectionHero (kicker="TOFU-MOFU-BOFU", index="03")
-  Ancien slide 16 : Statement sans image -> StatementHero (eyebrow "TOFU", italicPart "découverte")
-  Ancien slide 17 : ImageGrid 3 items    -> ImageGridHero (tofu-article/social/infographies, locales)
-  Ancien slide 18 : Statement sans image -> StatementHero (eyebrow "MOFU", italicPart "sélection")
-  Ancien slide 19 : ImageGrid 3 items    -> ImageGridHero (mofu-livre-blanc/webinaire/quizz, locales)
-  Ancien slide 20 : Statement sans image -> StatementHero (eyebrow "BOFU", italicPart "pré-conversion")
-  Ancien slide 21 : ImageGrid 3 items    -> ImageGridHero (bofu-essai/reduction/temoignage, locales)
-  Ancien slide 22 : BigImage             -> MediaHero (funnel-correlation.jpeg, fit=contain ; caption conservé)
-  Ancien slide 23 : Section 04           -> SubSectionHero (kicker="Mise en oeuvre", index="04")
-  Ancien slide 24 : TwoColumnTable 10 l  -> NumberedSplit (items condensés en 5 grandes phases +
+  Ancien slide 13 : ImageGrid 3 items    -> ImageGrid (digitec 1-2-3, toutes locales)
+  Ancien slide 14 : ImageGrid 3 items    -> ImageGrid (digitec 4-5-6, toutes locales)
+  Ancien slide 15 : Section 03           -> SubSection (kicker="TOFU-MOFU-BOFU", index="03")
+  Ancien slide 16 : Statement sans image -> Statement (eyebrow "TOFU", italicPart "découverte")
+  Ancien slide 17 : ImageGrid 3 items    -> ImageGrid (tofu-article/social/infographies, locales)
+  Ancien slide 18 : Statement sans image -> Statement (eyebrow "MOFU", italicPart "sélection")
+  Ancien slide 19 : ImageGrid 3 items    -> ImageGrid (mofu-livre-blanc/webinaire/quizz, locales)
+  Ancien slide 20 : Statement sans image -> Statement (eyebrow "BOFU", italicPart "pré-conversion")
+  Ancien slide 21 : ImageGrid 3 items    -> ImageGrid (bofu-essai/reduction/temoignage, locales)
+  Ancien slide 22 : BigImage             -> Media (funnel-correlation.jpeg, fit=contain ; caption conservé)
+  Ancien slide 23 : Section 04           -> SubSection (kicker="Mise en oeuvre", index="04")
+  Ancien slide 24 : TwoColumnTable 10 l  -> Steps (items condensés en 5 grandes phases +
                                            intro note absorbée dans subtitle ; image cover-road-fall.jpg réutilisée)
-                                           NOTE : la TwoColumnTable de 10 lignes dépasse la capacité d'une InfoCardsGrid
-                                           (qui gère 4 cards max lisiblement). Choix : NumberedSplit avec 5 items
+                                           NOTE : la TwoColumnTable de 10 lignes dépasse la capacité d'une InfoCards
+                                           (qui gère 4 cards max lisiblement). Choix : Steps avec 5 items
                                            groupant les 10 jours par phase logique. Jugement appelé à révision humaine.
-  Ancien slide 25 : ImageGrid 3 items    -> ImageGridHero (omni-sms/linkedin/push, locales)
-  Ancien slide 26 : NumberedCards 1 col  -> NumberedSplit (5 items, image cover-road-fall.jpg réutilisée ;
-                                           séquence verticale = format 1 col -> NumberedSplit)
-  Ancien slide 27 + 28 : Workshop+Brief  -> WorkshopHero (fusionnés, rows depuis WorkshopBrief ;
-                                           array content aplati en string unique par règle WorkshopHero)
+  Ancien slide 25 : ImageGrid 3 items    -> ImageGrid (omni-sms/linkedin/push, locales)
+  Ancien slide 26 : NumberedCards 1 col  -> Steps (5 items, image cover-road-fall.jpg réutilisée ;
+                                           séquence verticale = format 1 col -> Steps)
+  Ancien slide 27 + 28 : Workshop+Brief  -> Workshop (fusionnés, rows depuis WorkshopBrief ;
+                                           array content aplati en string unique par règle Workshop)
   Ancien slide 29 : Closing variant=qa   -> ClosingHero (title "Questions & réponses",
                                            highlight="réponses" ; image cover-road-fall.jpg)
 
   DÉCISIONS / JUGEMENTS APPELANT RÉVISION HUMAINE
   =================================================
-  1. Slide 24 (séquence 95 jours) : condensée en 5 phases dans NumberedSplit
+  1. Slide 24 (séquence 95 jours) : condensée en 5 phases dans Steps
      au lieu de 10 lignes. La TwoColumnTable originale listait 10 actions
      jour par jour ; les grouper en phases perd la granularité. Alternative :
-     un TableHero si un composant TableHero existe, ou deux NumberedSplit de 5.
+     un Table si un composant Table existe, ou deux Steps de 5.
      A vérifier avec Thomas.
-  2. Slide 11 (six étapes pipeline) : 6 cartes dans InfoCardsGrid (mise en page
+  2. Slide 11 (six étapes pipeline) : 6 cartes dans InfoCards (mise en page
      3+3 sur 1920px). Si visuellement trop dense, scinder en deux slides.
-  3. Slide 12 (MQL/SQL) : seulement 2 cartes dans InfoCardsGrid.
-     Lisible mais beaucoup d'espace blanc. Alternative : StatementHero avec
-     un tableau inline. Jugement : InfoCardsGrid reste cohérent avec le mapping
-     TwoColumnTable -> InfoCardsGrid prescrit.
-  4. WordCloudHero slide 2 : subtitle "Plusieurs réponses bienvenues" ajouté
+  3. Slide 12 (MQL/SQL) : seulement 2 cartes dans InfoCards.
+     Lisible mais beaucoup d'espace blanc. Alternative : Statement avec
+     un tableau inline. Jugement : InfoCards reste cohérent avec le mapping
+     TwoColumnTable -> InfoCards prescrit.
+  4. WordCloud slide 2 : subtitle "Plusieurs réponses bienvenues" ajouté
      (déplacé depuis l'ancien prop subtitle du WordCloud).
   5. Aucune image manquante : les 24 fichiers locaux couvrent tous les besoins.
      Aucun placeholder Unsplash nécessaire.
 */}
 
 {/* Slide 1 : Cover */}
-<CoverHero
+<Cover
   title="Lead nurturing"
   italicPart="nurturing"
   eyebrow="Module 30"
@@ -97,7 +97,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 2 : Récap Jour 2 (WordCloud - remplace le WordCloud ancien format) */}
-<WordCloudHero
+<WordCloud
   id="recap-jour-2"
   question="Votre takeaway du Jour 2, en un mot ?"
   italicPart="Jour 2"
@@ -109,7 +109,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 {/* Slide 3 : Calendar -> DROP (le calendrier du jour vit dans Introduction) */}
 
 {/* Slide 4 : Définition centrale (Statement + image definition-www.png) */}
-<MediaHero
+<Media
   title="Stimulation des leads pour maintenir leur intérêt"
   italicPart="leur intérêt"
   subtitle="Concerne tous les leads pas encore assez matures pour une conversion."
@@ -121,7 +121,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 5 : Définition complémentaire (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="Confiance"
   title="Créer une relation de confiance"
   italicPart="confiance"
@@ -131,7 +131,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 6 : Section 01 - Pourquoi nourrir */}
-<SubSectionHero
+<SubSection
   kicker="Les chiffres"
   index="01"
   title="Pourquoi le lead nurturing"
@@ -142,7 +142,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 7 : Stat 79% (Statement sans image, chiffre porte la slide) */}
-<StatementHero
+<Statement
   eyebrow="MarketingSherpa"
   title="79% des leads marketing ne convertissent jamais"
   italicPart="jamais"
@@ -155,7 +155,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 8 : Stat 50% / 33% (Statement sans image, focus ROI d'acquisition) */}
-<StatementHero
+<Statement
   eyebrow="Marketo"
   title="50% des SQLs coûtent 33% moins chers"
   italicPart="33% moins chers"
@@ -168,7 +168,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 9 : Trois objectifs du lead nurturing (ImageGrid 3 cards) */}
-<ImageGridHero
+<ImageGrid
   title="Trois objectifs du lead nurturing"
   italicPart="objectifs"
   subtitle="Selon Marketo, la moitié des leads dans un système ne sont pas prêts à acheter. Dans l'intervalle, il faut les occuper."
@@ -197,7 +197,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 10 : Section 02 - Customer pipeline */}
-<SubSectionHero
+<SubSection
   kicker="Le parcours"
   index="02"
   title="Le customer pipeline"
@@ -207,8 +207,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 11 : Les six étapes du pipeline (NumberedCards 2 col -> InfoCardsGrid 6 cards) */}
-<InfoCardsGrid
+{/* Slide 11 : Les six étapes du pipeline (NumberedCards 2 col -> InfoCards 6 cards) */}
+<InfoCards
   title="Les six étapes du customer pipeline"
   italicPart="six étapes"
   subtitle="Plus un lead est impliqué et convaincu, plus il est proche d'une décision d'achat."
@@ -224,8 +224,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 12 : MQL et SQL (TwoColumnTable -> InfoCardsGrid 2 cards) */}
-<InfoCardsGrid
+{/* Slide 12 : MQL et SQL (TwoColumnTable -> InfoCards 2 cards) */}
+<InfoCards
   title="MQL et SQL, deux qualifications distinctes"
   italicPart="qualifications"
   subtitle="Lorsqu'un visiteur fournit une information de contact, il devient lead brut. Notre objectif : le faire évoluer."
@@ -238,7 +238,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 13 : Exemple Digitec - du suspect au lead brut (ImageGrid 3 items) */}
-<ImageGridHero
+<ImageGrid
   title="L'exemple Digitec, du suspect au lead brut"
   italicPart="Digitec"
   subtitle="Trois premières étapes du pipeline, illustrées par un acteur e-commerce suisse familier."
@@ -267,7 +267,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 14 : Exemple Digitec - du MQL au client (ImageGrid 3 items) */}
-<ImageGridHero
+<ImageGrid
   title="L'exemple Digitec, du MQL au client"
   italicPart="client"
   subtitle="Trois étapes de conversion : engagement, intention d'achat, transaction."
@@ -296,7 +296,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 15 : Section 03 - Funnel marketing */}
-<SubSectionHero
+<SubSection
   kicker="TOFU - MOFU - BOFU"
   index="03"
   title="Le funnel marketing"
@@ -307,7 +307,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 16 : TOFU concept (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="TOFU"
   title="Le TOFU est une étape de découverte"
   italicPart="découverte"
@@ -317,7 +317,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 17 : Trois contenus pour le TOFU (ImageGrid 3 items) */}
-<ImageGridHero
+<ImageGrid
   title="Trois contenus pour le TOFU"
   italicPart="TOFU"
   subtitle="Le TOFU est non-invasif. On délivre des informations pertinentes sur les canaux où l'organisation est déjà présente."
@@ -346,7 +346,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 18 : MOFU concept (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="MOFU"
   title="Le MOFU est une étape de sélection"
   italicPart="sélection"
@@ -356,7 +356,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 19 : Trois contenus pour le MOFU (ImageGrid 3 items) */}
-<ImageGridHero
+<ImageGrid
   title="Trois contenus pour le MOFU"
   italicPart="MOFU"
   subtitle="Le MOFU cherche à apporter de la valeur ajoutée à des personnes déjà renseignées sur votre offre."
@@ -385,7 +385,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 20 : BOFU concept (Statement sans image) */}
-<StatementHero
+<Statement
   eyebrow="BOFU"
   title="Le BOFU est une étape de pré-conversion"
   italicPart="pré-conversion"
@@ -395,7 +395,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 21 : Trois contenus pour le BOFU (ImageGrid 3 items) */}
-<ImageGridHero
+<ImageGrid
   title="Trois contenus pour le BOFU"
   italicPart="BOFU"
   subtitle="Le BOFU conforte la personne dans son choix tout en l'incitant à passer à l'action."
@@ -423,8 +423,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 22 : MQLs au MOFU / SQLs au BOFU (BigImage -> MediaHero, contain) */}
-<MediaHero
+{/* Slide 22 : MQLs au MOFU / SQLs au BOFU (BigImage -> Media, contain) */}
+<Media
   title="MQLs au MOFU, SQLs au BOFU"
   italicPart="BOFU"
   subtitle="On retrouve une corrélation entre les étages du funnel et les qualifications du customer pipeline."
@@ -435,7 +435,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 23 : Section 04 - Opérationnaliser le nurturing */}
-<SubSectionHero
+<SubSection
   kicker="Mise en oeuvre"
   index="04"
   title="Opérationnaliser le nurturing"
@@ -445,12 +445,12 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 24 : Séquence type sur 95 jours (TwoColumnTable 10 lignes -> NumberedSplit 5 phases)
+{/* Slide 24 : Séquence type sur 95 jours (TwoColumnTable 10 lignes -> Steps 5 phases)
     NOTE DE MIGRATION : les 10 actions jour par jour ont été regroupées en 5 phases
     logiques (activation / découverte / engagement / décision / conversion) pour
-    tenir dans NumberedSplit. La granularité jour par jour est perdue. À réviser
-    si un composant TableHero ou une slide dédiée par phase est préféré. */}
-<NumberedSplit
+    tenir dans Steps. La granularité jour par jour est perdue. À réviser
+    si un composant Table ou une slide dédiée par phase est préféré. */}
+<Steps
   title="Une séquence type sur 95 jours"
   italicPart="95 jours"
   subtitle="Cadence indicative. À calibrer selon votre cycle réel et la maturité de vos personas."
@@ -467,7 +467,7 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
 />
 
 {/* Slide 25 : Approche omnicanale (ImageGrid 3 canaux) */}
-<ImageGridHero
+<ImageGrid
   title="Intégrer une approche omnicanale"
   italicPart="omnicanale"
   subtitle="L'email reste le canal le plus facile à mettre en place. D'autres complètent utilement selon les données collectées."
@@ -495,8 +495,8 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slide 26 : Cinq KPIs à suivre (NumberedCards 1 col -> NumberedSplit) */}
-<NumberedSplit
+{/* Slide 26 : Cinq KPIs à suivre (NumberedCards 1 col -> Steps) */}
+<Steps
   title="Cinq KPIs à suivre en priorité"
   italicPart="KPIs"
   subtitle="Si vous n'avez pas le temps de couvrir l'intégralité du funnel, priorisez via des mesures quantitatives."
@@ -512,11 +512,11 @@ import WorkshopHero from '@/components/slides/WorkshopHero.astro';
   ]}
 />
 
-{/* Slides 27+28 : Workshop + WorkshopBrief -> WorkshopHero (fusionnés)
+{/* Slides 27+28 : Workshop + WorkshopBrief -> Workshop (fusionnés)
     Les arrays du WorkshopBrief ("15 min individuel / 10 min peer-sharing" et
     "toujours relié à un persona / diversifié") ont été aplatis en strings uniques
-    conformément à la signature WorkshopHero { label: string, value: string }. */}
-<WorkshopHero
+    conformément à la signature Workshop { label: string, value: string }. */}
+<Workshop
   subtitle="À vous de cartographier les actions applicables à votre organisation, persona par persona."
   defaultMinutes={25}
   presets={[15, 25, 30]}

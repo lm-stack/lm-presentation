@@ -6,8 +6,10 @@
 > WordCloud / UTM, texte interne des mockups device, hauteurs de ligne structurelles du tableur).
 
 Source de vérité des tailles : `src/styles/type.css` (tokens CSS, scheme-indépendants).
-S'applique à la famille de composants **Hero** (`src/components/slides/*Hero.astro` + `InfoCardsGrid`,
-`NumberedSplit`, `SectionSplit`, `TitleSplitImage`, `PeopleCards`, `SchemaTriptych`), qui est le système vivant.
+S'applique à tous les composants de slide adoptés (`src/components/slides/*.astro` : `Cover`,
+`Section`, `InfoCards`, `Steps`, `Table`, `ImageGrid`, `People`, `Schema`, etc.), le système vivant.
+(Note : le suffixe `Hero` a été retiré des noms de composants ; « famille Hero » reste le nom du
+langage visuel ExecEd-style.)
 
 ## RÈGLE ABSOLUE : pas de taille en dur
 
@@ -22,11 +24,11 @@ Conséquence : changer une taille = changer UN token, pas 34 composants.
 
 | Token | Valeur | Palier | Composants |
 |---|---|---|---|
-| `--fs-cover` | clamp(110px, 11vw, 188px) | Cover | `CoverHero` |
-| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `SectionHero`, `SubSectionHero`, `AboutHero`, `SectionSplit`, `StatementHero`, `PauseHero`, `MatrixRainHero`, `ClosingHero`, `QuestionsHero`, `MerciHero` |
-| `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCardsGrid`, `NumberedSplit`, `ProgrammeHero`, `FormHero`, `ListImageHero`, `ExchangeHero`, `WorkshopHero`, `PeopleCards`, `MockupHero`, `CodeExamplesHero`, `TitleSplitImage`, `DemoHero`, `UtmGeneratorHero` |
-| `--fs-hero-m` | clamp(40px, 4vw, 72px) | Contenu dense | `ImageGridHero`, `PollHero`, `WordCloudHero`, `CompareColumnsHero`, `BarChartHero`, `TableHero`, `MediaHero`, `SpreadsheetHero`, `StatRingsHero`, `VideoHero`, `SchemaTriptych` |
-| `--fs-term` | clamp(76px, 8vw, 140px) | Spécial | `DefinitionHero` (terme serif) |
+| `--fs-cover` | clamp(110px, 11vw, 188px) | Cover | `Cover` |
+| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `Section`, `SubSection`, `About`, `SectionSplit`, `Statement`, `Pause`, `MatrixRain`, `ClosingHero`, `Questions`, `Merci` |
+| `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCards`, `Steps`, `Programme`, `Form`, `ListImage`, `Exchange`, `Workshop`, `People`, `Mockup`, `CodeExamples`, `SplitImage`, `Demo`, `UtmGenerator` |
+| `--fs-hero-m` | clamp(40px, 4vw, 72px) | Contenu dense | `ImageGrid`, `Poll`, `WordCloud`, `Compare`, `BarChart`, `Table`, `Media`, `Spreadsheet`, `StatRings`, `Video`, `Schema` |
+| `--fs-term` | clamp(76px, 8vw, 140px) | Spécial | `Definition` (terme serif) |
 
 ## Échelle des textes & méta
 
@@ -57,7 +59,11 @@ de fond reste >= `--fs-body`. Chrome/méta (brand-sub, source, badges) admis en 
 
 ## Hors scope
 
-Les composants **legacy** (non importés par les decks : `Cover`, `Section`, `Default`, `Statement`,
-`AboutMe(Bullets)`, `Closing`, `Title`, `Calendar`, `ImageGrid`, `Workshop`, `Demo`, `Exchange`,
-`Conventions`, `Table/TwoColumnTable`, `Numbered*`, `Agenda*`, `Timer`, `BigImage`, `IconCatalog`,
-`Custom`, `Poll`, `WordCloud`) ne sont pas migrés : à archiver, pas à harmoniser.
+Composants **legacy restants** (non importés par les decks, pas encore adoptés : `Default`,
+`Title`, `Calendar`, `Conventions`, `AgendaFull`, `AgendaLight`, `Timer`, `IconCatalog`, `Custom`)
+ne sont pas migrés : à archiver, pas à harmoniser.
+
+Les autres composants legacy (versions pré-Hero) ont été **supprimés lors du nettoyage 2026-06-09**,
+remplacés par leur équivalent Hero : `Cover`, `Section`, `Closing`/`ClosingHero`, `Statement`,
+`Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Demo`, `Exchange`, `ImageGrid`,
+`BigImage`, `TableSlide`/`TwoColumnTable`, `NumberedCards`/`NumberedCardWithDetail`, `Poll`, `WordCloud`.

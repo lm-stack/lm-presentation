@@ -1,0 +1,226 @@
+---
+// src/components/slides/Video.astro
+// Vidéo en grand "ExecEd-style" : même chrome que Media (header marque + logo,
+// titre serif italique partiel + sous-titre), mais un <video> à la place de l'image.
+// En live : lecture avec contrôles. En PDF / handout (Puppeteer) : la frame `poster`
+// est capturée, c'est donc le thumbnail du PDF.
+//
+// Le poster est soit fourni explicitement (prop `poster`), soit dérivé du chemin
+// vidéo (xxx.mp4 -> xxx-poster.jpg). Quand il est dérivé, la frame est générée au
+// build par scripts/extract-video-posters.mjs à partir de `posterTime` (ex. "1:30").
+import { splitHighlight } from '@/utils/highlight';
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  /** Chemin de la vidéo (mp4/webm) dans /public, ex. "/decks/qualite-donnees/excel-cleaning.mp4". */
+  video: string;
+  /** Poster (thumbnail PDF) explicite. Si absent, dérivé de `video` (-poster.jpg) et généré au build. */
+  poster?: string;
+  /** Horodatage de la frame poster, ex. "1:30" ou "90". Lu par build:posters (ffmpeg) quand `poster` est dérivé. */
+  posterTime?: string;
+  /** 'contain' (défaut, montre toute la vidéo) ou 'cover' (remplit, peut rogner les bords). */
+  fit?: 'contain' | 'cover';
+  /** 'fill' (défaut, pleine largeur) ou 'left' (le panneau épouse la largeur de la vidéo, calé à gauche). */
+  align?: 'fill' | 'left';
+  caption?: string;
+  alt?: string;
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  video,
+  poster,
+  posterTime,
+  fit = 'contain',
+  align = 'fill',
+  caption,
+  alt = '',
+  brand = 'Titre de la présentation',
+  brandSub,
+  tocLabel,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const posterSrc = poster ?? video.replace(/\.[^.]+$/, '-poster.jpg');
+---
+<section class="video" data-layout="video">
+  <header class="video__header">
+    <div class="video__brand-text">
+      <p class="video__brand-main">{brand}</p>
+      {brandSub && <p class="video__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="video__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="video__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="video__body">
+    <div class="video__heading">
+      <h2 class="video__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="video__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="video__subtitle">{subtitle}</p>}
+    </div>
+
+    <figure class:list={['video__figure', `video__figure--${fit}`, align === 'left' && 'video__figure--left']}>
+      <video
+        src={video}
+        poster={posterSrc}
+        controls
+        preload="metadata"
+        playsinline
+        aria-label={alt || title}
+        data-poster-time={posterTime}
+      ></video>
+    </figure>
+
+    {caption && <p class="video__caption">{caption}</p>}
+  </div>
+</section>
+
+<style>
+  .video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width : brand gauche + logo LM droite + border-bottom (44/40). */
+  .video__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .video__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .video__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .video__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps : heading compact en haut, figure qui prend l'espace restant. */
+  .video__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 28px;
+    gap: 32px;
+  }
+  .video__heading {
+    flex: 0 0 auto;
+  }
+  .video__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .video__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .video__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 12px 0 0;
+    max-width: 1500px;
+  }
+
+  /* Figure : prend l'espace restant. Fond sombre pour un letterboxing propre en
+     mode contain (capture d'écran claire sur cadre sombre). */
+  .video__figure {
+    flex: 0 0 auto;
+    width: 100%;
+    /* Panneau 1728 x 691 sur le canvas 1920x1080 (ratio 2.5:1) : un poil plus
+       court que pleine hauteur. Filmer en 2.5:1 (ex. 1920x768 ou 2560x1024)
+       remplit pile ; object-fit: contain ne déforme ni ne rogne sinon. */
+    height: 691px;
+    max-height: 100%;
+    min-height: 0;
+    margin: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #0b0e14;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .video__figure video {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .video__figure--contain video {
+    object-fit: contain;
+  }
+  .video__figure--cover video {
+    object-fit: cover;
+  }
+  /* align="left" : le panneau épouse la largeur de la vidéo (à sa hauteur fixe)
+     et se cale à gauche, au lieu d'être pleine largeur. La marge passe à droite,
+     sur le fond de slide : plus de bandes sombres autour de la vidéo. */
+  .video__figure--left {
+    align-self: flex-start;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .video__figure--left video {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+  }
+  .video__caption {
+    flex: 0 0 auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 0;
+    text-align: left;
+  }
+</style>

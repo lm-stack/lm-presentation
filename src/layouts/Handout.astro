@@ -9,6 +9,7 @@
 import '@/styles/slides.css';
 import '@/styles/handout.css';
 import FontsPreload from '@/components/FontsPreload.astro';
+import Favicons from '@/components/Favicons.astro';
 
 interface Props {
   title: string;
@@ -31,16 +32,7 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <FontsPreload />
-    {scheme === 'execed' ? (
-      <link rel="icon" type="image/svg+xml" href="/favicon-execed.svg" />
-    ) : (
-      <Fragment>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-        <link rel="shortcut icon" href="/favicon.png" />
-      </Fragment>
-    )}
+    <Favicons scheme={scheme} />
     <title>{`${title} | Handout ${mode}up | Lausanne Marketing`}</title>
     <meta name="robots" content="noindex" />
     {/* IMPORTANT : <style>{`...`}</style> seul ne marche PAS dans Astro pour */}

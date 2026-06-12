@@ -10,12 +10,12 @@ cover: "/decks/architecture-donnees/cover-blueprint.jpg"
 description: "Des données au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import DemoHero from '@/components/slides/DemoHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Demo from '@/components/slides/Demo.astro';
 
 {/* Slide 1 : Cover. Image : placeholder cover-blueprint d'architecture-donnees, à remplacer. */}
-<CoverHero
+<Cover
   title="Des données au CRM"
   italicPart="CRM"
   eyebrow="Jour 1 : Sujet 4"
@@ -29,7 +29,7 @@ import DemoHero from '@/components/slides/DemoHero.astro';
 {/* Slide 2 : Les 4 plus grands CRM (grille logos, mode contain).
     Logos locaux pleine couleur. DYNAMICS : placeholder logo Microsoft (officiel,
     couleur), à remplacer par le vrai logo Dynamics 365. */}
-<ImageGridHero
+<ImageGrid
   logos={true}
   title="Les quatre grands"
   italicPart="grands"
@@ -45,7 +45,7 @@ import DemoHero from '@/components/slides/DemoHero.astro';
 />
 
 {/* Slide 3 : Alternatives bon marché (grille logos, mode contain). */}
-<ImageGridHero
+<ImageGrid
   logos={true}
   title="Les alternatives abordables"
   italicPart="abordables"
@@ -62,7 +62,7 @@ import DemoHero from '@/components/slides/DemoHero.astro';
 
 {/* Slide 4 : Démo Zoho CRM en live (pas de vidéo). Image : placeholder dashboard
     Unsplash, A REMPLACER par une vraie capture Zoho CRM. */}
-<DemoHero
+<Demo
   title="Zoho CRM en pratique"
   italicPart="en pratique"
   subtitle="On construit le schéma Contact, Société, Affaire en direct, sans quitter l'outil."

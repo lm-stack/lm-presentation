@@ -10,16 +10,16 @@ cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&f
 description: "Ouverture du parcours CRM, Data & Automation : présentation de l'intervenant et vue d'ensemble des trois jours de formation."
 ---
 
-import CoverHero from '@/components/slides/CoverHero.astro';
-import AboutHero from '@/components/slides/AboutHero.astro';
-import ProgrammeHero from '@/components/slides/ProgrammeHero.astro';
-import ImageGridHero from '@/components/slides/ImageGridHero.astro';
-import ListImageHero from '@/components/slides/ListImageHero.astro';
-import NumberedSplit from '@/components/slides/NumberedSplit.astro';
-import ExchangeHero from '@/components/slides/ExchangeHero.astro';
-import WordCloudHero from '@/components/slides/WordCloudHero.astro';
+import Cover from '@/components/slides/Cover.astro';
+import About from '@/components/slides/About.astro';
+import Programme from '@/components/slides/Programme.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import ListImage from '@/components/slides/ListImage.astro';
+import Steps from '@/components/slides/Steps.astro';
+import Exchange from '@/components/slides/Exchange.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
-<CoverHero
+<Cover
   title="CRM, Data & Automation"
   italicPart="Automation"
   eyebrow="Formation continue"
@@ -30,7 +30,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   theme="halo-gold"
 />
 
-<ListImageHero
+<ListImage
   title="Le CAS en Marketing digital"
   italicPart="Marketing digital"
   subtitle="5 modules, 15 jours, 5 mois."
@@ -47,7 +47,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<NumberedSplit
+<Steps
   title="Vos objectifs"
   italicPart="objectifs"
   subtitle="À l'issue des trois jours, vous serez capable de :"
@@ -61,7 +61,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<AboutHero
+<About
   firstName="Thomas"
   lastName="Rouaud"
   photo="/assets/thomas-rouaud.jpg"
@@ -86,7 +86,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<ImageGridHero
+<ImageGrid
   title="Tour de table"
   italicPart="table"
   subtitle="Faisons connaissance avant de plonger dans la donnée."
@@ -103,7 +103,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   ]}
 />
 
-<ExchangeHero
+<Exchange
   title="Comment gérez-vous vos données aujourd'hui ?"
   italicPart="données"
   subtitle="État des lieux à voix haute : peu importe la taille de votre structure ou l'outil, on part de votre réalité."
@@ -117,7 +117,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Executive Education"
 />
 
-<WordCloudHero
+<WordCloud
   id="intro-outils-donnees"
   question="Avec quels outils gérez-vous vos données aujourd'hui ?"
   italicPart="outils"
@@ -126,7 +126,7 @@ import WordCloudHero from '@/components/slides/WordCloudHero.astro';
   brandSub="Executive Education"
 />
 
-<ProgrammeHero
+<Programme
   title="Agenda"
   italicPart="Agenda"
   brand="CRM, Data & Automation"
