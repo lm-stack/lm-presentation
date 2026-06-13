@@ -13,6 +13,7 @@ description: "Conclusion du parcours CRM, Data & Automation : la stratégie avan
 import Cover from '@/components/slides/Cover.astro';
 import Media from '@/components/slides/Media.astro';
 import Table from '@/components/slides/Table.astro';
+import Recap from '@/components/slides/Recap.astro';
 import Exchange from '@/components/slides/Exchange.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 
@@ -99,7 +100,18 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   theme="halo-gold"
 />
 
-{/* Slide 2 : La stratégie avant les outils — message clé de la formation */}
+{/* Slide 2 : Le chemin parcouru — récap workshops + démos, dérivé du parcours */}
+<Recap
+  parcours="crm-data-automation"
+  title="Le chemin parcouru ensemble"
+  italicPart="ensemble"
+  subtitle="Trois jours de pratique : ce que vous avez construit et vu en démonstration."
+  noWorkshop={["funnel-marketing", "segmentation-activation"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : La stratégie avant les outils — message clé de la formation */}
 <Media
   title="La stratégie avant les outils"
   italicPart="stratégie"

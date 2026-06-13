@@ -258,3 +258,42 @@ Historique des splits et réorganisations :
   | Workshop brief | 3 |
   | Workshop BPMN | 25 |
   | Restitution + débrief | 8 |
+
+## Examen (décidé 2026-06-13)
+
+Présenté dans le deck `introduction` (section `03 L'examen`), trois slides : intercalaire, livrables, barème.
+
+### Principe
+
+**Un seul projet, sur leur propre entreprise** (ou un cas de leur choix si ce n'est pas possible), décliné en quatre livrables qui s'enchaînent dans l'ordre de construction du cours. Les trois premiers sont quasi les outputs des workshops (ERD, BPMN, workflow no-code) : l'examen capitalise sur la pratique en salle. Le quatrième, la stratégie, est la clé de voûte qui relie les trois.
+
+### Les quatre livrables (dans l'ordre)
+
+1. **Architecture de données** : le schéma du CRM, entités et relations (cf. module `architecture-donnees`).
+2. **Processus modélisés** : deux à trois processus clés en BPMN (cf. `modeliser-les-processus`). Deux à trois suffisent.
+3. **Workflow** : un processus automatisé de bout en bout (cf. `workflows`). Un seul suffit.
+4. **Stratégie data & automation** : la vision qui relie et priorise les trois.
+
+### Modalités
+
+- **Format** : dossier écrit, **individuel**, une section par livrable.
+- **Cas** : leur entreprise, ou un cas au choix à défaut.
+- **Rendu** : après la formation, délai indiqué sur Moodle.
+
+### Barème
+
+| Livrable | Poids |
+|----------|-------|
+| Architecture | 20 % |
+| Processus | 20 % |
+| Workflow | 20 % |
+| Stratégie | 40 % |
+
+La stratégie pèse le double : c'est là que se mesure la compétence brochure « Piloter une stratégie d'automatisation », au-delà de la preuve technique. Pondération posée par défaut, à réviser librement (modifier le `<Table>` de `introduction.mdx`).
+
+## Récap de fin (conclusion)
+
+Le deck `conclusion` ouvre sur un slide `<Recap parcours="crm-data-automation">` (composant `src/components/slides/Recap.astro`) qui **dérive au build** le nombre de workshops et de démonstrations du parcours, comme `AgendaDays` :
+
+- **Workshops** : tout deck dont le corps contient un `<Workshop>`, moins l'override `noWorkshop` (mêmes exclusions que l'agenda : `funnel-marketing`, `segmentation-activation`). Libellé = titre du deck.
+- **Démonstrations** : chaque `<Demo toolName="...">` rencontré. Seuls 4 decks utilisent aujourd'hui le composant `<Demo>` (Tally, Apify, Apollo.io, Zoho CRM) : les démos faites en direct sans slide `<Demo>` ne sont pas comptées. État au 2026-06-13 : 5 workshops, 4 démos. Le récap se met à jour tout seul quand on ajoute un atelier ou une démo.
