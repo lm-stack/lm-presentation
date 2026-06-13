@@ -21,6 +21,8 @@ interface Props {
   /** Position de la légende, dans un des 4 coins (défaut "bottom-left").
       Toujours choisir le coin le plus vide de l'image (vérification visuelle). */
   captionPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  /** Cadrage de l'image (object-position), ex. "left center", "left top". Défaut "center". */
+  imagePosition?: string;
 }
 const {
   image,
@@ -30,6 +32,7 @@ const {
   source,
   sourceUrl,
   captionPosition = 'bottom-left',
+  imagePosition = 'center',
 } = Astro.props;
 ---
 <section
@@ -37,7 +40,7 @@ const {
   data-layout="image-full"
 >
   <div class="image-full__bg" aria-hidden={alt === ''}>
-    <img src={image} alt={alt} loading="eager" decoding="async" />
+    <img src={image} alt={alt} style={`object-position: ${imagePosition}`} loading="eager" decoding="async" />
   </div>
 
   {(captionTitle || caption || source) && (

@@ -1,0 +1,220 @@
+---
+title: "Modéliser les processus"
+subtitle: "CRM, Data & Automation"
+short: "Modéliser les processus"
+date: 2026-06-13
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "/decks/modeliser-les-processus/cover-whiteboard.jpg"
+description: "Modéliser les processus métier avec la notation BPMN avant de les implémenter dans le CRM. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Media from '@/components/slides/Media.astro';
+import Quote from '@/components/slides/Quote.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import ImageFull from '@/components/slides/ImageFull.astro';
+import BpmnCanvas from '@/components/slides/BpmnCanvas.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+
+{/* Module Modéliser les processus (Jour 1), créé le 2026-06-13.
+    Structure : 01 Pourquoi modéliser -> 02 Comment modéliser (BPMN) ->
+    03 Modélisons (démo interactive BpmnCanvas) -> pont vers le CRM -> Workshop.
+    Le bloc modélisation est repris de l'ancien deck workflow (Jour 2) ; la démo
+    interactive (BpmnCanvas) et le mapping BPMN->CRM sont net-neuf.
+    Placement : après des-donnees-au-crm. Logique du fil rouge : on a structuré
+    les données (architecture), monté le CRM dessus (De la Data au CRM), on
+    modélise maintenant les processus pour les implémenter dans ce CRM.
+    Images dans public/decks/modeliser-les-processus/. */}
+
+{/* Slide 1 : Cover (image placeholder cover-whiteboard, à remplacer). */}
+<Cover
+  title="Modéliser les processus"
+  italicPart="processus"
+  eyebrow="Jour 1 : Sujet 5"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="/decks/modeliser-les-processus/cover-whiteboard.jpg"
+  theme="halo-gold"
+/>
+
+{/* ============ 01 POURQUOI MODÉLISER ============ */}
+<SubSection
+  kicker="Modéliser les processus"
+  index="01"
+  title="Pourquoi modéliser ?"
+  italicPart="Pourquoi"
+  subtitle="Avant d'outiller ou d'automatiser, on cartographie. Sinon on accélère le désordre."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Pourquoi : le chaos, traité en citation (image de fond floutée) + texte de support. */}
+<Quote
+  text="Modélisez les processus avant de les implémenter"
+  lead={[
+    "Vous venez de monter le CRM sur votre architecture de données. Avant d'y construire des processus, il faut les cartographier.",
+    "Sans cartographie, on implémente du chaos et on accélère le désordre. Modéliser reste une étape cruciale, pour le CRM comme pour toute automatisation.",
+  ]}
+  image="/decks/modeliser-les-processus/besoins-chaos.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Pourquoi : ce que la modélisation apporte (net-neuf). */}
+<InfoCards
+  title="Ce que la modélisation vous apporte"
+  italicPart="apporte"
+  subtitle="Quatre bénéfices concrets, de l'équipe au CRM."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:users-three", label: "Clarté partagée", value: "Tout le monde voit le même processus : qui fait quoi, dans quel ordre. Fini les versions divergentes dans les têtes." },
+    { icon: "ph:magnifying-glass", label: "Repérer les ratés", value: "Doublons, angles morts et goulots d'étranglement sautent aux yeux une fois le processus dessiné." },
+    { icon: "ph:database", label: "Une base pour le CRM", value: "Un processus clair se traduit directement en étapes et en automatisations dans le CRM. On construit sur du solide." },
+    { icon: "ph:graduation-cap", label: "Transmettre sans friction", value: "Un nouveau venu comprend le fonctionnement d'un coup d'oeil. Le savoir n'est plus dans la tête d'une seule personne." },
+  ]}
+/>
+
+{/* ============ 02 COMMENT MODÉLISER ============ */}
+<SubSection
+  kicker="Modéliser les processus"
+  index="02"
+  title="Comment modéliser ?"
+  italicPart="Comment"
+  subtitle="Une notation standard et quelques notions clés suffisent : le BPMN."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Comment : BPMN, le standard de référence. Image plein cadre (ImageFull) =
+    illustration d'un processus BPMN modélisé dans Miro. Source = Miro. */}
+<ImageFull
+  image="/decks/modeliser-les-processus/bpmn-exemple-miro.png"
+  alt="Exemple de processus métier modélisé en BPMN dans Miro : événement de début, tâche, gateway exclusif Oui/Non, fins et objet de données"
+  captionTitle="Business Process Model and Notation"
+  caption="Le standard mondial pour modéliser un processus métier."
+  source="Miro"
+  sourceUrl="https://miro.com"
+  captionPosition="bottom-left"
+/>
+
+{/* Comment : les 4 notions clés du BPMN (grille 4 images, symboles SVG stylisés). */}
+<ImageGrid
+  logos={true}
+  title="Les quatre notions clés du BPMN"
+  italicPart="quatre notions clés"
+  subtitle="Quelques éléments simples suffisent pour modéliser un processus."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/modeliser-les-processus/notation/swimlane.svg", alt: "Symbole BPMN swimlane", title: "Swimlane", text: "Les voies qui représentent les acteurs ou les départements impliqués dans le processus." },
+    { src: "/decks/modeliser-les-processus/notation/evenement.svg", alt: "Symbole BPMN événement", title: "Événements", text: "Les points de départ, intermédiaires ou de fin qui ponctuent le déroulement." },
+    { src: "/decks/modeliser-les-processus/notation/activite.svg", alt: "Symbole BPMN activité", title: "Activités", text: "Les tâches concrètes à effectuer, souvent par un acteur identifié." },
+    { src: "/decks/modeliser-les-processus/notation/gateway.svg", alt: "Symbole BPMN gateway", title: "Gateways", text: "Les points de décision qui orientent le flux selon des conditions." },
+  ]}
+/>
+
+{/* Comment : outils d'édition BPMN (MIRO / Lucidchart). */}
+<Media
+  title="Des outils pour éditer vos processus"
+  italicPart="éditer"
+  subtitle="Le plus connu, popularisé par le télétravail, reste MIRO. Lucidchart en est une alternative robuste."
+  body="MIRO et Lucidchart abaissent la barrière d'entrée : édition collaborative en temps réel, templates BPMN prêts à l'emploi, partage par URL."
+  image="/decks/modeliser-les-processus/outils-miro.png"
+  alt="Capture de l'outil MIRO avec un tableau BPMN collaboratif"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 03 MODÉLISONS UN PROCESSUS (démo interactive) ============ */}
+<SubSection
+  kicker="Modéliser les processus"
+  index="03"
+  title="Modélisons un processus"
+  italicPart="Modélisons"
+  subtitle="En direct, étape par étape : publier un événement en ligne."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démo interactive : on construit le BPMN en avançant (fragments Reveal). */}
+<BpmnCanvas
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Process vs workflow (annonce le Jour 2). */}
+<ImageGrid
+  title="Différence entre processus et workflow"
+  italicPart="workflow"
+  subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/modeliser-les-processus/diff-process-bpmn.jpeg",
+      alt: "Schéma d'un processus métier en BPMN",
+      title: "Schéma d'un processus",
+      text: "Vue stratégique : qui fait quoi, dans quel ordre, avec quelles règles métier. C'est le BPMN, ce qu'on vient de modéliser.",
+    },
+    {
+      src: "/decks/modeliser-les-processus/diff-workflow-whiteboard.jpeg",
+      alt: "Schéma d'un workflow d'exécution",
+      title: "Schéma d'un workflow",
+      text: "Vue opérationnelle : trigger, actions, branchements, données. C'est ce qu'on construira au Jour 2, dans le CRM ou un outil no-code.",
+    },
+  ]}
+/>
+
+{/* Pont : du processus modélisé au CRM (mapping BPMN -> objets CRM). */}
+<InfoCards
+  title="Du processus modélisé au CRM"
+  italicPart="au CRM"
+  subtitle="Chaque brique BPMN se traduit directement dans le CRM que vous venez de monter."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:users", label: "Swimlane vers rôle", value: "Les voies d'acteurs deviennent les profils, rôles et règles d'assignation des enregistrements." },
+    { icon: "ph:flag", label: "Événement vers déclencheur", value: "Les événements de début et intermédiaires deviennent les déclencheurs des automatisations." },
+    { icon: "ph:check-square", label: "Activité vers étape", value: "Les activités deviennent les étapes du processus piloté dans le CRM : statuts, transitions, tâches." },
+    { icon: "ph:git-branch", label: "Gateway vers condition", value: "Les points de décision deviennent les conditions et les règles qui orientent le flux." },
+  ]}
+/>
+
+{/* Démo Zoho Blueprint (capture placeholder à remplacer). */}
+<Demo
+  title="Le processus dans Zoho"
+  italicPart="Zoho"
+  subtitle="On transforme le processus modélisé en Blueprint Zoho : un processus exécutable, étape par étape, directement dans le CRM."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
+  caption="Capture Zoho CRM Blueprint (à remplacer)."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Outil", value: "Zoho CRM, module Blueprint : un processus visuel avec états et transitions." },
+    { label: "Point de départ", value: "Le processus qu'on vient de modéliser en BPMN." },
+    { label: "Étapes", value: "Chaque activité devient un état, chaque gateway une transition conditionnelle." },
+    { label: "À retenir", value: "Le CRM exécute le processus que vous avez d'abord pensé sur le papier." },
+  ]}
+/>
+
+{/* Workshop, modélisation BPMN pure. */}
+<Workshop
+  subtitle="À vous de jouer : modélisez un processus métier de votre organisation en notation BPMN."
+  defaultMinutes={45}
+  presets={[15, 30, 45]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Temps", value: "45 minutes : 30 en individuel, 15 en peer-sharing." },
+    { label: "Objectif", value: "Un processus complet, avec au moins deux swimlanes et un gateway." },
+    { label: "Sujet", value: "Un processus réel de votre organisation." },
+    { label: "Notation", value: "Swimlanes, événements de début et de fin, activités, gateways." },
+  ]}
+/>

@@ -1,0 +1,485 @@
+---
+// src/components/slides/BpmnCanvas.astro
+// Slide "démo interactive" : on construit un processus BPMN en direct, étape
+// par étape, via les fragments Reveal (chaque noeud + son connecteur apparait
+// sur avance clavier). Langage visuel calqué sur le canvas workflow du site
+// lausanne.marketing/services/automation : barre chrome (dots), fond pointillé,
+// connecteurs à pulse animé. Thémé via les tokens (--c-accent), aucune couleur
+// en dur. Tâches = card épurée (label) + tag outil ; icônes conservées
+// uniquement dans les événements (cercles) et le gateway (losange).
+//
+// Coordonnées : canvas fixe 1728x820 (slide figé 1920x1080, Reveal scale le
+// tout) -> viewBox SVG 0 0 1728 820 mappe 1:1 sur les px des noeuds absolus.
+//
+// Processus : "Publier un événement en ligne" (outils Dynamics / Tally /
+// WordPress). Lane A "Spécialiste Marketing" : Nouvel événement -> Créer
+// l'événement et Configurer l'accusé (Dynamics). Lane B "Webmaster" : Créer le
+// formulaire et Paramétrer les champs (Tally), Publier et Tester (WordPress) ;
+// gateway "Soumission conforme ?" -> Non boucle sur Paramétrer les champs, Oui
+// termine sur "Page en ligne".
+import { Icon } from 'astro-icon/components';
+interface Props {
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+}
+const {
+  brand = 'Titre de la présentation',
+  brandSub,
+  tocLabel = 'Modélisation en direct',
+} = Astro.props;
+
+// Tâches (card 180x108). y 146 = lane Marketing, y 556 = lane Webmaster.
+const tasks = [
+  { id: 1, label: "Créer l'événement", tool: 'Dynamics', x: 320, y: 146 },
+  { id: 2, label: "Configurer l'accusé", tool: 'Dynamics', x: 535, y: 146 },
+  { id: 3, label: 'Créer le formulaire', tool: 'Tally', x: 535, y: 556 },
+  { id: 4, label: 'Paramétrer les champs', tool: 'Tally', x: 750, y: 556 },
+  { id: 5, label: 'Publier le formulaire', tool: 'WordPress', x: 965, y: 556 },
+  { id: 6, label: 'Tester la soumission', tool: 'WordPress', x: 1180, y: 556 },
+];
+---
+<section class="bpmn" data-layout="bpmn" data-section-title={tocLabel}>
+  <header class="bpmn__header">
+    <div class="bpmn__brand-text">
+      <p class="bpmn__brand-main">{brand}</p>
+      {brandSub && <p class="bpmn__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="bpmn__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="bpmn__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="bpmn__body">
+    {/* Fenêtre : barre chrome (titre) flush sur le canvas + légende de notation */}
+    <div class="bpmn__window">
+      <div class="bpmn__chrome">
+        <div class="bpmn__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="bpmn__chrome-title">
+          <Icon name="ph:flow-arrow" class="bpmn__chrome-icon" aria-hidden="true" />
+          Publier un événement en ligne
+        </div>
+        <div class="bpmn__legend" aria-hidden="true">
+          <span class="bpmn__legend-item"><span class="bpmn__legend-mark bpmn__legend-mark--event"></span>Événement</span>
+          <span class="bpmn__legend-item"><span class="bpmn__legend-mark bpmn__legend-mark--task"></span>Tâche</span>
+          <span class="bpmn__legend-item"><span class="bpmn__legend-mark bpmn__legend-mark--gateway"></span>Décision</span>
+        </div>
+      </div>
+
+      {/* Canvas pointillé : lanes (fond) + connecteurs (svg) + noeuds (absolu) */}
+      <div class="bpmn__canvas">
+        {/* Swimlane A : Spécialiste Marketing (visible d'emblée) */}
+        <div class="bpmn-lane bpmn-lane--a">
+          <div class="bpmn-lane__label"><span>Spécialiste Marketing</span></div>
+        </div>
+        {/* Swimlane B : Webmaster (apparait quand le flux y descend) */}
+        <div class="bpmn-lane bpmn-lane--b fragment" data-fragment-index="3">
+          <div class="bpmn-lane__label"><span>Webmaster</span></div>
+        </div>
+
+        {/* Connecteurs (flux de séquence) */}
+        <svg class="bpmn__links" viewBox="0 0 1728 820" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <marker id="bpmn-arrow" markerWidth="10" markerHeight="10" refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M1 1 L8 4 L1 7" class="bpmn-arrowhead" />
+            </marker>
+            <filter id="bpmn-glow" filterUnits="userSpaceOnUse" x="0" y="0" width="1728" height="820">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b" />
+              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
+
+          {/* idx1 : Nouvel événement -> Créer l'événement */}
+          <g class="bpmn-link fragment" data-fragment-index="1">
+            <path class="bpmn-link__base" d="M222 200 L320 200" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M222 200 L320 200" pathLength="100" />
+          </g>
+          {/* idx2 : Créer l'événement -> Configurer l'accusé */}
+          <g class="bpmn-link fragment" data-fragment-index="2">
+            <path class="bpmn-link__base" d="M500 200 L535 200" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M500 200 L535 200" pathLength="100" />
+          </g>
+          {/* idx3 : Configurer l'accusé -> Créer le formulaire (passage Marketing -> Webmaster) */}
+          <g class="bpmn-link fragment" data-fragment-index="3">
+            <path class="bpmn-link__base" d="M625 254 L625 556" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M625 254 L625 556" pathLength="100" style="animation-delay: 0.4s" />
+          </g>
+          {/* idx4 : Créer le formulaire -> Paramétrer les champs */}
+          <g class="bpmn-link fragment" data-fragment-index="4">
+            <path class="bpmn-link__base" d="M715 610 L750 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M715 610 L750 610" pathLength="100" />
+          </g>
+          {/* idx5 : Paramétrer les champs -> Publier le formulaire */}
+          <g class="bpmn-link fragment" data-fragment-index="5">
+            <path class="bpmn-link__base" d="M930 610 L965 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M930 610 L965 610" pathLength="100" />
+          </g>
+          {/* idx6 : Publier le formulaire -> Tester la soumission */}
+          <g class="bpmn-link fragment" data-fragment-index="6">
+            <path class="bpmn-link__base" d="M1145 610 L1180 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1145 610 L1180 610" pathLength="100" />
+          </g>
+          {/* idx7 : Tester la soumission -> Gateway */}
+          <g class="bpmn-link fragment" data-fragment-index="7">
+            <path class="bpmn-link__base" d="M1360 610 L1391 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1360 610 L1391 610" pathLength="100" />
+          </g>
+          {/* idx8 : Oui -> Page en ligne */}
+          <g class="bpmn-link fragment" data-fragment-index="8">
+            <path class="bpmn-link__base" d="M1479 610 L1538 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1479 610 L1538 610" pathLength="100" />
+          </g>
+          {/* idx9 : Non -> boucle de retour vers Paramétrer les champs */}
+          <g class="bpmn-link fragment" data-fragment-index="9">
+            <path class="bpmn-link__base" d="M1435 654 L1435 712 L840 712 L840 664" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1435 654 L1435 712 L840 712 L840 664" pathLength="100" style="animation-delay: 0.2s" />
+          </g>
+
+          {/* Étiquettes de branches */}
+          <g class="bpmn-branch-label fragment" data-fragment-index="8">
+            <text x="1487" y="594" class="bpmn-branch-label__txt">Oui</text>
+          </g>
+          <g class="bpmn-branch-label fragment" data-fragment-index="9">
+            <text x="1455" y="692" class="bpmn-branch-label__txt">Non</text>
+          </g>
+        </svg>
+
+        {/* Noeud : Début (visible d'emblée, ancre la lane Marketing) */}
+        <div class="bpmn-node bpmn-node--event bpmn-node--start" style="left: 138px; top: 158px;">
+          <div class="bpmn-node__circle"><Icon name="ph:flag" class="bpmn-node__ic" aria-hidden="true" /></div>
+          <span class="bpmn-node__caption">Nouvel événement</span>
+        </div>
+
+        {/* idx1..6 : tâches (card + tag outil) */}
+        {tasks.map((t) => (
+          <div class="bpmn-node bpmn-node--task fragment" data-fragment-index={t.id} style={`left: ${t.x}px; top: ${t.y}px;`}>
+            <span class="bpmn-node__label">{t.label}</span>
+            <span class="bpmn-node__tool">{t.tool}</span>
+          </div>
+        ))}
+
+        {/* idx7 : Gateway Soumission conforme ? */}
+        <div class="bpmn-node bpmn-node--gateway fragment" data-fragment-index="7" style="left: 1391px; top: 566px;">
+          <div class="bpmn-node__diamond"><span class="bpmn-node__diamond-inner"><Icon name="ph:git-branch" class="bpmn-node__ic" aria-hidden="true" /></span></div>
+          <span class="bpmn-node__caption">Soumission conforme ?</span>
+        </div>
+
+        {/* idx8 : Fin Page en ligne */}
+        <div class="bpmn-node bpmn-node--event bpmn-node--end fragment" data-fragment-index="8" style="left: 1538px; top: 568px;">
+          <div class="bpmn-node__circle bpmn-node__circle--end"><Icon name="ph:check" class="bpmn-node__ic" aria-hidden="true" /></div>
+          <span class="bpmn-node__caption">Page en ligne</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bpmn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 40px 96px 44px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header intangible : brand gauche + logo LM droite + border-bottom. */
+  .bpmn__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .bpmn__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .bpmn__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .bpmn__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps : la fenêtre (chrome + canvas) centrée dans l'espace sous le header. */
+  .bpmn__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* La fenêtre : chrome et canvas collés (un seul bloc, pas d'espace entre). */
+  .bpmn__window {
+    width: 1728px;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px -10px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+
+  /* Barre chrome facon fenêtre d'application (flush sur le canvas). */
+  .bpmn__chrome {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 14px 26px;
+    background: color-mix(in srgb, var(--c-ink) 3%, var(--c-surface));
+    border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+    border-radius: 6px 6px 0 0;
+    border-bottom: none;
+  }
+  .bpmn__dots { display: flex; gap: 8px; flex: 0 0 auto; }
+  .bpmn__dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: color-mix(in srgb, var(--c-ink) 22%, transparent);
+  }
+  .bpmn__dots span:nth-child(1) { background: color-mix(in srgb, var(--c-accent) 70%, transparent); }
+  .bpmn__chrome-title {
+    display: flex; align-items: center; gap: 12px;
+    flex: 1 1 auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--c-ink);
+  }
+  .bpmn__chrome-icon { width: 26px; height: 26px; color: var(--c-accent); flex: 0 0 auto; }
+  .bpmn__legend { display: flex; align-items: center; gap: 24px; flex: 0 0 auto; }
+  .bpmn__legend-item {
+    display: flex; align-items: center; gap: 9px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 500;
+    color: var(--c-muted);
+  }
+  .bpmn__legend-mark { width: 18px; height: 18px; flex: 0 0 auto; border: 2px solid var(--c-accent); }
+  .bpmn__legend-mark--event { border-radius: 50%; }
+  .bpmn__legend-mark--task { border-radius: 3px; background: color-mix(in srgb, var(--c-accent) 12%, transparent); }
+  .bpmn__legend-mark--gateway { transform: rotate(45deg); border-radius: 2px; }
+
+  /* Canvas : fond pointillé, boite fixe 1728x820, collée sous la barre chrome. */
+  .bpmn__canvas {
+    position: relative;
+    width: 1728px;
+    height: 820px;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+    border-radius: 0 0 6px 6px;
+    background:
+      radial-gradient(circle, color-mix(in srgb, var(--c-ink) 12%, transparent) 1.4px, transparent 1.4px) 0 0 / 26px 26px,
+      var(--c-surface);
+    overflow: hidden;
+  }
+
+  /* Swimlanes : bandes horizontales + label vertical centré à gauche. */
+  .bpmn-lane {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 410px;
+    z-index: 0;
+  }
+  .bpmn-lane--a { top: 0; }
+  .bpmn-lane--b {
+    top: 410px;
+    border-top: 1px dashed color-mix(in srgb, var(--c-ink) 18%, transparent);
+  }
+  /* Bande d'étiquette : grid place-items center -> le texte est centré sur toute
+     la hauteur de la lane (corrige le label non centré verticalement). */
+  .bpmn-lane__label {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 56px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--c-ink) 4%, var(--c-surface));
+    border-right: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  }
+  .bpmn-lane__label > span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
+  }
+
+  /* Couche connecteurs. */
+  .bpmn__links {
+    position: absolute;
+    inset: 0;
+    width: 1728px;
+    height: 820px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .bpmn-link__base {
+    stroke: color-mix(in srgb, var(--c-ink) 26%, transparent);
+    stroke-width: 2.5;
+    fill: none;
+  }
+  .bpmn-arrowhead {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 38%, transparent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bpmn-link__pulse {
+    stroke: var(--c-accent);
+    stroke-width: 3.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 18 82;
+    filter: url(#bpmn-glow);
+    animation: bpmn-flow 2.4s linear infinite;
+  }
+  @keyframes bpmn-flow {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+  }
+  .bpmn-branch-label__txt {
+    fill: var(--c-ink);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 700;
+  }
+
+  /* Noeuds (couche supérieure). */
+  .bpmn-node {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Tâche : card épurée (label centré) + tag outil en pied de card. */
+  .bpmn-node--task {
+    width: 180px;
+    height: 108px;
+    gap: 0;
+    background: var(--c-surface);
+    border: 2px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    border-left: 4px solid var(--c-accent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+    overflow: hidden;
+  }
+  .bpmn-node__label {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 16px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.18;
+    color: var(--c-ink);
+    text-align: center;
+  }
+  /* Tag outil : pied de card, fond accent doux, nom de l'outil en capitales. */
+  .bpmn-node__tool {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 6px 0;
+    background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--c-accent) 22%, transparent);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--c-accent);
+    text-align: center;
+  }
+
+  /* Événement : cercle (début trait fin, fin trait épais) avec icône centrée. */
+  .bpmn-node__circle {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: var(--c-surface);
+    border: 3px solid var(--c-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .bpmn-node__circle--end {
+    border-width: 6px;
+    background: color-mix(in srgb, var(--c-accent) 10%, var(--c-surface));
+  }
+
+  /* Gateway : losange (carré pivoté) avec icône redressée. */
+  .bpmn-node__diamond {
+    width: 88px; height: 88px;
+    transform: rotate(45deg);
+    background: var(--c-surface);
+    border: 2px solid var(--c-accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .bpmn-node__diamond-inner { transform: rotate(-45deg); display: flex; }
+  .bpmn-node__ic { width: 34px; height: 34px; color: var(--c-accent); flex: 0 0 auto; }
+
+  .bpmn-node__caption {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--c-ink);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Pop des noeuds quand le fragment devient visible (.visible runtime Reveal). */
+  .bpmn-node:global(.fragment.visible) {
+    animation: bpmn-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes bpmn-pop {
+    from { opacity: 0; transform: translateY(12px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  /* La lane B est en position absolue : pop en opacité seule (pas de translate). */
+  .bpmn-lane--b:global(.fragment.visible) {
+    animation: bpmn-fade 0.5s ease both;
+  }
+  @keyframes bpmn-fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Respect de prefers-reduced-motion : pas de pulse ni de pop animés. */
+  @media (prefers-reduced-motion: reduce) {
+    .bpmn-link__pulse { animation: none; opacity: 0.5; }
+    .bpmn-node:global(.fragment.visible),
+    .bpmn-lane--b:global(.fragment.visible) { animation: none; }
+  }
+</style>
