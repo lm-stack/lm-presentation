@@ -22,6 +22,11 @@ interface Props {
   brandSub?: string;
   /** Affiche une animation "réseau" (noeuds reliés) dans la colonne de droite. */
   network?: boolean;
+  /** Mini-ERD à droite : boîtes nommées + liens. Coordonnées dans une scène 220x260. */
+  diagram?: {
+    nodes: { label: string; x: number; y: number; accent?: boolean }[];
+    links: { from: string; to: string; dashed?: boolean }[];
+  };
 }
 import { splitHighlight } from '@/utils/highlight';
 const {
@@ -36,8 +41,38 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
   network = false,
+  diagram,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
+
+// Mini-ERD optionnel (colonne droite) : extrémités des liens calculées au bord
+// des boîtes (intersection ligne-rectangle), même principe que Erd.astro.
+const DNW = 66;
+const DNH = 30;
+const dmap = new Map((diagram?.nodes ?? []).map((n) => [n.label, n]));
+function dborder(n: { x: number; y: number }, tx: number, ty: number) {
+  const cx = n.x + DNW / 2;
+  const cy = n.y + DNH / 2;
+  const dx = tx - cx;
+  const dy = ty - cy;
+  if (dx === 0 && dy === 0) return { x: cx, y: cy };
+  const sx = dx !== 0 ? (DNW / 2) / Math.abs(dx) : Infinity;
+  const sy = dy !== 0 ? (DNH / 2) / Math.abs(dy) : Infinity;
+  const s = Math.min(sx, sy);
+  return { x: cx + dx * s, y: cy + dy * s };
+}
+const dlinks = (diagram?.links ?? [])
+  .map((l) => {
+    const a = dmap.get(l.from);
+    const b = dmap.get(l.to);
+    if (!a || !b) return null;
+    const ac = { x: a.x + DNW / 2, y: a.y + DNH / 2 };
+    const bc = { x: b.x + DNW / 2, y: b.y + DNH / 2 };
+    const p1 = dborder(a, bc.x, bc.y);
+    const p2 = dborder(b, ac.x, ac.y);
+    return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, dashed: !!l.dashed };
+  })
+  .filter((l): l is NonNullable<typeof l> => l !== null);
 ---
 <section class="statement" data-layout="statement">
   <header class="statement__header">
@@ -75,6 +110,27 @@ const titleParts = splitHighlight(title, italicPart);
     {network && (
       <div class="statement__network" aria-hidden="true">
         <canvas class="statement__network-canvas"></canvas>
+      </div>
+    )}
+
+    {diagram && (
+      <div class="statement__diagram" aria-hidden="true">
+        <svg class="statement__diagram-svg" viewBox="0 0 220 260" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="st-erd-arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+              <path d="M1.5,1.5 L7.5,4.5 L1.5,7.5 Z" class="st-erd-arrow-head" />
+            </marker>
+          </defs>
+          {dlinks.map((l) => (
+            <line class:list={['st-erd-link', { 'st-erd-link--dashed': l.dashed }]} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} marker-end="url(#st-erd-arrow)" />
+          ))}
+          {diagram.nodes.map((n) => (
+            <g>
+              <rect class:list={['st-erd-box', { 'st-erd-box--accent': n.accent }]} x={n.x} y={n.y} width={DNW} height={DNH} rx="4" />
+              <text class="st-erd-text" x={n.x + DNW / 2} y={n.y + DNH / 2}>{n.label}</text>
+            </g>
+          ))}
+        </svg>
       </div>
     )}
   </div>
@@ -229,31 +285,56 @@ const titleParts = splitHighlight(title, italicPart);
     height: 100%;
     pointer-events: none;
   }
+
+  /* Mini-ERD (colonne droite) : boîtes nommées reliées, 100% tokenisé. */
+  .statement__diagram {
+    flex: 0 0 38%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .statement__diagram-svg {
+    width: 100%;
+    height: 100%;
+    max-height: 560px;
+  }
+  .st-erd-box {
+    fill: var(--c-surface);
+    stroke: color-mix(in srgb, var(--c-ink) 22%, transparent);
+    stroke-width: 1.4;
+  }
+  .st-erd-box--accent {
+    stroke: var(--c-accent);
+    stroke-width: 2.4;
+  }
+  .st-erd-text {
+    fill: var(--c-ink);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .st-erd-link {
+    stroke: color-mix(in srgb, var(--c-ink) 38%, transparent);
+    stroke-width: 1.4;
+    fill: none;
+  }
+  .st-erd-link--dashed {
+    stroke: color-mix(in srgb, var(--c-accent) 70%, transparent);
+    stroke-dasharray: 4 3;
+  }
+  .st-erd-arrow-head {
+    fill: color-mix(in srgb, var(--c-ink) 38%, transparent);
+  }
 </style>
 
-<style is:global>
-  /* Footer "Source" réutilisable, en bas à gauche, pour citer une étude sur
-     n'importe quelle slide. Positionné par rapport à la <section> (relative).
-     Toujours cliquable quand un lien est fourni. */
-  [data-layout] .slide-source {
-    position: absolute;
-    left: 96px;
-    bottom: 40px;
-    margin: 0;
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: var(--fs-source);
-    font-weight: 500;
-    color: var(--c-faint);
-    letter-spacing: 0.01em;
-    z-index: 3;
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-  [data-layout] a.slide-source:hover {
-    color: var(--c-ink);
-    text-decoration: underline;
-  }
-</style>
+{/* Le style du footer source (.slide-source) est canonique dans
+    src/styles/slides.css (bleu --c-secondary, bordure, icône lien externe).
+    L'ancien override global qui vivait ici (color: --c-faint) a été retiré :
+    il écrasait le bleu sur tout deck contenant un Statement. */}
 
 <script>
   // Champ de noeuds reliés ("réseau" entités/relations) pour la colonne droite

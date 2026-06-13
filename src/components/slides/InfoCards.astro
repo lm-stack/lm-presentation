@@ -23,6 +23,10 @@ interface Props {
   subtitle?: string;
   /** Auto-fit : cards larges, 2 colonnes sur une slide 1920. */
   cards: InfoCard[];
+  /** Force un nombre de colonnes fixe (sinon auto-fit 2 col). Ex: columns={3}. */
+  columns?: number;
+  /** Décor optionnel : soleil qui se lève et se couche en fond (slide horaires). */
+  sunArc?: boolean;
   brand?: string;
   brandSub?: string;
 }
@@ -31,12 +35,19 @@ const {
   italicPart,
   subtitle,
   cards,
+  columns,
+  sunArc,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="info-cards" data-layout="info-cards">
+  {sunArc && (
+    <div class="info-cards__sun-track" aria-hidden="true">
+      <div class="info-cards__sun"><span class="info-cards__sun-disc"></span></div>
+    </div>
+  )}
   <header class="info-cards__header">
     <div class="info-cards__brand">
       <p class="info-cards__brand-main">{brand}</p>
@@ -55,7 +66,7 @@ const titleParts = splitHighlight(title, italicPart);
     </h2>
     {subtitle && <p class="info-cards__subtitle">{subtitle}</p>}
 
-    <div class="info-cards__grid">
+    <div class:list={['info-cards__grid', columns && 'info-cards__grid--fixed']} style={columns ? `--cols: ${columns}` : undefined}>
       {cards.map((card) => (
         <article class="info-cards__card">
           <span class="info-cards__icon" aria-hidden="true">
@@ -85,6 +96,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   /* Header full-width : brand gauche + logo LM droite + border-bottom. */
   .info-cards__header {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -117,6 +130,8 @@ const titleParts = splitHighlight(title, italicPart);
   }
 
   .info-cards__body {
+    position: relative;
+    z-index: 1;
     flex: 1 1 auto !important;
     display: flex;
     flex-direction: column;
@@ -158,6 +173,10 @@ const titleParts = splitHighlight(title, italicPart);
     grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
     gap: 28px;
   }
+  /* Override : nombre de colonnes fixe via --cols (ex: columns={3}). */
+  .info-cards__grid--fixed {
+    grid-template-columns: repeat(var(--cols, 2), 1fr);
+  }
 
   .info-cards__card {
     background: var(--c-surface);
@@ -195,5 +214,52 @@ const titleParts = splitHighlight(title, italicPart);
     line-height: var(--lh-lead);
     margin: 0;
     color: var(--c-ink);
+  }
+
+  /* Décor « soleil qui se lève et se couche » (prop sunArc) : un disque chaud
+     traverse le fond en arc (lever à gauche, zénith au centre, coucher à droite),
+     en boucle. Couleur réaliste self-contained (soleil), derrière le contenu. */
+  .info-cards__sun-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    animation: ic-sun-x 12s linear infinite;
+  }
+  .info-cards__sun {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    animation: ic-sun-y 12s ease-in-out infinite;
+  }
+  .info-cards__sun-disc {
+    display: block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(255, 197, 61, 0.92) 0%,
+      rgba(255, 184, 41, 0.5) 46%,
+      rgba(255, 184, 41, 0) 72%);
+  }
+  @keyframes ic-sun-x {
+    from { transform: translateX(-200px); }
+    to { transform: translateX(1980px); }
+  }
+  @keyframes ic-sun-y {
+    0% { transform: translateY(70px); opacity: 0; }
+    12% { opacity: 1; }
+    50% { transform: translateY(-250px); }
+    88% { opacity: 1; }
+    100% { transform: translateY(70px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .info-cards__sun-track { animation: none; transform: translateX(960px); }
+    .info-cards__sun { animation: none; transform: translateY(-250px); opacity: 0.85; }
   }
 </style>

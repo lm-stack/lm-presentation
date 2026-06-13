@@ -1,0 +1,239 @@
+---
+// src/components/slides/Tip.astro
+// Slide "Astuce" : encart conseil centré sur le fond pearl habituel du deck.
+// Le dégradé accent (or en LM, rouge en ExecEd) est porté par une CARD centrale
+// (border-radius 4px, ombre légère), PAS par toute la slide : on garde le fond
+// uniforme pearl (RÈGLE absolue) et on signale le conseil sans agresser l'oeil.
+// Header marque + logo LM standard (comme toute slide de contenu). Texte de la
+// card en couleur on-accent (encre sur or en LM, blanc sur rouge en ExecEd).
+// Tout en tokens (themes.css) : naît dans les deux schémas sans retouche.
+import { Icon } from 'astro-icon/components';
+import { splitHighlight } from '@/utils/highlight';
+
+interface Props {
+  /** Petit label au-dessus du titre (défaut "Astuce"). */
+  eyebrow?: string;
+  title: string;
+  /** Sous-chaîne du titre rendue en serif italique souligné. */
+  italicPart?: string;
+  /** Corps de l'astuce (une phrase ou deux). */
+  body: string;
+  /** URL de l'outil mis en avant (rend un bouton-pilule cliquable). */
+  url?: string;
+  /** Libellé du bouton (défaut : l'URL nettoyée de son protocole). */
+  urlLabel?: string;
+  /** Icône Phosphor dans le badge (défaut "ph:lightbulb"). */
+  icon?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  eyebrow = 'Astuce',
+  title,
+  italicPart,
+  body,
+  url,
+  urlLabel,
+  icon = 'ph:lightbulb',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const cleanLabel = urlLabel ?? (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : undefined);
+---
+<section class="tip" data-layout="tip">
+  <header class="tip__header">
+    <div class="tip__brand-text">
+      <p class="tip__brand-main">{brand}</p>
+      {brandSub && <p class="tip__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="tip__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="tip__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="tip__body">
+    <article class="tip__card">
+      <span class="tip__badge" aria-hidden="true">
+        <Icon name={icon} />
+      </span>
+      <p class="tip__eyebrow">{eyebrow}</p>
+      <h2 class="tip__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="tip__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      <p class="tip__text">{body}</p>
+      {url && (
+        <a class="tip__cta" href={url} target="_blank" rel="noopener">
+          <span>{cleanLabel}</span>
+          <Icon name="ph:arrow-up-right" />
+        </a>
+      )}
+    </article>
+  </div>
+</section>
+
+<style>
+  /* Fond pearl uniforme (RÈGLE absolue) : la slide ne tranche pas, c'est la card
+     qui porte la couleur. */
+  .tip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    color: var(--c-ink);
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+  }
+
+  /* Header marque standard (texte foncé, logo normal), comme toute slide de contenu. */
+  .tip__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .tip__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .tip__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .tip__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* La card est centrée dans l'espace restant sous le header. */
+  .tip__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Card centrale : c'est ELLE qui porte le dégradé accent. */
+  .tip__card {
+    position: relative;
+    overflow: hidden;
+    max-width: 1180px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 72px 88px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 26px;
+    color: var(--c-on-accent);
+    background:
+      radial-gradient(circle at 80% 16%, color-mix(in srgb, #fff 14%, transparent) 0%, transparent 52%),
+      linear-gradient(135deg, var(--c-accent) 0%, color-mix(in srgb, var(--c-accent) 72%, var(--c-ink)) 100%);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 14%, transparent);
+    animation: tip-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Badge ampoule : pastille claire, icône en couleur d'accent (pop sur la card). */
+  .tip__badge {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    background: var(--c-surface);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 22%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-accent);
+    flex: 0 0 auto;
+  }
+  .tip__badge :global(svg) {
+    width: 54px;
+    height: 54px;
+  }
+
+  .tip__eyebrow {
+    font-family: 'Space Grotesk', 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    margin: 0;
+    color: color-mix(in srgb, var(--c-on-accent) 82%, transparent);
+  }
+  .tip__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-on-accent);
+    text-wrap: balance;
+  }
+  .tip__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .tip__text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    margin: 0;
+    max-width: var(--measure-l);
+    color: color-mix(in srgb, var(--c-on-accent) 92%, transparent);
+  }
+
+  /* Bouton-pilule vers l'outil : surface claire, texte accent, pop sur la card. */
+  .tip__cta {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 999px;
+    background: var(--c-surface);
+    color: var(--c-accent);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 28%, transparent);
+    transition: transform 0.18s ease;
+  }
+  .tip__cta :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+  .tip__cta:hover {
+    transform: translateY(-2px);
+  }
+
+  @keyframes tip-reveal {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
