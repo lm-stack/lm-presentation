@@ -13,7 +13,7 @@ description: "Modéliser les processus métier avec la notation BPMN avant de le
 import Cover from '@/components/slides/Cover.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import Media from '@/components/slides/Media.astro';
-import Quote from '@/components/slides/Quote.astro';
+import Statement from '@/components/slides/Statement.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import ImageFull from '@/components/slides/ImageFull.astro';
@@ -54,14 +54,12 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
-{/* Pourquoi : le chaos, traité en citation (image de fond floutée) + texte de support. */}
-<Quote
-  text="Modélisez les processus avant de les implémenter"
-  lead={[
-    "Vous venez de monter le CRM sur votre architecture de données. Avant d'y construire des processus, il faut les cartographier.",
-    "Sans cartographie, on implémente du chaos et on accélère le désordre. Modéliser reste une étape cruciale, pour le CRM comme pour toute automatisation.",
-  ]}
-  image="/decks/modeliser-les-processus/besoins-chaos.jpg"
+{/* Pourquoi : la thèse d'ouverture en Statement (thèse alignée à gauche, titre
+    serif souligné sur deux lignes, pas une fausse citation). */}
+<Statement
+  title={"Modélisez les processus\navant de les implémenter"}
+  italicPart="avant de les implémenter"
+  body="Vous venez de monter le CRM sur votre architecture de données. Avant d'y construire des processus, cartographiez-les : sans cela, on implémente du chaos et on accélère le désordre."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
