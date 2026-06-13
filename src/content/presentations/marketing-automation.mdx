@@ -17,9 +17,13 @@ import Media from '@/components/slides/Media.astro';
 import ImageFull from '@/components/slides/ImageFull.astro';
 import Definition from '@/components/slides/Definition.astro';
 import BarChart from '@/components/slides/BarChart.astro';
+import ColumnChart from '@/components/slides/ColumnChart.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Compare from '@/components/slides/Compare.astro';
+import Spreadsheet from '@/components/slides/Spreadsheet.astro';
 
 {/* Reprise intégrale du deck marketing-automation (ancien format) en ExecEd-style.
     Images réutilisées telles quelles depuis public/decks/marketing-automation/.
@@ -49,17 +53,6 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-{/* Définition : c'est quoi un outil d'automation (introduit la notion avant la comparaison) */}
-<Definition
-  eyebrow="Définition"
-  term="Outil d'automation"
-  termItalicPart="automation"
-  definition="Un logiciel qui exécute des tâches répétitives à votre place en connectant vos applications entre elles : un déclencheur, une suite d'actions, sans écrire de code."
-  image="/decks/marketing-automation/cover-bg-lights.jpg"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 {/* Comparatif automation avant / après 2024 (grille deux images).
     TODO images à fournir dans public/decks/marketing-automation/ :
     - etat-avant-2024-n8n.png : capture d'un workflow n8n
@@ -72,22 +65,34 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
   images={[
     { src: "/decks/marketing-automation/etat-avant-2024-n8n.png", alt: "Workflow n8n : l'automation avant 2024", title: "Avant 2024", text: "Outils d'automation" },
-    { src: "/decks/marketing-automation/etat-apres-2024-ia.jpg", alt: "Outils d'automation et outils IA depuis 2024", title: "Après 2024", text: "Outils d'automation + outils IA" },
+    { src: "/decks/marketing-automation/claude-app.jpg", alt: "Logo et application Claude (Anthropic), exemple d'outil d'IA générative depuis 2024", title: "Après 2024", text: "Outils d'automation + outils IA" },
   ]}
 />
 
-{/* Les outils d'automation : grille 4 images (logos/captures à fournir) */}
+{/* Définition : c'est quoi un outil d'automation (après le comparatif avant/après 2024) */}
+<Definition
+  eyebrow="Définition"
+  term="Outil d'automation"
+  termItalicPart="automation"
+  definition="Un logiciel qui exécute des tâches répétitives à votre place en connectant vos applications entre elles : un déclencheur, une suite d'actions, sans écrire de code."
+  image="/decks/marketing-automation/cover-bg-lights.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Les outils d'automation : grille de logos (mode logos = contain sur fond clair) */}
 <ImageGrid
   title="Les outils d'automation"
   italicPart="automation"
   subtitle="Du no-code grand public à l'open-source, jusqu'à l'écosystème Microsoft."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+  logos
   images={[
-    { src: "/decks/marketing-automation/outil-zapier.jpeg", alt: "Zapier", title: "Zapier", text: "Le plus accessible, no-code. 6000+ apps connectées." },
-    { src: "/decks/marketing-automation/outil-make.jpeg", alt: "Make", title: "Make", text: "Scénarios visuels avancés (ex-Integromat)." },
-    { src: "/decks/marketing-automation/outil-n8n.png", alt: "n8n", title: "n8n", text: "Open-source et auto-hébergeable, très flexible." },
-    { src: "/decks/marketing-automation/outil-power-automate.png", alt: "Power Automate", title: "Power Automate", text: "Intégré à l'écosystème Microsoft 365." },
+    { src: "/decks/marketing-automation/logos/zapier.svg", alt: "Logo Zapier", title: "Zapier", text: "Le plus accessible, no-code. 6000+ apps connectées." },
+    { src: "/decks/marketing-automation/logos/make.svg", alt: "Logo Make", title: "Make", text: "Scénarios visuels avancés (ex-Integromat)." },
+    { src: "/decks/marketing-automation/logos/n8n.svg", alt: "Logo n8n", title: "n8n", text: "Open-source et auto-hébergeable, très flexible." },
+    { src: "/decks/marketing-automation/logos/powerautomate.svg", alt: "Logo Microsoft Power Automate", title: "Power Automate", text: "Intégré à l'écosystème Microsoft 365." },
   ]}
 />
 
@@ -142,116 +147,11 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 5 : Section 01 */}
+{/* Section 02 : Pourquoi automatiser */}
 <SubSection
-  kicker="Idée reçue"
   index="02"
-  title="C'est moins compliqué qu'il n'y paraît"
-  italicPart="compliqué"
-  subtitle="Le marketing automation est souvent perçu comme un processus très technique. C'est avant tout du marketing structuré."
-  subtitleWrap
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 6 : Imagination vs Réalité */}
-<ImageGrid
-  title="Imagination versus réalité"
-  italicPart="réalité"
-  subtitle="Le mythe du processus complexe à compétences informatiques pointues."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/imagination-code.jpeg", alt: "Imagination", title: "Imagination", text: "Lignes de code, terminaux noirs, dépendances et compétences informatiques pointues." },
-    { src: "/decks/marketing-automation/realite-workshop.jpeg", alt: "Réalité", title: "Réalité", text: "Des marketeurs autour d'une table, des post-it, un workflow dessiné à la main." },
-  ]}
-/>
-
-{/* Slide 7 : Définition (3 cards) */}
-<ImageGrid
-  title="Définition et applications"
-  italicPart="Définition"
-  subtitle="L'ensemble des techniques pour automatiser les tâches répétitives à faible valeur ajoutée."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/definition-donnees.jpg", alt: "Données", title: "Données", text: "Centraliser, qualifier, segmenter et activer la donnée client en continu." },
-    { src: "/decks/marketing-automation/definition-processus.png", alt: "Processus", title: "Processus", text: "Cartographier les étapes, automatiser les transitions, fiabiliser les opérations." },
-    { src: "/decks/marketing-automation/definition-campagnes.jpg", alt: "Campagnes", title: "Campagnes", text: "Diffuser le bon message, au bon moment, sur le bon canal, à la bonne personne." },
-  ]}
-/>
-
-{/* Slide 8 : Exemple Facebook Lead Ads */}
-<Media
-  title="Exemple : Facebook Lead Ads"
-  italicPart="Lead Ads"
-  subtitle="Annonce sponsorisée, formulaire intégré, capture en un clic."
-  image="/decks/marketing-automation/facebook-lead-ads.jpg"
-  alt="Trois écrans iPhone : annonce sponsorisée, formulaire de lead, confirmation"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 9 : Partage d'expérience Facebook Lead Ads */}
-<InfoCards
-  title="Partage d'expérience"
-  italicPart="expérience"
-  subtitle="Cinq questions pour confronter Facebook Lead Ads à vos pratiques."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: "ph:eye", label: "Familiarité", value: "Êtes-vous familiers avec les campagnes Facebook Lead Ads ?" },
-    { icon: "ph:gear", label: "Pratique", value: "Avez-vous déjà géré des campagnes de ce type ?" },
-    { icon: "ph:warning-circle", label: "Défis", value: "Quels sont, d'après vous, les défis de ce type de campagne en matière de marketing automation ?" },
-    { icon: "ph:prohibit", label: "Limites", value: "Quel est l'un des seuls éléments difficiles à automatiser ?" },
-    { icon: "ph:user-circle", label: "Owner", value: "Qui est responsable de l'automatisation dans vos organisations ?" },
-  ]}
-/>
-
-{/* Slide 10 : Chart ZHAW Avantages */}
-<Media
-  title="Avantages principaux"
-  italicPart="Avantages"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-avantages-zhaw-11.png"
-  alt="Classement des avantages du marketing automation, ZHAW 2022"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 11 : Vos avantages (Poll) */}
-<Poll
-  id="avantages-ma"
-  question="Selon vous, quel avantage du marketing automation pèse le plus lourd ?"
-  italicPart="le plus lourd"
-  subtitle="Une seule réponse"
-  options={[
-    "Rendre les processus plus efficaces",
-    "Communiquer de manière personnalisée",
-    "Optimiser les conversions",
-    "Gagner du temps sur les tâches répétitives",
-    "Améliorer la qualité des prospects",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 12 : Vos expériences (WordCloud) */}
-<WordCloud
-  id="vos-experiences-ma"
-  question="Votre expérience du marketing automation, en un mot ?"
-  italicPart="en un mot"
-  subtitle="Plusieurs réponses bienvenues"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 13 : Section 02 */}
-<SubSection
-  kicker="Pourquoi"
-  index="03"
-  title="Pourquoi le marketing automation ?"
-  italicPart="automation"
+  title="Pourquoi automatiser"
+  italicPart="automatiser"
   subtitle="Quatre dynamiques convergentes : données, outils, contenus, touchpoints."
   subtitleWrap
   brand="CRM, Data & Automation"
@@ -273,28 +173,48 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   ]}
 />
 
-{/* Slide 15 : 175 ZB datasphere */}
-<Media
+{/* Slide 15 : Multiplication des données (ColumnChart natif, IDC Data Age 2025, Figure 1).
+    Chiffres cités dans le rapport : 33 ZB (2018), 45 ZB (2019), 175 ZB (2025).
+    Les autres années sont lues sur la Figure 1 (série annuelle 2010-2025). */}
+<ColumnChart
   title="Multiplication des données"
   italicPart="données"
-  subtitle="Eric Schmidt, 2010 : tous les deux jours, autant d'informations que depuis deux millions d'années."
-  image="/decks/marketing-automation/chart-datasphere-15.png"
-  alt="Taille annuelle de la datasphère : 175 ZB en 2025"
-  caption="Source : IDC. Taille annuelle de la datasphère mondiale (en Zettaoctets), 2010 à 2025."
+  subtitle="De 45 zettaoctets en 2019 à 175 en 2025, la datasphère mondiale poursuit son expansion."
+  items={[
+    { label: "2010", value: 2 },
+    { label: "2011", value: 5 },
+    { label: "2012", value: 7 },
+    { label: "2013", value: 9 },
+    { label: "2014", value: 12 },
+    { label: "2015", value: 16 },
+    { label: "2016", value: 19 },
+    { label: "2017", value: 26 },
+    { label: "2018", value: 33 },
+    { label: "2019", value: 45 },
+    { label: "2020", value: 52 },
+    { label: "2021", value: 64 },
+    { label: "2022", value: 79 },
+    { label: "2023", value: 101 },
+    { label: "2024", value: 130 },
+    { label: "2025", value: 175, emphasis: true },
+  ]}
+  source="Data Age 2025 (IDC Global DataSphere), sponsorisé par Seagate, mai 2020"
+  sourceUrl="https://www.seagate.com/files/www-content/our-story/trends/files/dataage-idc-report-final.pdf"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 16 : MartechMap */}
-<Media
+{/* Slide 16 : Multiplication des outils (grille 2 crops du MartechMap ; le texte du haut de l'image passe en sous-titre, format de nombres suisse) */}
+<ImageGrid
   title="Multiplication des outils"
   italicPart="outils"
-  subtitle="De 150 outils en 2011 à 9'932 en 2022, +6'521 % en onze ans."
-  image="/decks/marketing-automation/chart-martechmap-16.png"
-  alt="Évolution du paysage Martech, 2011 à 2022"
-  caption="MartechMap 2022, Marketing Technology Landscape."
+  subtitle="Le nombre d'outils et technologies marketing est passé d'environ 150 en 2011 à 9'932 en 2022, soit une augmentation de 6'521 % dans les 11 dernières années."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/martechmap-evolution.png", alt: "Cascade des paysages Marketing Technology de 2011 (environ 150 outils) à 2022 (9'932 outils)" },
+    { src: "/decks/marketing-automation/martechmap-landscape.png", alt: "MartechMap 2022 : la grille dense des outils marketing classés par catégorie" },
+  ]}
 />
 
 {/* Slide 17 : PME vs grandes entreprises */}
@@ -412,7 +332,110 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 24 : Section 03 */}
+{/* Section 03 : L'automation en pratique */}
+<SubSection
+  index="03"
+  title="L'automation en pratique"
+  italicPart="pratique"
+  subtitle="Le marketing automation est souvent perçu comme un processus très technique. C'est avant tout du marketing structuré."
+  subtitleWrap
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Imagination vs Réalité */}
+<ImageGrid
+  title="Imagination versus réalité"
+  italicPart="réalité"
+  subtitle="Le mythe du processus complexe à compétences informatiques pointues."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/imagination-code.jpeg", alt: "Imagination", title: "Imagination", text: "Lignes de code, terminaux noirs, dépendances et compétences informatiques pointues." },
+    { src: "/decks/marketing-automation/realite-workshop.jpeg", alt: "Réalité", title: "Réalité", text: "Des marketeurs autour d'une table, des post-it, un workflow dessiné à la main." },
+  ]}
+/>
+
+{/* Slide 7 : Définition (3 cards) */}
+<ImageGrid
+  title="Définition et applications"
+  italicPart="Définition"
+  subtitle="L'ensemble des techniques pour automatiser les tâches répétitives à faible valeur ajoutée."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/definition-donnees.jpg", alt: "Données", title: "Données", text: "Centraliser, qualifier, segmenter et activer la donnée client en continu." },
+    { src: "/decks/marketing-automation/definition-processus.png", alt: "Processus", title: "Processus", text: "Cartographier les étapes, automatiser les transitions, fiabiliser les opérations." },
+    { src: "/decks/marketing-automation/definition-campagnes.jpg", alt: "Campagnes", title: "Campagnes", text: "Diffuser le bon message, au bon moment, sur le bon canal, à la bonne personne." },
+  ]}
+/>
+
+{/* Slide 8 : Exemple Facebook Lead Ads */}
+<Media
+  title="Exemple : Facebook Lead Ads"
+  italicPart="Lead Ads"
+  subtitle="Annonce sponsorisée, formulaire intégré, capture en un clic."
+  image="/decks/marketing-automation/facebook-lead-ads.jpg"
+  alt="Trois écrans iPhone : annonce sponsorisée, formulaire de lead, confirmation"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 9 : Partage d'expérience Facebook Lead Ads */}
+<InfoCards
+  title="Partage d'expérience"
+  italicPart="expérience"
+  subtitle="Cinq questions pour confronter Facebook Lead Ads à vos pratiques."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:eye", label: "Familiarité", value: "Êtes-vous familiers avec les campagnes Facebook Lead Ads ?" },
+    { icon: "ph:gear", label: "Pratique", value: "Avez-vous déjà géré des campagnes de ce type ?" },
+    { icon: "ph:warning-circle", label: "Défis", value: "Quels sont, d'après vous, les défis de ce type de campagne en matière de marketing automation ?" },
+    { icon: "ph:prohibit", label: "Limites", value: "Quel est l'un des seuls éléments difficiles à automatiser ?" },
+    { icon: "ph:user-circle", label: "Owner", value: "Qui est responsable de l'automatisation dans vos organisations ?" },
+  ]}
+/>
+
+{/* Slide 10 : Chart ZHAW Avantages */}
+<Media
+  title="Avantages principaux"
+  italicPart="Avantages"
+  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
+  image="/decks/marketing-automation/chart-avantages-zhaw-11.png"
+  alt="Classement des avantages du marketing automation, ZHAW 2022"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 11 : Vos avantages (Poll) */}
+<Poll
+  id="avantages-ma"
+  question="Selon vous, quel avantage du marketing automation pèse le plus lourd ?"
+  italicPart="le plus lourd"
+  subtitle="Une seule réponse"
+  options={[
+    "Rendre les processus plus efficaces",
+    "Communiquer de manière personnalisée",
+    "Optimiser les conversions",
+    "Gagner du temps sur les tâches répétitives",
+    "Améliorer la qualité des prospects",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 12 : Vos expériences (WordCloud) */}
+<WordCloud
+  id="vos-experiences-ma"
+  question="Votre expérience du marketing automation, en un mot ?"
+  italicPart="en un mot"
+  subtitle="Plusieurs réponses bienvenues"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Section 04 : Les APIs, la colonne vertébrale */}
 <SubSection
   kicker="Sous le capot"
   index="04"
@@ -424,117 +447,99 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 25 : Une technologie spécifique */}
-<Media
+{/* Slide 25 : Une technologie spécifique (modèle "grille 1 image", hauteur réduite, sans body) */}
+<ImageGrid
   title="Une technologie spécifique : l'API"
   italicPart="l'API"
   subtitle="Le marketing automation a surtout été rendu possible par cette brique technique."
-  body="L'API rend les outils interopérables : ils s'écoutent, s'échangent des données, déclenchent des actions chez le voisin."
-  image="/decks/marketing-automation/api-wires.jpeg"
-  alt="Câbles et connexions, métaphore de l'API"
-  fit="cover"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/api-wires.jpeg", alt: "Câbles et connexions, métaphore de l'API" },
+  ]}
 />
 
-{/* Slide 26 : Qu'est-ce qu'une API */}
-<Media
-  title="Une API connecte des applications"
-  italicPart="connecte"
-  subtitle="API signifie Application Programming Interface."
-  body="Une API est un ensemble de définitions, de protocoles et de données qu'on peut requêter."
+{/* Slide 26 : Définition de l'API (modèle Definition) */}
+<Definition
+  eyebrow="Définition"
+  term="API"
+  termItalicPart="API"
+  definition="API signifie Application Programming Interface. Une API est un ensemble de définitions, de protocoles et de données qu'on peut requêter."
   image="/decks/marketing-automation/api-puzzle.jpeg"
-  alt="Pièces de puzzle qui s'emboîtent, métaphore de l'API"
-  fit="cover"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 27 : Partage d'expérience APIs */}
+{/* Comprendre l'API 1/4 : l'analogie du restaurant (Statement) */}
+<Statement
+  eyebrow="L'analogie"
+  title="Une API, c'est un serveur au restaurant"
+  italicPart="un serveur au restaurant"
+  body="Vous commandez ce que propose le menu, le serveur transmet en cuisine et vous rapporte votre plat. Vous n'entrez jamais en cuisine, et vous n'avez pas besoin de savoir comment elle fonctionne."
+  network
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Comprendre l'API 2/4 : le restaurant traduit en API (Compare) */}
+<Compare
+  title="Du restaurant à l'API"
+  italicPart="l'API"
+  subtitle="La même idée, traduite mot à mot."
+  left={{
+    heading: "Au restaurant",
+    items: [
+      "Le menu : ce que vous pouvez commander",
+      "Le serveur : prend la commande et la transmet",
+      "La cuisine : prépare le plat, hors de votre vue",
+    ],
+  }}
+  right={{
+    heading: "Avec une API",
+    items: [
+      "Ce que l'API permet de demander",
+      "L'API : transmet votre demande au système",
+      "Le système : exécute, vous n'en voyez que le résultat",
+    ],
+  }}
+  note="Vous n'avez jamais besoin d'entrer en cuisine."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Comprendre l'API 3/4 : des APIs au quotidien (InfoCards) */}
 <InfoCards
-  title="Partage d'expérience : les APIs"
-  italicPart="les APIs"
-  subtitle="Quatre questions pour situer votre familiarité avec la technologie."
+  title="Des APIs, vous en utilisez déjà tous les jours"
+  italicPart="tous les jours"
+  subtitle="À chaque fois, une API discute en coulisse, sans que vous le voyiez."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   cards={[
-    { icon: "ph:eye", label: "Découverte", value: "Avant aujourd'hui, qui avait entendu parler des APIs ?" },
-    { icon: "ph:terminal-window", label: "Pratique", value: "Certains d'entre vous savent-ils requêter une API ?" },
-    { icon: "ph:target", label: "Pertinence", value: "Pourquoi est-ce important de connaître la technologie derrière les APIs dans le cadre du marketing automation ?" },
-    { icon: "ph:code", label: "Langage", value: "Quel langage est souvent utilisé pour communiquer avec une API ?" },
+    { icon: "ph:cloud-sun", label: "Météo", value: "Votre téléphone demande la météo à un service distant et l'affiche en quelques secondes." },
+    { icon: "ph:sign-in", label: "Se connecter avec Google", value: "Un site vous laisse entrer avec votre compte Google sans jamais voir votre mot de passe." },
+    { icon: "ph:airplane-tilt", label: "Comparateur de vols", value: "Un seul site interroge des dizaines de compagnies et agrège leurs prix en direct." },
+    { icon: "ph:credit-card", label: "Paiement en ligne", value: "Le site confie le paiement à un service spécialisé qui valide la carte et répond en direct." },
   ]}
 />
 
-{/* Slide 28 : JSON */}
-<Media
-  title="JSON, le langage des APIs"
-  italicPart="JSON"
-  subtitle="JSON : JavaScript Object Notation."
-  body="Un langage d'échange de données texte, plus rapide et plus simple que XML, lisible par les humains comme par les machines."
-  image="/decks/marketing-automation/json-brackets.png"
-  alt="Accolades JSON, métaphore du format"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 29 : Applications du JSON */}
-<ImageGrid
-  title="Applications du JSON"
-  italicPart="JSON"
-  subtitle="De plus en plus utilisé en marketing, et notamment dans trois cas typiques."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/json-server.jpg", alt: "Requêtes API", title: "Requêtes API", text: "L'échange standard entre un client (navigateur, app, workflow) et un service web." },
-    { src: "/decks/marketing-automation/json-magnifier.jpg", alt: "Requêtes de recherche", title: "Requêtes de recherche", text: "Filtres complexes, agrégations, facettes : le JSON exprime la requête comme la réponse." },
-    { src: "/decks/marketing-automation/json-structured.jpg", alt: "Données structurées", title: "Données structurées", text: "Schema.org, balisage SEO, configuration : JSON structure la donnée pour les moteurs." },
+{/* Comprendre l'API 4/4 : démo live no-code, native sans capture (Spreadsheet) */}
+<Spreadsheet
+  title="Démo : une donnée qui arrive toute seule"
+  italicPart="toute seule"
+  subtitle="Une formule dans une cellule, et la donnée tombe en direct. Sans une ligne de code : vous venez d'appeler une API."
+  sheets={[
+    {
+      name: "Démo",
+      formula: '=GOOGLEFINANCE("CHFEUR")',
+      activeCell: "B2",
+      columns: ["Donnée voulue", "Résultat en direct"],
+      rows: [
+        ["Taux de change CHF vers EUR", "1.04"],
+        ["Cours de l'action Apple (AAPL)", "229.80"],
+        ["Titre d'une page web", "Accueil | Exemple"],
+      ],
+    },
   ]}
-/>
-
-{/* Slide 30 : Verbes HTTP */}
-<Media
-  title="GET, POST, PUT, DELETE"
-  subtitle="Une requête API : une URL et une action."
-  image="/decks/marketing-automation/chart-http-verbs-30.png"
-  alt="Quatre verbes HTTP : GET consulter, POST créer, PUT mettre à jour, DELETE supprimer"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 31 : Documentation d'API (Stripe, Twilio, Spotify) */}
-<ImageGrid
-  title="Documentation d'API"
-  italicPart="Documentation"
-  subtitle="Chaque API a son propre fonctionnement. Avant de coder, on lit la doc."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/api-doc-stripe.png", alt: "Stripe", title: "Stripe", text: "Référence du paiement en ligne : doc claire, exemples copier-coller, SDK officiels." },
-    { src: "/decks/marketing-automation/api-doc-twilio.png", alt: "Twilio", title: "Twilio", text: "Messages, voix, vidéo, WhatsApp : l'omnicanal communication accessible par API." },
-    { src: "/decks/marketing-automation/api-doc-spotify.png", alt: "Spotify", title: "Spotify", text: "Accès aux playlists, métadonnées, recommandations : un cas d'école pour démarrer." },
-  ]}
-/>
-
-{/* Slide 32 : Démonstration sur Postman */}
-<Media
-  title="Démonstration sur Postman"
-  italicPart="Postman"
-  subtitle="Un client graphique gratuit pour explorer une API sans écrire une ligne de code."
-  image="/decks/marketing-automation/postman-demo.png"
-  alt="Illustration : deux personnes inspectent un carnet Postman avec une loupe"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 33 : Résultat de la démonstration */}
-<Media
-  title="Résultat de la démonstration"
-  italicPart="Résultat"
-  subtitle="Requête GET sur api.genderize.io, réponse JSON renvoyée en 237 ms."
-  image="/decks/marketing-automation/screen-postman-result-33.png"
-  alt="Capture Postman : requête GET et réponse JSON formatée"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -563,5 +568,42 @@ import WordCloud from '@/components/slides/WordCloud.astro';
     { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
     { src: "/decks/marketing-automation/auto-clickup.png", alt: "Assignation de tâche auto", title: "Assignation de tâche auto", text: "Une tâche créée dans un statut donné se voit assigner automatiquement à la bonne personne." },
     { src: "/decks/marketing-automation/auto-facebook.jpg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
+  ]}
+/>
+
+{/* Section 05 : MCP (intercalaire) */}
+<SubSection
+  kicker="L'étape d'après"
+  index="05"
+  title="MCP : donner des mains à l'IA"
+  italicPart="des mains"
+  subtitle="Si l'API connecte deux applications, le MCP connecte votre assistant IA à tous vos outils."
+  subtitleWrap
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* MCP : définition (modèle Definition) */}
+<Definition
+  eyebrow="Définition"
+  term="MCP"
+  termItalicPart="MCP"
+  definition="MCP signifie Model Context Protocol. C'est une prise universelle : un standard unique qui permet à un assistant IA, comme Claude, d'utiliser vos outils et vos données sans construire une connexion sur mesure pour chacun."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* MCP : pourquoi ça compte pour le marketing (InfoCards) + amorce de démo */}
+<InfoCards
+  title="Pourquoi ça change tout pour le marketing"
+  italicPart="change tout"
+  subtitle="L'IA passe de « savoir répondre » à « savoir agir » dans vos outils."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:database", label: "Lire vos données", value: "Retrouver un client dans le CRM, vérifier une commande, consulter un tableau de bord." },
+    { icon: "ph:envelope-simple", label: "Passer à l'action", value: "Préparer une relance, créer une tâche, mettre à jour une fiche, depuis la conversation." },
+    { icon: "ph:plugs-connected", label: "Là où vous travaillez", value: "Agenda, CRM, emails, fichiers : l'IA se branche sur vos outils existants." },
+    { icon: "ph:flask", label: "À tester en direct", value: "Demandez à Claude de retrouver un client et de préparer un message de relance." },
   ]}
 />

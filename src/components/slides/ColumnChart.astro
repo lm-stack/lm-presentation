@@ -1,0 +1,201 @@
+---
+// src/components/slides/ColumnChart.astro
+// Graphique en colonnes VERTICALES "ExecEd-style", 100% CSS (aucune librairie).
+// Pendant vertical de BarChart (barres horizontales) : utile pour une série
+// temporelle / une progression (ex : croissance d'un volume année par année).
+// Chaque colonne : valeur au-dessus, barre qui monte du bas, label (année) sous
+// la ligne de base. Header marque + logo, titre serif italique partiel + sous-titre.
+// Une colonne peut être mise en avant via `emphasis` (les autres sont atténuées).
+// Source citée via le footer global .slide-source (cliquable si `sourceUrl`).
+import { splitHighlight } from '@/utils/highlight';
+interface ColumnItem {
+  /** Label sous la colonne (année, catégorie courte). */
+  label: string;
+  value: number;
+  emphasis?: boolean;
+}
+interface Props {
+  title: string;
+  italicPart?: string;
+  subtitle?: string;
+  items: ColumnItem[];
+  /** Valeur max de l'échelle. Défaut : 1.25x la plus grande valeur (laisse de l'air au-dessus). */
+  max?: number;
+  /** Suffixe affiché après chaque valeur (ex : " ZB"). Défaut : aucun. */
+  unit?: string;
+  /** Texte de la source (étude, note méthodo) : footer bas-gauche. */
+  source?: string;
+  /** Lien rendant la source cliquable. */
+  sourceUrl?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  items,
+  max,
+  unit = '',
+  source,
+  sourceUrl,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const hasEmphasis = items.some((it) => it.emphasis);
+const peak = Math.max(...items.map((it) => it.value), 1);
+const scaleMax = max ?? peak * 1.25;
+---
+<section class="column-chart" data-layout="column-chart">
+  <header class="column-chart__header">
+    <div class="column-chart__brand-text">
+      <p class="column-chart__brand-main">{brand}</p>
+      {brandSub && <p class="column-chart__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="column-chart__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="column-chart__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="column-chart__body">
+    <div class="column-chart__heading">
+      <h2 class="column-chart__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="column-chart__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {subtitle && <p class="column-chart__subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="column-chart__plot">
+      <ul class="column-chart__cols">
+        {items.map((item, i) => {
+          const h = Math.max(1, Math.min(100, (item.value / scaleMax) * 100));
+          const dim = hasEmphasis && !item.emphasis;
+          return (
+            <li class:list={['column-chart__col', dim && 'is-dim']}>
+              <span class="column-chart__bar-wrap">
+                <span class="column-chart__value">{item.value}{unit}</span>
+                <span class="column-chart__bar" style={`height: ${h}%; --i: ${i};`}></span>
+              </span>
+              <span class="column-chart__label">{item.label}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+
+  {source && (sourceUrl
+    ? <a class="slide-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+    : <p class="slide-source">Source : {source}</p>)}
+</section>
+
+<style>
+  .column-chart {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+  .column-chart__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .column-chart__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; margin: 0; color: var(--c-ink); text-align: left;
+  }
+  .column-chart__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub); font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.18em; margin: 4px 0 0; color: var(--c-muted); text-align: left;
+  }
+  .column-chart__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
+
+  .column-chart__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 48px;
+  }
+  .column-chart__heading { flex: 0 0 auto; }
+  .column-chart__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em;
+    margin: 0; color: var(--c-ink); text-wrap: balance; text-align: left;
+  }
+  .column-chart__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic; font-weight: 400;
+  }
+  .column-chart__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead); line-height: var(--lh-lead); font-weight: 500; color: var(--c-muted);
+    margin: 12px 0 0; max-width: none;
+  }
+
+  /* Hauteur fixe du graphe = celle d'une image "grille 1 image" (540px) : graphe
+     compact, pas pleine hauteur. Le bloc titre + graphe est centré dans le body,
+     comme ImageGrid 1 image. Le gap réduit (20px) encaisse beaucoup de colonnes. */
+  .column-chart__plot { flex: 0 0 auto; height: 540px; width: 100%; display: flex; }
+  .column-chart__cols {
+    list-style: none; margin: 0; padding: 0;
+    flex: 1 1 auto; min-height: 0;
+    display: flex; align-items: stretch; justify-content: space-between; gap: 20px;
+  }
+  .column-chart__col {
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  /* Empilement bas : valeur au-dessus, barre collée à la ligne de base. */
+  .column-chart__bar-wrap {
+    flex: 1 1 auto; min-height: 0; width: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    gap: 14px;
+    border-bottom: 2px solid color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .column-chart__value {
+    flex: 0 0 auto;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-size: var(--fs-body); font-weight: 700; color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .column-chart__bar {
+    width: 62%; max-width: 144px; min-height: 6px;
+    background: var(--c-accent);
+    border-radius: 4px 4px 0 0;
+    transform-origin: bottom center;
+    animation: column-chart-grow 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+  }
+  .column-chart__label {
+    flex: 0 0 auto; margin-top: 20px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body); font-weight: 600; color: var(--c-muted);
+    text-align: center;
+  }
+
+  /* Colonnes atténuées quand une autre est mise en avant. */
+  .column-chart__col.is-dim .column-chart__bar { background: color-mix(in srgb, var(--c-accent) 32%, transparent); }
+  .column-chart__col.is-dim .column-chart__value { color: var(--c-muted); }
+
+  @keyframes column-chart-grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+</style>

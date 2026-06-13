@@ -35,6 +35,7 @@ import SplitImage from '@/components/slides/SplitImage.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 import BarChart from '@/components/slides/BarChart.astro';
+import ColumnChart from '@/components/slides/ColumnChart.astro';
 import Mockup from '@/components/slides/Mockup.astro';
 import Table from '@/components/slides/Table.astro';
 import Spreadsheet from '@/components/slides/Spreadsheet.astro';
@@ -344,6 +345,29 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     { label: "Cinquième catégorie", value: 14 },
   ]}
   source="Étude exemple, 2024 (n=000), plusieurs réponses possibles"
+  sourceUrl="https://lausanne.marketing"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
+{/* Graphique en colonnes verticales : pendant vertical de BarChart, pour une
+    progression dans le temps. Hauteur fixe (= une image "grille 1 image"), encaisse
+    beaucoup de colonnes. Une colonne en avant via `emphasis`, `unit` optionnel. */}
+<ColumnChart
+  title="Graphique en colonnes"
+  italicPart="colonnes"
+  subtitle="Barres verticales pour une progression dans le temps : hauteur fixe, gère beaucoup de colonnes."
+  unit=" ZB"
+  items={[
+    { label: "2019", value: 45 },
+    { label: "2020", value: 52 },
+    { label: "2021", value: 64 },
+    { label: "2022", value: 79 },
+    { label: "2023", value: 101 },
+    { label: "2024", value: 130 },
+    { label: "2025", value: 175, emphasis: true },
+  ]}
+  source="Étude exemple, 2024"
   sourceUrl="https://lausanne.marketing"
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
