@@ -26,7 +26,7 @@ Conséquence : changer une taille = changer UN token, pas 34 composants.
 |---|---|---|---|
 | `--fs-cover` | clamp(110px, 11vw, 188px) | Cover | `Cover` |
 | `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `Section`, `SubSection`, `About`, `SectionSplit`, `Statement`, `Pause`, `MatrixRain`, `ClosingHero`, `Questions`, `Merci` |
-| `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCards`, `Steps`, `Programme`, `Form`, `ListImage`, `Exchange`, `Workshop`, `People`, `Mockup`, `CodeExamples`, `SplitImage`, `Demo`, `UtmGenerator` |
+| `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCards`, `Steps`, `Programme`, `Form`, `ListImage`, `Exchange`, `Workshop`, `People`, `Mockup`, `CodeExamples`, `SplitImage`, `Capture`, `Demo`, `UtmGenerator` |
 | `--fs-hero-m` | clamp(40px, 4vw, 72px) | Contenu dense | `ImageGrid`, `Poll`, `WordCloud`, `Compare`, `BarChart`, `Table`, `Media`, `Spreadsheet`, `StatRings`, `Video`, `Schema` |
 | `--fs-term` | clamp(76px, 8vw, 140px) | Spécial | `Definition` (terme serif) |
 
@@ -68,5 +68,5 @@ ne sont pas migrés : à archiver, pas à harmoniser.
 
 Les autres composants legacy (versions pré-Hero) ont été **supprimés lors du nettoyage 2026-06-09**,
 remplacés par leur équivalent Hero : `Cover`, `Section`, `Closing`/`ClosingHero`, `Statement`,
-`Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Demo`, `Exchange`, `ImageGrid`,
+`Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Capture`, `Exchange`, `ImageGrid`,
 `BigImage`, `TableSlide`/`TwoColumnTable`, `NumberedCards`/`NumberedCardWithDetail`, `Poll`, `WordCloud`.

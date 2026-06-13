@@ -6,7 +6,7 @@ date: 2026-06-02
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop"
+cover: "https://images.unsplash.com/photo-1633424974203-6c91b2a651ee?w=1600&h=900&fit=crop"
 description: "Collecte des données : les cinq sources d'entrée d'un CRM (formulaires, transactions, imports, API, saisie manuelle). Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
@@ -20,7 +20,6 @@ import Mockup from '@/components/slides/Mockup.astro';
 import Compare from '@/components/slides/Compare.astro';
 import CodeExamples from '@/components/slides/CodeExamples.astro';
 import UtmGenerator from '@/components/slides/UtmGenerator.astro';
-import MatrixRain from '@/components/slides/MatrixRain.astro';
 import Quote from '@/components/slides/Quote.astro';
 import BarChart from '@/components/slides/BarChart.astro';
 import ListImage from '@/components/slides/ListImage.astro';
@@ -34,7 +33,7 @@ import Poll from '@/components/slides/Poll.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  image="https://images.unsplash.com/photo-1633424974203-6c91b2a651ee?w=800&h=1000&fit=crop"
   theme="halo-gold"
 />
 
@@ -80,7 +79,7 @@ import Poll from '@/components/slides/Poll.astro';
 
 <Quote
   icon="ph:lightbulb"
-  text="La majeure partie des données d'une entreprise est non structurée : emails, PDF, cartes de visite, notes d'appels. Tout l'enjeu de la collecte est de transformer ce vrac en données structurées, propres et exploitables par un CRM."
+  text="La majeure partie des données d'une entreprise est non structurée : emails, PDF, cartes de visite, notes d'appels. L'un des enjeux majeurs de la collecte est de transformer ce vrac en données structurées, propres et exploitables par un CRM."
   image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1920&h=1080&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -149,9 +148,13 @@ import Poll from '@/components/slides/Poll.astro';
   device="duo"
   title="Ce qu'on voit"
   italicPart="voit"
-  subtitle="Côté visiteur : un formulaire épuré, trois champs, un bouton. C'est tout ce qu'il perçoit."
+  bullets={[
+    "Un formulaire épuré : trois champs et un bouton, rien de plus.",
+    "Aucune friction, aucun jargon : le visiteur va droit au but.",
+    "C'est tout ce qu'il perçoit, le reste se joue en coulisses.",
+  ]}
   webform={{
-    url: "cedric.ch",
+    url: "www.site-web.ch",
     siteName: "Cédric",
     headline: "Recevez le guide gratuit",
     blurb: "Laissez vos coordonnées, on vous envoie tout par email.",
@@ -217,8 +220,6 @@ import Poll from '@/components/slides/Poll.astro';
   subtitle="Des paramètres ajoutés à la fin d'une URL pour savoir d'où vient un visiteur. Les trois essentiels : la source, le canal et la campagne."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  link="https://ga-dev-tools.google/campaign-url-builder/"
-  linkLabel="Google Campaign URL Builder"
   columns={1}
   examples={[
     {
@@ -284,19 +285,16 @@ import Poll from '@/components/slides/Poll.astro';
 />
 
 <Demo
-  title="Le formulaire de Cédric, disséqué"
-  italicPart="disséqué"
-  subtitle="On reprend la landing du module Growth et on regarde ce qui se joue entre le clic et la fiche CRM."
-  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&h=1000&fit=crop"
-  caption="Formulaire de Cédric (capture à remplacer)"
+  toolLogo="/decks/collecte-donnees/logos/zoho.svg"
+  toolName="Zoho Forms"
+  objectives={[
+    "Repérer les champs visibles : prénom et email, le strict minimum",
+    "Dévoiler les champs cachés : UTM, lead magnet, page, timestamp, IP",
+    "Vérifier la validation : format email, champs requis, anti-bot",
+    "Suivre le trajet du clic jusqu'à la fiche CRM",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Champs visibles", value: "Le strict minimum : prénom et email. Le reste se déduit ou se demande plus tard." },
-    { label: "Champs cachés", value: "UTM, slug du lead magnet, page d'origine, timestamp, IP, injectés sans friction." },
-    { label: "Validation", value: "Format email vérifié, champs requis, anti-bot, avant même l'envoi." },
-    { label: "À retenir", value: "Capter propre dès la source : aucune ligne à nettoyer derrière." },
-  ]}
 />
 
 <Table
@@ -312,12 +310,6 @@ import Poll from '@/components/slides/Poll.astro';
     ["Rapport qualité-prix", "Zoho Forms", "dès 12 CHF", "Complet et abordable, intégré au CRM Zoho"],
     ["Conversationnelle", "Typeform", "dès 50 CHF", "Une question à la fois, design soigné, fort taux de réponse"],
   ]}
-/>
-
-<MatrixRain
-  title="À grande échelle"
-  italicPart="grande échelle"
-  subtitle="Le scraping récolte la donnée publique en masse, automatiquement."
 />
 
 <SubSection
@@ -358,7 +350,7 @@ import Poll from '@/components/slides/Poll.astro';
   }}
   right={{
     heading: "Ce que ça ouvre vraiment",
-    items: ["Prix et offres des concurrents", "Avis clients et e-réputation", "Données de marché : immobilier, emploi", "Contenus, tendances et signaux"],
+    items: ["Prix et offres des concurrents", "Avis clients et e-réputation", "Données de marché : immobilier, emploi", "Résultats de recherche (SERP)", "Contenus, tendances et signaux"],
   }}
   note="Le scraping ne sert pas qu'à trouver des contacts : il alimente la veille, l'analyse de marché et la décision."
   brand="CRM, Data & Automation"
@@ -410,23 +402,6 @@ import Poll from '@/components/slides/Poll.astro';
   ]}
 />
 
-<Compare
-  title="Scraping ou API ?"
-  italicPart="API"
-  subtitle="Avant de scraper, posez la question : une API officielle fait souvent le travail, en plus stable et plus sûr."
-  left={{
-    heading: "L'API d'abord",
-    items: ["Donnée déjà fournie et structurée", "Stable, documentée, sous contrat", "Quotas et limites de débit clairs", "Souvent payante ou sur autorisation"],
-  }}
-  right={{
-    heading: "Le scraping ensuite",
-    items: ["Quand aucune API n'existe", "Couvre n'importe quel site public", "Fragile : casse si la page change", "Cadre légal entièrement à votre charge"],
-  }}
-  note="Règle simple : si une API expose la donnée, préférez-la. Le scraping est le plan B, puissant mais exigeant."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 <InfoCards
   title="Les outils pour scraper"
   italicPart="scraper"
@@ -458,35 +433,29 @@ import Poll from '@/components/slides/Poll.astro';
 />
 
 <Demo
-  title="Démonstration : OpenStreetMap"
-  italicPart="OpenStreetMap"
-  subtitle="Récupérer de la donnée publique ouverte avec Apify, sur OpenStreetMap."
-  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&h=1000&fit=crop"
-  caption="Apify : OpenStreetMap POI Extractor (capture à remplacer)"
+  toolLogo="/decks/collecte-donnees/logos/openstreetmap.svg"
+  toolName="OpenStreetMap"
+  objectives={[
+    "Configurer l'acteur OpenStreetMap POI Extractor sur Apify",
+    "Cibler les restaurants de Lausanne dans un rayon de 5 km",
+    "Extraire nom, adresse, téléphone, site web et horaires",
+    "Exporter un fichier prêt à importer dans le CRM",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Outil", value: "Apify, acteur OpenStreetMap POI Extractor (no-code, via l'Overpass API)." },
-    { label: "Cible", value: "Les restaurants de Lausanne, dans un rayon de 5 km." },
-    { label: "Récolté", value: "Nom, adresse, téléphone, site web, horaires, coordonnées GPS." },
-    { label: "Règle", value: "Open data sous licence ODbL : réutilisable avec attribution OpenStreetMap." },
-  ]}
 />
 
 <Demo
-  title="Démonstration : Apollo.io"
-  italicPart="Apollo.io"
-  subtitle="Trouver des décideurs ciblés et préparer une séquence, à partir d'une base de contacts B2B."
-  image="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1600&h=1000&fit=crop"
-  caption="Apollo.io : recherche de décideurs (capture à remplacer)"
+  toolLogo="/decks/collecte-donnees/logos/apollo.png"
+  toolName="Apollo.io"
+  objectives={[
+    "Filtrer la base Apollo.io par secteur, taille et zone géographique",
+    "Cibler les responsables marketing d'entreprises romandes de 50 à 200 employés",
+    "Récupérer nom, poste, entreprise et email professionnel",
+    "Préparer l'export en vérifiant la base légale avant tout envoi",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Outil", value: "Apollo.io, base de plus de 275 millions de contacts B2B." },
-    { label: "Cible", value: "Les responsables marketing d'entreprises romandes de 50 à 200 employés." },
-    { label: "Récolté", value: "Nom, poste, entreprise, email professionnel, profil LinkedIn." },
-    { label: "Règle", value: "Données professionnelles : vérifier la base légale (LPD/RGPD) et l'opt-out avant tout envoi." },
-  ]}
 />
 
 <Steps

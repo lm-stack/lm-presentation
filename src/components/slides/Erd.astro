@@ -1,0 +1,474 @@
+---
+// src/components/slides/Erd.astro
+// Diagramme entité-relation statique qui REPRODUIT FIDÈLEMENT le design du repo
+// lm-diagrams (ReactFlow + TableNode) : boîtes radius 12px avec barre d'accent
+// en tête, lignes de champs (grille nom | type) avec badges PK/FK, ombres douces,
+// connecteurs COURBÉS smoothstep avec flèche fermée, fond pointillé "canvas".
+//
+// Palette : valeurs littérales de lm-diagrams (or #FFD838, encre #191919, gris),
+// PAS les tokens du deck. C'est volontaire et assumé : l'ERD est un objet
+// "diagramme" à identité visuelle propre, au même titre que Spreadsheet (vert
+// Excel) ou Mockup (couleurs réelles des devices), exceptions nommées à la règle
+// "pas de hex en dur" (cf. .claude/rules/themes.md). Pour le passer à l'accent
+// rouge du deck : remplacer #FFD838 par var(--c-accent) dans le bloc <style>.
+//
+// Réutilisable : on passe `entities` (avec positions x/y dans la scène 1728x600)
+// et `relations`. Les chemins des arêtes sont calculés au build (handles aux
+// bords + routage smoothstep arrondi). state d'entité : 'normal' | 'accent'
+// (mise en avant, ex. celle qu'on vient d'ajouter) | 'ghost' (estompée).
+import { splitHighlight } from '@/utils/highlight';
+
+interface ErdField { name: string; type?: string; key?: 'pk' | 'fk'; }
+interface ErdEntity {
+  name: string;
+  x: number;
+  y: number;
+  group?: string;
+  state?: 'normal' | 'accent' | 'ghost';
+  fields: ErdField[];
+}
+interface ErdRelation { from: string; to: string; label?: string; dashed?: boolean; }
+
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  brand?: string;
+  brandSub?: string;
+  entities: ErdEntity[];
+  relations?: ErdRelation[];
+  caption?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  brand = 'Titre de la présentation',
+  brandSub,
+  entities,
+  relations = [],
+  caption,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+
+// Scène à coordonnées fixes (espace de design 1920x1080, zone utile sous le titre).
+const STAGE_W = 1728;
+const STAGE_H = 600;
+const NODE_W = 340;
+const HEAD_H = 56;
+const ROW_H = 32;
+// Hauteur exacte (le CSS fige header et lignes à ces hauteurs => handles alignés).
+const nodeH = (e: ErdEntity) => HEAD_H + e.fields.length * ROW_H;
+
+const byName = new Map(entities.map((e) => [e.name, e]));
+
+type Side = 'left' | 'right' | 'top' | 'bottom';
+function handle(e: ErdEntity, side: Side) {
+  const h = nodeH(e);
+  if (side === 'left') return { x: e.x, y: e.y + h / 2 };
+  if (side === 'right') return { x: e.x + NODE_W, y: e.y + h / 2 };
+  if (side === 'top') return { x: e.x + NODE_W / 2, y: e.y };
+  return { x: e.x + NODE_W / 2, y: e.y + h };
+}
+
+const R = 12; // rayon des coins arrondis du routage (smoothstep)
+type Pt = { x: number; y: number };
+function hPath(s: Pt, t: Pt) {
+  if (Math.abs(t.y - s.y) < 1) return `M ${s.x},${s.y} L ${t.x},${t.y}`;
+  const midX = (s.x + t.x) / 2;
+  const dS = midX >= s.x ? 1 : -1;
+  const dT = t.x >= midX ? 1 : -1;
+  const vy = t.y >= s.y ? 1 : -1;
+  const r = Math.max(0, Math.min(R, Math.abs(t.y - s.y) / 2, Math.abs(midX - s.x), Math.abs(t.x - midX)));
+  return [
+    `M ${s.x},${s.y}`,
+    `L ${midX - dS * r},${s.y}`,
+    `Q ${midX},${s.y} ${midX},${s.y + vy * r}`,
+    `L ${midX},${t.y - vy * r}`,
+    `Q ${midX},${t.y} ${midX + dT * r},${t.y}`,
+    `L ${t.x},${t.y}`,
+  ].join(' ');
+}
+function vPath(s: Pt, t: Pt) {
+  if (Math.abs(t.x - s.x) < 1) return `M ${s.x},${s.y} L ${t.x},${t.y}`;
+  const midY = (s.y + t.y) / 2;
+  const dS = midY >= s.y ? 1 : -1;
+  const dT = t.y >= midY ? 1 : -1;
+  const hx = t.x >= s.x ? 1 : -1;
+  const r = Math.max(0, Math.min(R, Math.abs(t.x - s.x) / 2, Math.abs(midY - s.y), Math.abs(t.y - midY)));
+  return [
+    `M ${s.x},${s.y}`,
+    `L ${s.x},${midY - dS * r}`,
+    `Q ${s.x},${midY} ${s.x + hx * r},${midY}`,
+    `L ${t.x - hx * r},${midY}`,
+    `Q ${t.x},${midY} ${t.x},${midY + dT * r}`,
+    `L ${t.x},${t.y}`,
+  ].join(' ');
+}
+
+const edges = relations
+  .map((r) => {
+    const a = byName.get(r.from);
+    const b = byName.get(r.to);
+    if (!a || !b) return null;
+    const ac = { x: a.x + NODE_W / 2, y: a.y + nodeH(a) / 2 };
+    const bc = { x: b.x + NODE_W / 2, y: b.y + nodeH(b) / 2 };
+    const horizontal = Math.abs(bc.x - ac.x) >= Math.abs(bc.y - ac.y);
+    let s: Pt;
+    let t: Pt;
+    let d: string;
+    if (horizontal) {
+      const right = bc.x >= ac.x;
+      s = handle(a, right ? 'right' : 'left');
+      t = handle(b, right ? 'left' : 'right');
+      d = hPath(s, t);
+    } else {
+      const down = bc.y >= ac.y;
+      s = handle(a, down ? 'bottom' : 'top');
+      t = handle(b, down ? 'top' : 'bottom');
+      d = vPath(s, t);
+    }
+    const ghost = a.state === 'ghost' || b.state === 'ghost';
+    return {
+      d,
+      dashed: !!r.dashed,
+      ghost,
+      label: r.label ?? '',
+      mx: (s.x + t.x) / 2,
+      my: (s.y + t.y) / 2,
+    };
+  })
+  .filter((e): e is NonNullable<typeof e> => e !== null);
+---
+<section class="erd" data-layout="erd">
+  <header class="erd__header">
+    <div class="erd__brand-text">
+      <p class="erd__brand-main">{brand}</p>
+      {brandSub && <p class="erd__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="erd__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="erd__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="erd__body">
+    {(title || subtitle) && (
+      <div class="erd__heading">
+        {title && (
+          <h2 class="erd__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="erd__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="erd__subtitle">{subtitle}</p>}
+      </div>
+    )}
+
+    <div class="erd__stage-wrap">
+      <div class="erd__stage" style={`width:${STAGE_W}px;height:${STAGE_H}px`}>
+        <svg class="erd__edges" viewBox={`0 0 ${STAGE_W} ${STAGE_H}`} preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <marker id="erd-arrow" markerWidth="14" markerHeight="14" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M2,2 L11,6 L2,10 Z" class="erd-arrow-head" />
+            </marker>
+          </defs>
+          {edges.map((e) => (
+            <path
+              class:list={['erd-edge', { 'erd-edge--dashed': e.dashed, 'erd-edge--ghost': e.ghost }]}
+              d={e.d}
+              marker-end="url(#erd-arrow)"
+            />
+          ))}
+        </svg>
+
+        {edges.filter((e) => e.label).map((e) => (
+          <span class:list={['erd-label', { 'erd-label--ghost': e.ghost }]} style={`left:${e.mx}px;top:${e.my}px`}>{e.label}</span>
+        ))}
+
+        {entities.map((e) => (
+          <article
+            class:list={['erd-node', e.state === 'accent' && 'erd-node--accent', e.state === 'ghost' && 'erd-node--ghost']}
+            style={`left:${e.x}px;top:${e.y}px;width:${NODE_W}px`}
+          >
+            <div class="erd-node__head" style={`height:${HEAD_H}px`}>
+              <span class="erd-node__title">{e.name}</span>
+              {e.group && <span class="erd-node__group">{e.group}</span>}
+            </div>
+            <div class="erd-node__body">
+              {e.fields.map((f) => (
+                <div class="erd-node__row" style={`height:${ROW_H}px`}>
+                  <span class="erd-node__col-name">
+                    {f.key === 'pk' && <span class="erd-badge erd-badge--pk">PK</span>}
+                    {f.key === 'fk' && <span class="erd-badge erd-badge--fk">FK</span>}
+                    <span class="erd-node__col-label">{f.name}</span>
+                  </span>
+                  {f.type && <span class="erd-node__col-type">{f.type}</span>}
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    {caption && <p class="erd__caption">{caption}</p>}
+  </div>
+</section>
+
+<style>
+  .erd {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header marque : chrome du slide => reste tokenisé (RÈGLE ABSOLUE header). */
+  .erd__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .erd__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .erd__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .erd__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Titre fixe en haut, scène centrée dans l'espace restant. */
+  .erd__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 32px;
+  }
+  .erd__heading {
+    flex: 0 0 auto;
+    text-align: left;
+  }
+  .erd__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .erd__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .erd__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    margin: 12px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+    max-width: var(--measure-l);
+  }
+
+  .erd__stage-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Scène = "canvas" lm-diagrams : fond pointillé sur un panneau clair discret. */
+  .erd__stage {
+    position: relative;
+    flex: 0 0 auto;
+    background-color: #ffffff;
+    background-image: radial-gradient(circle, rgba(25, 25, 25, 0.16) 1.3px, transparent 1.4px);
+    background-size: 26px 26px;
+    background-position: 13px 13px;
+    border: 1px solid rgba(25, 25, 25, 0.06);
+    border-radius: 12px;
+  }
+
+  .erd__edges {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    z-index: 0;
+  }
+  /* Arêtes : encre lm-diagrams, 1.5px, flèche fermée. */
+  .erd-edge {
+    stroke: #191919;
+    stroke-width: 1.5;
+    fill: none;
+  }
+  .erd-edge--dashed {
+    stroke: #b08400;
+    stroke-dasharray: 7 6;
+  }
+  .erd-edge--ghost {
+    stroke: rgba(25, 25, 25, 0.18);
+  }
+  .erd-arrow-head {
+    fill: #191919;
+  }
+
+  .erd-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b6f84;
+    background: #ffffff;
+    border: 1px solid rgba(25, 25, 25, 0.1);
+    padding: 2px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(25, 25, 25, 0.06);
+  }
+  .erd-label--ghost {
+    opacity: 0.4;
+  }
+
+  /* ====== Noeud entité : reproduction fidèle de TableNode (lm-diagrams) ====== */
+  .erd-node {
+    position: absolute;
+    z-index: 1;
+    background: #ffffff;
+    border: 1px solid rgba(25, 25, 25, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(25, 25, 25, 0.06), 0 1px 3px rgba(25, 25, 25, 0.04);
+  }
+  .erd-node--accent {
+    border-color: #ffd838;
+    box-shadow: 0 0 0 3px rgba(255, 216, 56, 0.25), 0 8px 20px rgba(25, 25, 25, 0.1);
+  }
+  .erd-node--ghost {
+    opacity: 0.42;
+    box-shadow: none;
+  }
+
+  .erd-node__head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    padding: 0 16px;
+    border-top: 4px solid #ffd838;
+    background: linear-gradient(180deg, rgba(25, 25, 25, 0.03) 0%, transparent 100%);
+  }
+  .erd-node__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #191919;
+  }
+  .erd-node__group {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(25, 25, 25, 0.5);
+  }
+
+  .erd-node__body {
+    display: flex;
+    flex-direction: column;
+  }
+  .erd-node__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    border-top: 1px solid rgba(25, 25, 25, 0.05);
+  }
+  .erd-node__col-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #191919;
+  }
+  .erd-node__col-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .erd-node__col-type {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(25, 25, 25, 0.5);
+    white-space: nowrap;
+  }
+
+  .erd-badge {
+    flex: 0 0 auto;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .erd-badge--pk {
+    background: #ffd838;
+    color: #191919;
+  }
+  .erd-badge--fk {
+    background: rgba(25, 25, 25, 0.08);
+    color: rgba(25, 25, 25, 0.7);
+  }
+
+  .erd__caption {
+    flex: 0 0 auto;
+    margin: 18px 0 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    color: var(--c-faint);
+    text-align: center;
+  }
+</style>

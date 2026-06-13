@@ -22,6 +22,8 @@ interface Props {
   italicPart?: string;
   subtitle?: string;
   body?: string;
+  /** Liste de points avec icône check, plus dense qu'un simple sous-titre. */
+  bullets?: string[];
   image?: string;
   alt?: string;
   webform?: WebForm;
@@ -34,6 +36,7 @@ const {
   italicPart,
   subtitle,
   body,
+  bullets,
   image,
   alt = '',
   webform,
@@ -58,7 +61,7 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
   </header>
 
   <div class:list={['mockup__body', isSplit ? 'mockup__body--split' : 'mockup__body--stack']}>
-    {(title || subtitle || body) && (
+    {(title || subtitle || body || bullets) && (
       <div class="mockup__text">
         {title && (
           <h2 class="mockup__title">
@@ -69,6 +72,16 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
         )}
         {subtitle && <p class="mockup__subtitle">{subtitle}</p>}
         {body && <p class="mockup__text-body">{body}</p>}
+        {bullets && bullets.length > 0 && (
+          <ul class="mockup__bullets">
+            {bullets.map((b) => (
+              <li class="mockup__bullet">
+                <svg class="mockup__bullet-icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                <span class="mockup__bullet-text">{b}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     )}
 
@@ -213,6 +226,20 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-body); line-height: var(--lh-body);
     font-weight: 400; color: var(--c-muted); margin: 20px 0 0; max-width: var(--measure-s);
   }
+  .mockup__bullets {
+    list-style: none; margin: 32px 0 0; padding: 0;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+  .mockup__bullet { display: flex; align-items: flex-start; gap: 16px; }
+  .mockup__bullet-icon {
+    flex: 0 0 auto; width: 34px; height: 34px; margin-top: 2px; color: var(--c-accent);
+  }
+  .mockup__bullet-text {
+    font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-lead); line-height: var(--lh-lead);
+    font-weight: 500; color: var(--c-ink);
+  }
+  /* Colonne texte un peu plus large en mode duo, pour aérer les bullets. */
+  .mockup--duo .mockup__text { flex-basis: 46%; max-width: 46%; }
 
   .mockup__stage {
     flex: 1 1 auto; min-width: 0; min-height: 0;

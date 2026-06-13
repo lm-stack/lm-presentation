@@ -254,6 +254,14 @@ const titleParts = splitHighlight(title, italicPart);
   .utm-generator__select:focus {
     border-color: var(--c-accent);
   }
+  /* Liste deroulante OUVERTE (options natives du popup) : texte plus petit que le
+     controle ferme. Ne touche ni a la valeur affichee fermee ni aux labels.
+     Respecte par Chrome / Edge / Firefox ; le popup natif de Safari (macOS) ignore
+     cette taille. */
+  .utm-generator__select option {
+    font-size: 16px;
+    font-weight: 500;
+  }
 
   /* Colonne résultat (sombre, "blanc on-ink" : exception littérale admise). */
   .utm-generator__result {

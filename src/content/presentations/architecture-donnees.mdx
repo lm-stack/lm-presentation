@@ -6,7 +6,7 @@ date: 2026-06-04
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "/decks/architecture-donnees/cover-blueprint.jpg"
+cover: "https://images.unsplash.com/photo-1664526937033-fe2c11f1be25?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 description: "Architecture des données : entités, champs, relations, les cinq pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
@@ -16,12 +16,66 @@ import InfoCards from '@/components/slides/InfoCards.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Media from '@/components/slides/Media.astro';
 import Statement from '@/components/slides/Statement.astro';
-import Exchange from '@/components/slides/Exchange.astro';
-import Demo from '@/components/slides/Demo.astro';
+import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import BarChart from '@/components/slides/BarChart.astro';
 import Compare from '@/components/slides/Compare.astro';
+import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
+
+{/*
+  Modèle ERD fil rouge du module (5 entités). Positions dans la scène 1728x600
+  d'Erd.astro, réutilisables tels quels pour l'exemple de construction progressif
+  (on passe un sous-ensemble des entités, mêmes coordonnées).
+*/}
+export const ERD = {
+  entities: [
+    { name: 'Prospect', x: 24, y: 170, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom', type: 'texte' },
+      { name: 'email', type: 'email' },
+      { name: 'source', type: 'liste' },
+      { name: 'statut', type: 'liste' },
+    ] },
+    { name: 'Contact', x: 464, y: 170, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'prénom', type: 'texte' },
+      { name: 'nom', type: 'texte' },
+      { name: 'email', type: 'email' },
+      { name: 'societe_id', key: 'fk', type: '→ Société' },
+    ] },
+    { name: 'Société', x: 904, y: 20, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom', type: 'texte' },
+      { name: 'secteur', type: 'liste' },
+      { name: 'taille', type: 'nombre' },
+    ] },
+    { name: 'Affaire', x: 904, y: 350, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'titre', type: 'texte' },
+      { name: 'montant', type: 'CHF' },
+      { name: 'societe_id', key: 'fk', type: '→ Société' },
+      { name: 'contact_id', key: 'fk', type: '→ Contact' },
+    ] },
+    { name: 'Événement', x: 1364, y: 180, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'type', type: 'liste' },
+      { name: 'date', type: 'date' },
+      { name: 'contact_id', key: 'fk', type: '→ Contact' },
+      { name: 'affaire_id', key: 'fk', type: '→ Affaire' },
+    ] },
+  ],
+  relations: [
+    { from: 'Contact', to: 'Société', label: 'appartient à' },
+    { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
+    { from: 'Affaire', to: 'Société', label: 'rattachée à' },
+    { from: 'Affaire', to: 'Contact', label: 'concerne' },
+    { from: 'Événement', to: 'Affaire', label: 'porte sur' },
+  ],
+};
+
+{/* Index par nom : pratique pour l'exemple de construction (sous-ensembles + états). */}
+export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 
 {/*
   MIGRATION : architecture-donnees.mdx -> architecture-donnees-new.mdx
@@ -116,22 +170,8 @@ import Schema from '@/components/slides/Schema.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  image="https://images.unsplash.com/photo-1664526937033-fe2c11f1be25?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   theme="halo-gold"
-/>
-
-{/* Slide 2 : Échange d'ouverture (ex-Exchange slide 3 — Calendar slide 2 supprimé) */}
-<Exchange
-  title="Où vivent vos contacts aujourd'hui ?"
-  italicPart="contacts"
-  subtitle="Tour de table express : peu importe l'outil, c'est le schéma qui compte."
-  prompts={[
-    "Outlook, Excel ou post-it sur l'écran ?",
-    "Salesforce, Brevo ou un autre CRM ?",
-    "Aucun outil structuré pour l'instant ?",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />
 
 {/* Intercalaire §01 : Pourquoi c'est votre sujet (ouverture) */}
@@ -226,7 +266,7 @@ import Schema from '@/components/slides/Schema.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 6 : Entité, champ, relation — triptyque SVG sur mesure (data-objects). */}
+{/* Slide vocabulaire : triptyque Entité / Champ / Relation (SVG sur mesure). */}
 <Schema
   title="Entité, champ, relation"
   italicPart="champ"
@@ -235,34 +275,148 @@ import Schema from '@/components/slides/Schema.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
+{/* Slide 7 : Cinq entités couvrent 80% des CRM (ex-Statement sans image) */}
 <Statement
   eyebrow="Le schéma minimal"
-  title="Quatre entités couvrent 80% des CRM"
+  title="Cinq entités couvrent 80% des CRM"
   italicPart="80%"
-  network={true}
-  body="Contact, Société, Affaire, Événement. Un Contact appartient à une Société. Une Société peut avoir plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) devient un Événement, rattaché au Contact ou à l'Affaire. Ce schéma sera notre fil rouge tout au long du cours."
+  diagram={{
+    nodes: [
+      { label: 'Société', x: 82, y: 14 },
+      { label: 'Prospect', x: 6, y: 92 },
+      { label: 'Contact', x: 82, y: 92 },
+      { label: 'Affaire', x: 150, y: 165 },
+      { label: 'Événement', x: 18, y: 205 },
+    ],
+    links: [
+      { from: 'Prospect', to: 'Contact', dashed: true },
+      { from: 'Contact', to: 'Société' },
+      { from: 'Affaire', to: 'Société' },
+      { from: 'Affaire', to: 'Contact' },
+      { from: 'Événement', to: 'Affaire' },
+    ],
+  }}
+  body="Prospect, Contact, Société, Affaire, Événement. Une piste entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société. Une Société porte plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) est un Événement, rattaché au Contact ou à l'Affaire. Ce schéma sera notre fil rouge tout au long du cours."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 8 : Section 03 — Les cinq pièges à éviter */}
+{/* Slide : Prospect vs Contact — pourquoi séparer les deux statuts (réponse Q2). */}
+<Compare
+  title="Prospect et Contact : pourquoi les séparer"
+  italicPart="les séparer"
+  subtitle="Deux statuts, deux usages : les confondre pollue la base et fausse le pilotage."
+  left={{ heading: "Prospect", items: [
+    "Une piste encore à qualifier : la relation n'existe peut-être pas.",
+    "Peu de champs : nom, source, canal d'entrée suffisent.",
+    "Adressé en masse : campagnes et séquences de qualification.",
+    "Plutôt géré par le marketing ou la prospection.",
+  ] }}
+  right={{ heading: "Contact", items: [
+    "Une relation établie : personne identifiée, rattachée à une Société.",
+    "Fiche riche : coordonnées, rôle, historique, Affaires liées.",
+    "Adressé en direct : suivi personnalisé, un commercial dédié.",
+    "Plutôt géré par les ventes ou le compte qui le suit.",
+  ] }}
+  note="Les séparer garde la base de Contacts propre, des KPI justes et un consentement adapté à chaque statut. Une piste qualifiée est convertie en Contact, pas mélangée avec eux."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Intercalaire §04 : Construire votre architecture (exemple de construction + pièges) */}
 <SubSection
-  kicker="Les erreurs classiques"
+  kicker="Mise en pratique"
   index="04"
-  title="Les cinq pièges à éviter"
-  italicPart="cinq pièges"
-  subtitle="Ces erreurs se retrouvent dans la quasi-totalité des CRM mal conçus : les éviter dès le départ vous épargne des mois de refonte."
+  title="Construire votre architecture"
+  italicPart="votre architecture"
+  subtitle="On assemble le modèle entité par entité, puis on déjoue les pièges qui plombent la plupart des CRM."
   subtitleWrap={true}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 9 : Cinq pièges (ex-NumberedCards 1 col, 5 items, dense)
-    Condensation : symptôme + réflexe fusionnés en text ; conséquence résumée.
-    Image : cover-blueprint.jpg (à remplacer). */}
+{/* Exemple de construction pas à pas (use case : organisateur d'événements).
+    On réutilise le modèle ERD (positions + champs via l'index E) et on dévoile une
+    entité par slide, la dernière ajoutée en `accent`. Événement = interaction (def
+    du deck) ; à confirmer si l'on veut plutôt « l'événement organisé ». */}
+
+{/* Construction 1/5 : partir des champs collectés -> entité Prospect, seule sur le slide. */}
+<Erd
+  title="Identifier les champs collectés"
+  italicPart="champs collectés"
+  subtitle="Fil rouge : une entreprise qui organise des événements. Question concrète : qu'est-ce qu'on récolte, par exemple dans le formulaire d'inscription ? Ces champs deviennent la première entité, le Prospect."
+  entities={[{ ...E['Prospect'], state: 'accent' }]}
+  caption="Étape 1 sur 5 : partir des données réellement collectées, pas d'un modèle théorique."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Construction 2/5 : l'entité Contact + relation Prospect -> Contact. */}
+<Erd
+  title="La piste devient un Contact"
+  italicPart="Contact"
+  subtitle="Quand un prospect s'inscrit, il devient un Contact : une personne qualifiée, avec une fiche complète. La relation devient relie les deux entités."
+  entities={[{ ...E['Prospect'] }, { ...E['Contact'], state: 'accent' }]}
+  relations={[{ from: 'Prospect', to: 'Contact', label: 'devient', dashed: true }]}
+  caption="Étape 2 sur 5 : une nouvelle entité, reliée à la précédente."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Construction 3/5 : l'entité Société + Contact -> Société. */}
+<Erd
+  title="Le Contact appartient à une Société"
+  italicPart="Société"
+  subtitle="Un participant représente souvent une entreprise. On ajoute la Société et on rattache le Contact : c'est une relation, pas le nom de la boîte recopié dans un champ texte."
+  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'], state: 'accent' }]}
+  relations={[
+    { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
+    { from: 'Contact', to: 'Société', label: 'appartient à' },
+  ]}
+  caption="Étape 3 sur 5 : une info partagée (l'entreprise) vit dans sa propre entité."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Construction 4/5 : l'entité Affaire + ses relations. */}
+<Erd
+  title="Une vente, c'est une Affaire"
+  italicPart="Affaire"
+  subtitle="Inscription payante, stand, sponsoring : chaque vente est une Affaire, rattachée à la Société et au Contact concerné. On y suit le montant et le statut."
+  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Affaire'], state: 'accent' }]}
+  relations={[
+    { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
+    { from: 'Contact', to: 'Société', label: 'appartient à' },
+    { from: 'Affaire', to: 'Société', label: 'rattachée à' },
+    { from: 'Affaire', to: 'Contact', label: 'concerne' },
+  ]}
+  caption="Étape 4 sur 5 : une transaction relie plusieurs entités à la fois."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Construction 5/5 : l'entité Événement -> ERD complet. */}
+<Erd
+  title="Chaque échange est un Événement"
+  italicPart="Événement"
+  subtitle="Email de confirmation, relance, appel : chaque interaction devient un Événement, rattaché à l'Affaire. Le modèle est complet, et c'est le même quel que soit l'outil."
+  entities={[
+    { ...E['Prospect'] },
+    { ...E['Contact'] },
+    { ...E['Société'] },
+    { ...E['Affaire'] },
+    { ...E['Événement'], state: 'accent' },
+  ]}
+  relations={ERD.relations}
+  caption="Étape 5 sur 5 : votre architecture, prête à être outillée."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide pièges 1/2 : trois premiers pièges (ex-Steps 5 items, scindé).
+    Image : cover-blueprint.jpg (à remplacer par un visuel pertinent). */}
 <Steps
-  title="Cinq pièges à éviter dès le départ"
+  title="Les pièges à éviter (1/2)"
   italicPart="pièges"
   subtitle="Pour chaque piège : le symptôme observable et le réflexe correctif."
   image="/decks/architecture-donnees/cover-blueprint.jpg"
@@ -272,6 +426,18 @@ import Schema from '@/components/slides/Schema.astro';
     { text: "Vouloir tout tracker : 47 champs custom \"au cas où\". Réflexe : \"qu'est-ce que je vais filtrer avec ça ?\" Pas de réponse, pas de champ." },
     { text: "Tout coller dans une seule table : affaires dans la colonne notes du contact. Réflexe : une entité par concept, avec des relations." },
     { text: "Stocker les événements dans la fiche contact : DerniereAction, ProchaineRelance écrasent l'historique. Réflexe : une table Activités séparée." },
+  ]}
+/>
+
+{/* Slide pièges 2/2 : les deux derniers pièges. */}
+<Steps
+  title="Les pièges à éviter (2/2)"
+  italicPart="pièges"
+  subtitle="Les deux derniers, les plus coûteux à corriger après coup."
+  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
     { text: "Le champ Notes comme grand sac : \"DOB 1985, fils Tom, allergique gluten\". Réflexe : champs structurés pour ce qui se filtre, notes pour le qualitatif." },
     { text: "Plusieurs versions de la même donnée : email dans Outlook, Salesforce et Excel. Réflexe : un seul endroit qui fait autorité, les autres se synchronisent." },
   ]}
@@ -301,7 +467,7 @@ import Schema from '@/components/slides/Schema.astro';
 {/* Slide 12 : Démonstration live (ex-Demo bare, pas de screenshot disponible)
     Image placeholder Unsplash "ERD / database schema" — à remplacer par une
     capture réelle de la démo (Excel ou Airtable). */}
-<Demo
+<Capture
   title="Même schéma, trois tailles d'entreprise"
   italicPart="trois tailles"
   subtitle="Construction live du modèle Contact + Société + Affaire + Événement dans trois outils calibrés sur trois profils."

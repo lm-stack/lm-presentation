@@ -16,7 +16,7 @@ import Statement from '@/components/slides/Statement.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Media from '@/components/slides/Media.astro';
-import Demo from '@/components/slides/Demo.astro';
+import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 
 {/*
@@ -60,7 +60,7 @@ import Workshop from '@/components/slides/Workshop.astro';
   5. TwoColumnTable Persona/Segment (slide 8) : 2 lignes de définition -> InfoCards 2 cards.
      Icons : ph:user-circle (Persona) et ph:funnel (Segment).
      Les valeurs reprennent le texte source, condensé pour tenir dans une card.
-  6. Demo (slide 14) : le source était un <Demo> sans screenshot ni image fournie.
+  6. Demo (slide 14) : le source était un <Capture> sans screenshot ni image fournie.
      Conformément à la règle "Demo REQUIRES image + rows", on utilise une image
      Unsplash placeholder (Zoho CRM dashboard concept) + rows rédigés à partir du
      contexte du slide source. Caption : "Zoho CRM : création de segments (à remplacer)".
@@ -81,7 +81,7 @@ import Workshop from '@/components/slides/Workshop.astro';
 <Cover
   title="Segmentation et activation"
   italicPart="activation"
-  eyebrow="Jour 1 : Sujet 4"
+  eyebrow="Jour 2 : Sujet 1"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -238,7 +238,7 @@ import Workshop from '@/components/slides/Workshop.astro';
     Source : Demo sans screenshot ni image (slide 14). Règle : Demo REQUIRES image + rows.
     PLACEHOLDER IMAGE : Unsplash tableau de bord CRM (à remplacer par capture Zoho réelle).
     Rows rédigés à partir du contexte du slide source (base Cédric, Zoho CRM, 15 min). */}
-<Demo
+<Capture
   title="Trois segments Cédric, trois activations"
   italicPart="Cédric"
   subtitle="Live dans Zoho : création de trois segments depuis la base nettoyée au sujet 2 Qualité. Pour chacun, une activation cohérente déclenchée."

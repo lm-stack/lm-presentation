@@ -22,11 +22,11 @@ import Merci from '@/components/slides/Merci.astro';
 import Steps from '@/components/slides/Steps.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Workshop from '@/components/slides/Workshop.astro';
-import Demo from '@/components/slides/Demo.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Definition from '@/components/slides/Definition.astro';
 import Form from '@/components/slides/Form.astro';
 import Compare from '@/components/slides/Compare.astro';
+import Erd from '@/components/slides/Erd.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import Pause from '@/components/slides/Pause.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
@@ -426,6 +426,42 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
+{/* ERD : diagramme entité-relation statique (look lm-diagrams tokenisé, rendu crisp
+    + PDF). On passe les entités avec leur position (scène 1728x600) et les relations ;
+    les flèches sont calculées au build (intersection ligne-rectangle). Badges PK/FK
+    via `key`. state d'entité : 'normal' (défaut) | 'accent' (mise en avant) | 'ghost'
+    (estompée). Idéal pour un schéma de données ou une construction progressive. */}
+<Erd
+  title="Un diagramme entité-relation"
+  italicPart="entité-relation"
+  subtitle="Des boîtes (entités) avec leurs champs et badges PK/FK, reliées par des relations fléchées."
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+  entities={[
+    { name: 'Contact', x: 120, y: 150, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom', type: 'texte' },
+      { name: 'email', type: 'email' },
+      { name: 'societe_id', key: 'fk', type: '→ Société' },
+    ] },
+    { name: 'Société', x: 700, y: 120, fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom', type: 'texte' },
+      { name: 'secteur', type: 'liste' },
+    ] },
+    { name: 'Affaire', x: 1280, y: 270, state: 'accent', fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'titre', type: 'texte' },
+      { name: 'montant', type: 'CHF' },
+      { name: 'societe_id', key: 'fk', type: '→ Société' },
+    ] },
+  ]}
+  relations={[
+    { from: 'Contact', to: 'Société', label: 'appartient à' },
+    { from: 'Affaire', to: 'Société', label: 'rattachée à' },
+  ]}
+/>
+
 <SubSection
   kicker="Catalogue"
   index="5"
@@ -463,22 +499,6 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   subtitle="Démonstration, vidéo, image plein cadre, déclaration chiffrée, workshop, formulaire et pause."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
-/>
-
-<Demo
-  title="Démonstration"
-  italicPart="Démonstration"
-  subtitle="Une capture de l'outil, et les grandes lignes en tableau."
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
-  caption="Capture d'écran de la démonstration"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-  rows={[
-    { label: "Outil", value: "Le logiciel ou service montré en direct." },
-    { label: "Cible", value: "Sur quelles données on travaille." },
-    { label: "Étapes", value: "Les 3 ou 4 manipulations clés à observer." },
-    { label: "À retenir", value: "Le point pédagogique de la démonstration." },
-  ]}
 />
 
 {/* Vidéo : screencast en grand (object-fit contain, jamais rognée). En live :
@@ -609,6 +629,10 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   title="Mockup tablette"
   italicPart="tablette"
   subtitle="Device à droite (image ou faux site), contenu à gauche."
+  bullets={[
+    "Prop bullets optionnelle : points avec icône check, plus dense qu'un sous-titre.",
+    "Idéale pour détailler ce que montre le device, côté gauche.",
+  ]}
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=1200&fit=crop"
   alt="Exemple de contenu dans une tablette"
   brand="Titre de la présentation"
