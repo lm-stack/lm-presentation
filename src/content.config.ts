@@ -61,6 +61,13 @@ const parcours = defineCollection({
       .array(
         z.object({
           label: z.string(),
+          // Titre éditorial du jour, ex. "Les fondations data". Optionnel au
+          // schéma (un parcours sans agenda ne le remplit pas), mais requis dès
+          // qu'un <Agenda> est rendu pour ce parcours (validé au build par le
+          // composant, échec bruyant si absent).
+          theme: z.string().optional(),
+          // Description courte du jour, ex. "Collecter, nettoyer, structurer...".
+          summary: z.string().optional(),
           decks: z.array(z.string()).min(1),
         })
       )

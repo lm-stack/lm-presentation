@@ -12,7 +12,7 @@ description: "Ouverture du parcours CRM, Data & Automation : présentation de l'
 
 import Cover from '@/components/slides/Cover.astro';
 import About from '@/components/slides/About.astro';
-import Programme from '@/components/slides/Programme.astro';
+import Agenda from '@/components/slides/Agenda.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
@@ -126,15 +126,7 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-<Programme
-  title="Agenda"
-  italicPart="Agenda"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
+<Agenda
+  parcours="crm-data-automation"
   image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=1600&fit=crop"
-  items={[
-    { title: "Jour 1 : Les fondations data", description: "Collecter, nettoyer, structurer et activer la donnée client." },
-    { title: "Jour 2 : CRM et automation", description: "Protection des données, implémentation CRM, dashboards et marketing automation." },
-    { title: "Jour 3 : Industrialiser avec l'IA", description: "Lead nurturing, workflows avancés, IA et suivi des performances." },
-  ]}
 />

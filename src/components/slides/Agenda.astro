@@ -1,0 +1,59 @@
+---
+// src/components/slides/Agenda.astro
+// Agenda dynamique : couche données au-dessus de <Programme>. Lit la
+// structure `days` d'un parcours (label + theme + summary) et la rend en
+// liste numérotée. La position du slide dans le deck reste éditoriale
+// (placer ce composant où l'agenda doit apparaître). Aucun style propre :
+// tout le visuel vient de Programme.astro, inchangé.
+import { getCollection } from 'astro:content';
+import Programme from '@/components/slides/Programme.astro';
+
+interface Props {
+  // Slug du parcours (id de collection, ex. "crm-data-automation").
+  parcours: string;
+  title?: string;
+  italicPart?: string;
+  // Image latérale ; défaut : cover du parcours si défini, sinon aucune.
+  image?: string;
+}
+
+const { parcours: slug, title = 'Agenda', italicPart = 'Agenda', image } = Astro.props;
+
+const entry = (await getCollection('parcours')).find((p) => p.id === slug);
+if (!entry) {
+  throw new Error(
+    `<Agenda> : parcours "${slug}" introuvable dans src/content/parcours/.`
+  );
+}
+
+const days = entry.data.days;
+if (!days?.length) {
+  throw new Error(`<Agenda> : le parcours "${slug}" n'a pas de "days" défini.`);
+}
+
+const items = days.map((d) => {
+  if (!d.theme || !d.summary) {
+    throw new Error(
+      `<Agenda> : le jour "${d.label}" du parcours "${slug}" doit définir "theme" et "summary".`
+    );
+  }
+  return { title: `${d.label} : ${d.theme}`, description: d.summary };
+});
+
+// brand / brandSub dérivés comme la route p/[slug].astro pour Questions/Merci.
+const INSTITUTION: Record<string, string> = {
+  execed: 'Executive Education',
+  lm: 'Lausanne Marketing',
+};
+const brand = entry.data.title;
+const brandSub = INSTITUTION[entry.data.scheme];
+const sideImage = image ?? entry.data.cover;
+---
+<Programme
+  title={title}
+  italicPart={italicPart}
+  items={items}
+  image={sideImage}
+  brand={brand}
+  brandSub={brandSub}
+/>
