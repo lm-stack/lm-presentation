@@ -13,6 +13,7 @@ description: "Conclusion du parcours CRM, Data & Automation : la stratégie avan
 import Cover from '@/components/slides/Cover.astro';
 import Media from '@/components/slides/Media.astro';
 import Table from '@/components/slides/Table.astro';
+import Exchange from '@/components/slides/Exchange.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 
 {/*
@@ -132,7 +133,39 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 4 : Feedback collectif fin de formation — WordCloud interactif */}
+{/* Slide 4 : Débat 1 — responsabilité humaine de l'automatisation */}
+<Exchange
+  eyebrow="Débat"
+  tocLabel="Responsabilité"
+  title="Automatiser, jusqu'où est-ce juste ?"
+  italicPart="juste"
+  subtitle="Vous savez désormais automatiser une large part de votre métier. Derrière chaque tâche reprise par la machine, il y a des emplois et des collègues."
+  prompts={[
+    "Quelle est votre responsabilité envers ceux dont vous automatisez le travail ?",
+    "Supprimer un poste ou faire monter la personne en compétence : qui tranche, et comment ?",
+  ]}
+  icon="ph:scales-fill"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 5 : Débat 2 — géopolitique et souveraineté des données */}
+<Exchange
+  eyebrow="Débat"
+  tocLabel="Souveraineté des données"
+  title="Où vivent vraiment vos données ?"
+  italicPart="vraiment"
+  subtitle="Chaque outil que vous choisissez décide où vos données sont stockées et sous quelle juridiction elles tombent. Un choix technique, ou politique ?"
+  prompts={[
+    "Outil européen ou américain : qu'est-ce que ça change pour vous et vos clients ?",
+    "Cloud Act, RGPD, souveraineté : de quoi êtes-vous vraiment responsable ?",
+  ]}
+  icon="ph:globe-hemisphere-west-fill"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Feedback collectif fin de formation — WordCloud interactif */}
 <WordCloud
   id="feedback-formation"
   question="Votre takeaway principal de la formation, en un mot ?"
