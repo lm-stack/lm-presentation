@@ -17,7 +17,6 @@ import Demo from '@/components/slides/Demo.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import Media from '@/components/slides/Media.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
-import Exchange from '@/components/slides/Exchange.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Workshop from '@/components/slides/Workshop.astro';
@@ -33,7 +32,12 @@ import Workshop from '@/components/slides/Workshop.astro';
     - Calendrier du Jour 2 supprimé (comme collecte/qualité/IA : il vit dans Introduction).
     - Démo Zoho : capture placeholder (à remplacer) ; démo Zapier fusionnée avec
       son slide "Résultat" (capture zapier-workflow-result.png).
-    - NumberedCardWithDetail (Données à collecter) condensé en Media. */}
+    - NumberedCardWithDetail (Données à collecter) condensé en Media.
+    - 2026-06-13 : bloc modélisation (chaos, BPMN, 4 notions clés, Exchange,
+      outils d'édition BPMN, process vs workflow) extrait vers le deck Jour 1
+      `modeliser-les-processus`. Ce deck démarre désormais directement sur les
+      outils no-code et la construction, en assumant la modélisation faite au
+      Jour 1. Sections renumérotées (01 Outils, 02 Construire). */}
 
 {/* Slide 1 : Cover */}
 <Cover
@@ -109,90 +113,18 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Slide 5 : Section 01 - Identifier les besoins */}
-<SubSection
-  kicker="Avant les outils"
-  index="01"
-  title="Identifier les besoins"
-  italicPart="besoins"
-  subtitle="Modéliser les processus avant de les automatiser, comme pour tout projet CRM."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 6 : Identifier avant d'automatiser (Statement + image chaos) */}
-<Media
-  title="Identifiez les processus avant de les automatiser"
-  italicPart="avant"
-  subtitle="Comme lors de l'implémentation d'un CRM ou de n'importe quel outil digital."
-  body="Sans cartographie, on automatise du chaos et on accélère le désordre. Modéliser reste une étape cruciale."
-  image="/decks/workflow/besoins-chaos.jpg"
-  alt="Bureau en désordre, métaphore du chaos opérationnel"
-  fit="cover"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 7 : BPMN, l'exemple de référence (gros schéma Trisotech) */}
-<Media
-  title="Business Process Model and Notation"
-  italicPart="Notation"
-  subtitle="Le standard mondial pour modéliser un processus métier, plus communément appelé BPMN."
-  image="/decks/workflow/bpmn-exemple.jpg"
-  alt="Diagramme BPMN du processus de nomination du prix Nobel, modélisé sur Trisotech"
-  caption="Source : Trisotech. Exemple appliqué au processus de nomination du prix Nobel."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 8 : Les quatre notions clés du BPMN */}
-<InfoCards
-  title="Les quatre notions clés du BPMN"
-  italicPart="quatre notions clés"
-  subtitle="Quelques éléments simples suffisent pour modéliser un processus."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  cards={[
-    { icon: "ph:rows", label: "Swimlane", value: "Les voies qui représentent les acteurs ou les départements impliqués dans le processus." },
-    { icon: "ph:flag", label: "Événements", value: "Les points de départ, intermédiaires ou de fin qui ponctuent le déroulement." },
-    { icon: "ph:check-square", label: "Activités", value: "Les tâches concrètes à effectuer, souvent par un acteur identifié." },
-    { icon: "ph:git-branch", label: "Gateways", value: "Les points de décision qui orientent le flux selon des conditions." },
-  ]}
-/>
-
-{/* Slide 9 : Échange - modéliser ensemble (nouveau composant Exchange) */}
-<Exchange
-  title="Modélisons ensemble un processus métier"
-  italicPart="ensemble"
-  subtitle="Choisissez un processus de votre organisation. On le cartographie en direct avec la notation BPMN."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 10 : Section 02 - Identifier les outils */}
+{/* Slide 5 : Section 01 - Identifier les outils */}
 <SubSection
   kicker="Les briques"
-  index="02"
+  index="01"
   title="Identifier les outils"
   italicPart="outils"
-  subtitle="Du BPMN au no-code : choisir les bonnes briques pour modéliser et automatiser."
+  subtitle="Des automatisations natives du CRM aux plateformes no-code : les bonnes briques pour exécuter vos processus."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 11 : Outils d'édition BPMN, focus MIRO */}
-<Media
-  title="Beaucoup d'outils peuvent éditer des processus BPMN"
-  italicPart="éditer"
-  subtitle="Le plus connu, popularisé par le télétravail, reste MIRO. Lucidchart en est une alternative robuste."
-  body="MIRO et Lucidchart abaissent la barrière d'entrée : édition collaborative en temps réel, templates BPMN prêts à l'emploi, partage par URL."
-  image="/decks/workflow/outils-miro.png"
-  alt="Capture de l'outil MIRO avec un tableau BPMN collaboratif"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 12 : Trois outils no-code de référence */}
+{/* Slide 6 : Trois outils no-code de référence */}
 <InfoCards
   title="Trois outils no-code pour créer des workflows"
   italicPart="no-code"
@@ -206,10 +138,10 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Slide 13 : Section 03 - Construire un workflow */}
+{/* Slide 7 : Section 02 - Construire un workflow */}
 <SubSection
   kicker="Pas-à-pas"
-  index="03"
+  index="02"
   title="Construire un workflow"
   italicPart="Construire"
   subtitle="Des objectifs au déclenchement, en passant par les actions et les données."
@@ -294,30 +226,7 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 20 : Différence entre workflow et modélisation */}
-<ImageGrid
-  title="Différence entre workflow et modélisation"
-  italicPart="modélisation"
-  subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    {
-      src: "/decks/workflow/diff-process-bpmn.jpeg",
-      alt: "Schéma d'un processus métier en BPMN",
-      title: "Schéma d'un processus",
-      text: "Vue stratégique : qui fait quoi, dans quel ordre, avec quelles règles métier. C'est le BPMN.",
-    },
-    {
-      src: "/decks/workflow/diff-workflow-whiteboard.jpeg",
-      alt: "Schéma d'un workflow d'exécution",
-      title: "Schéma d'un workflow",
-      text: "Vue opérationnelle : trigger, actions, branchements, données. C'est ce qu'on configure dans Zapier ou n8n.",
-    },
-  ]}
-/>
-
-{/* Slide 21 : Données à collecter à chaque étape (NumberedCardWithDetail condensé) */}
+{/* Slide 14 : Données à collecter à chaque étape (NumberedCardWithDetail condensé) */}
 <Media
   title="Données à collecter à chaque étape"
   italicPart="données"

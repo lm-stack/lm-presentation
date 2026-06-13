@@ -14,6 +14,8 @@ interface LogoItem {
 }
 interface Props {
   text: string;
+  /** Texte de support optionnel sous la citation (un ou plusieurs paragraphes). */
+  lead?: string | string[];
   author?: string;
   role?: string;
   image?: string;
@@ -25,6 +27,7 @@ interface Props {
 }
 const {
   text,
+  lead,
   author,
   role,
   image,
@@ -33,6 +36,7 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+const leadParts = lead ? (Array.isArray(lead) ? lead : [lead]) : [];
 ---
 <section class:list={['quote', !image && 'quote--plain']} data-layout="quote">
   {image && (
@@ -57,6 +61,11 @@ const {
       <Icon name={icon} />
     </span>
     <blockquote class="quote__text">{text}</blockquote>
+    {leadParts.length > 0 && (
+      <div class="quote__lead">
+        {leadParts.map((p) => <p>{p}</p>)}
+      </div>
+    )}
     {author && (
       <p class="quote__author">
         <span class="quote__author-name">{author}</span>
@@ -196,6 +205,22 @@ const {
     max-width: 1380px;
     color: var(--c-ink);
     text-wrap: balance;
+    text-align: center;
+  }
+  /* Texte de support optionnel sous la citation (un ou plusieurs paragraphes). */
+  .quote__lead {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 1100px;
+  }
+  .quote__lead p {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 0;
     text-align: center;
   }
   .quote__author {

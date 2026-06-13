@@ -1,28 +1,30 @@
 ---
-title: "Des données au CRM"
+title: "De la Data au CRM"
 subtitle: "CRM, Data & Automation"
-short: "Des données au CRM"
+short: "De la Data au CRM"
 date: 2026-06-08
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "/decks/architecture-donnees/cover-blueprint.jpg"
-description: "Des données au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+cover: "/decks/des-donnees-au-crm/cover.jpg"
+description: "De la Data au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
-import Demo from '@/components/slides/Demo.astro';
+import Demonstration from '@/components/slides/Demonstration.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
 
-{/* Slide 1 : Cover. Image : placeholder cover-blueprint d'architecture-donnees, à remplacer. */}
+{/* Slide 1 : Cover. */}
 <Cover
-  title="Des données au CRM"
+  title="De la Data au CRM"
   italicPart="CRM"
   eyebrow="Jour 1 : Sujet 4"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  image="/decks/des-donnees-au-crm/cover.jpg"
   theme="halo-gold"
 />
 
@@ -56,22 +58,50 @@ import Demo from '@/components/slides/Demo.astro';
     { src: "/decks/des-donnees-au-crm/logos/googlesheets.svg", alt: "Google Sheets", title: "Google Sheets / Excel", text: "Le point de départ : gratuit, universel, parfait pour une TPE." },
     { src: "/decks/des-donnees-au-crm/logos/brevo.svg", alt: "Brevo", title: "Brevo", text: "Email et marketing avec un CRM léger intégré, abordable." },
     { src: "/decks/des-donnees-au-crm/logos/airtable.svg", alt: "Airtable", title: "Airtable", text: "Base de données flexible, CRM sur-mesure sans coder." },
-    { src: "/decks/des-donnees-au-crm/logos/notion.svg", alt: "Notion", title: "Notion", text: "Tout-en-un notes et bases, CRM léger très bon marché." },
+    { src: "/decks/des-donnees-au-crm/logos/attio.svg", alt: "Attio", title: "Attio", text: "CRM moderne et ultra flexible, gratuit pour démarrer." },
   ]}
 />
 
-{/* Slide 4 : Démo Zoho CRM en live (pas de vidéo). Image : placeholder dashboard
-    Unsplash, A REMPLACER par une vraie capture Zoho CRM. */}
-<Demo
-  title="Zoho CRM en pratique"
-  italicPart="en pratique"
-  subtitle="On construit le schéma Contact, Société, Affaire en direct, sans quitter l'outil."
-  image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=1000&fit=crop"
-  caption="Démo live (capture d'illustration, à remplacer par Zoho CRM)."
+{/* Slide 4 : Pourquoi Zoho CRM ? (grille de 4 raisons, InfoCards).
+    Justifie le choix de Zoho comme outil fil rouge des démos et ateliers. */}
+<InfoCards
+  title="Pourquoi Zoho CRM ?"
+  italicPart="Zoho"
+  subtitle="L'outil qu'on utilise pour la démo et les ateliers : le meilleur compromis entre puissance, prix et simplicité."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Édition", value: "Zoho CRM gratuit, jusqu'à 3 utilisateurs." },
-    { label: "En direct", value: "Créer les entités, ajouter des champs, tracer la première relation." },
+  cards={[
+    { icon: "ph:tag", label: "Prix progressif", value: "Gratuit jusqu'à 3 utilisateurs, puis des paliers abordables qui suivent la croissance, de l'association à la multinationale." },
+    { icon: "ph:puzzle-piece", label: "Tout-en-un", value: "CRM, email marketing, support et automatisation dans un seul écosystème. Pas dix outils à connecter et à payer séparément." },
+    { icon: "ph:lightning", label: "Puissant, pas lourd", value: "Workflows, automatisations et IA intégrée (Zia), à une fraction du prix et de la complexité de Salesforce." },
+    { icon: "ph:wrench", label: "Sur-mesure, sans code", value: "Modules, champs et processus adaptés à ton métier, déployables sans développeur ni armée de consultants." },
   ]}
+/>
+
+{/* Slide 5 : Démonstration Zoho CRM en live. Titre figé "Démonstration",
+    logo de l'outil + objectifs concrets de la démo. */}
+<Demonstration
+  toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
+  toolName="Zoho CRM"
+  objectives={[
+    "Créer une entité sur Zoho CRM (module)",
+    "Créer un champ normal",
+    "Créer un champ lookup (relation)",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Fil rouge de la démo (stepper 4 étapes, étape 1 active, le reste grisé). */}
+<FilRouge
+  active={1}
+  subtitle="Zoho CRM nous sert de fil rouge sur toute la démo : quatre étapes, un seul outil, pour ne pas se perdre."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />

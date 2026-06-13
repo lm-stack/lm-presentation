@@ -36,7 +36,9 @@ const { tagline, image, brand = 'Titre de la présentation', brandSub } = Astro.
       <p class="merci__brand-main">{brand}</p>
       {brandSub && <p class="merci__brand-sub">{brandSub}</p>}
     </div>
-    <img src="/assets/lm-logo.svg" class="merci__brand-logo" alt="Lausanne Marketing" />
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="merci__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="merci__brand-logo" alt="Lausanne Marketing" />
+    </a>
   </header>
 
   <div class="merci__body">

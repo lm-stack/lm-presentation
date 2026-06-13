@@ -17,7 +17,8 @@ const presentations = defineCollection({
     updated: z.string().optional(),
     type: z.enum(['cours', 'commercial', 'workshop', 'evenement']),
     unlisted: z.boolean().default(false),
-    cover: z.string().optional(),
+    // cover requis : fond image obligatoire sur les slides de clôture (Questions / Merci), cf. slides.md.
+    cover: z.string(),
     description: z.string().optional(),
     scheme: z.enum(['lm', 'execed']).default('lm'),
     // Slide de fin auto-injecté par la route (Questions dans un parcours

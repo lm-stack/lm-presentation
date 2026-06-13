@@ -54,8 +54,11 @@ de fond reste >= `--fs-body`. Chrome/méta (brand-sub, source, badges) admis en 
 ## Mesure (largeur de ligne lisible)
 
 `--measure-s` 640px (~45ch) · `--measure-m` 820px (~60ch) · `--measure-l` 1100px (~75ch) ·
-`--measure-xl` 1280px (intercalaire). Toute description / corps porte un `max-width` = un token
-`--measure-*`, jamais une valeur arbitraire.
+`--measure-xl` 1280px (intercalaire). Un corps / lead / description porte un `max-width` = un token `--measure-*`, jamais une valeur en px
+arbitraire. **Sous-titres de slide** : si le contenu sous le titre occupe toute la largeur (grilles,
+tableaux, graphes, médias : `InfoCards`, `ImageGrid`, `Table`, `BarChart`, `Media`, etc.), le
+sous-titre passe en `max-width: none` pour s'aligner sur ce contenu en dessous. Les layouts centrés
+ou en colonne (split, intercalaires) gardent un cap `--measure-*`.
 
 ## Hors scope
 

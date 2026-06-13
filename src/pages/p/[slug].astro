@@ -40,11 +40,15 @@ function formatDate(d: Date) {
 }
 const updatedLabel = entry.data.updated ?? formatDate(entry.data.date);
 
-// Header de marque du slide de fin : dans un parcours, le titre du parcours
-// fait office de marque et le titre du deck de sous-titre ; en one-shot, le
-// deck porte sa propre marque.
+// Header de marque du slide de fin : MÊME header que les slides de contenu.
+// brand = le cours (titre du parcours, ou titre du deck en one-shot) ;
+// brandSub = l'institution déduite du schéma, pas le titre du deck.
+const INSTITUTION: Record<string, string> = {
+  execed: 'Executive Education',
+  lm: 'Lausanne Marketing',
+};
 const endingBrand = parcours?.data.title ?? entry.data.title;
-const endingBrandSub = parcours ? entry.data.title : entry.data.subtitle;
+const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
 ---
 <Deck
   title={entry.data.title}
@@ -63,6 +67,7 @@ const endingBrandSub = parcours ? entry.data.title : entry.data.subtitle;
         nextTitle={nextDeck.data.title}
         nextShort={nextDeck.data.short ?? nextDeck.data.subtitle}
         nextCover={nextDeck.data.cover}
+        cover={entry.data.cover}
         brand={endingBrand}
         brandSub={endingBrandSub}
       />

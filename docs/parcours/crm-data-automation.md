@@ -64,7 +64,8 @@ Decks présents dans le parcours :
 | architecture-donnees    | Jour 1, syllabus #2                        |
 | segmentation-activation | Jour 1, syllabus #4                        |
 | marketing-automation    | Jour 2, syllabus #8                        |
-| workflow                | Jour 2 (recouvre partiellement #1 Modélisation des processus) |
+| modeliser-les-processus | Jour 1, syllabus #1 (Modélisation des processus) |
+| workflow                | Jour 2, syllabus #6 Implémentation/automatisation (le bloc modélisation a été extrait vers `modeliser-les-processus` le 2026-06-13) |
 | lead-nurturing          | Jour 3, syllabus #9                        |
 | funnel-marketing        | HORS BROCHURE, héritage Growth Marketing   |
 | protection-donnees      | Jour 2, syllabus #5                        |
@@ -74,7 +75,7 @@ Decks présents dans le parcours :
 
 Decks manquants par rapport à la brochure :
 
-- **Jour 1** : complet (4 sujets de 1h30, voir Choix structurants ci-dessous). Le sujet #1 Modélisation des processus n'a pas de deck dédié : on a choisi de le couvrir par les 3 piliers de la qualité (sujet 2 Qualité) et par le module `workflow` du Jour 2.
+- **Jour 1** : complet. Le sujet #1 Modélisation des processus a désormais son deck dédié `modeliser-les-processus` (créé 2026-06-13), placé **après** `des-donnees-au-crm` : on structure les données (architecture), on monte le CRM sur ce schéma (De la Data au CRM), puis on modélise les processus pour les implémenter dans ce CRM. Les 3 piliers de la qualité (sujet 2 Qualité) restent un renfort sur la gouvernance.
 - **Jour 2** : Implémentation CRM, Data visualisation et dashboards
 - **Jour 3** : Suivi des performances
 
@@ -85,6 +86,7 @@ Decks à arbitrer :
 Historique des splits et réorganisations :
 
 - **2026-05-29** : split du deck `collecte-qualite-donnees` (Jour 1, sujet 2 dans l'ancienne organisation, 2h) en deux decks `collecte-donnees` et `qualite-donnees` (1h30 chacun). Architecture déplacée du sujet 1 au sujet 3 pour partir de la pratique (capter, nettoyer) avant de monter en abstraction. Jour 1 passe de 3 sujets de 2h à 4 sujets de 1h30 (+ synthèse 30 min).
+- **2026-06-13** : création du deck `modeliser-les-processus` (Jour 1, après `des-donnees-au-crm`). Le bloc modélisation (chaos, BPMN, 4 notions clés, Exchange, outils d'édition BPMN, process vs workflow) est **extrait intégralement** de `workflow` (Jour 2) vers ce nouveau deck, plus deux slides net-neuf (mapping BPMN vers objets CRM, démo Zoho Blueprint). `workflow` redémarre désormais sur les outils no-code et la construction, en assumant la modélisation faite au Jour 1. Images rapatriées vers `public/decks/modeliser-les-processus/`.
 
 ## Choix structurants
 
@@ -228,4 +230,31 @@ Historique des splits et réorganisations :
   | Démo live (Cédric, 3 segments) | 10 |
   | Workshop brief | 3 |
   | Workshop multi-groupes | 18 |
+  | Restitution + débrief | 8 |
+
+### Module Modéliser les processus (Jour 1, après De la Data au CRM)
+
+- **Durée** : 90 min (1h30).
+- **Idée centrale** : "Modéliser avant d'implémenter. On cartographie le processus sur le papier avant de le construire dans le CRM."
+- **Placement et fil rouge** : volontairement **après** `des-donnees-au-crm`. Enchaînement : architecture des données (le schéma) puis De la Data au CRM (on monte le CRM sur ce schéma) puis Modéliser les processus (on cartographie les processus métier, puis on les implémente dans ce CRM). Le module annonce aussi le Jour 2 (`workflow`, les workflows d'exécution) via le slide "processus vs workflow".
+- **Origine du contenu** : le bloc modélisation a été **extrait intégralement** du deck `workflow` (Jour 2) le 2026-06-13 (chaos, BPMN/Trisotech, 4 notions clés, Exchange, outils d'édition BPMN, process vs workflow), augmenté de deux slides net-neuf : le mapping BPMN vers objets CRM, et une démo Zoho Blueprint.
+- **Notation BPMN (4 notions clés)** : swimlanes (acteurs/départements), événements (début, intermédiaire, fin), activités (tâches), gateways (points de décision).
+- **Outils d'édition** : MIRO (le plus connu), Lucidchart (alternative robuste).
+- **Pont vers le CRM** (cœur du module, slides net-neuf) : chaque brique BPMN se traduit dans le CRM. Swimlane vers rôle/assignation, événement vers déclencheur, activité vers étape (statut/transition/tâche), gateway vers condition/règle. Ancré dans Zoho via le module Blueprint (l'outil fil rouge établi au module précédent).
+- **Workshop** : **modélisation BPMN pure** (décision : pas de volet implémentation CRM dans l'exercice, qui reste une démo). Les participants modélisent un processus réel de leur organisation, avec au moins deux swimlanes et un gateway.
+- **Structure timing** :
+
+  | Bloc | Durée |
+  |------|-------|
+  | Cover | 2 |
+  | Pourquoi modéliser (chaos) | 4 |
+  | BPMN, le standard (Trisotech) | 6 |
+  | Les 4 notions clés du BPMN | 10 |
+  | Outils d'édition (MIRO, Lucidchart) | 4 |
+  | Exchange, modéliser ensemble | 8 |
+  | Processus vs workflow | 4 |
+  | Du processus au CRM (mapping) | 6 |
+  | Démo Zoho Blueprint | 10 |
+  | Workshop brief | 3 |
+  | Workshop BPMN | 25 |
   | Restitution + débrief | 8 |

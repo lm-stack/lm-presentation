@@ -98,7 +98,7 @@ Pas de shadows monumentales `0 32px 64px -16px rgba(25, 25, 25, 0.18)` qui font 
 
 Vaut pour : `Cover`, `About`, `Section`, `Quote`, `ImageFull`, `ClosingHero`, `Steps`, `SectionSplit`, `SplitImage`, `InfoCards`, `People`, `ImageGrid`, `Programme`, et tout futur composant ExecEd-style.
 
-**Exception — slides de fin (`Questions`, `Merci`)** : même header (brand text à gauche, logo 48px à droite, border-bottom full width), mais le **logo est une image NON cliquable** (pas de `<a>`, pas de lien `https://lausanne.marketing`). Sur `Questions`, le SEUL lien de la slide est la carte de preview vers le deck suivant ; sur `Merci`, aucun lien du tout (fin chaleureuse, sans appel à l'action externe). Le swap de logo par thème reste assuré sans lien par le sélecteur `[class$="__brand-logo"]` de `themes.css`.
+**Slides de fin (`Questions`, `Merci`)** : même header que partout, **logo cliquable** (lien `https://lausanne.marketing`, `target="_blank"`, `rel="noopener"`, `aria-label="Lausanne Marketing"`) comme tous les composants ExecEd-style. Conséquence : sur `Questions` il y a **deux liens** (le logo externe + la carte de preview vers le deck suivant) ; sur `Merci`, le logo est le seul lien. Le swap de logo par thème reste assuré par le sélecteur `[class$="__brand-logo"]` de `themes.css`. (Historique : ces slides avaient un logo volontairement non cliquable jusqu'au 2026-06-13, harmonisé depuis.)
 
 ## Fond uniforme des slides à contenu — RÈGLE ABSOLUE
 
@@ -151,12 +151,12 @@ Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes 
 
 ⚠️ **La slide de fin d'un deck n'est jamais écrite à la main dans le MDX.** Elle est **auto-injectée** par la route `src/pages/p/[slug].astro`, après `<Content />`, en fonction de la position du deck dans son parcours.
 
-- **`Questions`** (titre figé « Des questions ? ») : deck appartenant à un parcours et **qui n'en est PAS le dernier**. Affiche une **carte de preview cliquable** vers le deck suivant (cover + titre + accroche `short`/`subtitle`). C'est le SEUL lien de la slide.
-- **`Merci`** (titre figé « Merci beaucoup ») : présentation **one-shot** (hors parcours) OU **dernier deck** d'un parcours. Fond pearl par défaut ; image full-bleed floutée + voile clair si `cover` est défini. Aucun lien.
+- **`Questions`** (titre figé « Des questions ? ») : deck appartenant à un parcours et **qui n'en est PAS le dernier**. Affiche une **carte de preview cliquable** vers le deck suivant (cover + titre + accroche `short`/`subtitle`), plus le logo cliquable du header. **Fond image obligatoire** : la `cover` du deck en full-bleed flouté + voile clair.
+- **`Merci`** (titre figé « Merci beaucoup ») : présentation **one-shot** (hors parcours) OU **dernier deck** d'un parcours. **Fond image obligatoire** : la `cover` du deck en full-bleed flouté + voile clair (le `cover` est désormais requis dans le schéma, plus de fond pearl vide). Seul lien : le logo du header.
 
 Règles associées :
 
 - **Titres durcis, comme `Workshop`.** Le `<h2>` est codé en dur dans chaque composant (« Des questions ? » / « Merci beaucoup », mot final en italique serif souligné gold). Pas de prop `title`. Inviolable.
-- **Header de marque** : dans un parcours, `brand` = titre du parcours, `brandSub` = titre du deck ; en one-shot, `brand` = titre du deck, `brandSub` = son `subtitle`. Calculé par la route, ne pas dupliquer côté MDX.
+- **Header de marque** : la slide de fin reprend le MÊME header que les slides de contenu. `brand` = le cours (titre du parcours, ou titre du deck en one-shot) ; `brandSub` = l'institution déduite du schéma (`execed` = « Executive Education », `lm` = « Lausanne Marketing »), PAS le titre du deck. Calculé par la route, ne pas dupliquer côté MDX.
 - **`autoClosing`** (frontmatter, défaut `true`) : passer `autoClosing: false` UNIQUEMENT quand le deck gère sa propre fin (ex. `template.mdx`, vitrine qui appelle `Questions` / `Merci` à la main avec des données d'exemple). Sinon, laisser la route faire.
 - **Ne jamais remettre un `ClosingHero` / `Closing` manuel** en bas d'un deck de parcours : la migration 2026-06-08 les a tous retirés au profit de la fin auto. Un « Merci » manuel ferait doublon avec le `Merci` injecté.
