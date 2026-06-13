@@ -21,6 +21,8 @@ interface Props {
   title: string;
   italicPart?: string;
   subtitle?: string;
+  /** Trois compteurs affichés en gros KPI (remplace le sous-titre textuel). */
+  kpis?: { value: string; label: string }[];
   body?: string;
   /** Image de fond (floutée) de la colonne droite. */
   image: string;
@@ -32,6 +34,7 @@ const {
   title,
   italicPart,
   subtitle,
+  kpis,
   body,
   image,
   items,
@@ -63,6 +66,17 @@ const titleParts = splitHighlight(title, italicPart);
           ? <>{titleParts.before}<em class="list-image__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
+      {kpis && kpis.length > 0 && (
+        <ul class="list-image__kpis">
+          {kpis.map((k) => (
+            <li class="list-image__kpi">
+              <span class="list-image__kpi-value">{k.value}</span>
+              <span class="list-image__kpi-rule" aria-hidden="true"></span>
+              <span class="list-image__kpi-label">{k.label}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       {subtitle && (
         <p class="list-image__subtitle">{subtitle}</p>
       )}
@@ -204,6 +218,45 @@ const titleParts = splitHighlight(title, italicPart);
     color: var(--c-muted);
     margin: 28px 0 0;
     max-width: var(--measure-m);
+  }
+
+  /* Rangée de gros KPI (remplace le sous-titre textuel sur la slide du CAS). */
+  .list-image__kpis {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    gap: 48px;
+  }
+  .list-image__kpi {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  /* Grand chiffre KPI : exception de taille assumée (chiffre géant, sans token). */
+  .list-image__kpi-value {
+    font-family: 'Space Grotesk', 'Hanken Grotesk', sans-serif;
+    font-size: clamp(56px, 5vw, 84px);
+    font-weight: 700;
+    line-height: 0.95;
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+  }
+  .list-image__kpi-rule {
+    width: 40px;
+    height: 4px;
+    background: var(--c-accent);
+    border-radius: 2px;
+  }
+  .list-image__kpi-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
   }
 
   /* Colonne droite : image floutée en fond + voile clair, cards posées dessus. */

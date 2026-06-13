@@ -44,8 +44,13 @@ const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="info-cards" data-layout="info-cards">
   {sunArc && (
-    <div class="info-cards__sun-track" aria-hidden="true">
-      <div class="info-cards__sun"><span class="info-cards__sun-disc"></span></div>
+    <div class="info-cards__sky" aria-hidden="true">
+      <span class="info-cards__cloud info-cards__cloud--1"></span>
+      <span class="info-cards__cloud info-cards__cloud--2"></span>
+      <span class="info-cards__horizon"></span>
+      <div class="info-cards__sun-track">
+        <div class="info-cards__sun"><span class="info-cards__sun-disc"></span></div>
+      </div>
     </div>
   )}
   <header class="info-cards__header">
@@ -216,50 +221,100 @@ const titleParts = splitHighlight(title, italicPart);
     color: var(--c-ink);
   }
 
-  /* Décor « soleil qui se lève et se couche » (prop sunArc) : un disque chaud
-     traverse le fond en arc (lever à gauche, zénith au centre, coucher à droite),
-     en boucle. Couleur réaliste self-contained (soleil), derrière le contenu. */
+  /* Décor « ciel » (prop sunArc) sur la slide horaires : soleil rouge qui se lève
+     à gauche, passe au zénith et se couche à droite ; ligne d'horizon ; nuages en
+     dérive très lente. Couleurs réalistes self-contained, derrière le contenu. */
+  .info-cards__sky {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  /* Horizon terrestre : grand cercle dont seul l'arc supérieur est visible (le reste
+     déborde, rogné par .info-cards__sky), donnant un net arc de cercle (courbure de
+     la planète). Léger remplissage sous l'arc = le sol. */
+  .info-cards__horizon {
+    position: absolute;
+    top: 72%;
+    left: 50%;
+    width: 2600px;
+    height: 2600px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--c-ink) 20%, transparent);
+    background: color-mix(in srgb, var(--c-ink) 4%, transparent);
+  }
   .info-cards__sun-track {
     position: absolute;
     top: 0;
     left: 0;
-    width: 150px;
+    width: 160px;
     height: 100%;
-    z-index: 0;
-    pointer-events: none;
-    animation: ic-sun-x 12s linear infinite;
+    animation: ic-sun-x 13s linear infinite;
   }
   .info-cards__sun {
     position: absolute;
-    top: 30%;
+    top: 76%;
     left: 0;
-    width: 150px;
-    height: 150px;
-    animation: ic-sun-y 12s ease-in-out infinite;
+    width: 160px;
+    height: 160px;
+    margin-top: -80px;
+    animation: ic-sun-y 13s ease-in-out infinite;
   }
   .info-cards__sun-disc {
     display: block;
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 50%,
-      rgba(255, 197, 61, 0.92) 0%,
-      rgba(255, 184, 41, 0.5) 46%,
-      rgba(255, 184, 41, 0) 72%);
+      rgba(255, 202, 51, 0.95) 0%,
+      rgba(255, 196, 40, 0.55) 45%,
+      rgba(255, 196, 40, 0) 72%);
   }
   @keyframes ic-sun-x {
-    from { transform: translateX(-200px); }
-    to { transform: translateX(1980px); }
+    from { transform: translateX(-220px); }
+    to { transform: translateX(2000px); }
   }
   @keyframes ic-sun-y {
-    0% { transform: translateY(70px); opacity: 0; }
+    0% { transform: translateY(40px); opacity: 0; }
     12% { opacity: 1; }
-    50% { transform: translateY(-250px); }
+    50% { transform: translateY(-560px); }
     88% { opacity: 1; }
-    100% { transform: translateY(70px); opacity: 0; }
+    100% { transform: translateY(40px); opacity: 0; }
+  }
+  .info-cards__cloud {
+    position: absolute;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--c-ink) 7%, transparent);
+    filter: blur(18px);
+  }
+  .info-cards__cloud--1 {
+    top: 15%;
+    left: 14%;
+    width: 320px;
+    height: 88px;
+    animation: ic-cloud-1 36s ease-in-out infinite;
+  }
+  .info-cards__cloud--2 {
+    top: 24%;
+    left: 55%;
+    width: 420px;
+    height: 104px;
+    animation: ic-cloud-2 48s ease-in-out infinite;
+  }
+  @keyframes ic-cloud-1 {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(48px); }
+  }
+  @keyframes ic-cloud-2 {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-38px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .info-cards__sun-track { animation: none; transform: translateX(960px); }
-    .info-cards__sun { animation: none; transform: translateY(-250px); opacity: 0.85; }
+    .info-cards__sun-track,
+    .info-cards__sun,
+    .info-cards__cloud { animation: none; }
+    .info-cards__sun { transform: translateY(-560px); opacity: 0.9; }
   }
 </style>

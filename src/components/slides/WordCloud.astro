@@ -50,7 +50,7 @@ const titleParts = splitHighlight(question, italicPart);
     <div class="wordcloud__heading">
       <h2 class="wordcloud__title">
         {titleParts
-          ? <>{titleParts.before}<em class="wordcloud__title-italic">{titleParts.match}</em>{titleParts.after}</>
+          ? <>{titleParts.before}<em class="wordcloud__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : question}
       </h2>
       {subtitle && <p class="wordcloud__subtitle">{subtitle}</p>}

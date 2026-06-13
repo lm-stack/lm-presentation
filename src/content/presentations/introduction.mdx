@@ -12,11 +12,11 @@ description: "Ouverture du parcours CRM, Data & Automation : présentation de l'
 
 import Cover from '@/components/slides/Cover.astro';
 import About from '@/components/slides/About.astro';
-import Agenda from '@/components/slides/Agenda.astro';
+import AgendaDays from '@/components/slides/AgendaDays.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
-import Exchange from '@/components/slides/Exchange.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 
 <Cover
@@ -26,14 +26,18 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  image="https://images.unsplash.com/photo-1640158615573-cd28feb1bf4e?w=800&h=1000&fit=crop"
   theme="halo-gold"
 />
 
 <ListImage
   title="Le CAS en Marketing digital"
   italicPart="Marketing digital"
-  subtitle="5 modules, 15 jours, 5 mois."
+  kpis={[
+    { value: "5", label: "modules" },
+    { value: "15", label: "jours" },
+    { value: "5", label: "mois" },
+  ]}
   body="CRM, Data & Automation est le module 5 de ce parcours."
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
@@ -103,20 +107,6 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   ]}
 />
 
-<Exchange
-  title="Comment gérez-vous vos données aujourd'hui ?"
-  italicPart="données"
-  subtitle="État des lieux à voix haute : peu importe la taille de votre structure ou l'outil, on part de votre réalité."
-  prompts={[
-    "Des fichiers Excel éparpillés entre les équipes ?",
-    "Un CRM payé mais sous-exploité ?",
-    "Rien de structuré pour l'instant ?",
-    "Personne ne sait qui possède la donnée ?",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 <WordCloud
   id="intro-outils-donnees"
   question="Avec quels outils gérez-vous vos données aujourd'hui ?"
@@ -126,7 +116,19 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
-<Agenda
-  parcours="crm-data-automation"
-  image="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=1600&fit=crop"
+<AgendaDays parcours="crm-data-automation" />
+
+<InfoCards
+  title="Horaires des journées"
+  italicPart="journées"
+  columns={3}
+  sunArc
+  subtitle="Le déroulé type d'une journée de formation."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:sun-horizon", label: "Matin", value: "9h00 à 12h30" },
+    { icon: "ph:sun", label: "Après-midi", value: "13h30 à 17h00" },
+    { icon: "ph:coffee", label: "Pauses", value: "15 mins par demi-journée" },
+  ]}
 />
