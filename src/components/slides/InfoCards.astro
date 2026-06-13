@@ -294,22 +294,22 @@ const titleParts = splitHighlight(title, italicPart);
     left: 14%;
     width: 320px;
     height: 88px;
-    animation: ic-cloud-1 36s ease-in-out infinite;
+    animation: ic-cloud-1 26s ease-in-out infinite;
   }
   .info-cards__cloud--2 {
     top: 24%;
     left: 55%;
     width: 420px;
     height: 104px;
-    animation: ic-cloud-2 48s ease-in-out infinite;
+    animation: ic-cloud-2 32s ease-in-out infinite;
   }
   @keyframes ic-cloud-1 {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(48px); }
+    0%, 100% { transform: translateX(-50px); }
+    50% { transform: translateX(240px); }
   }
   @keyframes ic-cloud-2 {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(-38px); }
+    0%, 100% { transform: translateX(60px); }
+    50% { transform: translateX(-220px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .info-cards__sun-track,

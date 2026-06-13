@@ -1,13 +1,13 @@
 ---
-title: "De la Data au CRM"
+title: "Des données au CRM"
 subtitle: "CRM, Data & Automation"
-short: "De la Data au CRM"
+short: "Des données au CRM"
 date: 2026-06-08
 type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/des-donnees-au-crm/cover.jpg"
-description: "De la Data au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Des données au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -15,10 +15,12 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Demo from '@/components/slides/Demo.astro';
 import FilRouge from '@/components/slides/FilRouge.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
+import DataPipeline from '@/components/slides/DataPipeline.astro';
+import Table from '@/components/slides/Table.astro';
 
 {/* Slide 1 : Cover. */}
 <Cover
-  title="De la Data au CRM"
+  title="Des données au CRM"
   italicPart="CRM"
   eyebrow="Jour 1 : Sujet 4"
   footer="HEC Lausanne : Juin 2026"
@@ -26,6 +28,50 @@ import InfoCards from '@/components/slides/InfoCards.astro';
   brandSub="Executive Education"
   image="/decks/des-donnees-au-crm/cover.jpg"
   theme="halo-gold"
+/>
+
+{/* Slide comparatif CDP / CRM / ERP : situe le CRM parmi ses systèmes voisins
+    (CDP en amont qui unifie la donnée, ERP en aval qui exécute l'opération).
+    Ouverture conceptuelle, juste après la Cover, avant le pipeline et les outils.
+    Composant Table (4 colonnes : dimension + CRM + CDP + ERP). */}
+<Table
+  title="CDP, CRM, ERP"
+  italicPart="CRM"
+  subtitle="Trois systèmes complémentaires, pas concurrents : chacun son rôle dans la donnée."
+  headers={["", "CRM", "CDP", "ERP"]}
+  rows={[
+    ["Rôle", "Gérer la relation client", "Unifier la donnée client", "Piloter les opérations internes"],
+    ["Question clé", "« Où en est ma relation avec ce contact ? »", "« Qui est ce client, toutes sources réunies ? »", "« Mes opérations internes tournent-elles ? »"],
+    ["Données", "Contacts, affaires, pipeline", "Profils unifiés, comportements web et app", "Stocks, achats, factures, paie"],
+    ["Qui s'en sert", "Ventes, marketing, support", "Marketing data, analystes", "Finance, opérations, direction"],
+    ["Côté traiteur", "Suivre les devis, relancer les clients", "Réconcilier le client (web, tél, Insta)", "Stocks, facturation, paie des extras"],
+  ]}
+  caption="Le CDP unifie la donnée, le CRM pilote la relation, l'ERP exécute l'opération : elle circule de l'un à l'autre, jamais dans un seul."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide pipeline : de la donnée brute à la fiche CRM (composant DataPipeline ;
+    la donnée se transforme d'étape en étape, fin sur la fiche CRM). Refondu le
+    2026-06-13 : titre généralisé (plus "scrapée"), tags Qualité en teaser. */}
+<DataPipeline
+  title="De la donnée brute à la fiche CRM"
+  italicPart="fiche CRM"
+  subtitle="Collecter n'est que la première étape : la valeur naît du traitement qui suit."
+  stages={[
+    { num: "01", verb: "Récolter", icon: "ph:download-simple", desc: "Rassembler la donnée brute et l'exporter (CSV, JSON).", raw: true, data: ["le pont;rue du pont 4;", "0211234567;resto"] },
+    { num: "02", verb: "Nettoyer", icon: "ph:broom", tag: "Qualité", desc: "Dédupliquer, normaliser, corriger les erreurs.", data: ["Le Pont", "Rue du Pont 4, Lausanne", "+41 21 123 45 67"] },
+    { num: "03", verb: "Enrichir", icon: "ph:sparkle", tag: "Qualité", desc: "Recouper les sources, compléter les manques.", added: true, data: ["Restauration", "lepont.ch", "40 couverts"] },
+  ]}
+  result={{ num: "04", verb: "Injecter", icon: "ph:identification-card", desc: "Importer dans le CRM et tenir à jour.", title: "Fiche CRM", fields: [
+    { label: "Société", value: "Le Pont" },
+    { label: "Téléphone", value: "+41 21 123 45 67" },
+    { label: "Secteur", value: "Restauration" },
+    { label: "Ville", value: "Lausanne" },
+  ] }}
+  note="Nettoyer et enrichir sont approfondis au module suivant, Qualité des données."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Slide 2 : Les 4 plus grands CRM (grille logos, mode contain).
@@ -83,6 +129,7 @@ import InfoCards from '@/components/slides/InfoCards.astro';
 <Demo
   toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
   toolName="Zoho CRM"
+  toolUrl="https://www.zoho.com/crm/"
   objectives={[
     "Créer une entité sur Zoho CRM (module)",
     "Créer un champ normal",

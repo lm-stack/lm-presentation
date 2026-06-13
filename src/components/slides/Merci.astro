@@ -23,7 +23,7 @@ interface Props {
 }
 const { tagline, image, brand = 'Titre de la présentation', brandSub } = Astro.props;
 ---
-<section class:list={['merci', { 'merci--image': image }]} data-layout="merci">
+<section class:list={['merci', { 'merci--image': image }]} data-layout="merci" data-section-title="Merci">
   {image && (
     <div class="merci__bg" aria-hidden="true">
       <img src={image} alt="" loading="lazy" decoding="async" />

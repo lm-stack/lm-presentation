@@ -57,7 +57,7 @@ import Tip from '@/components/slides/Tip.astro';
 />
 
 {/* Ouverture : poser l'enjeu IA. Données pas prêtes = projets d'IA qui échouent
-    (Gartner, communiqué « Lack of AI-Ready Data Puts AI Projects at Risk », 26/02/2025 ;
+    (Gartner, communiqué « Lack of AI-Ready Data Puts AI Projects at Risk », 26/02/2025 ;
     enquête T3 2024, 248 responsables data). gartner.com bloque le fetch (403) :
     chiffres du communiqué officiel, citables tels quels. */}
 <StatRings
@@ -68,7 +68,7 @@ import Tip from '@/components/slides/Tip.astro';
     { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
     { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
   ]}
-  source="Gartner, « AI-Ready Data Puts AI Projects at Risk », 2025."
+  source="Gartner, « AI-Ready Data Puts AI Projects at Risk », 2025."
   sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -173,11 +173,10 @@ import Tip from '@/components/slides/Tip.astro';
 
 {/* Pourquoi valider AVANT d'envoyer : le bounce est la donnée négligée qui
     contamine toute la base (réputation d'expéditeur, sanction Gmail/Outlook). */}
-<Statement
-  eyebrow="Le pire du pire"
-  title="Le bounce contamine toute la base"
-  italicPart="contamine"
-  body="Une faute de frappe ou un doublon reste un problème local. Un email invalide, lui, fait grimper votre taux de bounce, et c'est le signal numéro un que Gmail et Outlook lisent comme « expéditeur douteux ». Résultat : même vos bons emails partent en spam, et la réputation d'expéditeur se répare en mois, pas en jours. D'où le réflexe : valider avant d'envoyer."
+<Quote
+  icon="ph:warning-octagon"
+  text="Le bounce contamine toute la base."
+  lead="Un email invalide fait grimper votre taux de bounce, et Gmail vous classe « expéditeur douteux ». Même vos bons emails partent alors en spam, et la réputation se répare en mois, pas en jours. Le réflexe : valider avant d'envoyer."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -196,13 +195,28 @@ import Tip from '@/components/slides/Tip.astro';
   brandSub="Executive Education"
 />
 
-{/* Astuce : tester sa propre délivrabilité (complément du cleaning de liste). */}
-<Tip
-  eyebrow="Astuce"
+{/* Démo mail-tester : placeholder vidéo (remplace l'ancienne astuce Tip).
+    Déposer la vidéo enregistrée dans /decks/qualite-donnees/mail-tester-demo.mp4. */}
+<Video
   title="Testez votre délivrabilité avant d'envoyer"
   italicPart="délivrabilité"
-  body="mail-tester.com, gratuit : envoyez un email à l'adresse fournie, recevez une note sur 10 et un diagnostic complet (SPF, DKIM, DMARC, contenu, blacklists). Le réflexe avant chaque campagne pour savoir si vos messages atterrissent en spam."
-  url="https://www.mail-tester.com/"
+  subtitle="mail-tester.com : on envoie un email à l'adresse fournie, on reçoit une note sur 10 et un diagnostic SPF, DKIM, DMARC, contenu et blacklists."
+  video="/decks/qualite-donnees/mail-tester-demo.mp4"
+  posterTime="0:03"
+  caption="Démo à enregistrer (placeholder) : www.mail-tester.com"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démo Yopmail : placeholder vidéo. En vidéo plutôt qu'en Demo loupe car Yopmail
+    n'a pas de logo exploitable. Vidéo dans /decks/qualite-donnees/yopmail-demo.mp4. */}
+<Video
+  title="Yopmail, l'email jetable"
+  italicPart="jetable"
+  subtitle="Une adresse email temporaire en un clic, sans inscription : pour tester un formulaire ou un workflow sans polluer sa vraie boîte."
+  video="/decks/qualite-donnees/yopmail-demo.mp4"
+  posterTime="0:03"
+  caption="Démo à enregistrer (placeholder) : www.yopmail.com"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "https://images.unsplash.com/photo-1664526937033-fe2c11f1be25?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-description: "Architecture des données : entités, champs, relations, les cinq pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Architecture des données : entités, champs, relations, les six pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -24,7 +24,7 @@ import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
 
 {/*
-  Modèle ERD fil rouge du module (5 entités, use case traiteur). Positions dans la scène 1920x1080
+  Modèle ERD fil rouge du module (4 entités, use case traiteur). Positions dans la scène 1920x1080
   d'Erd.astro, réutilisables tels quels pour l'exemple de construction progressif
   (on passe un sous-ensemble des entités, mêmes coordonnées).
 */}
@@ -34,9 +34,9 @@ export const ERD = {
       { name: 'id', key: 'pk' },
       { name: 'nom', type: 'texte' },
       { name: 'email', type: 'email' },
-      { name: 'type_event', type: 'liste' },
-      { name: 'nb_convives', type: 'nombre' },
-      { name: 'date_event', type: 'date' },
+      { name: 'source', type: 'liste' },
+      { name: 'type_client', type: 'liste' },
+      { name: 'besoin', type: 'liste' },
     ] },
     { name: 'Contact', x: 600, y: 420, fields: [
       { name: 'id', key: 'pk' },
@@ -60,20 +60,12 @@ export const ERD = {
       { name: 'contact_id', key: 'fk', type: '→ Contact' },
       { name: 'societe_id', key: 'fk', type: '→ Société' },
     ] },
-    { name: 'Événement', x: 1500, y: 280, fields: [
-      { name: 'id', key: 'pk' },
-      { name: 'type', type: 'liste' },
-      { name: 'date', type: 'date' },
-      { name: 'contact_id', key: 'fk', type: '→ Contact' },
-      { name: 'offre_id', key: 'fk', type: '→ Offre' },
-    ] },
   ],
   relations: [
     { from: 'Contact', to: 'Société', label: 'appartient à' },
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Offre', to: 'Contact', label: 'pour' },
     { from: 'Offre', to: 'Société', label: 'adressée à' },
-    { from: 'Événement', to: 'Offre', label: 'sur' },
   ],
 };
 
@@ -197,7 +189,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
     { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
   ]}
-  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
+  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
   sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -278,28 +270,23 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Slide 7 : Cinq entités couvrent 80% des CRM (ex-Statement sans image) */}
+{/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
 <Statement
   eyebrow="Le schéma minimal"
-  title="Cinq entités couvrent 80% des CRM"
+  title="Quatre entités couvrent 80% des CRM"
   italicPart="80%"
-  diagram={{
-    nodes: [
-      { label: 'Société', x: 82, y: 14 },
-      { label: 'Prospect', x: 6, y: 92 },
-      { label: 'Contact', x: 82, y: 92 },
-      { label: 'Offre', x: 150, y: 165 },
-      { label: 'Événement', x: 18, y: 205 },
+  entityCard={{
+    name: 'Contact',
+    fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom' },
+      { name: 'email' },
+      { name: 'téléphone' },
+      { name: 'Société', key: 'fk' },
     ],
-    links: [
-      { from: 'Prospect', to: 'Contact', dashed: true },
-      { from: 'Contact', to: 'Société' },
-      { from: 'Offre', to: 'Société' },
-      { from: 'Offre', to: 'Contact' },
-      { from: 'Événement', to: 'Offre' },
-    ],
+    satellites: ['Société', 'Prospect', 'Offre'],
   }}
-  body="Prospect, Contact, Société, Offre, Événement. Une demande de devis entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société (pour les clients pro). À chaque client, une ou plusieurs Offres (le devis : menu, couverts, prix). Chaque rendez-vous (dégustation, relance, la réception) est un Événement, rattaché au Contact ou à l'Offre. Ce schéma sera notre fil rouge tout au long du cours."
+  body="Prospect, Contact, Société, Offre. Une demande de devis entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société (pour les clients pro). À chaque client, une ou plusieurs Offres (le devis : menu, couverts, prix). Ce schéma sera notre fil rouge tout au long du cours."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -340,32 +327,32 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 
 {/* Exemple de construction pas à pas (use case : un traiteur).
     On réutilise le modèle ERD (positions + champs via l'index E) et on dévoile une
-    entité par slide, la dernière ajoutée en `accent`. Offre = le devis ; Événement =
-    rendez-vous / activité (dégustation, relance, réception). */}
+    entité par slide, la dernière ajoutée en `accent`. Offre = le devis (menu,
+    couverts, prix). */}
 
-{/* Construction 1/5 : partir des champs collectés -> entité Prospect, seule sur le slide. */}
+{/* Construction 1/4 : partir des champs collectés -> entité Prospect, seule sur le slide. */}
 <Erd
   title="Identifier les champs collectés"
   italicPart="champs collectés"
-  subtitle="Fil rouge : un traiteur. Quand une demande de devis arrive (mariage, séminaire), qu'est-ce que le formulaire récolte ? Type d'événement, nombre de convives, date, contact. Ces champs forment la première entité, le Prospect."
+  subtitle="Fil rouge : un traiteur. Une piste arrive : qu'est-ce qui montre qu'elle est faite pour nous ? Sa source, son type (particulier ou entreprise), le besoin qu'elle exprime. Ces signaux de segmentation forment la première entité, le Prospect, pas les détails d'un devis précis (ça, ce sera l'Offre)."
   entities={[{ ...E['Prospect'], state: 'accent' }]}
-  caption="Étape 1 sur 5 : partir du formulaire réel, pas d'un modèle théorique."
+  caption="Étape 1 sur 4 : partir du formulaire réel, pas d'un modèle théorique."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Construction 2/5 : l'entité Société, posée tôt (connue dès la demande pro). */}
+{/* Construction 2/4 : l'entité Société, posée tôt (connue dès la demande pro). */}
 <Erd
   title="L'entreprise, connue dès la demande"
   italicPart="entreprise"
   subtitle="Pour un événement d'entreprise (séminaire, inauguration), la demande arrive déjà avec sa Société. On la pose tout de suite, au niveau de la piste : on la reliera juste après."
   entities={[{ ...E['Prospect'] }, { ...E['Société'], state: 'accent' }]}
-  caption="Étape 2 sur 5 : poser tôt les entités qu'on connaît déjà (ici, l'entreprise cliente)."
+  caption="Étape 2 sur 4 : poser tôt les entités qu'on connaît déjà (ici, l'entreprise cliente)."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Construction 3/5 : l'entité Contact + relations ; explique Prospect -> Contact. */}
+{/* Construction 3/4 : l'entité Contact + relations ; explique Prospect -> Contact. */}
 <Erd
   title="La demande devient un Contact"
   italicPart="Contact"
@@ -375,47 +362,24 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Contact', to: 'Société', label: 'appartient à' },
   ]}
-  caption="Étape 3 sur 5 : la piste qualifiée rejoint la base, reliée à son entreprise."
+  caption="Étape 3 sur 4 : la piste qualifiée rejoint la base, reliée à son entreprise."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Construction 4/5 : l'entité Offre (le devis) + ses relations. */}
+{/* Construction 4/4 : l'entité Offre (le devis) -> ERD complet (4 entités). */}
 <Erd
   title="Le devis, c'est une Offre"
   italicPart="Offre"
-  subtitle="Le menu proposé, le nombre de couverts, le prix, le statut (envoyé, accepté, refusé) : c'est une Offre, adressée au Contact et à sa Société. Le cœur du métier du traiteur : faire des offres."
+  subtitle="Le menu proposé, le nombre de couverts, le prix, le statut (envoyé, accepté, refusé) : c'est une Offre, adressée au Contact et à sa Société. Le modèle du traiteur est complet, et c'est le même quel que soit l'outil."
   entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Offre'], state: 'accent' }]}
-  relations={[
-    { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
-    { from: 'Contact', to: 'Société', label: 'appartient à' },
-    { from: 'Offre', to: 'Contact', label: 'pour' },
-    { from: 'Offre', to: 'Société', label: 'adressée à' },
-  ]}
-  caption="Étape 4 sur 5 : l'Offre relie le client à ce qu'on lui vend."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Construction 5/5 : l'entité Événement -> ERD complet. */}
-<Erd
-  title="Chaque rendez-vous est un Événement"
-  italicPart="Événement"
-  subtitle="Dégustation, relance, et la réception elle-même : chaque rendez-vous daté est un Événement, rattaché à l'Offre. Le modèle du traiteur est complet, et c'est le même quel que soit l'outil."
-  entities={[
-    { ...E['Prospect'] },
-    { ...E['Contact'] },
-    { ...E['Société'] },
-    { ...E['Offre'] },
-    { ...E['Événement'], state: 'accent' },
-  ]}
   relations={ERD.relations}
-  caption="Étape 5 sur 5 : votre architecture, prête à être outillée."
+  caption="Étape 4 sur 4 : votre architecture, prête à être outillée."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide pièges 1/2 : trois premiers pièges (ex-Steps 5 items, scindé).
+{/* Slide pièges 1/2 : pièges 1 à 3 (6 pièges au total, scindés 3 + 3).
     Image : cover-blueprint.jpg (à remplacer par un visuel pertinent). */}
 <Steps
   title="Les pièges à éviter (1/2)"
@@ -431,17 +395,19 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   ]}
 />
 
-{/* Slide pièges 2/2 : les deux derniers pièges. */}
+{/* Slide pièges 2/2 : pièges 4 à 6 (décompte continué à 4 via la prop start). */}
 <Steps
   title="Les pièges à éviter (2/2)"
   italicPart="pièges"
-  subtitle="Les deux derniers, les plus coûteux à corriger après coup."
+  subtitle="Les trois derniers, les plus coûteux à corriger après coup."
   image="/decks/architecture-donnees/cover-blueprint.jpg"
+  start={4}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
     { text: "Le champ Notes comme grand sac : \"DOB 1985, fils Tom, allergique gluten\". Réflexe : champs structurés pour ce qui se filtre, notes pour le qualitatif." },
     { text: "Plusieurs versions de la même donnée : email dans Outlook, Salesforce et Excel. Réflexe : un seul endroit qui fait autorité, les autres se synchronisent." },
+    { text: "Saisir en texte libre ce qui doit se filtrer : \"resto\", \"Restaurant\", \"restauration\" comptent comme trois valeurs. Réflexe : une liste déroulante (picklist) dès qu'un champ sert à segmenter ou filtrer." },
   ]}
 />
 
@@ -472,14 +438,14 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 <Capture
   title="Même schéma, trois tailles d'entreprise"
   italicPart="trois tailles"
-  subtitle="Construction live du modèle Contact + Société + Offre + Événement dans trois outils calibrés sur trois profils."
+  subtitle="Construction live du modèle Contact + Société + Offre dans trois outils calibrés sur trois profils."
   image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=1000&fit=crop"
   caption="Capture démo Excel / Airtable / Zoho (à remplacer)"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
     { label: "Outil", value: "Excel (TPE et associations), Airtable (PME en croissance), Zoho CRM (grande structure)." },
-    { label: "Cible", value: "Modèle Contact + Société + Offre + Événement, identique dans les trois outils." },
+    { label: "Cible", value: "Modèle Contact + Société + Offre, identique dans les trois outils." },
     { label: "Étapes", value: "Création des tables, ajout des champs, première relation entre entités. Environ 4 minutes par outil." },
     { label: "À retenir", value: "L'outil n'invente pas le schéma : c'est vous qui le faites, une fois, puis vous le portez partout." },
   ]}

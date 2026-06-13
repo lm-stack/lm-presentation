@@ -1,19 +1,20 @@
 ---
 // src/components/slides/Demo.astro
-// Slide d'annonce d'une démo live ExecEd-style, structure asymétrique calquée
-// sur Workshop. Fond DISTINCTIF (dégradé + halo accent, façon Cover) et un
-// schéma ERD esquissé en filigrane (entités + relations) pour l'ambiance
-// "atelier où l'on construit le schéma en direct".
-// À gauche (60%) : badge "Démo en direct", titre FIGÉ "Démonstration" (italique
-// serif + soulignement accent, inviolable comme Workshop), objectifs en gros
-// numéros accent. À droite (40%) : logo de l'outil démontré + son nom.
-// ERD décoratif générique (cards abstraites sans texte) : marche pour n'importe
-// quelle démo et dans les deux schémas (tokens uniquement).
+// Slide d'annonce d'une démo live ExecEd-style. À gauche (60%) : badge "Démo en
+// direct", titre FIGÉ "Démonstration" (italique serif souligné accent, inviolable
+// comme Workshop), objectifs en gros numéros accent. À droite : une LOUPE géante
+// décorative FLAT (anneau plat, verre transparent, sans effet métal/reflet) tenue
+// en biais, lentille en haut-droite qui déborde du cadre, manche vers le bas-gauche.
+// Dans le verre, des lignes de data défilent vite à l'horizontale, alternées
+// gauche<->droite une ligne sur deux ; le logo de l'outil est révélé au centre
+// (sans son nom). Décor générique tokenisé (marche LM + ExecEd, n'importe quel outil).
 interface Props {
-  /** Logo de l'outil de la démo (chemin SVG/PNG dans /public). */
+  /** Logo de l'outil de la démo (chemin SVG/PNG dans /public). Révélé dans la loupe. */
   toolLogo: string;
-  /** Nom de l'outil affiché sous le logo, ex. "Zoho CRM". */
+  /** Nom de l'outil : sert d'alt au logo, n'est plus affiché dans la slide. */
   toolName?: string;
+  /** URL de l'outil : rend le logo cliquable (ouvre dans un nouvel onglet). */
+  toolUrl?: string;
   /** Objectifs concrets de la démo (3 à 5 items, ce qu'on fait en direct). */
   objectives: string[];
   /** Libellé du badge live, défaut "Démo en direct". */
@@ -24,45 +25,58 @@ interface Props {
 const {
   toolLogo,
   toolName,
+  toolUrl,
   objectives,
   liveLabel = 'Démo en direct',
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+
+// Jetons de data décoratifs qui défilent dans la loupe. Génériques (agnostiques de
+// l'outil), volontairement courts : champs / valeurs / métriques plausibles d'un
+// CRM ou d'un tableur. Pur décor (comme les graduations de l'horloge d'AgendaDays),
+// donc taille < 22px admise. Réparties en lignes horizontales ; chaque ligne est
+// un décalage différent du pool (variété verticale) et est dupliquée plus bas pour
+// un défilement horizontal en boucle sans couture.
+const dataTokens = [
+  'lead', '1 248', 'email', 'score 87', 'MQL', 'id 4471', '+23%', 'sync',
+  'tag VIP', 'deal', 'CHF 4 900', 'open 62%', 'stage 3', 'NPS 71', 'churn 4%',
+];
+// Assez de lignes pour couvrir TOUTE la hauteur du verre (le surplus est rogné par
+// le cercle haut/bas), sinon des calottes vides apparaissent en haut et en bas.
+const ROW_COUNT = 20;
+const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
+  const k = (r * 5) % dataTokens.length;
+  return [...dataTokens.slice(k), ...dataTokens.slice(0, k)];
+});
 ---
 <section class="demo" data-layout="demo">
-  <div class="demo__bg" aria-hidden="true">
-    <svg class="demo__erd" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-      <path class="erd-rel" d="M 450 794 C 820 794 1010 815 1380 815" />
-      <path class="erd-rel" d="M 1480 438 C 1480 585 1530 585 1530 720" />
-      <circle class="erd-key" cx="450" cy="794" r="7" />
-      <circle class="erd-key" cx="1380" cy="815" r="7" />
-      <circle class="erd-key" cx="1480" cy="438" r="7" />
-      <circle class="erd-key" cx="1530" cy="720" r="7" />
-      <g transform="translate(150 700)">
-        <rect class="erd-card" width="300" height="188" rx="14" />
-        <line class="erd-head" x1="0" y1="50" x2="300" y2="50" />
-        <line class="erd-field" x1="30" y1="92" x2="214" y2="92" />
-        <line class="erd-field" x1="30" y1="126" x2="246" y2="126" />
-        <line class="erd-field" x1="30" y1="160" x2="184" y2="160" />
-      </g>
-      <g transform="translate(1330 250)">
-        <rect class="erd-card" width="300" height="188" rx="14" />
-        <line class="erd-head" x1="0" y1="50" x2="300" y2="50" />
-        <line class="erd-field" x1="30" y1="92" x2="232" y2="92" />
-        <line class="erd-field" x1="30" y1="126" x2="198" y2="126" />
-        <line class="erd-field" x1="30" y1="160" x2="244" y2="160" />
-      </g>
-      <g transform="translate(1380 720)">
-        <rect class="erd-card" width="300" height="188" rx="14" />
-        <line class="erd-head" x1="0" y1="50" x2="300" y2="50" />
-        <line class="erd-field" x1="30" y1="92" x2="206" y2="92" />
-        <line class="erd-field" x1="30" y1="126" x2="244" y2="126" />
-        <line class="erd-field" x1="30" y1="160" x2="172" y2="160" />
-      </g>
-    </svg>
+  <div class="demo__bg" aria-hidden="true"></div>
+
+  <!-- Loupe décorative flat : lentille en haut-droite qui déborde, manche bas-gauche. -->
+  <div class="demo__loupe" aria-hidden="true">
+    <span class="demo__loupe-handle"></span>
+    <div class="demo__lens">
+      <div class="demo__data">
+        {dataRows.map((row) => (
+          <div class="demo__data-row">
+            <div class="demo__data-strip">
+              {[...row, ...row].map((token) => <span class="demo__data-chip">{token}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="demo__lens-logo">
+        {toolUrl
+          ? <a class="demo__tool-link" href={toolUrl} target="_blank" rel="noopener" aria-label={toolName ? `Ouvrir ${toolName}` : "Ouvrir l'outil"}>
+              <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />
+            </a>
+          : <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />}
+      </div>
+    </div>
   </div>
 
+  <!-- Header full-width standard : brand gauche + logo LM droite + border-bottom. -->
   <header class="demo__header">
     <div class="demo__brand-text">
       <p class="demo__brand-main">{brand}</p>
@@ -74,13 +88,6 @@ const {
   </header>
 
   <div class="demo__content">
-    <div class="demo__tool-zone">
-      <div class="demo__tool-inner">
-        <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />
-        {toolName && <p class="demo__tool-name">{toolName}</p>}
-      </div>
-    </div>
-
     <div class="demo__main">
       <p class="demo__live">
         <span class="demo__live-dot" aria-hidden="true"></span>
@@ -109,10 +116,10 @@ const {
     height: 100%;
     overflow: hidden;
     padding: 0 !important;
-    /* Fond distinctif (façon Cover halo-gold) : halo accent doux autour de
-       l'outil + dégradé diagonal crème -> bg-end. Tokens => marche LM et ExecEd. */
+    /* Fond distinctif (façon Cover halo-gold) : halo accent doux derrière la loupe
+       + dégradé diagonal crème -> bg-end. Tokens => marche LM et ExecEd. */
     background:
-      radial-gradient(78% 68% at 82% 40%, color-mix(in srgb, var(--c-accent-soft) 46%, transparent) 0%, transparent 60%),
+      radial-gradient(70% 62% at 78% 48%, color-mix(in srgb, var(--c-accent-soft) 42%, transparent) 0%, transparent 60%),
       linear-gradient(158deg, var(--c-cream) 0%, var(--c-bg-end) 100%);
     color: var(--c-ink);
     display: flex !important;
@@ -120,47 +127,168 @@ const {
     justify-content: flex-start !important;
   }
 
-  /* Schéma ERD esquissé en filigrane (cards abstraites + relations accent),
-     atténué vers les bords par un masque radial. Décoratif, derrière le contenu. */
+  /* Fond quadrillage (papier millimétré) en filigrane, atténué vers les bords
+     par un masque radial. Décoratif, derrière le contenu. Tokens => LM + ExecEd. */
   .demo__bg {
     position: absolute;
     inset: 0;
     z-index: 0;
     overflow: hidden;
     pointer-events: none;
-  }
-  .demo__erd {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    -webkit-mask-image: radial-gradient(ellipse 96% 92% at 50% 46%, #000 48%, transparent 90%);
-    mask-image: radial-gradient(ellipse 96% 92% at 50% 46%, #000 48%, transparent 90%);
-  }
-  .erd-card {
-    fill: none;
-    stroke: color-mix(in srgb, var(--c-ink) 20%, transparent);
-    stroke-width: 2;
-  }
-  .erd-head {
-    stroke: color-mix(in srgb, var(--c-ink) 20%, transparent);
-    stroke-width: 2;
-  }
-  .erd-field {
-    stroke: color-mix(in srgb, var(--c-ink) 13%, transparent);
-    stroke-width: 6;
-    stroke-linecap: round;
-  }
-  .erd-rel {
-    fill: none;
-    stroke: color-mix(in srgb, var(--c-accent) 34%, transparent);
-    stroke-width: 2.5;
-  }
-  .erd-key {
-    fill: color-mix(in srgb, var(--c-accent) 44%, transparent);
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--c-ink) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--c-ink) 7%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 96% 92% at 50% 46%, #000 42%, transparent 88%);
+    mask-image: radial-gradient(ellipse 96% 92% at 50% 46%, #000 42%, transparent 88%);
   }
 
-  /* Header full-width standard : brand gauche + logo LM droite + border-bottom. */
+  /* ============================================================ */
+  /* LOUPE GÉANTE FLAT (décor, déborde du cadre à droite)          */
+  /* ============================================================ */
+  .demo__loupe {
+    position: absolute;
+    top: 54%;
+    right: 0;
+    width: 900px;
+    height: 900px;
+    transform: translate(18%, -50%);
+    z-index: 1; /* derrière la colonne de texte (z-index 2), devant le fond (z 0) */
+    pointer-events: none;
+  }
+
+  /* Manche : barre plate arrondie qui part du bas-gauche de la lentille (rim ~135°)
+     et plonge vers le bas-gauche dans le cadre, en partie tronquée par le bord bas. */
+  .demo__loupe-handle {
+    position: absolute;
+    z-index: 5;
+    left: 132px;
+    top: 768px;
+    width: 380px;
+    height: 54px;
+    border-radius: 999px;
+    transform-origin: 0 50%;
+    transform: translateY(-50%) rotate(135deg);
+    /* Même gris léger que l'horloge d'AgendaDays (var(--c-ink) ~20%), pas du noir. */
+    background: color-mix(in srgb, var(--c-ink) 20%, transparent);
+  }
+
+  /* Monture : anneau PLAT (pas de dégradé métal, pas d'ombre). Verre transparent :
+     on voit le fond de la slide au travers (flat). */
+  .demo__lens {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    /* Même gris léger que l'horloge d'AgendaDays (var(--c-ink) ~20%), pas du noir. */
+    border: 18px solid color-mix(in srgb, var(--c-ink) 20%, transparent);
+    box-sizing: border-box;
+    background: transparent;
+  }
+
+  /* Lignes de data : empilées verticalement, chacune défile vite à l'horizontale,
+     une ligne sur deux dans le sens inverse. Découpées au cercle du verre. */
+  .demo__data {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+  }
+  .demo__data-row {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+  .demo__data-strip {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 14px;
+    padding-right: 14px;
+    white-space: nowrap;
+    animation: demo-scroll-x 10s linear infinite;
+    will-change: transform;
+  }
+  /* Une ligne sur deux : sens inverse (gauche -> droite). */
+  .demo__data-row:nth-child(even) .demo__data-strip {
+    animation-direction: reverse;
+  }
+  /* Vitesses légèrement variées pour un défilement organique. */
+  .demo__data-row:nth-child(3n) .demo__data-strip { animation-duration: 8s; }
+  .demo__data-row:nth-child(3n + 1) .demo__data-strip { animation-duration: 12s; }
+  .demo__data-chip {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--c-ink) 20%, transparent);
+  }
+  @keyframes demo-scroll-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo__data-strip { animation: none; }
+  }
+
+  /* Logo de l'outil "révélé" au centre du verre (seul, sans nom ni halo : flat). */
+  .demo__lens-logo {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Mesh derrière le logo : halo radial doux dans le GRIS du fond de slide
+     (token --c-bg-end, la fin du dégradé de .demo) plutôt qu'un blanc arbitraire.
+     Il "efface" la data juste derrière le logo pour le faire ressortir, en fondu
+     pour ne jamais faire une boîte / un fond plein. */
+  .demo__lens-logo::before {
+    content: '';
+    position: absolute;
+    width: 72%;
+    height: 72%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      var(--c-bg-end) 0%,
+      color-mix(in srgb, var(--c-bg-end) 85%, transparent) 34%,
+      color-mix(in srgb, var(--c-bg-end) 36%, transparent) 60%,
+      transparent 76%
+    );
+  }
+  .demo__tool-logo {
+    position: relative;
+    width: 56%;
+    max-width: 390px;
+    height: auto;
+    display: block;
+  }
+  /* Logo cliquable : la loupe est pointer-events:none, on réactive le clic ici. */
+  .demo__tool-link {
+    position: relative;
+    display: block;
+    width: 56%;
+    max-width: 390px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .demo__tool-link:hover {
+    transform: scale(1.05);
+  }
+  .demo__tool-link .demo__tool-logo {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* ============================================================ */
+  /* HEADER + COLONNE DE TEXTE (gauche, inchangés)                 */
+  /* ============================================================ */
   .demo__header {
     position: relative;
     z-index: 2;
@@ -197,51 +325,19 @@ const {
 
   .demo__content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     flex: 1 1 auto;
     min-height: 0;
-  }
-
-  /* Zone outil (droite, 40%) : logo en grand + nom, posé sur le halo du fond. */
-  .demo__tool-zone {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 56px 96px 56px 32px;
-  }
-  .demo__tool-inner {
-    position: relative;
-    width: 100%;
-    max-width: 460px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-  }
-  .demo__tool-logo {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .demo__tool-name {
-    font-family: 'Hanken Grotesk', sans-serif;
-    font-size: var(--fs-card-title);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--c-ink);
-    margin: 0;
-    text-align: center;
+    /* Transparent aux clics pour laisser passer vers le logo de la loupe ; la
+       colonne de texte et le lien du logo réactivent chacun le leur. */
+    pointer-events: none;
   }
 
   /* Colonne principale (gauche, 60%) : badge live + titre + objectifs. */
   .demo__main {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    pointer-events: auto;
     width: 60%;
     height: 100%;
     padding: 28px 64px 56px 96px;
@@ -279,6 +375,9 @@ const {
     0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-accent) 55%, transparent); }
     70% { box-shadow: 0 0 0 12px transparent; }
     100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo__live-dot { animation: none; }
   }
 
   .demo__title {

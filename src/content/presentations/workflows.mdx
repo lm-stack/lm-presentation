@@ -67,6 +67,30 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
+{/* Slide 2bis : Processus vs workflow (recap Jour 1 -> Jour 2). Transféré depuis
+    modeliser-les-processus le 2026-06-13 (images relocalisées dans /decks/workflow/). */}
+<ImageGrid
+  title="Différence entre processus et workflow"
+  italicPart="workflow"
+  subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflow/diff-process-bpmn.jpeg",
+      alt: "Schéma d'un processus métier en BPMN",
+      title: "Schéma d'un processus",
+      text: "Vue stratégique : qui fait quoi, dans quel ordre, avec quelles règles métier. C'est le BPMN modélisé au Jour 1.",
+    },
+    {
+      src: "/decks/workflow/diff-workflow-whiteboard.jpeg",
+      alt: "Schéma d'un workflow d'exécution",
+      title: "Schéma d'un workflow",
+      text: "Vue opérationnelle : trigger, actions, branchements, données. C'est ce qu'on construit dans ce module, dans le CRM ou un outil no-code.",
+    },
+  ]}
+/>
+
 {/* Slide 3 : Trois exemples d'automatisations complexes */}
 <ImageGrid
   title="Automatisations complexes"
@@ -257,7 +281,7 @@ import Workshop from '@/components/slides/Workshop.astro';
   eyebrow="Webhook"
   title="Un webhook est une requête qui envoie des données"
   italicPart="webhook"
-  body="À la différence d'une API interrogée à intervalle régulier, un webhook est déclenché par un événement. Exemple : Stripe pousse un événement « nouveau paiement » à l'instant où la transaction réussit. Pas de polling, pas de latence."
+  body="À la différence d'une API interrogée à intervalle régulier, un webhook est déclenché par un événement. Exemple : Stripe pousse un événement « nouveau paiement » à l'instant où la transaction réussit. Pas de polling, pas de latence."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

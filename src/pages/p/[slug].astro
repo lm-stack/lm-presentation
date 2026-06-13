@@ -31,6 +31,9 @@ export async function getStaticPaths() {
 }
 
 const { entry, parcours, nextDeck } = Astro.props;
+// Retour parcours : seulement si le portail /parcours/<slug> existe vraiment
+// (parcours listé). Un parcours unlisted n'a pas de page : on éviterait un 404.
+const parcoursSlug = parcours && !parcours.data.unlisted ? parcours.id : undefined;
 const { Content } = await render(entry);
 
 function formatDate(d: Date) {
@@ -58,6 +61,7 @@ const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
   cover={entry.data.cover}
   updated={updatedLabel}
   scheme={entry.data.scheme}
+  parcoursSlug={parcoursSlug}
 >
   <Content />
   {entry.data.autoClosing && (
@@ -70,6 +74,7 @@ const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
         cover={entry.data.cover}
         brand={endingBrand}
         brandSub={endingBrandSub}
+        parcoursSlug={parcoursSlug}
       />
     ) : (
       <Merci

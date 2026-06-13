@@ -27,6 +27,9 @@ interface Props {
   cover?: string;
   brand?: string;
   brandSub?: string;
+  /** Slug du parcours du deck courant : propage ?from=<slug> sur le lien vers le
+      deck suivant, pour ne jamais perdre le contexte parcours. */
+  parcoursSlug?: string;
 }
 const {
   nextSlug,
@@ -37,9 +40,13 @@ const {
   cover,
   brand = 'Titre de la présentation',
   brandSub,
+  parcoursSlug,
 } = Astro.props;
+// Lien vers le deck suivant : on propage ?from=<parcoursSlug> pour conserver le
+// contexte parcours (bouton retour) d'un deck à l'autre. Sans parcours, lien nu.
+const nextHref = parcoursSlug ? `/p/${nextSlug}?from=${parcoursSlug}` : `/p/${nextSlug}/`;
 ---
-<section class:list={['questions', { 'questions--image': cover }]} data-layout="questions">
+<section class:list={['questions', { 'questions--image': cover }]} data-layout="questions" data-section-title="Questions">
   {cover && (
     <div class="questions__bg" aria-hidden="true">
       <img src={cover} alt="" loading="lazy" decoding="async" />
@@ -62,7 +69,7 @@ const {
       Des <em class="questions__title-italic"><span class="underline">questions ?</span></em>
     </h2>
 
-    <a class="questions__next" href={`/p/${nextSlug}/`} aria-label={`Prochain sujet : ${nextTitle}`}>
+    <a class="questions__next" href={nextHref} aria-label={`Prochain sujet : ${nextTitle}`}>
       {nextCover && (
         <span class="questions__next-media" aria-hidden="true">
           <img src={nextCover} alt="" loading="lazy" decoding="async" />

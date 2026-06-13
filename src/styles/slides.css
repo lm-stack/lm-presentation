@@ -43,6 +43,21 @@ body.is-fullscreen {
   --slide-v-chrome: 0px;
 }
 
+/* Bande de letterbox en plein ecran : l'ecran de projection (ou la dalle 16:10
+   du portable) n'a presque jamais le ratio 16:9 exact des slides, donc une bande
+   subsiste autour du cadre 16:9. On la peint en NOIR au lieu du creme du body :
+   sur un projecteur le noir ne projette aucune lumiere (la bande "disparait" sur
+   la toile), et a l'ecran elle lit comme un cadre volontaire, pas comme une
+   "bande blanche" cassee. Standard Keynote / PowerPoint / lecteur video.
+   `body.is-fullscreen` (posee par l'event fullscreenchange) est le selecteur
+   fiable quand html est lui-meme l'element plein ecran (`:has(:fullscreen)` ne
+   matche pas l'element sur lui-meme) ; `:root:has(:fullscreen) body` couvre le
+   cas ou un autre element passe en plein ecran. */
+:root:has(:fullscreen) body,
+body.is-fullscreen {
+  background: #000;
+}
+
 .deck-stage {
   position: fixed;
   top: calc(50% + var(--slide-top-offset));

@@ -1,0 +1,285 @@
+---
+// src/components/slides/CTA.astro
+// Slide d'appel à l'action en DEUX colonnes : header marque standard (brand +
+// logo LM + border-bottom full-width, RÈGLE). En dessous, à GAUCHE le texte
+// aligné à gauche (titre serif italique partiel souligné + description + puces
+// d'avantages + gros bouton accent), à DROITE un QR code généré au build qui
+// pointe vers le lien du bouton. Fond mesh gradient en tokens : slide
+// "structurelle" avec sa propre identité (comme Cover), donc hors règle du fond
+// pearl uniforme. Marche LM et ExecEd.
+import { splitHighlight } from '@/utils/highlight';
+import qrcode from 'qrcode-generator';
+interface Props {
+  title: string;
+  /** Portion du titre rendue en italique serif souligné. */
+  italicPart?: string;
+  /** Texte de description, sous le titre. */
+  description?: string;
+  /** Avantages listés en puces (coche accent) sous la description. */
+  bullets?: string[];
+  /** Libellé du gros bouton. */
+  buttonLabel: string;
+  /** Cible du bouton (URL absolue ou chemin relatif). Sert aussi de cible au QR. */
+  buttonHref: string;
+  /** Ouvre le lien dans un nouvel onglet (défaut true). */
+  buttonExternal?: boolean;
+  /** Légende sous le QR, défaut "Scannez pour ouvrir". */
+  qrCaption?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  description,
+  bullets,
+  buttonLabel,
+  buttonHref,
+  buttonExternal = true,
+  qrCaption = 'Scannez pour ouvrir',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+const linkAttrs = buttonExternal ? { target: '_blank', rel: 'noopener' } : {};
+// QR : on encode une URL ABSOLUE (résolue via Astro.site quand dispo) pour
+// qu'elle reste scannable hors du site ; le bouton garde, lui, le href fourni.
+const qrUrl = Astro.site ? new URL(buttonHref, Astro.site).toString() : buttonHref;
+const qr = qrcode(0, 'M');
+qr.addData(qrUrl);
+qr.make();
+const qrSvg = qr.createSvgTag({ scalable: true, margin: 0 });
+---
+<section class="cta" data-layout="cta">
+  <header class="cta__header">
+    <div class="cta__brand-text">
+      <p class="cta__brand-main">{brand}</p>
+      {brandSub && <p class="cta__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="cta__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="cta__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="cta__body">
+    <div class="cta__main">
+      <h2 class="cta__title">
+        {titleParts
+          ? <>{titleParts.before}<em class="cta__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+          : title}
+      </h2>
+      {description && <p class="cta__desc">{description}</p>}
+      {bullets && bullets.length > 0 && (
+        <ul class="cta__bullets">
+          {bullets.map((b) => (
+            <li class="cta__bullet">
+              <svg class="cta__bullet-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.34a8,8,0,0,1,11.32,11.32Z" />
+              </svg>
+              <span>{b}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <a class="cta__button" href={buttonHref} {...linkAttrs}>
+        <span>{buttonLabel}</span>
+        <svg class="cta__button-arrow" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+          <path d="m181.66 133.66-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="cta__qr-zone">
+      <div class="cta__qr" set:html={qrSvg}></div>
+      {qrCaption && <p class="cta__qr-caption">{qrCaption}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    /* Halo circulaire accent-soft (rouge en ExecEd, jaune en LM) centré sur le
+       QR de la colonne de droite, sur une base pearl unie. Pas d'autre fond.
+       100% tokens => LM et ExecEd. */
+    background:
+      radial-gradient(circle 760px at 78% 52%,
+        color-mix(in srgb, var(--c-accent-soft) 82%, transparent) 0%,
+        color-mix(in srgb, var(--c-accent-soft) 40%, transparent) 50%,
+        transparent 78%),
+      linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header full-width standard (RÈGLE) : brand gauche + logo LM droite + border. */
+  .cta__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .cta__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .cta__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+  .cta__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps en 2 colonnes : texte à gauche, QR à droite, centrés verticalement. */
+  .cta__body {
+    flex: 1 1 auto !important;
+    min-height: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+  }
+  .cta__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 28px;
+  }
+  .cta__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+    text-wrap: balance;
+  }
+  .cta__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .cta__desc {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: 0;
+    max-width: var(--measure-m);
+  }
+
+  /* Avantages en puces : alignés à gauche, coche accent devant chaque ligne. */
+  .cta__bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+  }
+  .cta__bullet {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    color: var(--c-ink);
+  }
+  .cta__bullet-icon {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    color: var(--c-accent);
+  }
+
+  /* Gros bouton accent. RÈGLE : radius 4px, texte sur accent => --c-on-accent,
+     drop-shadow légère. */
+  .cta__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 22px 44px;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+    border-radius: 4px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cta__button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--c-ink) 16%, transparent);
+  }
+  .cta__button-arrow {
+    flex: 0 0 auto;
+  }
+
+  /* Colonne QR (droite) : carte blanche (quiet zone) + légende. Le QR reste
+     noir sur blanc (contraste maximal pour le scan, exception couleurs admise). */
+  .cta__qr-zone {
+    flex: 0 0 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+  }
+  .cta__qr {
+    width: 540px;
+    height: 540px;
+    box-sizing: border-box;
+    padding: 22px;
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .cta__qr :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .cta__qr-caption {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
+    margin: 0;
+  }
+</style>

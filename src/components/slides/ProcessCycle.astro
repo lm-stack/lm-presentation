@@ -1,0 +1,320 @@
+---
+// src/components/slides/ProcessCycle.astro
+// Slide "deux pôles + cycle" : deux cartes (gauche / droite) reliées par un moyeu
+// circulaire de flèches (ph:arrows-clockwise) qui signale un aller-retour permanent
+// entre les deux. Header + heading calqués sur Schema/Compare, 100% tokenisé.
+// Le titre reste épinglé en haut (body flex-start) ; le diagramme est centré dans
+// l'espace restant (slides.md : titre fixe, contenu centré sous le titre).
+// Usage : "Par où commencer ? Architecture des données <-> Modélisation des processus".
+import { Icon } from 'astro-icon/components';
+import { splitHighlight } from '@/utils/highlight';
+interface Pole {
+  icon: string;
+  label: string;
+  sub?: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  left: Pole;
+  right: Pole;
+  /** Phrase de synthèse sous le diagramme (le sens du cycle). */
+  note?: string;
+  /** Icône du moyeu central (cercle de flèches). Défaut ph:arrows-clockwise. */
+  hubIcon?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  left,
+  right,
+  note,
+  hubIcon = 'ph:arrows-clockwise',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="pcycle" data-layout="process-cycle">
+  {/* Filigrane : énorme flèche circulaire (le cycle), haut-gauche, derrière le
+      contenu, coupée par le bord (overflow hidden). Écho de l'horloge du deck
+      d'introduction (AgendaDays). */}
+  <div class="pcycle__watermark" aria-hidden="true"><Icon name="ph:arrow-clockwise" /></div>
+  <header class="pcycle__header">
+    <div class="pcycle__brand-text">
+      <p class="pcycle__brand-main">{brand}</p>
+      {brandSub && <p class="pcycle__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="pcycle__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="pcycle__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="pcycle__body">
+    {(title || subtitle) && (
+      <div class="pcycle__heading">
+        {title && (
+          <h2 class="pcycle__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="pcycle__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="pcycle__subtitle">{subtitle}</p>}
+      </div>
+    )}
+
+    <div class="pcycle__stage">
+      <div class="pcycle__diagram">
+        <article class="pcycle__pole">
+          <div class="pcycle__pole-icon"><Icon name={left.icon} aria-hidden="true" /></div>
+          <h3 class="pcycle__pole-label">{left.label}</h3>
+          {left.sub && <p class="pcycle__pole-sub">{left.sub}</p>}
+        </article>
+
+        <span class="pcycle__link" aria-hidden="true"></span>
+
+        <div class="pcycle__hub" aria-hidden="true">
+          <span class="pcycle__hub-ring"><Icon name={hubIcon} class="pcycle__hub-ic" /></span>
+        </div>
+
+        <span class="pcycle__link" aria-hidden="true"></span>
+
+        <article class="pcycle__pole">
+          <div class="pcycle__pole-icon"><Icon name={right.icon} aria-hidden="true" /></div>
+          <h3 class="pcycle__pole-label">{right.label}</h3>
+          {right.sub && <p class="pcycle__pole-sub">{right.sub}</p>}
+        </article>
+      </div>
+
+      {note && <p class="pcycle__note">{note}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pcycle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Filigrane : énorme flèche circulaire derrière le contenu (z-index 0), coupée
+     par le bord haut-gauche (overflow hidden). Très faible opacité, décorative. */
+  .pcycle__watermark {
+    position: absolute;
+    top: -360px;
+    left: -380px;
+    width: 1240px;
+    height: 1240px;
+    z-index: 0;
+    pointer-events: none;
+    color: color-mix(in srgb, var(--c-accent) 13%, transparent);
+  }
+  .pcycle__watermark :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Header intangible : brand gauche + logo LM droite + border-bottom. */
+  .pcycle__header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .pcycle__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .pcycle__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .pcycle__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Body : titre + diagramme centrés comme un bloc (au-dessus du filigrane). */
+  .pcycle__body {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    gap: 56px;
+  }
+  .pcycle__heading {
+    flex: 0 0 auto;
+    text-align: left;
+  }
+  .pcycle__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .pcycle__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .pcycle__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    margin: 12px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+    max-width: var(--measure-l);
+  }
+
+  /* Scène : le diagramme, centré horizontalement sous le titre. */
+  .pcycle__stage {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pcycle__diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    width: 100%;
+  }
+
+  /* Pôle : carte centrée (icône ronde + label + sous-label). */
+  .pcycle__pole {
+    flex: 0 0 auto;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 44px 36px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    text-align: center;
+  }
+  .pcycle__pole-icon {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--c-accent) 12%, var(--c-surface));
+    border: 2px solid color-mix(in srgb, var(--c-accent) 42%, transparent);
+  }
+  .pcycle__pole-icon :global(svg) {
+    width: 52px;
+    height: 52px;
+    color: var(--c-accent);
+  }
+  .pcycle__pole-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+    margin: 0;
+  }
+  .pcycle__pole-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 400;
+    line-height: var(--lh-body);
+    color: var(--c-muted);
+    margin: 0;
+  }
+
+  /* Connecteur : fin trait accent reliant le pôle au moyeu. */
+  .pcycle__link {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 3px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--c-accent) 45%, transparent);
+  }
+
+  /* Moyeu : cercle de flèches (le cycle). */
+  .pcycle__hub {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pcycle__hub-ring {
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--c-accent) 10%, var(--c-surface));
+    border: 3px solid color-mix(in srgb, var(--c-accent) 45%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .pcycle__hub-ic {
+    width: 104px;
+    height: 104px;
+    color: var(--c-accent);
+  }
+
+  /* Note de synthèse, centrée sous le diagramme. */
+  .pcycle__note {
+    flex: 0 0 auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 0;
+    max-width: var(--measure-l);
+    text-align: center;
+    text-wrap: balance;
+  }
+</style>

@@ -22,9 +22,11 @@ import CodeExamples from '@/components/slides/CodeExamples.astro';
 import UtmGenerator from '@/components/slides/UtmGenerator.astro';
 import Quote from '@/components/slides/Quote.astro';
 import BarChart from '@/components/slides/BarChart.astro';
-import ListImage from '@/components/slides/ListImage.astro';
+import Statement from '@/components/slides/Statement.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 import Table from '@/components/slides/Table.astro';
 import Poll from '@/components/slides/Poll.astro';
+import UseCase from '@/components/slides/UseCase.astro';
 
 <Cover
   title="Collecte des données"
@@ -43,6 +45,15 @@ import Poll from '@/components/slides/Poll.astro';
   title="Source de données"
   italicPart="données"
   subtitle="Formulaires, transactions, scraping, intégrations ou imports : par où la donnée entre."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<WordCloud
+  id="intro-outils-donnees"
+  question="Avec quels outils gérez-vous vos données aujourd'hui ?"
+  italicPart="outils"
+  subtitle="Excel, HubSpot, Zoho, Brevo, rien du tout : citez-les tous, plusieurs réponses bienvenues."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -171,7 +182,7 @@ import Poll from '@/components/slides/Poll.astro';
   subtitle="La question qu'on me pose tout le temps. La règle : demander le moins possible."
   left={{
     heading: "À demander",
-    items: ["Email", "Prénom"],
+    items: ["Email", "Prénom", "Nom"],
   }}
   right={{
     heading: "À inférer ou enrichir",
@@ -273,23 +284,24 @@ import Poll from '@/components/slides/Poll.astro';
 <Steps
   title="Pourquoi un générateur ?"
   italicPart="générateur"
-  subtitle="Taguer à la main marche cinq minutes. À l'échelle d'une équipe, un générateur évite trois pièges."
+  subtitle="Taguer à la main marche 5 minutes mais pas à l'échelle d'une équipe."
   image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
-    { text: "Cohérence : tout le monde tague avec les mêmes valeurs. Fini les « Newsletter », « newsletter » et « NL » qui éclatent un même canal en trois lignes de rapport." },
+    { text: "Cohérence : tout le monde tague avec les mêmes valeurs. Fini les « Newsletter », « newsletter » et « NL » qui éclatent un même canal en trois lignes de rapport." },
     { text: "Zéro erreur : pas de faute de frappe ni de paramètre oublié, le lien reste toujours valide et mesurable." },
     { text: "Accessible à tous : n'importe qui dans l'équipe produit un lien correct en quelques clics, sans connaître la syntaxe UTM." },
   ]}
 />
 
 <Demo
-  toolLogo="/decks/collecte-donnees/logos/zoho.svg"
-  toolName="Zoho Forms"
+  toolLogo="/decks/collecte-donnees/logos/tally.svg"
+  toolName="Tally"
+  toolUrl="https://tally.so"
   objectives={[
     "Repérer les champs visibles : prénom et email, le strict minimum",
-    "Dévoiler les champs cachés : UTM, lead magnet, page, timestamp, IP",
+    "Dévoiler les champs cachés : UTM, lead magnet, gclid, etc.",
     "Vérifier la validation : format email, champs requis, anti-bot",
     "Suivre le trajet du clic jusqu'à la fiche CRM",
   ]}
@@ -360,7 +372,7 @@ import Poll from '@/components/slides/Poll.astro';
 <Steps
   title="Le scraping en clair"
   italicPart="en clair"
-  subtitle="Récolter automatiquement de la donnée publique déjà structurée, sans la saisir à la main."
+  subtitle="Récolter automatiquement de la donnée publique déjà structurée."
   image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -416,25 +428,37 @@ import Poll from '@/components/slides/Poll.astro';
   ]}
 />
 
-<ListImage
+<ImageGrid
+  logos={true}
   title="Les fournisseurs de données les plus connus"
   italicPart="les plus connus"
   subtitle="Au-delà du scraping brut : des plateformes packagent et revendent la donnée déjà collectée."
-  body="Selon le ZHAW Marketing Automation & AI Report 2024, 14% des entreprises s'appuient sur ces fournisseurs spécialisés."
-  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  items={[
-    { label: "Données B2B", title: "Apollo.io", objective: "275M de contacts, recherche de décideurs et séquences d'emails." },
-    { label: "Conforme RGPD", title: "Cognism", objective: "Coordonnées B2B vérifiées et conformes RGPD." },
-    { label: "Entreprises", title: "ZoomInfo", objective: "Profils d'entreprises et de décideurs, vérifiés." },
-    { label: "Enrichissement", title: "Clay", objective: "Agrège des dizaines de sources et enrichit via IA." },
+  images={[
+    { src: "/decks/collecte-donnees/logos/apollo.png", alt: "Apollo.io", title: "Apollo.io", text: "275M de contacts, recherche de décideurs et séquences d'emails." },
+    { src: "/decks/collecte-donnees/logos/cognism.png", alt: "Cognism", title: "Cognism", text: "Coordonnées B2B vérifiées et conformes RGPD." },
+    { src: "/decks/collecte-donnees/logos/zoominfo.svg", alt: "ZoomInfo", title: "ZoomInfo", text: "Profils d'entreprises et de décideurs, vérifiés." },
+    { src: "/decks/collecte-donnees/logos/clay.png", alt: "Clay", title: "Clay", text: "Agrège des dizaines de sources et enrichit via IA." },
   ]}
 />
 
+<UseCase
+  you={{ icon: "ph:storefront", label: "Grossiste en viande" }}
+  target={{ icon: "ph:fork-knife", label: "Les restaurants" }}
+  objective="Constituer la liste des restaurants d'une ville pour aller les démarcher."
+  collect={["Adresse", "Téléphone", "Site web"]}
+  source="OpenStreetMap les recense déjà, gratuitement."
+  image="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&h=1300&fit=crop&q=80"
+  imageAlt="Salle de restaurant"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 <Demo
-  toolLogo="/decks/collecte-donnees/logos/openstreetmap.svg"
-  toolName="OpenStreetMap"
+  toolLogo="/decks/collecte-donnees/logos/apify.svg"
+  toolName="Apify"
+  toolUrl="https://apify.com"
   objectives={[
     "Configurer l'acteur OpenStreetMap POI Extractor sur Apify",
     "Cibler les restaurants de Lausanne dans un rayon de 5 km",
@@ -445,12 +469,25 @@ import Poll from '@/components/slides/Poll.astro';
   brandSub="Executive Education"
 />
 
+<UseCase
+  you={{ icon: "ph:app-window", label: "Logiciel de paie" }}
+  target={{ icon: "ph:users-three", label: "Les responsables RH" }}
+  objective="Obtenir les contacts RH d'entreprises ciblées (secteur, taille, région) pour leur présenter l'outil."
+  collect={["Responsable RH", "Email pro", "Entreprise", "Secteur"]}
+  source="Bases B2B comme Apollo.io, filtrables par critères."
+  image="https://images.unsplash.com/photo-1758520144427-ddb02ac74e9d?w=1000&h=1300&fit=crop&q=80"
+  imageAlt="Entretien en ressources humaines"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 <Demo
   toolLogo="/decks/collecte-donnees/logos/apollo.png"
   toolName="Apollo.io"
+  toolUrl="https://www.apollo.io"
   objectives={[
     "Filtrer la base Apollo.io par secteur, taille et zone géographique",
-    "Cibler les responsables marketing d'entreprises romandes de 50 à 200 employés",
+    "Cibler les responsables RH (DRH, gestionnaires de paie) d'entreprises romandes de 50 à 200 employés",
     "Récupérer nom, poste, entreprise et email professionnel",
     "Préparer l'export en vérifiant la base légale avant tout envoi",
   ]}
@@ -458,17 +495,46 @@ import Poll from '@/components/slides/Poll.astro';
   brandSub="Executive Education"
 />
 
-<Steps
-  title="De la donnée scrapée à la fiche CRM"
-  italicPart="fiche CRM"
-  subtitle="Scraper n'est que la première étape : la valeur naît du traitement qui suit."
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
+{/* "De la donnée scrapée à la fiche CRM" déplacé vers le deck des-donnees-au-crm
+    le 2026-06-13 (slide pipeline Récolter -> Nettoyer -> Enrichir -> Injecter). */}
+
+<SubSection
+  kicker="Source de données"
+  index="1.3"
+  title="Les autres sources"
+  italicPart="autres"
+  subtitle="Transactions, intégrations, imports : moins visibles, souvent plus riches."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  items={[
-    { text: "Récolter : lancer le scraper et exporter la donnée brute (CSV, JSON)." },
-    { text: "Nettoyer : dédupliquer, normaliser les formats, corriger les erreurs." },
-    { text: "Enrichir : recouper les sources et compléter les champs manquants." },
-    { text: "Injecter : importer dans le CRM et automatiser la mise à jour." },
+/>
+
+<Table
+  title="Trois portes souvent négligées"
+  italicPart="négligées"
+  subtitle="Transactions, intégrations et imports : chacune nourrit le CRM à sa façon."
+  headers={["Source", "Ce qu'elle apporte", "Exemple"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Transactions", "Donnée fiable et comportementale, base de la segmentation RFM", "Une commande Shopify crée la fiche client et son historique d'achat"],
+    ["Intégrations (API)", "Le tissu conjonctif : la donnée circule sans ressaisie", "Calendly ajoute chaque rendez-vous pris à la fiche CRM"],
+    ["Imports manuels", "Rapide, universel, zéro mise en place", "Le fichier des participants d'un salon, importé en CSV"],
+  ]}
+/>
+
+<Table
+  title="Ce que cache une transaction"
+  italicPart="une transaction"
+  subtitle="Comme un formulaire et ses champs cachés, une transaction (Stripe, app, caisse) charrie bien plus que le montant."
+  caption="Données exposées par le prestataire de paiement : jamais le numéro de carte complet, géré côté PCI."
+  headers={["Donnée récupérable", "Ce qu'elle capte", "À quoi ça sert"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Métadonnées custom", "Vos clés posées au checkout : campagne, source, ID commande", "Relier l'achat à une campagne, exactement comme les UTMs"],
+    ["Coordonnées", "Email, nom, adresses de facturation et de livraison", "Créer ou compléter la fiche client"],
+    ["Signaux carte", "Pays, marque, type, 4 derniers chiffres (jamais le numéro)", "Localiser, détecter la fraude, segmenter"],
+    ["Device et IP", "Appareil, navigateur, localisation approximative", "Reconstituer le contexte d'achat"],
+    ["Contexte d'achat", "Montant, articles, devise, récurrence, date", "Segmentation RFM, abonnés contre one-shot"],
   ]}
 />

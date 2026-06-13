@@ -1,0 +1,282 @@
+---
+// src/components/slides/ImproveLoop.astro
+// Slide "boucle d'amélioration continue" : une rangée d'étapes (Modéliser ->
+// Implémenter -> Mesurer -> Améliorer) reliées par des flèches, plus une flèche
+// de retour (bracket en U sous la rangée) qui repart de la dernière vers la
+// première : le processus est permanent. Header + heading calqués sur Schema /
+// ProcessCycle, 100% tokenisé. Titre épinglé en haut, diagramme centré dessous.
+import { Icon } from 'astro-icon/components';
+import { splitHighlight } from '@/utils/highlight';
+interface Step {
+  icon: string;
+  label: string;
+}
+interface Props {
+  title?: string;
+  italicPart?: string;
+  subtitle?: string;
+  steps: Step[];
+  /** Libellé porté par la flèche de retour (la boucle). Défaut "En continu". */
+  returnLabel?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  title,
+  italicPart,
+  subtitle,
+  steps,
+  returnLabel = 'En continu',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+const titleParts = splitHighlight(title, italicPart);
+---
+<section class="iloop" data-layout="improve-loop">
+  <header class="iloop__header">
+    <div class="iloop__brand-text">
+      <p class="iloop__brand-main">{brand}</p>
+      {brandSub && <p class="iloop__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="iloop__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="iloop__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="iloop__body">
+    {(title || subtitle) && (
+      <div class="iloop__heading">
+        {title && (
+          <h2 class="iloop__title">
+            {titleParts
+              ? <>{titleParts.before}<em class="iloop__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              : title}
+          </h2>
+        )}
+        {subtitle && <p class="iloop__subtitle">{subtitle}</p>}
+      </div>
+    )}
+
+    <div class="iloop__stage">
+      <div class="iloop__flow">
+        <div class="iloop__row">
+          {steps.map((s, i) => (
+            <>
+              {i > 0 && (
+                <span class="iloop__arrow" aria-hidden="true"><Icon name="ph:arrow-right" class="iloop__arrow-ic" /></span>
+              )}
+              <article class="iloop__step">
+                <div class="iloop__step-badge"><Icon name={s.icon} aria-hidden="true" /></div>
+                <h3 class="iloop__step-label">{s.label}</h3>
+              </article>
+            </>
+          ))}
+        </div>
+
+        <div class="iloop__return" aria-hidden="true">
+          <span class="iloop__return-arrow"></span>
+          <span class="iloop__return-label">{returnLabel}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .iloop {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header intangible. */
+  .iloop__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .iloop__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .iloop__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .iloop__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Body : titre + diagramme centrés comme un bloc (texte proche des étapes). */
+  .iloop__body {
+    flex: 1 1 auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+    gap: 56px;
+  }
+  .iloop__heading {
+    flex: 0 0 auto;
+    text-align: left;
+  }
+  .iloop__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-m);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-wrap: balance;
+    text-align: left;
+  }
+  .iloop__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .iloop__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    margin: 12px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+    max-width: var(--measure-l);
+  }
+
+  .iloop__stage {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Flux : la rangée d'étapes + la flèche de retour en U dessous. */
+  .iloop__flow {
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .iloop__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* Étape : carte (icône ronde + label). */
+  .iloop__step {
+    flex: 0 0 auto;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 40px 28px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    text-align: center;
+  }
+  .iloop__step-badge {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--c-accent) 12%, var(--c-surface));
+    border: 2px solid color-mix(in srgb, var(--c-accent) 42%, transparent);
+  }
+  .iloop__step-badge :global(svg) {
+    width: 46px;
+    height: 46px;
+    color: var(--c-accent);
+  }
+  .iloop__step-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+    margin: 0;
+  }
+
+  /* Flèche entre deux étapes. */
+  .iloop__arrow {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  .iloop__arrow-ic {
+    width: 38px;
+    height: 38px;
+    color: color-mix(in srgb, var(--c-ink) 38%, transparent);
+  }
+
+  /* Flèche de retour : bracket en U sous la rangée, repart de la fin vers le
+     début (la boucle permanente). Pointe vers le haut, dans la première étape. */
+  .iloop__return {
+    position: relative;
+    height: 58px;
+    margin: 0 150px;
+    border: 3px solid color-mix(in srgb, var(--c-accent) 52%, transparent);
+    border-top: none;
+    border-radius: 0 0 18px 18px;
+  }
+  .iloop__return-arrow {
+    position: absolute;
+    top: -12px;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 13px solid color-mix(in srgb, var(--c-accent) 70%, transparent);
+  }
+  .iloop__return-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-accent);
+    white-space: nowrap;
+  }
+</style>

@@ -13,9 +13,12 @@ interface Props {
   parcours: string;
   title?: string;
   italicPart?: string;
+  // Slugs de decks à NE jamais marquer "workshop" (override de la détection auto),
+  // ex. un deck legacy hors-brochure qui garde un atelier mais ne compte pas.
+  noWorkshop?: string[];
 }
 
-const { parcours: slug, title = 'Agenda', italicPart = 'Agenda' } = Astro.props;
+const { parcours: slug, title = 'Agenda', italicPart = 'Agenda', noWorkshop = [] } = Astro.props;
 
 const entry = (await getCollection('parcours')).find((p) => p.id === slug);
 if (!entry) {
@@ -29,9 +32,14 @@ if (!days?.length) {
   throw new Error(`<AgendaDays> : le parcours "${slug}" n'a pas de "days" défini.`);
 }
 
-// Table slug -> titre du deck, pour résoudre chaque jour.
-const titleBySlug = new Map(
-  (await getCollection('presentations')).map((p) => [p.id, p.data.title])
+// Table slug -> { titre, présence d'un workshop }, pour résoudre chaque jour.
+// Un deck est marqué "workshop" si son corps MDX contient un <Workshop ...> :
+// l'agenda se met donc à jour tout seul quand on ajoute/retire un atelier.
+const metaBySlug = new Map(
+  (await getCollection('presentations')).map((p) => [
+    p.id,
+    { title: p.data.title, hasWorkshop: /<Workshop[\s/>]/.test(p.body ?? '') },
+  ])
 );
 
 const columns = days.map((d) => {
@@ -41,13 +49,13 @@ const columns = days.map((d) => {
     );
   }
   const decks = d.decks.map((deckSlug) => {
-    const deckTitle = titleBySlug.get(deckSlug);
-    if (!deckTitle) {
+    const meta = metaBySlug.get(deckSlug);
+    if (!meta) {
       throw new Error(
         `<AgendaDays> : deck "${deckSlug}" (jour "${d.label}", parcours "${slug}") introuvable dans src/content/presentations/.`
       );
     }
-    return deckTitle;
+    return { title: meta.title, hasWorkshop: meta.hasWorkshop && !noWorkshop.includes(deckSlug) };
   });
   return { label: d.label, theme: d.theme, decks };
 });
@@ -99,10 +107,11 @@ const titleParts = splitHighlight(title, italicPart);
             <span class="agenda-days__day-rule" aria-hidden="true"></span>
           </div>
           <ol class="agenda-days__decks">
-            {col.decks.map((deckTitle, i) => (
-              <li class="agenda-days__deck">
+            {col.decks.map((deck, i) => (
+              <li class:list={['agenda-days__deck', { 'agenda-days__deck--workshop': deck.hasWorkshop }]}>
                 <span class="agenda-days__deck-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                <span class="agenda-days__deck-title">{deckTitle}</span>
+                <span class="agenda-days__deck-title">{deck.title}</span>
+                {deck.hasWorkshop && <span class="agenda-days__deck-tag">Workshop</span>}
               </li>
             ))}
           </ol>
@@ -345,5 +354,22 @@ const titleParts = splitHighlight(title, italicPart);
     line-height: var(--lh-body);
     font-weight: 600;
     color: var(--c-ink);
+  }
+
+  /* Marqueur "Workshop" : pastille gold poussée à droite de la ligne, sur les
+     sessions dont le deck contient un atelier (détection auto via le corps MDX). */
+  .agenda-days__deck-tag {
+    flex: 0 0 auto;
+    align-self: center;
+    margin-left: auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-on-accent);
+    background: var(--c-accent);
+    border-radius: 4px;
+    padding: 3px 9px;
   }
 </style>

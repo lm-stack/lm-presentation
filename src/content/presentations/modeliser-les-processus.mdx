@@ -12,22 +12,23 @@ description: "Modéliser les processus métier avec la notation BPMN avant de le
 
 import Cover from '@/components/slides/Cover.astro';
 import SubSection from '@/components/slides/SubSection.astro';
-import Media from '@/components/slides/Media.astro';
 import Statement from '@/components/slides/Statement.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import ImageFull from '@/components/slides/ImageFull.astro';
 import BpmnCanvas from '@/components/slides/BpmnCanvas.astro';
+import ProcessCycle from '@/components/slides/ProcessCycle.astro';
+import ImproveLoop from '@/components/slides/ImproveLoop.astro';
 import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 
-{/* Module Modéliser les processus (Jour 1), créé le 2026-06-13.
+{/* Module Modéliser les processus (Jour 2, premier sujet), créé le 2026-06-13.
     Structure : 01 Pourquoi modéliser -> 02 Comment modéliser (BPMN) ->
     03 Modélisons (démo interactive BpmnCanvas) -> pont vers le CRM -> Workshop.
     Le bloc modélisation est repris de l'ancien deck workflow (Jour 2) ; la démo
     interactive (BpmnCanvas) et le mapping BPMN->CRM sont net-neuf.
     Placement : après des-donnees-au-crm. Logique du fil rouge : on a structuré
-    les données (architecture), monté le CRM dessus (De la Data au CRM), on
+    les données (architecture), monté le CRM dessus (Des données au CRM), on
     modélise maintenant les processus pour les implémenter dans ce CRM.
     Images dans public/decks/modeliser-les-processus/. */}
 
@@ -35,7 +36,7 @@ import Workshop from '@/components/slides/Workshop.astro';
 <Cover
   title="Modéliser les processus"
   italicPart="processus"
-  eyebrow="Jour 1 : Sujet 5"
+  eyebrow="Jour 2 : Sujet 1"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -79,6 +80,33 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
+{/* Pourquoi : par où commencer ? Le cycle data <-> processus (ProcessCycle). */}
+<ProcessCycle
+  title="Par où commencer ?"
+  italicPart="commencer"
+  subtitle="Architecture des données et modélisation des processus s'alimentent l'une l'autre : aucune ne vient strictement avant l'autre."
+  left={{ icon: "ph:database", label: "Architecture des données", sub: "Le schéma : entités, champs, relations." }}
+  right={{ icon: "ph:flow-arrow", label: "Modélisation des processus", sub: "Le flux : qui fait quoi, dans quel ordre." }}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Pourquoi : la modélisation est un processus permanent (boucle d'amélioration continue). */}
+<ImproveLoop
+  title="Un processus n'est jamais figé"
+  italicPart="jamais figé"
+  subtitle="On le modélise, on l'implémente, on le mesure, on l'améliore. Puis on recommence : c'est une routine, pas un projet ponctuel."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  steps={[
+    { icon: "ph:flow-arrow", label: "Modéliser" },
+    { icon: "ph:wrench", label: "Implémenter" },
+    { icon: "ph:chart-line-up", label: "Mesurer" },
+    { icon: "ph:trend-up", label: "Améliorer" },
+  ]}
+  returnLabel="En continu"
+/>
+
 {/* ============ 02 COMMENT MODÉLISER ============ */}
 <SubSection
   kicker="Modéliser les processus"
@@ -90,15 +118,15 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
-{/* Comment : BPMN, le standard de référence. Image plein cadre (ImageFull) =
-    illustration d'un processus BPMN modélisé dans Miro. Source = Miro. */}
+{/* Comment : BPMN, le standard de référence. Image d'illustration (Miro),
+    source créditée bpmn.io (l'image sert juste à illustrer la notation). */}
 <ImageFull
   image="/decks/modeliser-les-processus/bpmn-exemple-miro.png"
-  alt="Exemple de processus métier modélisé en BPMN dans Miro : événement de début, tâche, gateway exclusif Oui/Non, fins et objet de données"
+  alt="Exemple de processus métier modélisé en BPMN : événement de début, tâche, gateway exclusif Oui/Non, fins et objet de données"
   captionTitle="Business Process Model and Notation"
   caption="Le standard mondial pour modéliser un processus métier."
-  source="Miro"
-  sourceUrl="https://miro.com"
+  source="bpmn.io"
+  sourceUrl="https://bpmn.io"
   captionPosition="bottom-left"
 />
 
@@ -118,16 +146,18 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Comment : outils d'édition BPMN (MIRO / Lucidchart). */}
-<Media
+{/* Comment : outils d'édition BPMN, grille 2 logos (Miro / Lucidchart). */}
+<ImageGrid
+  logos={true}
   title="Des outils pour éditer vos processus"
   italicPart="éditer"
-  subtitle="Le plus connu, popularisé par le télétravail, reste MIRO. Lucidchart en est une alternative robuste."
-  body="MIRO et Lucidchart abaissent la barrière d'entrée : édition collaborative en temps réel, templates BPMN prêts à l'emploi, partage par URL."
-  image="/decks/modeliser-les-processus/outils-miro.png"
-  alt="Capture de l'outil MIRO avec un tableau BPMN collaboratif"
+  subtitle="Deux éditeurs collaboratifs abaissent la barrière d'entrée : templates BPMN prêts à l'emploi, édition à plusieurs en temps réel, partage par URL."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+  images={[
+    { src: "/decks/modeliser-les-processus/logos/miro.svg", alt: "Logo Miro", title: "Miro", text: "Le plus connu, popularisé par le télétravail. Tableau blanc collaboratif avec templates BPMN prêts à l'emploi." },
+    { src: "/decks/modeliser-les-processus/logos/lucidchart.svg", alt: "Logo Lucidchart", title: "Lucidchart", text: "L'alternative robuste, orientée diagrammes. Bibliothèque de formes BPMN complète et rigoureuse." },
+  ]}
 />
 
 {/* ============ 03 MODÉLISONS UN PROCESSUS (démo interactive) ============ */}
@@ -136,7 +166,7 @@ import Workshop from '@/components/slides/Workshop.astro';
   index="03"
   title="Modélisons un processus"
   italicPart="Modélisons"
-  subtitle="En direct, étape par étape : publier un événement en ligne."
+  subtitle="En direct, pas à pas : de la demande de devis à la réception, chez un traiteur."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -147,28 +177,9 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
-{/* Process vs workflow (annonce le Jour 2). */}
-<ImageGrid
-  title="Différence entre processus et workflow"
-  italicPart="workflow"
-  subtitle="La représentation graphique d'un processus métier n'est pas la même chose qu'un workflow d'exécution."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    {
-      src: "/decks/modeliser-les-processus/diff-process-bpmn.jpeg",
-      alt: "Schéma d'un processus métier en BPMN",
-      title: "Schéma d'un processus",
-      text: "Vue stratégique : qui fait quoi, dans quel ordre, avec quelles règles métier. C'est le BPMN, ce qu'on vient de modéliser.",
-    },
-    {
-      src: "/decks/modeliser-les-processus/diff-workflow-whiteboard.jpeg",
-      alt: "Schéma d'un workflow d'exécution",
-      title: "Schéma d'un workflow",
-      text: "Vue opérationnelle : trigger, actions, branchements, données. C'est ce qu'on construira au Jour 2, dans le CRM ou un outil no-code.",
-    },
-  ]}
-/>
+{/* "Différence processus / workflow" : déplacé vers le deck workflows (Jour 2)
+    le 2026-06-13. Le contenu (grille 2 images diff-process-bpmn / diff-workflow-
+    whiteboard) est repris tel quel côté workflows. */}
 
 {/* Pont : du processus modélisé au CRM (mapping BPMN -> objets CRM). */}
 <InfoCards
@@ -185,20 +196,20 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Démo Zoho Blueprint (capture placeholder à remplacer). */}
+{/* Démo Zoho Blueprint, processus traiteur (capture placeholder à remplacer). */}
 <Capture
   title="Le processus dans Zoho"
   italicPart="Zoho"
-  subtitle="On transforme le processus modélisé en Blueprint Zoho : un processus exécutable, étape par étape, directement dans le CRM."
+  subtitle="On transforme le processus traiteur modélisé en Blueprint Zoho : le cycle de vie de l'Offre, exécutable état par état, directement dans le CRM."
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
   caption="Capture Zoho CRM Blueprint (à remplacer)."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
-    { label: "Outil", value: "Zoho CRM, module Blueprint : un processus visuel avec états et transitions." },
-    { label: "Point de départ", value: "Le processus qu'on vient de modéliser en BPMN." },
-    { label: "Étapes", value: "Chaque activité devient un état, chaque gateway une transition conditionnelle." },
-    { label: "À retenir", value: "Le CRM exécute le processus que vous avez d'abord pensé sur le papier." },
+    { label: "Outil", value: "Zoho CRM, module Blueprint : un processus visuel avec états et transitions, posé sur l'Offre." },
+    { label: "Point de départ", value: "Le processus traiteur qu'on vient de modéliser : de la demande de devis à la réception." },
+    { label: "États", value: "Demande reçue, Qualifiée, Devis envoyé, Accepté, Dégustation, Réception. Chaque activité BPMN devient un état." },
+    { label: "Transitions", value: "Le gateway « Devis accepté ? » devient une transition conditionnelle ; chaque passage exige ses champs et ses actions." },
   ]}
 />
 

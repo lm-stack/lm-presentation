@@ -6,18 +6,19 @@ date: 2026-06-01
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop"
+cover: "https://images.unsplash.com/photo-1640158615573-cd28feb1bf4e?w=1200&h=750&fit=crop"
 description: "Ouverture du parcours CRM, Data & Automation : présentation de l'intervenant et vue d'ensemble des trois jours de formation."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
 import About from '@/components/slides/About.astro';
 import AgendaDays from '@/components/slides/AgendaDays.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
-import WordCloud from '@/components/slides/WordCloud.astro';
+import CTA from '@/components/slides/CTA.astro';
 
 <Cover
   title="CRM, Data & Automation"
@@ -26,28 +27,39 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="https://images.unsplash.com/photo-1640158615573-cd28feb1bf4e?w=800&h=1000&fit=crop"
+  image="https://images.unsplash.com/photo-1640158615573-cd28feb1bf4e?w=800&h=1000&fit=crop&crop=focalpoint&fp-x=0.35&fp-y=0.5"
   theme="halo-gold"
+  focal="left"
+/>
+
+<SubSection
+  index="01"
+  title="Présentation générale"
+  italicPart="générale"
+  subtitle="Le cours, vos objectifs et un tour de table."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <ListImage
   title="Le CAS en Marketing digital"
   italicPart="Marketing digital"
+  titleBreak
   kpis={[
-    { value: "5", label: "modules" },
+    { value: "05", label: "modules" },
     { value: "15", label: "jours" },
-    { value: "5", label: "mois" },
+    { value: "05", label: "mois" },
   ]}
   body="CRM, Data & Automation est le module 5 de ce parcours."
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
-    { label: "Module 01", title: "Stratégie digitale", objective: "Bâtir une stratégie omnicanale cohérente, du parcours client à l'acquisition." },
-    { label: "Module 02", title: "IA & content marketing", objective: "Concevoir une stratégie de contenu performante, outillée par l'IA." },
-    { label: "Module 03", title: "Réseaux sociaux", objective: "Déployer une présence cohérente sur les réseaux sociaux et en mesurer l'impact." },
-    { label: "Module 04", title: "Growth marketing", objective: "Activer une démarche d'expérimentation orientée croissance." },
-    { label: "Module 05", title: "CRM, data & automation", objective: "Structurer la donnée et automatiser le parcours client de bout en bout.", current: true },
+    { label: "Module 01", title: "Stratégie digitale", objective: "Une stratégie omnicanale cohérente." },
+    { label: "Module 02", title: "IA & content marketing", objective: "Du contenu performant, outillé par l'IA." },
+    { label: "Module 03", title: "Réseaux sociaux", objective: "Une présence sociale à fort impact." },
+    { label: "Module 04", title: "Growth marketing", objective: "Tester, mesurer, accélérer la croissance." },
+    { label: "Module 05", title: "CRM, data & automation", objective: "Structurer la donnée, automatiser le parcours.", current: true },
   ]}
 />
 
@@ -107,16 +119,16 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   ]}
 />
 
-<WordCloud
-  id="intro-outils-donnees"
-  question="Avec quels outils gérez-vous vos données aujourd'hui ?"
-  italicPart="outils"
-  subtitle="Excel, HubSpot, Zoho, Brevo, rien du tout : citez-les tous, plusieurs réponses bienvenues."
+<SubSection
+  index="02"
+  title="Agenda"
+  italicPart="Agenda"
+  subtitle="Le programme des trois jours et les horaires."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-<AgendaDays parcours="crm-data-automation" />
+<AgendaDays parcours="crm-data-automation" noWorkshop={["funnel-marketing", "segmentation-activation"]} />
 
 <InfoCards
   title="Horaires des journées"
@@ -131,4 +143,19 @@ import WordCloud from '@/components/slides/WordCloud.astro';
     { icon: "ph:sun", label: "Après-midi", value: "13h30 à 17h00" },
     { icon: "ph:coffee", label: "Pauses", value: "15 mins par demi-journée" },
   ]}
+/>
+
+<CTA
+  title="Ce slidedeck en ligne"
+  italicPart="en ligne"
+  description="Retrouvez tous les slides en ligne. Pas indispensable, mais plus pratique pour explorer à votre rythme."
+  bullets={[
+    "Navigation libre entre les modules",
+    "Contenus interactifs : sondages et démos en direct",
+    "Accessible sur tous vos écrans",
+  ]}
+  buttonLabel="Voir le slidedeck en ligne"
+  buttonHref="/parcours/crm-data-automation/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />

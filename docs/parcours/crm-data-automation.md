@@ -75,7 +75,7 @@ Decks présents dans le parcours :
 
 Decks manquants par rapport à la brochure :
 
-- **Jour 1** : complet. Le sujet #1 Modélisation des processus a désormais son deck dédié `modeliser-les-processus` (créé 2026-06-13), placé **après** `des-donnees-au-crm` : on structure les données (architecture), on monte le CRM sur ce schéma (De la Data au CRM), puis on modélise les processus pour les implémenter dans ce CRM. Les 3 piliers de la qualité (sujet 2 Qualité) restent un renfort sur la gouvernance.
+- **Jour 1** : complet. Le sujet #1 Modélisation des processus a désormais son deck dédié `modeliser-les-processus` (créé 2026-06-13), placé **après** `des-donnees-au-crm` : on structure les données (architecture), on monte le CRM sur ce schéma (Des données au CRM), puis on modélise les processus pour les implémenter dans ce CRM. Les 3 piliers de la qualité (sujet 2 Qualité) restent un renfort sur la gouvernance.
 - **Jour 2** : Implémentation CRM, Data visualisation et dashboards
 - **Jour 3** : Suivi des performances
 
@@ -232,11 +232,11 @@ Historique des splits et réorganisations :
   | Workshop multi-groupes | 18 |
   | Restitution + débrief | 8 |
 
-### Module Modéliser les processus (Jour 1, après De la Data au CRM)
+### Module Modéliser les processus (Jour 2, premier sujet)
 
 - **Durée** : 90 min (1h30).
 - **Idée centrale** : "Modéliser avant d'implémenter. On cartographie le processus sur le papier avant de le construire dans le CRM."
-- **Placement et fil rouge** : volontairement **après** `des-donnees-au-crm`. Enchaînement : architecture des données (le schéma) puis De la Data au CRM (on monte le CRM sur ce schéma) puis Modéliser les processus (on cartographie les processus métier, puis on les implémente dans ce CRM). Le module annonce aussi le Jour 2 (`workflow`, les workflows d'exécution) via le slide "processus vs workflow".
+- **Placement et fil rouge** : volontairement **après** `des-donnees-au-crm`. Enchaînement : architecture des données (le schéma) puis Des données au CRM (on monte le CRM sur ce schéma) puis Modéliser les processus (on cartographie les processus métier, puis on les implémente dans ce CRM). Le module annonce aussi le Jour 2 (`workflow`, les workflows d'exécution) via le slide "processus vs workflow".
 - **Origine du contenu** : le bloc modélisation a été **extrait intégralement** du deck `workflow` (Jour 2) le 2026-06-13 (chaos, BPMN/Trisotech, 4 notions clés, Exchange, outils d'édition BPMN, process vs workflow), augmenté de deux slides net-neuf : le mapping BPMN vers objets CRM, et une démo Zoho Blueprint.
 - **Notation BPMN (4 notions clés)** : swimlanes (acteurs/départements), événements (début, intermédiaire, fin), activités (tâches), gateways (points de décision).
 - **Outils d'édition** : MIRO (le plus connu), Lucidchart (alternative robuste).

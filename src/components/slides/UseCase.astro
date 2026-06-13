@@ -1,0 +1,363 @@
+---
+// src/components/slides/UseCase.astro
+// Slide "cas d'usage" : raconte un scénario commercial en un coup d'oeil.
+// Layout split : à GAUCHE le récit (badge + Vous -> Cible en cartes reliées par
+// une flèche + brief Objectif / À collecter / Source), à DROITE une illustration
+// photo pleine hauteur bord-à-bord (prop `image`) qui passe SOUS le header
+// (convention : l'image monte jusqu'au bord haut, le header se superpose). Un
+// léger fondu en haut de l'image (vers la couleur de fond) garde le logo lisible.
+// Pensé pour précéder une démo. 100% tokenisé, aucune couleur ni taille en dur.
+import { Icon } from 'astro-icon/components';
+interface Party {
+  /** Icône Phosphor (ex. "ph:storefront"). */
+  icon: string;
+  /** Description courte (ex. "Logiciel de paie", "Les restaurants"). */
+  label: string;
+}
+interface Props {
+  /** Badge en tête. Défaut "Cas d'usage". */
+  eyebrow?: string;
+  /** Partie gauche : qui vous êtes. */
+  you: Party;
+  /** Partie droite : votre cible. */
+  target: Party;
+  /** Étiquette de la carte gauche. Défaut "Vous". */
+  youLabel?: string;
+  /** Étiquette de la carte droite. Défaut "Cible". */
+  targetLabel?: string;
+  /** L'objectif du cas d'usage. */
+  objective: string;
+  /** Données à collecter (chips). */
+  collect: string[];
+  /** Source / outil mobilisé (optionnel ; enchaîne sur la démo). */
+  source?: string;
+  /** Illustration latérale (URL image). Optionnel : sans elle, récit pleine largeur. */
+  image?: string;
+  /** Texte alternatif de l'image (français). */
+  imageAlt?: string;
+  /** Cadrage de l'image (valeur CSS object-position, ex. "center 70%"). Défaut "center". */
+  focal?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  eyebrow = "Cas d'usage",
+  you,
+  target,
+  youLabel = 'Vous',
+  targetLabel = 'Cible',
+  objective,
+  collect,
+  source,
+  image,
+  imageAlt = '',
+  focal = 'center',
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="usecase" data-layout="usecase" data-has-media={image ? 'true' : 'false'}>
+  {image && (
+    <div class="usecase__media">
+      <img src={image} alt={imageAlt} style={`object-position: ${focal};`} />
+      <span class="usecase__media-scrim" aria-hidden="true"></span>
+    </div>
+  )}
+
+  <header class="usecase__header">
+    <div class="usecase__brand-text">
+      <p class="usecase__brand-main">{brand}</p>
+      {brandSub && <p class="usecase__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="usecase__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="usecase__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="usecase__content">
+    <div class="usecase__left">
+      <span class="usecase__eyebrow">{eyebrow}</span>
+
+      <div class="usecase__scenario">
+        <article class="usecase__party">
+          <span class="usecase__party-tag">{youLabel}</span>
+          <div class="usecase__party-icon"><Icon name={you.icon} aria-hidden="true" /></div>
+          <p class="usecase__party-label">{you.label}</p>
+        </article>
+
+        <span class="usecase__arrow" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
+
+        <article class="usecase__party usecase__party--target">
+          <span class="usecase__party-tag">{targetLabel}</span>
+          <div class="usecase__party-icon"><Icon name={target.icon} aria-hidden="true" /></div>
+          <p class="usecase__party-label">{target.label}</p>
+        </article>
+      </div>
+
+      <div class="usecase__brief">
+        <div class="usecase__row">
+          <span class="usecase__row-label">Objectif</span>
+          <p class="usecase__row-value">{objective}</p>
+        </div>
+        <div class="usecase__row usecase__row--collect">
+          <span class="usecase__row-label">À collecter</span>
+          <div class="usecase__chips">
+            {collect.map((c) => <span class="usecase__chip">{c}</span>)}
+          </div>
+        </div>
+        {source && (
+          <div class="usecase__row">
+            <span class="usecase__row-label">Source</span>
+            <p class="usecase__row-value">{source}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .usecase {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Média : illustration pleine hauteur, bord-à-bord, qui passe SOUS le header
+     (top 0 -> bas du slide). z-index 0 : le header et le récit se superposent. */
+  .usecase__media {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 42%;
+    z-index: 0;
+    border-left: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  }
+  .usecase__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Fondu haut de l'image vers la couleur de fond : garde le logo (sur l'image)
+     lisible quelle que soit la photo, et "raccorde" l'image au bandeau header. */
+  .usecase__media-scrim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 190px;
+    background: linear-gradient(
+      180deg,
+      var(--c-bg-start) 0%,
+      var(--c-bg-start) 38%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Header intangible : brand gauche + logo LM droite + border-bottom full-width.
+     z-index 2 : se superpose à l'image qui passe dessous. */
+  .usecase__header {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 96px 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .usecase__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .usecase__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .usecase__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Contenu : récit (gauche), centré verticalement sous le header. Le média étant
+     absolu, on contraint la colonne récit pour qu'elle ne passe pas sous l'image. */
+  .usecase__content {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+  }
+  .usecase__left {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    padding: 48px 64px 64px 96px;
+  }
+  .usecase[data-has-media='true'] .usecase__left {
+    flex: 0 0 58%;
+    max-width: 58%;
+  }
+
+  /* Badge "Cas d'usage" : pastille accent, ancrée à gauche. */
+  .usecase__eyebrow {
+    align-self: flex-start;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-on-accent);
+    background: var(--c-accent);
+    padding: 9px 18px;
+    border-radius: 999px;
+  }
+
+  /* Scénario : deux parties reliées par une flèche. */
+  .usecase__scenario {
+    display: flex;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .usecase__party {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 28px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+    text-align: center;
+  }
+  .usecase__party--target {
+    background: color-mix(in srgb, var(--c-accent) 7%, var(--c-surface));
+    border-color: color-mix(in srgb, var(--c-accent) 45%, transparent);
+  }
+  .usecase__party-tag {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-muted);
+  }
+  .usecase__party-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--c-accent) 12%, var(--c-surface));
+    border: 2px solid color-mix(in srgb, var(--c-accent) 42%, transparent);
+  }
+  .usecase__party-icon :global(svg) {
+    width: 42px;
+    height: 42px;
+    color: var(--c-accent);
+  }
+  .usecase__party-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+    margin: 0;
+  }
+  .usecase__arrow {
+    flex: 0 0 auto;
+    align-self: center;
+    display: flex;
+  }
+  .usecase__arrow :global(svg) {
+    width: 48px;
+    height: 48px;
+    color: var(--c-accent);
+  }
+
+  /* Brief : Objectif / À collecter / Source, en lignes label -> valeur. */
+  .usecase__brief {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 32px;
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  }
+  .usecase__row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .usecase__row--collect {
+    align-items: center;
+  }
+  .usecase__row-label {
+    flex: 0 0 auto;
+    width: 148px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--c-accent);
+  }
+  .usecase__row-value {
+    flex: 1 1 auto;
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    color: var(--c-ink);
+  }
+  .usecase__chips {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .usecase__chip {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--c-ink);
+    background: color-mix(in srgb, var(--c-accent) 12%, var(--c-surface));
+    border: 1px solid color-mix(in srgb, var(--c-accent) 32%, transparent);
+    padding: 8px 18px;
+    border-radius: 999px;
+  }
+</style>

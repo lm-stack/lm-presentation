@@ -17,6 +17,9 @@ interface Props {
   italicPart?: string;
   subtitle?: string;
   items: NumberedItem[];
+  /** Numéro de départ du décompte (défaut 1). Permet de continuer la numérotation
+   *  d'un slide à l'autre (ex. 04, 05, 06 sur un second slide qui prolonge le premier). */
+  start?: number;
   /** Image décorative affichée à droite (sinon motif damier). */
   image?: string;
   brand?: string;
@@ -27,6 +30,7 @@ const {
   italicPart,
   subtitle,
   items,
+  start = 1,
   image,
   brand = 'Titre de la présentation',
   brandSub,
@@ -63,7 +67,7 @@ const titleParts = splitHighlight(title, italicPart);
       <ol class="steps__list">
         {items.map((item, i) => (
           <li class="steps__item">
-            <span class="steps__number">{String(i + 1).padStart(2, '0')}</span>
+            <span class="steps__number">{String(i + start).padStart(2, '0')}</span>
             <p class="steps__item-text">{item.text}</p>
           </li>
         ))}

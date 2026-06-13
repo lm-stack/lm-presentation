@@ -11,12 +11,11 @@
 // Coordonnées : canvas fixe 1728x820 (slide figé 1920x1080, Reveal scale le
 // tout) -> viewBox SVG 0 0 1728 820 mappe 1:1 sur les px des noeuds absolus.
 //
-// Processus : "Publier un événement en ligne" (outils Dynamics / Tally /
-// WordPress). Lane A "Spécialiste Marketing" : Nouvel événement -> Créer
-// l'événement et Configurer l'accusé (Dynamics). Lane B "Webmaster" : Créer le
-// formulaire et Paramétrer les champs (Tally), Publier et Tester (WordPress) ;
-// gateway "Soumission conforme ?" -> Non boucle sur Paramétrer les champs, Oui
-// termine sur "Page en ligne".
+// Processus : « Processus commercial traiteur, du devis à l'affaire gagnée »
+// (outils Zoho CRM / Email). Lane A « Commercial » : Demande de devis -> Qualifier
+// la demande -> Établir le devis -> Envoyer le devis. Lane B « Client » : gateway
+// « Devis accepté ? » -> Non boucle sur Établir le devis, Oui termine sur « Affaire
+// gagnée ». Devient le Blueprint Zoho (cycle de vie de l'Offre) au slide suivant.
 import { Icon } from 'astro-icon/components';
 interface Props {
   brand?: string;
@@ -29,14 +28,12 @@ const {
   tocLabel = 'Modélisation en direct',
 } = Astro.props;
 
-// Tâches (card 180x108). y 146 = lane Marketing, y 556 = lane Webmaster.
+// Tâches (card 180x108). Les 3 tâches sont dans la lane A (Commercial, y 146) ;
+// la lane B (Client) ne porte que le gateway et la fin.
 const tasks = [
-  { id: 1, label: "Créer l'événement", tool: 'Dynamics', x: 320, y: 146 },
-  { id: 2, label: "Configurer l'accusé", tool: 'Dynamics', x: 535, y: 146 },
-  { id: 3, label: 'Créer le formulaire', tool: 'Tally', x: 535, y: 556 },
-  { id: 4, label: 'Paramétrer les champs', tool: 'Tally', x: 750, y: 556 },
-  { id: 5, label: 'Publier le formulaire', tool: 'WordPress', x: 965, y: 556 },
-  { id: 6, label: 'Tester la soumission', tool: 'WordPress', x: 1180, y: 556 },
+  { id: 1, label: 'Qualifier la demande', tool: 'Zoho CRM', x: 330, y: 146 },
+  { id: 2, label: 'Établir le devis', tool: 'Zoho CRM', x: 620, y: 146 },
+  { id: 3, label: 'Envoyer le devis', tool: 'Email', x: 910, y: 146 },
 ];
 ---
 <section class="bpmn" data-layout="bpmn" data-section-title={tocLabel}>
@@ -57,7 +54,7 @@ const tasks = [
         <div class="bpmn__dots" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="bpmn__chrome-title">
           <Icon name="ph:flow-arrow" class="bpmn__chrome-icon" aria-hidden="true" />
-          Publier un événement en ligne
+          Du devis à l'affaire gagnée
         </div>
         <div class="bpmn__legend" aria-hidden="true">
           <span class="bpmn__legend-item"><span class="bpmn__legend-mark bpmn__legend-mark--event"></span>Événement</span>
@@ -68,13 +65,13 @@ const tasks = [
 
       {/* Canvas pointillé : lanes (fond) + connecteurs (svg) + noeuds (absolu) */}
       <div class="bpmn__canvas">
-        {/* Swimlane A : Spécialiste Marketing (visible d'emblée) */}
+        {/* Swimlane A : Commercial (visible d'emblée) */}
         <div class="bpmn-lane bpmn-lane--a">
-          <div class="bpmn-lane__label"><span>Spécialiste Marketing</span></div>
+          <div class="bpmn-lane__label"><span>Commercial</span></div>
         </div>
-        {/* Swimlane B : Webmaster (apparait quand le flux y descend) */}
-        <div class="bpmn-lane bpmn-lane--b fragment" data-fragment-index="3">
-          <div class="bpmn-lane__label"><span>Webmaster</span></div>
+        {/* Swimlane B : Client (apparait au gateway, quand le flux y descend) */}
+        <div class="bpmn-lane bpmn-lane--b fragment" data-fragment-index="4">
+          <div class="bpmn-lane__label"><span>Client</span></div>
         </div>
 
         {/* Connecteurs (flux de séquence) */}
@@ -89,68 +86,53 @@ const tasks = [
             </filter>
           </defs>
 
-          {/* idx1 : Nouvel événement -> Créer l'événement */}
+          {/* idx1 : Demande de devis -> Qualifier la demande */}
           <g class="bpmn-link fragment" data-fragment-index="1">
-            <path class="bpmn-link__base" d="M222 200 L320 200" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M222 200 L320 200" pathLength="100" />
+            <path class="bpmn-link__base" d="M222 200 L330 200" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M222 200 L330 200" pathLength="100" />
           </g>
-          {/* idx2 : Créer l'événement -> Configurer l'accusé */}
+          {/* idx2 : Qualifier la demande -> Établir le devis */}
           <g class="bpmn-link fragment" data-fragment-index="2">
-            <path class="bpmn-link__base" d="M500 200 L535 200" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M500 200 L535 200" pathLength="100" />
+            <path class="bpmn-link__base" d="M510 200 L620 200" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M510 200 L620 200" pathLength="100" />
           </g>
-          {/* idx3 : Configurer l'accusé -> Créer le formulaire (passage Marketing -> Webmaster) */}
+          {/* idx3 : Établir le devis -> Envoyer le devis */}
           <g class="bpmn-link fragment" data-fragment-index="3">
-            <path class="bpmn-link__base" d="M625 254 L625 556" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M625 254 L625 556" pathLength="100" style="animation-delay: 0.4s" />
+            <path class="bpmn-link__base" d="M800 200 L910 200" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M800 200 L910 200" pathLength="100" />
           </g>
-          {/* idx4 : Créer le formulaire -> Paramétrer les champs */}
+          {/* idx4 : Envoyer le devis -> Gateway (passage Commercial -> Client) */}
           <g class="bpmn-link fragment" data-fragment-index="4">
-            <path class="bpmn-link__base" d="M715 610 L750 610" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M715 610 L750 610" pathLength="100" />
+            <path class="bpmn-link__base" d="M1000 254 L1000 566" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1000 254 L1000 566" pathLength="100" style="animation-delay: 0.4s" />
           </g>
-          {/* idx5 : Paramétrer les champs -> Publier le formulaire */}
+          {/* idx5 : Oui -> Affaire gagnée */}
           <g class="bpmn-link fragment" data-fragment-index="5">
-            <path class="bpmn-link__base" d="M930 610 L965 610" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M930 610 L965 610" pathLength="100" />
+            <path class="bpmn-link__base" d="M1044 610 L1298 610" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M1044 610 L1298 610" pathLength="100" />
           </g>
-          {/* idx6 : Publier le formulaire -> Tester la soumission */}
+          {/* idx6 : Non -> boucle de retour vers Établir le devis */}
           <g class="bpmn-link fragment" data-fragment-index="6">
-            <path class="bpmn-link__base" d="M1145 610 L1180 610" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M1145 610 L1180 610" pathLength="100" />
-          </g>
-          {/* idx7 : Tester la soumission -> Gateway */}
-          <g class="bpmn-link fragment" data-fragment-index="7">
-            <path class="bpmn-link__base" d="M1360 610 L1391 610" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M1360 610 L1391 610" pathLength="100" />
-          </g>
-          {/* idx8 : Oui -> Page en ligne */}
-          <g class="bpmn-link fragment" data-fragment-index="8">
-            <path class="bpmn-link__base" d="M1479 610 L1538 610" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M1479 610 L1538 610" pathLength="100" />
-          </g>
-          {/* idx9 : Non -> boucle de retour vers Paramétrer les champs */}
-          <g class="bpmn-link fragment" data-fragment-index="9">
-            <path class="bpmn-link__base" d="M1435 654 L1435 712 L840 712 L840 664" marker-end="url(#bpmn-arrow)" />
-            <path class="bpmn-link__pulse" d="M1435 654 L1435 712 L840 712 L840 664" pathLength="100" style="animation-delay: 0.2s" />
+            <path class="bpmn-link__base" d="M956 610 L710 610 L710 254" marker-end="url(#bpmn-arrow)" />
+            <path class="bpmn-link__pulse" d="M956 610 L710 610 L710 254" pathLength="100" style="animation-delay: 0.2s" />
           </g>
 
           {/* Étiquettes de branches */}
-          <g class="bpmn-branch-label fragment" data-fragment-index="8">
-            <text x="1487" y="594" class="bpmn-branch-label__txt">Oui</text>
+          <g class="bpmn-branch-label fragment" data-fragment-index="5">
+            <text x="1150" y="594" class="bpmn-branch-label__txt">Oui</text>
           </g>
-          <g class="bpmn-branch-label fragment" data-fragment-index="9">
-            <text x="1455" y="692" class="bpmn-branch-label__txt">Non</text>
+          <g class="bpmn-branch-label fragment" data-fragment-index="6">
+            <text x="828" y="596" class="bpmn-branch-label__txt">Non</text>
           </g>
         </svg>
 
         {/* Noeud : Début (visible d'emblée, ancre la lane Marketing) */}
         <div class="bpmn-node bpmn-node--event bpmn-node--start" style="left: 138px; top: 158px;">
           <div class="bpmn-node__circle"><Icon name="ph:flag" class="bpmn-node__ic" aria-hidden="true" /></div>
-          <span class="bpmn-node__caption">Nouvel événement</span>
+          <span class="bpmn-node__caption">Demande de devis</span>
         </div>
 
-        {/* idx1..6 : tâches (card + tag outil) */}
+        {/* idx1..3 : tâches (card + tag outil) */}
         {tasks.map((t) => (
           <div class="bpmn-node bpmn-node--task fragment" data-fragment-index={t.id} style={`left: ${t.x}px; top: ${t.y}px;`}>
             <span class="bpmn-node__label">{t.label}</span>
@@ -158,16 +140,16 @@ const tasks = [
           </div>
         ))}
 
-        {/* idx7 : Gateway Soumission conforme ? */}
-        <div class="bpmn-node bpmn-node--gateway fragment" data-fragment-index="7" style="left: 1391px; top: 566px;">
+        {/* idx4 : Gateway Devis accepté ? (lane Client) */}
+        <div class="bpmn-node bpmn-node--gateway fragment" data-fragment-index="4" style="left: 956px; top: 566px;">
           <div class="bpmn-node__diamond"><span class="bpmn-node__diamond-inner"><Icon name="ph:git-branch" class="bpmn-node__ic" aria-hidden="true" /></span></div>
-          <span class="bpmn-node__caption">Soumission conforme ?</span>
+          <span class="bpmn-node__caption">Devis accepté ?</span>
         </div>
 
-        {/* idx8 : Fin Page en ligne */}
-        <div class="bpmn-node bpmn-node--event bpmn-node--end fragment" data-fragment-index="8" style="left: 1538px; top: 568px;">
+        {/* idx5 : Fin Affaire gagnée */}
+        <div class="bpmn-node bpmn-node--event bpmn-node--end fragment" data-fragment-index="5" style="left: 1298px; top: 568px;">
           <div class="bpmn-node__circle bpmn-node__circle--end"><Icon name="ph:check" class="bpmn-node__ic" aria-hidden="true" /></div>
-          <span class="bpmn-node__caption">Page en ligne</span>
+          <span class="bpmn-node__caption">Affaire gagnée</span>
         </div>
       </div>
     </div>

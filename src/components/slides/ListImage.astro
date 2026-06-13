@@ -20,6 +20,8 @@ interface ListItem {
 interface Props {
   title: string;
   italicPart?: string;
+  /** Force la partie italique du titre sur sa propre ligne (saut de ligne). */
+  titleBreak?: boolean;
   subtitle?: string;
   /** Trois compteurs affichés en gros KPI (remplace le sous-titre textuel). */
   kpis?: { value: string; label: string }[];
@@ -33,6 +35,7 @@ interface Props {
 const {
   title,
   italicPart,
+  titleBreak = false,
   subtitle,
   kpis,
   body,
@@ -61,11 +64,15 @@ const titleParts = splitHighlight(title, italicPart);
 
   <div class="list-image__content">
     <div class="list-image__left">
-      <h2 class="list-image__title">
+      <h2 class:list={['list-image__title', { 'list-image__title--break': titleBreak }]}>
         {titleParts
           ? <>{titleParts.before}<em class="list-image__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
+      {subtitle && (
+        <p class="list-image__subtitle">{subtitle}</p>
+      )}
+      {body && <p class="list-image__body">{body}</p>}
       {kpis && kpis.length > 0 && (
         <ul class="list-image__kpis">
           {kpis.map((k) => (
@@ -77,10 +84,6 @@ const titleParts = splitHighlight(title, italicPart);
           ))}
         </ul>
       )}
-      {subtitle && (
-        <p class="list-image__subtitle">{subtitle}</p>
-      )}
-      {body && <p class="list-image__body">{body}</p>}
     </div>
 
     <div class="list-image__right">
@@ -193,6 +196,10 @@ const titleParts = splitHighlight(title, italicPart);
     font-style: italic;
     font-weight: 400;
   }
+  /* titleBreak : la partie italique passe sur sa propre ligne. */
+  .list-image__title--break .list-image__title-italic {
+    display: block;
+  }
   .list-image__subtitle {
     display: flex;
     align-items: center;
@@ -223,16 +230,20 @@ const titleParts = splitHighlight(title, italicPart);
   /* Rangée de gros KPI (remplace le sous-titre textuel sur la slide du CAS). */
   .list-image__kpis {
     list-style: none;
-    margin: 28px 0 0;
+    margin: 160px 0 0;
     padding: 0;
     display: flex;
     gap: 48px;
   }
+  /* Colonnes KPI de largeur égale, contenu aligné à gauche : espacement visuel
+     identique entre chaque KPI, quelle que soit la largeur du label. */
   .list-image__kpi {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    width: 140px;
+    text-align: left;
   }
   /* Grand chiffre KPI : exception de taille assumée (chiffre géant, sans token). */
   .list-image__kpi-value {

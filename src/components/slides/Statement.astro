@@ -27,6 +27,13 @@ interface Props {
     nodes: { label: string; x: number; y: number; accent?: boolean }[];
     links: { from: string; to: string; dashed?: boolean }[];
   };
+  /** Carte Entité (ERD TableNode) mise en avant à droite, avec des dots (entités
+   *  liées) reliées par des connecteurs qui la rejoignent. */
+  entityCard?: {
+    name: string;
+    fields: { name: string; key?: 'pk' | 'fk' }[];
+    satellites?: string[];
+  };
 }
 import { splitHighlight } from '@/utils/highlight';
 const {
@@ -42,6 +49,7 @@ const {
   brandSub,
   network = false,
   diagram,
+  entityCard,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
 
@@ -73,6 +81,26 @@ const dlinks = (diagram?.links ?? [])
     return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, dashed: !!l.dashed };
   })
   .filter((l): l is NonNullable<typeof l> => l !== null);
+
+// Carte Entité (option entityCard) : un TableNode mis en avant + des dots (entités
+// liées) reliés par des connecteurs horizontaux. Scène fixe en px dans l'espace
+// 1920x1080 du slide (mêmes px que le reste, scalés uniformément par Reveal).
+const EC_STAGE_W = 584;
+const EC_STAGE_H = 560;
+const EC_CARD_W = 290;
+const EC_CARD_X = 264;
+const EC_HEAD_H = 56;
+const EC_ROW_H = 40;
+const EC_DOT_X = 124;
+const ecCardH = entityCard ? EC_HEAD_H + entityCard.fields.length * EC_ROW_H : 0;
+const ecCardY = (EC_STAGE_H - ecCardH) / 2;
+const ecSats = entityCard?.satellites ?? [];
+const ecSatPts = ecSats.map((label, i) => {
+  const top = ecCardY + 30;
+  const bot = ecCardY + ecCardH - 30;
+  const y = ecSats.length <= 1 ? (top + bot) / 2 : top + (bot - top) * (i / (ecSats.length - 1));
+  return { label, y };
+});
 ---
 <section class="statement" data-layout="statement">
   <header class="statement__header">
@@ -131,6 +159,35 @@ const dlinks = (diagram?.links ?? [])
             </g>
           ))}
         </svg>
+      </div>
+    )}
+
+    {entityCard && (
+      <div class="statement__entitycard" aria-hidden="true">
+        <div class="ec-stage" style={`width:${EC_STAGE_W}px;height:${EC_STAGE_H}px`}>
+          <svg class="ec-edges" viewBox={`0 0 ${EC_STAGE_W} ${EC_STAGE_H}`} preserveAspectRatio="none">
+            {ecSatPts.map((p) => <line class="ec-link" x1={EC_DOT_X} y1={p.y} x2={EC_CARD_X} y2={p.y} />)}
+            {ecSatPts.map((p) => <circle class="ec-dot" cx={EC_DOT_X} cy={p.y} r="7" />)}
+            {ecSatPts.map((p) => <circle class="ec-handle" cx={EC_CARD_X} cy={p.y} r="4" />)}
+          </svg>
+          {ecSatPts.map((p) => (
+            <span class="ec-sat" style={`top:${p.y}px;width:${EC_DOT_X - 16}px`}>{p.label}</span>
+          ))}
+          <article class="ec-card" style={`left:${EC_CARD_X}px;top:${ecCardY}px;width:${EC_CARD_W}px`}>
+            <div class="ec-card__head" style={`height:${EC_HEAD_H}px`}>
+              <span class="ec-card__title">{entityCard.name}</span>
+            </div>
+            <div class="ec-card__body">
+              {entityCard.fields.map((f) => (
+                <div class="ec-card__row" style={`height:${EC_ROW_H}px`}>
+                  <span class="ec-card__field">{f.name}</span>
+                  {f.key === 'pk' && <span class="ec-badge ec-badge--pk">PK</span>}
+                  {f.key === 'fk' && <span class="ec-badge ec-badge--fk">FK</span>}
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
       </div>
     )}
   </div>
@@ -329,6 +386,97 @@ const dlinks = (diagram?.links ?? [])
   .st-erd-arrow-head {
     fill: color-mix(in srgb, var(--c-ink) 38%, transparent);
   }
+
+  /* ====== Carte Entité (entityCard) : TableNode mis en avant + dots reliés ======
+     Mêmes codes visuels que Erd.astro (radius 12, barre d'accent en tête, badges
+     PK/FK), 100% tokenisé. Scène fixe en px (alignée 1:1 avec le viewBox SVG). */
+  .statement__entitycard {
+    flex: 0 0 40%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .ec-stage {
+    position: relative;
+    flex: 0 0 auto;
+  }
+  .ec-edges {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .ec-link {
+    stroke: color-mix(in srgb, var(--c-ink) 40%, transparent);
+    stroke-width: 1.6;
+    fill: none;
+  }
+  .ec-dot { fill: var(--c-accent); }
+  .ec-handle { fill: color-mix(in srgb, var(--c-ink) 40%, transparent); }
+  .ec-sat {
+    position: absolute;
+    left: 0;
+    transform: translateY(-50%);
+    text-align: right;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--c-ink);
+    white-space: nowrap;
+  }
+  .ec-card {
+    position: absolute;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--c-ink) 6%, transparent), 0 1px 3px color-mix(in srgb, var(--c-ink) 4%, transparent);
+  }
+  .ec-card__head {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    border-top: 4px solid var(--c-accent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c-ink) 3%, transparent) 0%, transparent 100%);
+  }
+  .ec-card__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--c-ink);
+  }
+  .ec-card__body {
+    display: flex;
+    flex-direction: column;
+  }
+  .ec-card__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 0 18px;
+    border-top: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
+  }
+  .ec-card__field {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--c-ink);
+  }
+  .ec-badge {
+    flex: 0 0 auto;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 4px;
+  }
+  .ec-badge--pk { background: var(--c-accent); color: var(--c-on-accent); }
+  .ec-badge--fk { background: color-mix(in srgb, var(--c-ink) 9%, transparent); color: var(--c-muted); }
 </style>
 
 {/* Le style du footer source (.slide-source) est canonique dans

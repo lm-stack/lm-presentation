@@ -23,6 +23,8 @@ interface Props {
   rating?: { score: string; count: string };
   theme?: 'cream-mist' | 'warm-blush' | 'pearl-stone' | 'halo-gold';
   tocLabel?: string;
+  /** object-position de l'image dans sa carte (ex. 'left', 'center 80%'). Défaut : centré. */
+  focal?: string;
 }
 import { splitHighlight } from '@/utils/highlight';
 const {
@@ -36,6 +38,7 @@ const {
   rating,
   theme = 'pearl-stone',
   tocLabel = 'Accueil',
+  focal,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
 ---
@@ -70,7 +73,7 @@ const titleParts = splitHighlight(title, italicPart);
       <div class="cover__image-area">
         <canvas class="cover__rain" aria-hidden="true"></canvas>
         <div class="cover__image-card">
-          <img src={image} alt="" loading="eager" decoding="async" />
+          <img src={image} alt="" loading="eager" decoding="async" style={focal ? `object-position: ${focal};` : undefined} />
         </div>
       </div>
     )}

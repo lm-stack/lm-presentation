@@ -234,6 +234,12 @@ const titleParts = splitHighlight(title, italicPart);
     color: var(--c-ink);
     font-weight: 700;
   }
+  /* Première colonne = libellés : toujours sur une seule ligne (pas de wrap),
+     la colonne s'élargit pour tenir le libellé le plus long. */
+  .table__table th:first-child,
+  .table__table td:first-child {
+    white-space: nowrap;
+  }
 
   .table__caption {
     font-family: 'Hanken Grotesk', sans-serif;

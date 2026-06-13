@@ -156,6 +156,7 @@ Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes 
 
 Règles associées :
 
+- **Toujours dans la ToC (« Sommaire »).** Les deux slides de fin exposent `data-section-title` (« Questions » et « Merci »), donc le slide de clôture apparaît TOUJOURS dans la table des matières du deck et du template. Ne jamais retirer cet attribut : la ToC (« Sommaire ») est auto-construite depuis `section[data-section-title]` (`deck-chrome.ts`).
 - **Titres durcis, comme `Workshop`.** Le `<h2>` est codé en dur dans chaque composant (« Des questions ? » / « Merci beaucoup », mot final en italique serif souligné gold). Pas de prop `title`. Inviolable.
 - **Header de marque** : la slide de fin reprend le MÊME header que les slides de contenu. `brand` = le cours (titre du parcours, ou titre du deck en one-shot) ; `brandSub` = l'institution déduite du schéma (`execed` = « Executive Education », `lm` = « Lausanne Marketing »), PAS le titre du deck. Calculé par la route, ne pas dupliquer côté MDX.
 - **`autoClosing`** (frontmatter, défaut `true`) : passer `autoClosing: false` UNIQUEMENT quand le deck gère sa propre fin (ex. `template.mdx`, vitrine qui appelle `Questions` / `Merci` à la main avec des données d'exemple). Sinon, laisser la route faire.
