@@ -23,6 +23,8 @@ interface Props {
   nextCover?: string;
   /** Libellé eyebrow de la carte, défaut "Prochain sujet". */
   nextEyebrow?: string;
+  /** Cover du deck courant : fond image full-bleed flouté de la slide. */
+  cover?: string;
   brand?: string;
   brandSub?: string;
 }
@@ -32,17 +34,27 @@ const {
   nextShort,
   nextCover,
   nextEyebrow = 'Prochain sujet',
+  cover,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
 ---
-<section class="questions" data-layout="questions">
+<section class:list={['questions', { 'questions--image': cover }]} data-layout="questions">
+  {cover && (
+    <div class="questions__bg" aria-hidden="true">
+      <img src={cover} alt="" loading="lazy" decoding="async" />
+      <div class="questions__overlay"></div>
+    </div>
+  )}
+
   <header class="questions__header">
     <div class="questions__brand-text">
       <p class="questions__brand-main">{brand}</p>
       {brandSub && <p class="questions__brand-sub">{brandSub}</p>}
     </div>
-    <img src="/assets/lm-logo.svg" class="questions__brand-logo" alt="Lausanne Marketing" />
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="questions__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="questions__brand-logo" alt="Lausanne Marketing" />
+    </a>
   </header>
 
   <div class="questions__body">
@@ -80,6 +92,28 @@ const {
     flex-direction: column !important;
     justify-content: flex-start !important;
     background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+  }
+
+  .questions__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .questions__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(3px) saturate(0.7);
+  }
+  .questions__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.88) 0%, rgba(239, 239, 242, 0.75) 100%);
+  }
+  .questions__header,
+  .questions__body {
+    position: relative;
+    z-index: 1;
   }
 
   .questions__header {
