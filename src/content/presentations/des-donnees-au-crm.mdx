@@ -6,16 +6,17 @@ date: 2026-06-08
 type: cours
 scheme: "execed"
 unlisted: true
-cover: "/decks/architecture-donnees/cover-blueprint.jpg"
+cover: "/decks/des-donnees-au-crm/cover.jpg"
 description: "De la Data au CRM : les quatre grands CRM et les alternatives abordables. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
-import Demo from '@/components/slides/Demo.astro';
+import Demonstration from '@/components/slides/Demonstration.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 
-{/* Slide 1 : Cover. Image : placeholder cover-blueprint d'architecture-donnees, à remplacer. */}
+{/* Slide 1 : Cover. */}
 <Cover
   title="De la Data au CRM"
   italicPart="CRM"
@@ -23,7 +24,7 @@ import InfoCards from '@/components/slides/InfoCards.astro';
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  image="/decks/architecture-donnees/cover-blueprint.jpg"
+  image="/decks/des-donnees-au-crm/cover.jpg"
   theme="halo-gold"
 />
 
@@ -77,18 +78,30 @@ import InfoCards from '@/components/slides/InfoCards.astro';
   ]}
 />
 
-{/* Slide 5 : Démo Zoho CRM en live (pas de vidéo). Image : placeholder dashboard
-    Unsplash, A REMPLACER par une vraie capture Zoho CRM. */}
-<Demo
-  title="Zoho CRM en pratique"
-  italicPart="en pratique"
-  subtitle="On construit le schéma Contact, Société, Affaire en direct, sans quitter l'outil."
-  image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&h=1000&fit=crop"
-  caption="Démo live (capture d'illustration, à remplacer par Zoho CRM)."
+{/* Slide 5 : Démonstration Zoho CRM en live. Titre figé "Démonstration",
+    logo de l'outil + objectifs concrets de la démo. */}
+<Demonstration
+  toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
+  toolName="Zoho CRM"
+  objectives={[
+    "Créer une entité sur Zoho CRM (module)",
+    "Créer un champ normal",
+    "Créer un champ lookup (relation)",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Édition", value: "Zoho CRM gratuit, jusqu'à 3 utilisateurs." },
-    { label: "En direct", value: "Créer les entités, ajouter des champs, tracer la première relation." },
+/>
+
+{/* Slide 6 : Fil rouge de la démo (stepper 4 étapes, étape 1 active, le reste grisé). */}
+<FilRouge
+  active={1}
+  subtitle="Zoho CRM nous sert de fil rouge sur toute la démo : quatre étapes, un seul outil, pour ne pas se perdre."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
   ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />

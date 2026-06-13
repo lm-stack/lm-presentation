@@ -1,0 +1,204 @@
+---
+// src/components/slides/FilRouge.astro
+// Slide "fil rouge" de la démo : un stepper horizontal des étapes de la démo,
+// relié par un fil accent (le fil rouge), avec UNE étape active mise en avant
+// et les autres grisées. Réutilisable : on le ré-affiche à chaque étape en
+// changeant `active`. Titre FIGÉ "Fil rouge" (italique serif + soulignement
+// accent), inviolable comme Workshop / Démonstration.
+interface Props {
+  /** Étapes du fil rouge (3 à 5), dans l'ordre. */
+  steps: string[];
+  /** Index 1-based de l'étape active ; les autres sont grisées. */
+  active?: number;
+  /** Phrase d'explication (pourquoi un fil rouge). */
+  subtitle?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  steps,
+  active = 1,
+  subtitle,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+---
+<section class="filrouge" data-layout="filrouge">
+  <header class="filrouge__header">
+    <div class="filrouge__brand-text">
+      <p class="filrouge__brand-main">{brand}</p>
+      {brandSub && <p class="filrouge__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="filrouge__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="filrouge__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="filrouge__body">
+    <div class="filrouge__intro">
+      <h2 class="filrouge__title">
+        <em class="filrouge__title-italic"><span class="underline">Fil rouge</span></em>
+      </h2>
+      {subtitle && <p class="filrouge__subtitle">{subtitle}</p>}
+    </div>
+
+    <ol class="filrouge__steps" style={`--filrouge-count:${steps.length}`}>
+      {steps.map((step, i) => (
+        <li class:list={['filrouge__step', { 'is-active': i + 1 === active }]}>
+          <span class="filrouge__node">{String(i + 1).padStart(2, '0')}</span>
+          <span class="filrouge__step-label">{step}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .filrouge {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .filrouge__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 96px 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .filrouge__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .filrouge__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+  .filrouge__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .filrouge__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 96px;
+    padding: 36px 96px 64px;
+  }
+
+  .filrouge__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-l);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .filrouge__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .filrouge__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    color: var(--c-muted);
+    margin: var(--space-title-lead) 0 0;
+    max-width: var(--measure-xl);
+  }
+
+  /* Stepper : N étapes en colonnes égales, reliées par le fil rouge (accent). */
+  .filrouge__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--filrouge-count, 4), 1fr);
+    align-items: start;
+    position: relative;
+  }
+  /* Le fil : ligne accent reliant le centre des noeuds (premier -> dernier). */
+  .filrouge__steps::before {
+    content: '';
+    position: absolute;
+    top: 44px;
+    left: calc(50% / var(--filrouge-count, 4));
+    right: calc(50% / var(--filrouge-count, 4));
+    height: 3px;
+    transform: translateY(-50%);
+    background: color-mix(in srgb, var(--c-accent) 30%, transparent);
+  }
+
+  .filrouge__step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    padding: 0 16px;
+    text-align: center;
+  }
+  .filrouge__node {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: var(--fs-card-title);
+    background: var(--c-surface);
+    border: 2px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    color: var(--c-faint);
+  }
+  .filrouge__step-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--c-muted);
+    max-width: 300px;
+  }
+
+  /* Étape active : noeud accent plein + label en encre, le reste grisé. */
+  .filrouge__step.is-active .filrouge__node {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+    box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--c-accent) 55%, transparent);
+  }
+  .filrouge__step.is-active .filrouge__step-label {
+    color: var(--c-ink);
+    font-weight: 700;
+  }
+</style>

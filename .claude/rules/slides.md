@@ -157,6 +157,6 @@ Exceptions (chrome / méta, pas du contenu de fond) : `brandSub` (14px), lignes 
 Règles associées :
 
 - **Titres durcis, comme `Workshop`.** Le `<h2>` est codé en dur dans chaque composant (« Des questions ? » / « Merci beaucoup », mot final en italique serif souligné gold). Pas de prop `title`. Inviolable.
-- **Header de marque** : dans un parcours, `brand` = titre du parcours, `brandSub` = titre du deck ; en one-shot, `brand` = titre du deck, `brandSub` = son `subtitle`. Calculé par la route, ne pas dupliquer côté MDX.
+- **Header de marque** : la slide de fin reprend le MÊME header que les slides de contenu. `brand` = le cours (titre du parcours, ou titre du deck en one-shot) ; `brandSub` = l'institution déduite du schéma (`execed` = « Executive Education », `lm` = « Lausanne Marketing »), PAS le titre du deck. Calculé par la route, ne pas dupliquer côté MDX.
 - **`autoClosing`** (frontmatter, défaut `true`) : passer `autoClosing: false` UNIQUEMENT quand le deck gère sa propre fin (ex. `template.mdx`, vitrine qui appelle `Questions` / `Merci` à la main avec des données d'exemple). Sinon, laisser la route faire.
 - **Ne jamais remettre un `ClosingHero` / `Closing` manuel** en bas d'un deck de parcours : la migration 2026-06-08 les a tous retirés au profit de la fin auto. Un « Merci » manuel ferait doublon avec le `Merci` injecté.
