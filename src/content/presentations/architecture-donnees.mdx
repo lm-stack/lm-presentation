@@ -24,53 +24,56 @@ import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
 
 {/*
-  Modèle ERD fil rouge du module (5 entités). Positions dans la scène 1728x600
+  Modèle ERD fil rouge du module (5 entités, use case traiteur). Positions dans la scène 1920x1080
   d'Erd.astro, réutilisables tels quels pour l'exemple de construction progressif
   (on passe un sous-ensemble des entités, mêmes coordonnées).
 */}
 export const ERD = {
   entities: [
-    { name: 'Prospect', x: 24, y: 170, fields: [
+    { name: 'Prospect', x: 110, y: 110, fields: [
       { name: 'id', key: 'pk' },
       { name: 'nom', type: 'texte' },
       { name: 'email', type: 'email' },
-      { name: 'source', type: 'liste' },
-      { name: 'statut', type: 'liste' },
+      { name: 'type_event', type: 'liste' },
+      { name: 'nb_convives', type: 'nombre' },
+      { name: 'date_event', type: 'date' },
     ] },
-    { name: 'Contact', x: 464, y: 170, fields: [
+    { name: 'Contact', x: 600, y: 420, fields: [
       { name: 'id', key: 'pk' },
       { name: 'prénom', type: 'texte' },
       { name: 'nom', type: 'texte' },
       { name: 'email', type: 'email' },
+      { name: 'téléphone', type: 'texte' },
       { name: 'societe_id', key: 'fk', type: '→ Société' },
     ] },
-    { name: 'Société', x: 904, y: 20, fields: [
+    { name: 'Société', x: 600, y: 110, fields: [
       { name: 'id', key: 'pk' },
       { name: 'nom', type: 'texte' },
       { name: 'secteur', type: 'liste' },
       { name: 'taille', type: 'nombre' },
     ] },
-    { name: 'Affaire', x: 904, y: 350, fields: [
+    { name: 'Offre', x: 1110, y: 490, fields: [
       { name: 'id', key: 'pk' },
-      { name: 'titre', type: 'texte' },
+      { name: 'menu', type: 'texte' },
       { name: 'montant', type: 'CHF' },
-      { name: 'societe_id', key: 'fk', type: '→ Société' },
+      { name: 'statut', type: 'liste' },
       { name: 'contact_id', key: 'fk', type: '→ Contact' },
+      { name: 'societe_id', key: 'fk', type: '→ Société' },
     ] },
-    { name: 'Événement', x: 1364, y: 180, fields: [
+    { name: 'Événement', x: 1500, y: 280, fields: [
       { name: 'id', key: 'pk' },
       { name: 'type', type: 'liste' },
       { name: 'date', type: 'date' },
       { name: 'contact_id', key: 'fk', type: '→ Contact' },
-      { name: 'affaire_id', key: 'fk', type: '→ Affaire' },
+      { name: 'offre_id', key: 'fk', type: '→ Offre' },
     ] },
   ],
   relations: [
     { from: 'Contact', to: 'Société', label: 'appartient à' },
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
-    { from: 'Affaire', to: 'Société', label: 'rattachée à' },
-    { from: 'Affaire', to: 'Contact', label: 'concerne' },
-    { from: 'Événement', to: 'Affaire', label: 'porte sur' },
+    { from: 'Offre', to: 'Contact', label: 'pour' },
+    { from: 'Offre', to: 'Société', label: 'adressée à' },
+    { from: 'Événement', to: 'Offre', label: 'sur' },
   ],
 };
 
@@ -285,18 +288,18 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
       { label: 'Société', x: 82, y: 14 },
       { label: 'Prospect', x: 6, y: 92 },
       { label: 'Contact', x: 82, y: 92 },
-      { label: 'Affaire', x: 150, y: 165 },
+      { label: 'Offre', x: 150, y: 165 },
       { label: 'Événement', x: 18, y: 205 },
     ],
     links: [
       { from: 'Prospect', to: 'Contact', dashed: true },
       { from: 'Contact', to: 'Société' },
-      { from: 'Affaire', to: 'Société' },
-      { from: 'Affaire', to: 'Contact' },
-      { from: 'Événement', to: 'Affaire' },
+      { from: 'Offre', to: 'Société' },
+      { from: 'Offre', to: 'Contact' },
+      { from: 'Événement', to: 'Offre' },
     ],
   }}
-  body="Prospect, Contact, Société, Affaire, Événement. Une piste entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société. Une Société porte plusieurs Affaires (devis, ventes, projets) et plusieurs Contacts. Chaque interaction (appel, email, rendez-vous) est un Événement, rattaché au Contact ou à l'Affaire. Ce schéma sera notre fil rouge tout au long du cours."
+  body="Prospect, Contact, Société, Offre, Événement. Une demande de devis entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société (pour les clients pro). À chaque client, une ou plusieurs Offres (le devis : menu, couverts, prix). Chaque rendez-vous (dégustation, relance, la réception) est un Événement, rattaché au Contact ou à l'Offre. Ce schéma sera notre fil rouge tout au long du cours."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -335,76 +338,75 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Exemple de construction pas à pas (use case : organisateur d'événements).
+{/* Exemple de construction pas à pas (use case : un traiteur).
     On réutilise le modèle ERD (positions + champs via l'index E) et on dévoile une
-    entité par slide, la dernière ajoutée en `accent`. Événement = interaction (def
-    du deck) ; à confirmer si l'on veut plutôt « l'événement organisé ». */}
+    entité par slide, la dernière ajoutée en `accent`. Offre = le devis ; Événement =
+    rendez-vous / activité (dégustation, relance, réception). */}
 
 {/* Construction 1/5 : partir des champs collectés -> entité Prospect, seule sur le slide. */}
 <Erd
   title="Identifier les champs collectés"
   italicPart="champs collectés"
-  subtitle="Fil rouge : une entreprise qui organise des événements. Question concrète : qu'est-ce qu'on récolte, par exemple dans le formulaire d'inscription ? Ces champs deviennent la première entité, le Prospect."
+  subtitle="Fil rouge : un traiteur. Quand une demande de devis arrive (mariage, séminaire), qu'est-ce que le formulaire récolte ? Type d'événement, nombre de convives, date, contact. Ces champs forment la première entité, le Prospect."
   entities={[{ ...E['Prospect'], state: 'accent' }]}
-  caption="Étape 1 sur 5 : partir des données réellement collectées, pas d'un modèle théorique."
+  caption="Étape 1 sur 5 : partir du formulaire réel, pas d'un modèle théorique."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Construction 2/5 : l'entité Contact + relation Prospect -> Contact. */}
+{/* Construction 2/5 : l'entité Société, posée tôt (connue dès la demande pro). */}
 <Erd
-  title="La piste devient un Contact"
+  title="L'entreprise, connue dès la demande"
+  italicPart="entreprise"
+  subtitle="Pour un événement d'entreprise (séminaire, inauguration), la demande arrive déjà avec sa Société. On la pose tout de suite, au niveau de la piste : on la reliera juste après."
+  entities={[{ ...E['Prospect'] }, { ...E['Société'], state: 'accent' }]}
+  caption="Étape 2 sur 5 : poser tôt les entités qu'on connaît déjà (ici, l'entreprise cliente)."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Construction 3/5 : l'entité Contact + relations ; explique Prospect -> Contact. */}
+<Erd
+  title="La demande devient un Contact"
   italicPart="Contact"
-  subtitle="Quand un prospect s'inscrit, il devient un Contact : une personne qualifiée, avec une fiche complète. La relation devient relie les deux entités."
-  entities={[{ ...E['Prospect'] }, { ...E['Contact'], state: 'accent' }]}
-  relations={[{ from: 'Prospect', to: 'Contact', label: 'devient', dashed: true }]}
-  caption="Étape 2 sur 5 : une nouvelle entité, reliée à la précédente."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Construction 3/5 : l'entité Société + Contact -> Société. */}
-<Erd
-  title="Le Contact appartient à une Société"
-  italicPart="Société"
-  subtitle="Un participant représente souvent une entreprise. On ajoute la Société et on rattache le Contact : c'est une relation, pas le nom de la boîte recopié dans un champ texte."
-  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'], state: 'accent' }]}
+  subtitle="Le prospect qualifié devient un Contact, rattaché à sa Société. Pourquoi déjà un Contact, et plus un Prospect ? Parce qu'on ne rédige un devis que pour une demande qualifiée : faire une offre, c'est justement l'acte qui fait passer la piste en Contact."
+  entities={[{ ...E['Prospect'] }, { ...E['Société'] }, { ...E['Contact'], state: 'accent' }]}
   relations={[
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Contact', to: 'Société', label: 'appartient à' },
   ]}
-  caption="Étape 3 sur 5 : une info partagée (l'entreprise) vit dans sa propre entité."
+  caption="Étape 3 sur 5 : la piste qualifiée rejoint la base, reliée à son entreprise."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Construction 4/5 : l'entité Affaire + ses relations. */}
+{/* Construction 4/5 : l'entité Offre (le devis) + ses relations. */}
 <Erd
-  title="Une vente, c'est une Affaire"
-  italicPart="Affaire"
-  subtitle="Inscription payante, stand, sponsoring : chaque vente est une Affaire, rattachée à la Société et au Contact concerné. On y suit le montant et le statut."
-  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Affaire'], state: 'accent' }]}
+  title="Le devis, c'est une Offre"
+  italicPart="Offre"
+  subtitle="Le menu proposé, le nombre de couverts, le prix, le statut (envoyé, accepté, refusé) : c'est une Offre, adressée au Contact et à sa Société. Le cœur du métier du traiteur : faire des offres."
+  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Offre'], state: 'accent' }]}
   relations={[
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Contact', to: 'Société', label: 'appartient à' },
-    { from: 'Affaire', to: 'Société', label: 'rattachée à' },
-    { from: 'Affaire', to: 'Contact', label: 'concerne' },
+    { from: 'Offre', to: 'Contact', label: 'pour' },
+    { from: 'Offre', to: 'Société', label: 'adressée à' },
   ]}
-  caption="Étape 4 sur 5 : une transaction relie plusieurs entités à la fois."
+  caption="Étape 4 sur 5 : l'Offre relie le client à ce qu'on lui vend."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
 {/* Construction 5/5 : l'entité Événement -> ERD complet. */}
 <Erd
-  title="Chaque échange est un Événement"
+  title="Chaque rendez-vous est un Événement"
   italicPart="Événement"
-  subtitle="Email de confirmation, relance, appel : chaque interaction devient un Événement, rattaché à l'Affaire. Le modèle est complet, et c'est le même quel que soit l'outil."
+  subtitle="Dégustation, relance, et la réception elle-même : chaque rendez-vous daté est un Événement, rattaché à l'Offre. Le modèle du traiteur est complet, et c'est le même quel que soit l'outil."
   entities={[
     { ...E['Prospect'] },
     { ...E['Contact'] },
     { ...E['Société'] },
-    { ...E['Affaire'] },
+    { ...E['Offre'] },
     { ...E['Événement'], state: 'accent' },
   ]}
   relations={ERD.relations}
@@ -470,14 +472,14 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 <Capture
   title="Même schéma, trois tailles d'entreprise"
   italicPart="trois tailles"
-  subtitle="Construction live du modèle Contact + Société + Affaire + Événement dans trois outils calibrés sur trois profils."
+  subtitle="Construction live du modèle Contact + Société + Offre + Événement dans trois outils calibrés sur trois profils."
   image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=1000&fit=crop"
   caption="Capture démo Excel / Airtable / Zoho (à remplacer)"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
     { label: "Outil", value: "Excel (TPE et associations), Airtable (PME en croissance), Zoho CRM (grande structure)." },
-    { label: "Cible", value: "Modèle Contact + Société + Affaire + Événement, identique dans les trois outils." },
+    { label: "Cible", value: "Modèle Contact + Société + Offre + Événement, identique dans les trois outils." },
     { label: "Étapes", value: "Création des tables, ajout des champs, première relation entre entités. Environ 4 minutes par outil." },
     { label: "À retenir", value: "L'outil n'invente pas le schéma : c'est vous qui le faites, une fois, puis vous le portez partout." },
   ]}
