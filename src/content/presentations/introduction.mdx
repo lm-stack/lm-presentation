@@ -18,6 +18,7 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
+import Table from '@/components/slides/Table.astro';
 import CTA from '@/components/slides/CTA.astro';
 
 <Cover
@@ -169,19 +170,19 @@ import CTA from '@/components/slides/CTA.astro';
   ]}
 />
 
-<InfoCards
-  title="Modalités de l'examen"
-  italicPart="examen"
-  columns={2}
-  subtitle="Un dossier individuel, capitalisant sur ce que vous construisez en atelier."
+<Table
+  title="Le barème"
+  italicPart="barème"
+  subtitle="Dossier écrit individuel, rendu après la formation, délai indiqué sur Moodle."
+  headers={["Livrable", "Poids", "Ce qui est évalué"]}
+  rows={[
+    ["Architecture", "25 %", "Schéma clair, entités et relations justes, pièges classiques évités."],
+    ["Processus", "25 %", "BPMN lisible, acteurs et points de décision explicites."],
+    ["Workflow", "20 %", "Automatisation cohérente, déclencheur et conditions pertinents."],
+    ["Stratégie", "30 %", "Vision d'ensemble, priorisation et liens entre les trois livrables."],
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  cards={[
-    { icon: "ph:user", label: "Format", value: "Dossier écrit individuel, une section par livrable." },
-    { icon: "ph:buildings", label: "Votre cas", value: "Votre entreprise, ou un cas de votre choix si ce n'est pas possible." },
-    { icon: "ph:stack", label: "Quantité", value: "Un workflow et deux à trois processus modélisés suffisent." },
-    { icon: "ph:calendar-check", label: "Rendu", value: "Après la formation, délai indiqué sur Moodle." },
-  ]}
 />
 
 <CTA
