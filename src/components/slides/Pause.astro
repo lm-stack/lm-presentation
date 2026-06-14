@@ -18,6 +18,8 @@ interface Props {
   spotify?: string;
   brand?: string;
   brandSub?: string;
+  /** Libellé ToC. Sans lui, la pause n'apparaît pas au Sommaire (opt-in). */
+  tocLabel?: string;
 }
 const {
   title = 'Pause',
@@ -28,6 +30,7 @@ const {
   spotify,
   brand = 'Titre de la présentation',
   brandSub,
+  tocLabel,
 } = Astro.props;
 
 const titleParts = splitHighlight(title, italicPart);
@@ -54,7 +57,7 @@ const spotifyEmbed = spotifyParsed
   : null;
 const showSpotify = !!spotifyEmbed && !isHandout;
 ---
-<section class="pause" data-layout="pause" data-section-title={title}>
+<section class="pause" data-layout="pause" data-section-title={tocLabel}>
   <header class="pause__header">
     <div class="pause__brand-text">
       <p class="pause__brand-main">{brand}</p>

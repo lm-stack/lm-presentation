@@ -52,7 +52,10 @@ const {
   captionItalic,
   captionText,
   captionPosition = 'bottom-left',
-  tocLabel = 'Canvas n8n',
+  // Pas de label ToC par défaut : N8nCanvas est une slide de CONTENU, pas une
+  // section. Sans data-section-title, il n'apparaît pas dans le Sommaire (sinon
+  // « Canvas n8n » apparaissait une fois par canvas). Passer tocLabel pour forcer.
+  tocLabel,
 } = Astro.props;
 
 // Géométrie des noeuds (chip) dans la scène 1920x1080.
@@ -90,6 +93,7 @@ const hasCaption = !!(captionTitle || captionText);
 <section class:list={['n8n', `n8n--cap-${captionPosition}`]} data-layout="n8n-canvas" data-section-title={tocLabel}>
   <svg class="n8n__edges" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
     {edges.map((e) => <path class="n8n-edge" d={e.d} />)}
+    {edges.map((e, i) => <path class="n8n-edge-flow" d={e.d} pathLength="100" style={`animation-delay:${i * 0.3}s`} />)}
   </svg>
 
   {edges.filter((e) => e.label).map((e) => (
@@ -157,6 +161,31 @@ const hasCaption = !!(captionTitle || captionText);
     stroke: color-mix(in srgb, var(--c-ink) 30%, transparent);
     stroke-width: 2;
     fill: none;
+  }
+  /* Flux animé : un segment accent qui voyage le long du connecteur (port de
+     sortie -> port d'entrée = gauche -> droite), pour montrer que le workflow
+     « tourne ». pathLength 100 normalise le tiret quelle que soit la longueur
+     réelle de la courbe ; le décalage par index fait cascader le flux le long
+     de la chaîne (effet propagation). */
+  .n8n-edge-flow {
+    stroke: var(--c-accent);
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 14 86;
+    animation: n8n-flow 2.2s linear infinite;
+  }
+  @keyframes n8n-flow {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+  }
+  /* Accessibilité + impression (PDF handout) : pas de flux animé, le connecteur
+     statique reste lisible. */
+  @media (prefers-reduced-motion: reduce) {
+    .n8n-edge-flow { animation: none; opacity: 0; }
+  }
+  @media print {
+    .n8n-edge-flow { animation: none; opacity: 0; }
   }
   /* Libellé de branche posé au milieu d'un connecteur (façon n8n / Erd). */
   .n8n-edge-label {

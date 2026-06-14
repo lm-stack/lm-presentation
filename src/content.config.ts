@@ -19,7 +19,11 @@ const presentations = defineCollection({
     unlisted: z.boolean().default(false),
     // cover requis : fond image obligatoire sur les slides de clôture (Questions / Merci), cf. slides.md.
     cover: z.string(),
-    description: z.string().optional(),
+    // Obligatoire + plafonnée à 90 car. : accroche reprise dans la carte du parcours
+    // ET la carte « Des questions ? » (cf. p/[slug].astro, parcours/[slug].astro), en
+    // plus de la meta SEO. Le build échoue si elle manque ou dépasse 90 (règle garantie
+    // pour TOUS les decks).
+    description: z.string().max(90),
     scheme: z.enum(['lm', 'execed']).default('lm'),
     // Slide de fin auto-injecté par la route (Questions dans un parcours
     // non terminal, Merci pour un one-shot ou le dernier deck du parcours).
@@ -63,7 +67,7 @@ const parcours = defineCollection({
           label: z.string(),
           // Titre éditorial du jour, ex. "Les fondations data". Optionnel au
           // schéma (un parcours sans agenda ne le remplit pas), mais requis dès
-          // qu'un <Agenda> est rendu pour ce parcours (validé au build par le
+          // qu'un <AgendaDays> est rendu pour ce parcours (validé au build par le
           // composant, échec bruyant si absent).
           theme: z.string().optional(),
           // Description courte du jour, ex. "Collecter, nettoyer, structurer...".
@@ -76,3 +80,4 @@ const parcours = defineCollection({
 });
 
 export const collections = { presentations, parcours };
+// description des decks : obligatoire + plafonnée à 90 (schéma presentations ci-dessus).

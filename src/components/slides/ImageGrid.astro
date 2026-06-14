@@ -33,6 +33,8 @@ interface Props {
   mediaHeight?: string;
   /** Ajustement image : 'cover' (défaut, rogne) ou 'contain' (entière, fond clair). */
   mediaFit?: 'cover' | 'contain';
+  /** Agrandit le texte des cards (--fs-lead, encre, sans troncature) : pour un prompt lisible (ex. tour de table). */
+  cardTextLarge?: boolean;
   brand?: string;
   brandSub?: string;
 }
@@ -47,6 +49,7 @@ const {
   sourceUrl,
   mediaHeight,
   mediaFit = 'cover',
+  cardTextLarge = false,
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -88,7 +91,7 @@ const variantClass = `image-grid__grid--${count}`;
           {(img.title || img.text) && (
             <div class="image-grid__card-body">
               {img.title && <h3 class="image-grid__card-title">{img.title}</h3>}
-              {img.text && <p class="image-grid__card-text">{img.text}</p>}
+              {img.text && <p class:list={['image-grid__card-text', cardTextLarge && 'image-grid__card-text--lg']}>{img.text}</p>}
             </div>
           )}
         </article>
@@ -314,6 +317,14 @@ const variantClass = `image-grid__grid--${count}`;
   .image-grid__grid--4 .image-grid__card-text,
   .image-grid__grid--5 .image-grid__card-text {
     -webkit-line-clamp: 2;
+  }
+  /* Texte de card agrandi (prop cardTextLarge) : prompt lisible, sans troncature. */
+  .image-grid__card-text--lg {
+    font-size: var(--fs-lead);
+    color: var(--c-ink);
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
   }
 
   @keyframes image-grid-reveal {

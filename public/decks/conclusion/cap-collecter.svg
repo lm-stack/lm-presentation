@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- données qui entrent -->
+    <circle cx="92" cy="42" r="7" fill="#1E2B3E"/>
+    <circle cx="120" cy="30" r="7" fill="#1E2B3E"/>
+    <circle cx="148" cy="42" r="7" fill="#1E2B3E"/>
+    <!-- base de données -->
+    <ellipse cx="120" cy="92" rx="64" ry="24" fill="#F8C9D0" stroke="#1E2B3E" stroke-width="9"/>
+    <path d="M56 92 v76 a64 24 0 0 0 128 0 v-76" stroke="#1E2B3E" stroke-width="9"/>
+    <path d="M56 130 a64 24 0 0 0 128 0" stroke="#1E2B3E" stroke-width="7"/>
+    <!-- pastille de validation (fiabiliser) -->
+    <circle cx="190" cy="184" r="34" fill="#E73952"/>
+    <path d="M175 185 l10 10 20-22" stroke="#FFFFFF" stroke-width="9"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- connecteurs du flux -->
+    <line x1="96" y1="92" x2="110" y2="104" stroke="#1E2B3E" stroke-width="9"/>
+    <line x1="152" y1="153" x2="166" y2="165" stroke="#1E2B3E" stroke-width="9"/>
+    <!-- étape 1 -->
+    <rect x="30" y="42" width="84" height="50" rx="14" fill="#FFFFFF" stroke="#1E2B3E" stroke-width="9"/>
+    <!-- étape 2 (décision, accent) -->
+    <rect x="86" y="103" width="84" height="50" rx="14" fill="#F8C9D0" stroke="#E73952" stroke-width="9"/>
+    <!-- étape 3 -->
+    <rect x="142" y="164" width="84" height="50" rx="14" fill="#FFFFFF" stroke="#1E2B3E" stroke-width="9"/>
+  </g>
+</svg>

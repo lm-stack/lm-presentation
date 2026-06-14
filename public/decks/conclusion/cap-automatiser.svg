@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- dents de l'engrenage (contour, comme le slide 1) -->
+    <g fill="#F8C9D0" stroke="#1E2B3E" stroke-width="9">
+      <rect x="108" y="44" width="16" height="26" rx="4"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(45 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(90 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(135 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(180 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(225 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(270 116 118)"/>
+      <rect x="108" y="44" width="16" height="26" rx="4" transform="rotate(315 116 118)"/>
+    </g>
+    <!-- corps -->
+    <circle cx="116" cy="118" r="50" fill="#F8C9D0" stroke="#1E2B3E" stroke-width="9"/>
+    <!-- moyeu (accent rouge) -->
+    <circle cx="116" cy="118" r="16" fill="#E73952"/>
+  </g>
+</svg>

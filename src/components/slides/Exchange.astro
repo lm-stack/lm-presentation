@@ -40,7 +40,7 @@ const {
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
 ---
-<section class="exchange" data-layout="exchange" data-section-title={tocLabel ?? title}>
+<section class="exchange" data-layout="exchange" data-section-title={tocLabel}>
   <header class="exchange__header">
     <div class="exchange__brand-text">
       <p class="exchange__brand-main">{brand}</p>

@@ -7,40 +7,48 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/workflow/cover-whiteboard.jpg"
-description: "Workflow : l'anatomie d'un workflow (déclencheur, types de déclencheur, actions, actions spéciales), quand le scinder en deux, et construction live d'un workflow cross-outils. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Anatomie d'un workflow : déclencheur, actions, mapping et gestion d'erreur."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
 import Statement from '@/components/slides/Statement.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import SubSection from '@/components/slides/SubSection.astro';
-import Media from '@/components/slides/Media.astro';
 import N8nCanvas from '@/components/slides/N8nCanvas.astro';
-import WorkflowCanvas from '@/components/slides/WorkflowCanvas.astro';import Compare from '@/components/slides/Compare.astro';
+import Compare from '@/components/slides/Compare.astro';
+import Table from '@/components/slides/Table.astro';
 import Demo from '@/components/slides/Demo.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import Debat from '@/components/slides/Debat.astro';
 
-{/* Deck Workflow (Jour 2, dernier sujet), refait intégralement le 2026-06-14.
-    Structure : 01 L'anatomie d'un workflow (déclencheur, types de déclencheur,
-    actions/noeuds, actions spéciales, données) -> 02 Construire un workflow
-    (WorkflowCanvas interactif, règle « un workflow un déclencheur », démo n8n)
-    -> Workshop. Pièce centrale : WorkflowCanvas, le pendant de BpmnCanvas
-    (modeliser-les-processus) mais pour un workflow d'exécution linéaire.
-    Déplacé / retiré lors de la refonte :
-    - Slide webhook (définition) -> envoyé vers marketing-automation (section APIs).
-    - Outils no-code (Zapier/Make/n8n) : retiré, déjà couvert dans marketing-automation.
-    - Démo Zoho native (placeholder) : retirée, territoire de digitaliser-les-processus.
-    - Poll « automatisation complexe », « process vs workflow », « appli in-house »,
-      « finaliser le workflow », « tout commence par les applications » : retirés
-      (redondance ou amorce d'un slide déplacé).
-    Images réutilisées depuis public/decks/workflow/. */}
+{/* Deck Workflow (Jour 2, dernier sujet). Structure :
+    01 Types d'automatisation (simples du quotidien -> complexes cross-outils)
+    02 L'anatomie d'un workflow (déclencheur, actions, 5 actions spéciales, mapping)
+       puis la réalité : « quand ça casse » (erreur + monitoring) et « quand ne
+       pas automatiser » (jugement), juste après le mapping
+    03 Des exemples concrets (Conversion, Lead Facebook, Génération d'offre) + Discussion
+    04 Construire un workflow (règle « un workflow un déclencheur », démo n8n live)
+    -> Workshop.
+    Pièce visuelle centrale : N8nCanvas (langage n8n). Le flux des connecteurs est
+    ANIMÉ gauche -> droite (le workflow « tourne ») sur TOUS les canvas. Flux
+    linéaires alignés sur la même ligne (trigger à y=420) ; les branches (Switch,
+    Conversion, gestion d'erreur) gardent leur spine à 420.
+    Historique 2026-06-14 :
+    - Section « Types d'automatisation » + slide « Automatisations simples »
+      récupéré de marketing-automation ; WorkflowCanvas (ancien design) retiré.
+    - Exemples concrets AVANT « Construire » ; « Génération d'offre » étoffé ;
+      Débat relabellé « Discussion » et remonté en clôture des exemples.
+    - Ajout : action spéciale « Valider » (Human in the loop, cas marketing),
+      mapping des champs, « quand ça casse » (cas marketing) + « quand ne pas
+      automatiser ». Ces deux derniers déplacés après le mapping (clôture de
+      l'anatomie) ; la section « En conditions réelles » a été retirée.
+    Images réutilisées depuis public/decks/workflow/ et marketing-automation/. */}
 
 {/* Slide 1 : Cover */}
 <Cover
   title="Workflow"
   italicPart="Workflow"
-  eyebrow="Jour 2 : Sujet 5"
+  eyebrow="Jour 2"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -58,7 +66,33 @@ import Debat from '@/components/slides/Debat.astro';
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : ce qu'un workflow permet (3 exemples concrets) */}
+{/* ============ 01 TYPES D'AUTOMATISATION ============ */}
+<SubSection
+  kicker="Workflow"
+  index="01"
+  title="Types d'automatisation"
+  italicPart="automatisation"
+  subtitle="Des gestes simples du quotidien jusqu'aux scénarios qui orchestrent plusieurs outils."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Automatisations simples (déplacé depuis marketing-automation le 2026-06-14) :
+    les gestes no-code du quotidien. Images dans public/decks/marketing-automation/. */}
+<ImageGrid
+  title="Automatisations simples du quotidien"
+  italicPart="quotidien"
+  subtitle="Les outils digitaux que nous utilisons sont déjà partiellement no-code. Vous en avez déjà créés."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
+    { src: "/decks/marketing-automation/auto-clickup.png", alt: "Assignation de tâche auto", title: "Assignation de tâche auto", text: "Une tâche créée dans un statut donné se voit assigner automatiquement à la bonne personne." },
+    { src: "/decks/marketing-automation/auto-facebook.jpg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
+  ]}
+/>
+
+{/* Ce qu'un workflow permet (3 exemples concrets cross-outils) */}
 <ImageGrid
   title="Automatisations complexes"
   italicPart="complexes"
@@ -70,7 +104,7 @@ import Debat from '@/components/slides/Debat.astro';
       src: "/decks/workflow/complexe-abandon-panier.jpeg",
       alt: "Abandon de panier",
       title: "Abandon de panier",
-      text: "Relancer un acheteur qui n'a pas finalisé sa commande, avec un email et un code promo conditionnel.",
+      text: "Relancer un acheteur qui n'a pas finalisé sa commande, par email et code promo.",
     },
     {
       src: "/decks/workflow/complexe-email-bienvenue.jpg",
@@ -87,20 +121,20 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* ============ 01 L'ANATOMIE D'UN WORKFLOW ============ */}
+{/* ============ 02 L'ANATOMIE D'UN WORKFLOW ============ */}
 <SubSection
   kicker="Workflow"
-  index="01"
+  index="02"
   title="L'anatomie d'un workflow"
   italicPart="anatomie"
-  subtitle="Tout workflow se ramène aux mêmes briques : un déclencheur, des actions, des actions spéciales et des données qui circulent."
+  subtitle="Un déclencheur, des actions, des actions spéciales, des données."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
 {/* Les types de déclencheur : canvas n8n plein cadre. Quatre noeuds déclencheur
-    (forme n8n, bord gauche arrondi) + box de légende avec la définition. Passé
-    en design n8n le 2026-06-14. */}
+    (forme n8n, bord gauche arrondi) + box de légende avec la définition. Aligné
+    sur la ligne y=420 comme les flux. */}
 <N8nCanvas
   captionTitle="Le déclencheur"
   captionItalic="déclencheur"
@@ -108,15 +142,14 @@ import Debat from '@/components/slides/Debat.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t1", type: "trigger", icon: "ph:bell-ringing",  label: "Événement appli", desc: "Un formulaire, une ligne, un statut qui change.", x: 210,  y: 300 },
-    { id: "t2", type: "trigger", icon: "ph:clock",         label: "Planifié",        desc: "Le temps : tous les lundis, chaque fin de mois.", x: 660,  y: 300 },
-    { id: "t3", type: "trigger", icon: "ph:webhooks-logo", label: "Webhook",         desc: "Une appli externe pousse l'événement en direct.", x: 1110, y: 300 },
-    { id: "t4", type: "trigger", icon: "ph:cursor-click",  label: "Manuel",          desc: "Un humain lance le workflow à la demande.",       x: 1560, y: 300 },
+    { id: "t1", type: "trigger", icon: "ph:bell-ringing",  label: "Événement appli", desc: "Un formulaire, une ligne, un statut qui change.", x: 210,  y: 420 },
+    { id: "t2", type: "trigger", icon: "ph:clock",         label: "Planifié",        desc: "Le temps : tous les lundis, chaque fin de mois.", x: 660,  y: 420 },
+    { id: "t3", type: "trigger", icon: "ph:webhooks-logo", label: "Webhook",         desc: "Une appli externe pousse l'événement en direct.", x: 1110, y: 420 },
+    { id: "t4", type: "trigger", icon: "ph:cursor-click",  label: "Manuel",          desc: "Un humain lance le workflow à la demande.",       x: 1560, y: 420 },
   ]}
 />
 
-{/* Les actions / noeuds : canvas n8n (chaîne déclencheur -> actions). Remplace
-    l'ancien Media « Puis s'enchaînent les actions » (2026-06-14). */}
+{/* Les actions / noeuds : canvas n8n (chaîne déclencheur -> actions). */}
 <N8nCanvas
   captionTitle="Les actions"
   captionItalic="actions"
@@ -124,10 +157,10 @@ import Debat from '@/components/slides/Debat.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms", x: 240,  y: 380 },
-    { id: "a1", type: "action",  icon: "ph:user-plus",       label: "Créer le contact",   sub: "Zoho CRM",     x: 670,  y: 380 },
-    { id: "a2", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",  sub: "Slack",        x: 1100, y: 380 },
-    { id: "a3", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",        x: 1530, y: 380 },
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms", x: 240,  y: 420 },
+    { id: "a1", type: "action",  icon: "ph:user-plus",       label: "Créer le contact",   sub: "Zoho CRM",     x: 670,  y: 420 },
+    { id: "a2", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",  sub: "Slack",        x: 1100, y: 420 },
+    { id: "a3", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",        x: 1530, y: 420 },
   ]}
   connections={[
     { from: "t",  to: "a1" },
@@ -137,10 +170,11 @@ import Debat from '@/components/slides/Debat.astro';
 />
 
 {/* Les actions spéciales : une par slide (déclencheur -> action spéciale ->
-    action(s) en aval pour montrer les possibilités). 4 actions : Filtrer,
-    Formatter, Retarder, Switch (ajouté le 2026-06-14). */}
+    action(s) en aval pour montrer les possibilités). 5 actions : Filtrer,
+    Formatter, Retarder, Switch, Valider (human in the loop). Toutes alignées
+    sur la ligne y=420. */}
 
-{/* Action spéciale 1/4 : Filtrer. */}
+{/* Action spéciale 1/5 : Filtrer. */}
 <N8nCanvas
   captionTitle="Filtrer"
   captionItalic="Filtrer"
@@ -158,7 +192,7 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* Action spéciale 2/4 : Formatter. */}
+{/* Action spéciale 2/5 : Formatter. */}
 <N8nCanvas
   captionTitle="Formatter"
   captionItalic="Formatter"
@@ -176,7 +210,7 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* Action spéciale 3/4 : Retarder. */}
+{/* Action spéciale 3/5 : Retarder. */}
 <N8nCanvas
   captionTitle="Retarder"
   captionItalic="Retarder"
@@ -194,8 +228,10 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* Action spéciale 4/4 : Switch (aiguille vers plusieurs actions selon une
-    valeur ; 3 actions en aval pour montrer les possibilités). */}
+{/* Action spéciale 4/5 : Switch (aiguille vers plusieurs actions selon une
+    valeur ; 3 actions en aval). Spine à y=420 (comme les flux linéaires), les
+    branches s'écartent symétriquement (170 / 420 / 670). Légende en bas-gauche
+    (défaut) : la branche basse est à droite (x=1200), pas de collision. */}
 <N8nCanvas
   captionTitle="Switch"
   captionItalic="Switch"
@@ -203,11 +239,11 @@ import Debat from '@/components/slides/Debat.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire",  sub: "Google Forms",  x: 170,  y: 470 },
-    { id: "sw", type: "special", icon: "ph:git-branch",      label: "Switch",              sub: "Type de client", x: 620,  y: 470 },
-    { id: "a1", type: "action",  icon: "ph:envelope-simple", label: "Séquence B2C",        sub: "Gmail",         x: 1200, y: 220 },
-    { id: "a2", type: "action",  icon: "ph:user-plus",       label: "Handover commercial", sub: "Zoho CRM",      x: 1200, y: 470 },
-    { id: "a3", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",   sub: "Slack",         x: 1200, y: 720 },
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire",  sub: "Google Forms",  x: 170,  y: 420 },
+    { id: "sw", type: "special", icon: "ph:git-branch",      label: "Switch",              sub: "Type de client", x: 620,  y: 420 },
+    { id: "a1", type: "action",  icon: "ph:envelope-simple", label: "Séquence B2C",        sub: "Gmail",         x: 1200, y: 170 },
+    { id: "a2", type: "action",  icon: "ph:user-plus",       label: "Handover commercial", sub: "Zoho CRM",      x: 1200, y: 420 },
+    { id: "a3", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",   sub: "Slack",         x: 1200, y: 670 },
   ]}
   connections={[
     { from: "t",  to: "sw" },
@@ -217,32 +253,203 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* Les données circulent d'une étape à l'autre (Media + Lead Ads) */}
-<Media
-  title="Les données circulent d'une étape à l'autre"
-  italicPart="données"
-  subtitle="Au-delà du design du workflow, lister les données collectées à chaque étape est crucial."
-  body="Cas typique, un formulaire Lead Ads (campagne Facebook). Champs par défaut : nom, prénom, email, téléphone, entreprise. Champs personnalisés : texte libre, choix multiples, questions conditionnelles, prise de rendez-vous."
-  image="/decks/workflow/donnees-lead-ads.jpeg"
-  alt="Formulaire Facebook Lead Ads avec champs par défaut et champs personnalisés"
-  fit="cover"
+{/* Action spéciale 5/5 : Human in the loop (validation humaine). Le workflow se
+    met en pause et attend l'approbation d'un humain avant un geste sensible. Cas
+    marketing : un post généré par l'IA n'est publié qu'après validation. y=420. */}
+<N8nCanvas
+  captionTitle="Human in the loop"
+  captionItalic="the loop"
+  captionText="Le workflow se met en pause jusqu'à ce qu'un humain approuve avant de poursuivre. Ici, un post généré par l'IA n'est publié qu'une fois validé. Avant un geste sensible (une publication, une campagne, un envoi client), l'automatisation propose et l'humain tranche."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t", type: "trigger", icon: "ph:robot",       label: "Post généré", sub: "IA",          x: 320,  y: 420 },
+    { id: "v", type: "special", icon: "ph:user-circle", label: "Valider",     sub: "Responsable", x: 832,  y: 420 },
+    { id: "a", type: "action",  icon: "ph:megaphone",   label: "Publier",     sub: "LinkedIn",    x: 1344, y: 420 },
+  ]}
+  connections={[
+    { from: "t", to: "v" },
+    { from: "v", to: "a" },
+  ]}
+/>
+
+{/* La brique « données » : faire correspondre les champs d'un outil à l'autre.
+    Le vrai point de douleur quand on connecte deux outils (Table, pas un canvas). */}
+<Table
+  title="Faire correspondre les champs"
+  italicPart="correspondre"
+  subtitle="Connecter deux outils, c'est surtout aligner leurs champs un à un."
+  headers={["Champ reçu (Google Forms)", "Champ CRM (Zoho)"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Prénom", "First Name"],
+    ["Nom", "Last Name"],
+    ["Adresse e-mail", "Email"],
+    ["Téléphone", "Phone"],
+    ["Entreprise", "Account Name"],
+  ]}
+/>
+
+{/* Quand ça casse : gestion d'erreur (branche d'échec) + monitoring. Le workflow
+    n'est pas « fire and forget ». Cas marketing : si l'ajout d'un lead au CRM
+    échoue, on alerte plutôt que de perdre le lead en silence. Branche off l'action
+    centrale (OK / Erreur), spine à y=420, branches 250 / 590 comme Conversion.
+    Placé juste après le mapping (clôture de l'anatomie). */}
+<N8nCanvas
+  captionTitle="Quand ça casse"
+  captionItalic="casse"
+  captionText="Un workflow n'est pas « fire and forget ». Ici, si l'ajout du lead au CRM échoue, l'équipe est alertée plutôt que de perdre le lead en silence. Prévoyez la panne : relance automatique, alerte en cas d'échec, et historique d'exécution à surveiller."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",   type: "trigger", icon: "ph:lightning",       label: "Nouveau lead",          sub: "Landing page", x: 200,  y: 420 },
+    { id: "crm", type: "action",  icon: "ph:user-plus",       label: "Ajouter au CRM",        sub: "Zoho CRM",     x: 680,  y: 420 },
+    { id: "ok",  type: "action",  icon: "ph:envelope-simple", label: "Séquence de bienvenue", sub: "Mailchimp",    x: 1300, y: 250 },
+    { id: "err", type: "special", icon: "ph:warning-circle",  label: "Alerter le marketing",  sub: "Slack",        x: 1300, y: 590 },
+  ]}
+  connections={[
+    { from: "t",   to: "crm" },
+    { from: "crm", to: "ok",  label: "OK" },
+    { from: "crm", to: "err", label: "Erreur" },
+  ]}
+/>
+
+{/* Quand ne pas automatiser : le jugement. Automatiser un processus stable et
+    fréquent ; s'abstenir si ça change tout le temps, si c'est rare ou plein
+    d'exceptions. (Compare : bon candidat vs à éviter.) Clôt l'anatomie. */}
+<Compare
+  title="Quand ne pas automatiser"
+  italicPart="ne pas"
+  subtitle="Automatiser a un coût de construction et de maintenance. Tout ne le mérite pas."
+  left={{
+    heading: "Bon candidat",
+    items: [
+      "Processus stable, qui ne change pas tous les mois",
+      "Répétitif et fréquent : le temps gagné dépasse vite le temps de build",
+      "Règles claires, peu d'exceptions",
+      "Plusieurs outils à synchroniser à la main",
+    ],
+  }}
+  right={{
+    heading: "À éviter (pour l'instant)",
+    items: [
+      "Change sans arrêt : vous passerez votre temps à le réparer",
+      "Très rare : 3 fois par an, le faire à la main coûte moins cher",
+      "Truffé d'exceptions et de jugement humain",
+      "Pas encore stabilisé : on automatise un processus, pas un brouillon",
+    ],
+  }}
+  note="La question à se poser : le temps gagné dépasse-t-il le coût de construction et de maintenance ?"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* ============ 02 CONSTRUIRE UN WORKFLOW ============ */}
+{/* ============ 03 DES EXEMPLES CONCRETS ============ */}
 <SubSection
   kicker="Workflow"
-  index="02"
-  title="Construire un workflow"
-  italicPart="Construire"
-  subtitle="On assemble les briques en direct, puis on pose la règle qui évite l'erreur la plus fréquente."
+  index="03"
+  title="Des exemples concrets"
+  italicPart="exemples"
+  subtitle="Des workflows fréquents pour vous inspirer, avant de concevoir le vôtre."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Démo interactive : on construit le workflow en avançant (fragments Reveal). */}
-<WorkflowCanvas
+{/* Exemple 1 : conversion e-commerce (achat -> Google Ads + mise à jour CDP).
+    Spine à y=420, branches à 250 / 590. */}
+<N8nCanvas
+  captionTitle="Conversion e-commerce"
+  captionItalic="Conversion"
+  captionText="Un achat finalisé remonte la conversion à Google Ads et met à jour le profil client dans le CDP. Optimisation des campagnes et donnée client, sans intervention."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",   type: "trigger", icon: "ph:shopping-cart",   label: "Achat finalisé",          sub: "Shopify",       x: 200,  y: 420 },
+    { id: "fmt", type: "special", icon: "ph:text-aa",         label: "Préparer les données",    sub: "Mise en forme", x: 680,  y: 420 },
+    { id: "ga",  type: "action",  icon: "ph:megaphone",       label: "Remonter la conversion",  sub: "Google Ads",    x: 1300, y: 250 },
+    { id: "cdp", type: "action",  icon: "ph:database",        label: "Mettre à jour le profil", sub: "CDP",           x: 1300, y: 590 },
+  ]}
+  connections={[
+    { from: "t",   to: "fmt" },
+    { from: "fmt", to: "ga" },
+    { from: "fmt", to: "cdp" },
+  ]}
+/>
+
+{/* Exemple 2 : capture de lead Facebook Lead Ads (lead -> CRM -> notif -> email).
+    Placé avant « Génération d'offre » : le cas simple avant le cas étoffé. */}
+<N8nCanvas
+  captionTitle="Lead Facebook"
+  captionItalic="Lead"
+  captionText="Un lead Facebook Lead Ads crée le contact dans le CRM, notifie le commercial et déclenche l'email de bienvenue. Aucun lead ne passe entre les mailles."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",    type: "trigger", icon: "ph:facebook-logo",   label: "Nouveau lead",           sub: "Facebook Lead Ads", x: 240,  y: 420 },
+    { id: "crm",  type: "action",  icon: "ph:user-plus",       label: "Créer le contact",       sub: "Zoho CRM",          x: 660,  y: 420 },
+    { id: "noti", type: "action",  icon: "ph:slack-logo",      label: "Notifier le commercial", sub: "Slack",             x: 1080, y: 420 },
+    { id: "mail", type: "action",  icon: "ph:envelope-simple", label: "Email de bienvenue",     sub: "Gmail",             x: 1500, y: 420 },
+  ]}
+  connections={[
+    { from: "t",    to: "crm" },
+    { from: "crm",  to: "noti" },
+    { from: "noti", to: "mail" },
+  ]}
+/>
+
+{/* Exemple 3 : génération d'offre, version réaliste « jusqu'où on peut aller ».
+    Chaîne longue (6 noeuds) sur la ligne y=420 : demande de devis -> conversion
+    du lead -> société -> génération PDF -> envoi -> tâche. */}
+<N8nCanvas
+  captionTitle="Génération d'offre"
+  captionItalic="offre"
+  captionText="Une demande de devis convertit le lead en contact, le rattache à sa société, génère l'offre en PDF, l'envoie au client et planifie la tâche de relance. Jusqu'où l'automatisation peut aller : zéro ressaisie, zéro oubli."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",    type: "trigger", icon: "ph:lightning",       label: "Demande de devis",        sub: "Site web",  x: 120,  y: 420 },
+    { id: "conv", type: "action",  icon: "ph:user-plus",       label: "Convertir en contact",    sub: "Zoho CRM",  x: 426,  y: 420 },
+    { id: "soc",  type: "action",  icon: "ph:buildings",       label: "Attacher société",        sub: "Zoho CRM",  x: 732,  y: 420 },
+    { id: "gen",  type: "action",  icon: "ph:file-pdf",        label: "Générer l'offre",         sub: "PDFMonkey", x: 1038, y: 420 },
+    { id: "send", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'offre",         sub: "Gmail",     x: 1344, y: 420 },
+    { id: "task", type: "action",  icon: "ph:list-checks",     label: "Créer une tâche",         sub: "Zoho CRM",  x: 1650, y: 420 },
+  ]}
+  connections={[
+    { from: "t",    to: "conv" },
+    { from: "conv", to: "soc" },
+    { from: "soc",  to: "gen" },
+    { from: "gen",  to: "send" },
+    { from: "send", to: "task" },
+  ]}
+/>
+
+{/* Discussion (ex-Débat, relabellé via eyebrow) : idéation collective en clôture
+    des exemples, juste avant la construction. Mode live = animation permanente
+    (bulles qui flottent + flux continu de réactions, "la salle qui s'enflamme"). */}
+<Debat
+  title="Quels autres workflows créer ?"
+  italicPart="créer"
+  eyebrow="Discussion"
+  live
+  intensity="intense"
+  intro="Vous avez vu l'anatomie d'un workflow et des exemples concrets. À vous d'imaginer ce que vous pourriez automatiser."
+  prompts={[
+    "Dans votre organisation, quelle tâche répétitive mériterait un workflow dès demain ?",
+    "Quel serait son déclencheur, et quelles actions en aval ?",
+    "Qu'est-ce qui vous empêche de le mettre en place aujourd'hui ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 04 CONSTRUIRE UN WORKFLOW ============ */}
+<SubSection
+  kicker="Workflow"
+  index="04"
+  title="Construire un workflow"
+  italicPart="Construire"
+  subtitle="On pose la règle qui évite l'erreur la plus fréquente, puis on construit en direct."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -284,7 +491,7 @@ import Debat from '@/components/slides/Debat.astro';
   brandSub="Executive Education"
 />
 
-{/* Démonstration live n8n : formulaire -> Zoho CRM -> Gmail */}
+{/* Démonstration live n8n : formulaire -> Zoho CRM -> Slack -> Gmail (4 étapes) */}
 <Demo
   toolLogo="/decks/marketing-automation/logos/n8n.svg"
   toolName="n8n"
@@ -292,95 +499,8 @@ import Debat from '@/components/slides/Debat.astro';
   objectives={[
     "Déclencher sur un nouveau formulaire reçu (Google Forms)",
     "Créer ou mettre à jour le contact dans Zoho CRM",
+    "Notifier l'équipe sur Slack",
     "Envoyer l'email de confirmation via Gmail",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* ============ 03 DES EXEMPLES CONCRETS ============ */}
-<SubSection
-  kicker="Workflow"
-  index="03"
-  title="Des exemples concrets"
-  italicPart="exemples"
-  subtitle="Des workflows fréquents pour vous inspirer, avant de concevoir le vôtre."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Exemple 1 : conversion e-commerce (achat -> Google Ads + mise à jour CDP). */}
-<N8nCanvas
-  captionTitle="Conversion e-commerce"
-  captionItalic="Conversion"
-  captionText="Un achat finalisé remonte la conversion à Google Ads et met à jour le profil client dans le CDP. Optimisation des campagnes et donnée client, sans intervention."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  nodes={[
-    { id: "t",   type: "trigger", icon: "ph:shopping-cart",   label: "Achat finalisé",          sub: "Shopify",       x: 200,  y: 470 },
-    { id: "fmt", type: "special", icon: "ph:text-aa",         label: "Préparer les données",    sub: "Mise en forme", x: 680,  y: 470 },
-    { id: "ga",  type: "action",  icon: "ph:megaphone",       label: "Remonter la conversion",  sub: "Google Ads",    x: 1300, y: 300 },
-    { id: "cdp", type: "action",  icon: "ph:database",        label: "Mettre à jour le profil", sub: "CDP",           x: 1300, y: 640 },
-  ]}
-  connections={[
-    { from: "t",   to: "fmt" },
-    { from: "fmt", to: "ga" },
-    { from: "fmt", to: "cdp" },
-  ]}
-/>
-
-{/* Exemple 2 : génération automatique d'une offre (devis -> PDF -> envoi -> CRM). */}
-<N8nCanvas
-  captionTitle="Génération d'offre"
-  captionItalic="offre"
-  captionText="Une demande de devis génère l'offre en PDF, l'envoie au client et met à jour l'opportunité dans le CRM. Plus de copier-coller, zéro oubli."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  nodes={[
-    { id: "t",    type: "trigger", icon: "ph:lightning",       label: "Demande de devis",            sub: "Zoho CRM",  x: 240,  y: 420 },
-    { id: "gen",  type: "action",  icon: "ph:file-pdf",        label: "Générer l'offre",             sub: "PDFMonkey", x: 660,  y: 420 },
-    { id: "send", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'offre",             sub: "Gmail",     x: 1080, y: 420 },
-    { id: "upd",  type: "action",  icon: "ph:briefcase",       label: "Mettre à jour l'opportunité", sub: "Zoho CRM",  x: 1500, y: 420 },
-  ]}
-  connections={[
-    { from: "t",    to: "gen" },
-    { from: "gen",  to: "send" },
-    { from: "send", to: "upd" },
-  ]}
-/>
-
-{/* Exemple 3 : capture de lead Facebook Lead Ads (lead -> CRM -> notif -> email). */}
-<N8nCanvas
-  captionTitle="Lead Facebook"
-  captionItalic="Lead"
-  captionText="Un lead Facebook Lead Ads crée le contact dans le CRM, notifie le commercial et déclenche l'email de bienvenue. Aucun lead ne passe entre les mailles."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  nodes={[
-    { id: "t",    type: "trigger", icon: "ph:facebook-logo",   label: "Nouveau lead",           sub: "Facebook Lead Ads", x: 240,  y: 420 },
-    { id: "crm",  type: "action",  icon: "ph:user-plus",       label: "Créer le contact",       sub: "Zoho CRM",          x: 660,  y: 420 },
-    { id: "noti", type: "action",  icon: "ph:slack-logo",      label: "Notifier le commercial", sub: "Slack",             x: 1080, y: 420 },
-    { id: "mail", type: "action",  icon: "ph:envelope-simple", label: "Email de bienvenue",     sub: "Gmail",             x: 1500, y: 420 },
-  ]}
-  connections={[
-    { from: "t",    to: "crm" },
-    { from: "crm",  to: "noti" },
-    { from: "noti", to: "mail" },
-  ]}
-/>
-
-{/* Débat : idéation collective avant le workshop. Mode live = animation permanente
-    (bulles qui flottent + flux continu de réactions, "la salle qui s'enflamme"). */}
-<Debat
-  title="Quels autres workflows créer ?"
-  italicPart="créer"
-  live
-  intensity="intense"
-  intro="Vous avez vu l'anatomie, la construction et des exemples concrets. À vous d'imaginer ce que vous pourriez automatiser."
-  prompts={[
-    "Dans votre organisation, quelle tâche répétitive mériterait un workflow dès demain ?",
-    "Quel serait son déclencheur, et quelles actions en aval ?",
-    "Qu'est-ce qui vous empêche de le mettre en place aujourd'hui ?",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"

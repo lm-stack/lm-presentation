@@ -241,6 +241,10 @@ const nextHref = parcoursSlug ? `/p/${nextSlug}?from=${parcoursSlug}` : `/p/${ne
     font-size: var(--fs-body);
     line-height: var(--lh-body);
     color: var(--c-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .questions__next-arrow {
     flex: 0 0 auto;

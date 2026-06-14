@@ -129,7 +129,7 @@ const stream = STREAM.slice(0, streamCount).map((s, i) => ({
   text: reactionWords[i % reactionWords.length],
 }));
 ---
-<section class:list={['debat', { 'debat--live': live }]} data-layout="debat" data-section-title={tocLabel ?? title}>
+<section class:list={['debat', { 'debat--live': live }]} data-layout="debat" data-section-title={tocLabel}>
   <div class="debat__ambient" aria-hidden="true">
     {ambient.map((a) => (
       a.bubble

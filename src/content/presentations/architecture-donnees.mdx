@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "https://images.unsplash.com/photo-1664526937033-fe2c11f1be25?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-description: "Architecture des données : entités, champs, relations, les six pièges classiques et le pivot tool-agnostic. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Entités, champs et relations : le schéma qui structure votre CRM."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -16,9 +16,8 @@ import InfoCards from '@/components/slides/InfoCards.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Media from '@/components/slides/Media.astro';
 import Statement from '@/components/slides/Statement.astro';
-import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
-import BarChart from '@/components/slides/BarChart.astro';
+import Kpi from '@/components/slides/Kpi.astro';
 import Compare from '@/components/slides/Compare.astro';
 import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
@@ -163,7 +162,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 <Cover
   title="Architecture des données"
   italicPart="données"
-  eyebrow="Jour 1 : Sujet 3"
+  eyebrow="Jour 1"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -182,15 +181,12 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Stat : données pas prêtes pour l'IA (Gartner, février 2025) */}
-<BarChart
-  title="L'IA bute sur des données pas prêtes"
-  italicPart="pas prêtes"
-  subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
-  items={[
-    { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
-    { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
-  ]}
+{/* KPI : la donnée pas prête, premier frein à l'IA (Gartner, février 2025). */}
+<Kpi
+  eyebrow="Le frein n°1 à l'IA"
+  value="60"
+  unit="%"
+  label="des projets d'IA seront abandonnés d'ici 2026, faute de données prêtes."
   source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
   sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
   brand="CRM, Data & Automation"
@@ -332,6 +328,16 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   italicPart="votre architecture"
   subtitle="On crée le modèle entité par entité, puis on déjoue les pièges fréquents."
   subtitleWrap={true}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Cas d'usage du fil rouge : le traiteur, posé avant de construire son modèle. */}
+<Statement
+  eyebrow="Le fil rouge"
+  title="Notre cas d'usage : un traiteur"
+  italicPart="un traiteur"
+  body="Un traiteur événementiel reçoit des demandes pour des mariages et des séminaires, de particuliers comme d'entreprises. Il qualifie chaque piste, puis répond par un devis. C'est ce métier qu'on va modéliser dans les prochaines slides : des premières demandes jusqu'au devis signé, en quatre entités."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=750&fit=crop"
-description: "Le module de synthèse du parcours CRM, Data & Automation : relier architecture, processus et workflow dans une stratégie data & automation priorisée. Quatrième livrable de l'examen. HEC Lausanne Executive Education."
+description: "Synthèse : relier architecture, processus et workflow en une stratégie priorisée."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -18,6 +18,12 @@ import InfoCards from '@/components/slides/InfoCards.astro';
 import Table from '@/components/slides/Table.astro';
 import Tip from '@/components/slides/Tip.astro';
 import Workshop from '@/components/slides/Workshop.astro';
+import Media from '@/components/slides/Media.astro';
+import Compare from '@/components/slides/Compare.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import N8nCanvas from '@/components/slides/N8nCanvas.astro';
+import UseCase from '@/components/slides/UseCase.astro';
+import Debat from '@/components/slides/Debat.astro';
 
 {/* Module Stratégie data & automation (Jour 3, capstone), créé le 2026-06-14.
     Dernier module d'enseignement, juste avant la conclusion : c'est la synthèse du
@@ -30,7 +36,7 @@ import Workshop from '@/components/slides/Workshop.astro';
 <Cover
   title="Stratégie data & automation"
   italicPart="automation"
-  eyebrow="Jour 3 : Synthèse"
+  eyebrow="Jour 3"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -49,11 +55,163 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
 />
 
-{/* Thèse d'ouverture en Statement (titre serif souligné sur deux lignes). */}
+{/* ===== Cas d'usage horloger : démonstration concrète du « pourquoi une stratégie ».
+    Ouverture ancrée sur la gestion des événements d'une maison horlogère : sans
+    cohérence d'ensemble, on duplique un workflow par événement (et les erreurs) ;
+    une stratégie automatise l'événementiel à la racine. Le message « on ne crée
+    plus un workflow par événement, mais un workflow qui s'adapte à tous » est repris
+    du module workflows-avancés (conservé par ailleurs dans le parcours pour l'instant).
+    Spec : docs/superpowers/specs/2026-06-14-strategie-cas-horloger-design.md ===== */}
+
+{/* Décor du cas, en format Cas d'usage (UseCase) : la maison horlogère et son
+    année d'événements. Image de salon horloger (placeholder Unsplash, à valider). */}
+<UseCase
+  eyebrow="Cas d'usage"
+  youLabel="La maison"
+  you={{ icon: "ph:watch", label: "Maison horlogère" }}
+  targetLabel="Les invités"
+  target={{ icon: "ph:users", label: "Invités VIP" }}
+  objective="Une maison genevoise anime une dizaine d'événements par an (lancement, salon Watches & Wonders, soirée VIP, vente privée), toujours avec la même mécanique."
+  collect={["Liste d'invités", "RSVP", "Présence sur place", "Centres d'intérêt"]}
+  source="Un workflow n8n branché au CRM, mobilisé pour chaque événement."
+  image="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=1200&h=1600&fit=crop"
+  imageAlt="Montres de luxe exposées, évocation d'un salon horloger"
+  focal="center"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Le réflexe : un workflow par événement, qu'on finit par dupliquer. Deux chaînes
+    identiques (Lancement, Salon) ; la caption évoque la prolifération des autres. */}
+<N8nCanvas
+  captionTitle="Le réflexe : copier le workflow"
+  captionItalic="copier"
+  captionText="Un workflow par événement. On duplique pour le salon, la soirée VIP, la vente privée... et trente-sept autres. La même logique, recopiée à chaque fois."
+  captionPosition="bottom-left"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "l1", type: "trigger", icon: "ph:storefront",      label: "Salon Lausanne",     sub: "CRM",   x: 210,  y: 210 },
+    { id: "i1", type: "action",  icon: "ph:paper-plane-tilt", label: "Invitations",       sub: "Email", x: 640,  y: 210 },
+    { id: "r1", type: "action",  icon: "ph:check-square",     label: "RSVP",               sub: "CRM",   x: 1070, y: 210 },
+    { id: "e1", type: "action",  icon: "ph:bell-ringing",     label: "Relances",           sub: "Email", x: 1500, y: 210 },
+    { id: "l2", type: "trigger", icon: "ph:storefront",       label: "Salon Genève",       sub: "CRM",   x: 210,  y: 480 },
+    { id: "i2", type: "action",  icon: "ph:paper-plane-tilt", label: "Invitations",       sub: "Email", x: 640,  y: 480 },
+    { id: "r2", type: "action",  icon: "ph:check-square",     label: "RSVP",               sub: "CRM",   x: 1070, y: 480 },
+    { id: "e2", type: "action",  icon: "ph:bell-ringing",     label: "Relances",           sub: "Email", x: 1500, y: 480 },
+  ]}
+  connections={[
+    { from: "l1", to: "i1" }, { from: "i1", to: "r1" }, { from: "r1", to: "e1" },
+    { from: "l2", to: "i2" }, { from: "i2", to: "r2" }, { from: "r2", to: "e2" },
+  ]}
+/>
+
+{/* La douleur : trois limites de la duplication. Assets repris du module
+    workflows-avancés (public/decks/workflows-avances/, deck conservé par ailleurs). */}
+<ImageGrid
+  title="Trois limites de la duplication"
+  italicPart="limites"
+  subtitle="Multiplier des workflows quasi identiques, c'est multiplier les occasions de divergence."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflows-avances/limite-risque-erreur.jpeg",
+      alt: "Illustration du risque d'erreur lié à la duplication des workflows",
+      title: "Risque d'erreur",
+      text: "Une relance corrigée dans un workflow, oubliée dans les onze autres.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-scalabilite.jpeg",
+      alt: "Illustration de la scalabilité limitée par la multiplication des workflows",
+      title: "Scalabilité limitée",
+      text: "Un workflow par événement, donc une charge de maintenance qui enfle au rythme du calendrier.",
+    },
+    {
+      src: "/decks/workflows-avances/limite-usine-gaz.jpeg",
+      alt: "Illustration d'une usine à gaz, métaphore de la complexité incontrôlée",
+      title: "Usine à gaz",
+      text: "Qui a créé « Soirée VIP v3 (final) » ? Plus personne ne sait quelle version fait foi.",
+    },
+  ]}
+/>
+
+{/* La bascule : un seul workflow paramétrable pour TOUS les événements. Chaîne unique
+    sur la spine y=420 (modèle « Génération d'offre » de workflow.mdx, 6 noeuds). */}
+<N8nCanvas
+  captionTitle="Un workflow pour tous"
+  captionItalic="tous"
+  captionText="La donnée varie (le type d'événement, sa date, son audience), la logique reste unique. Un seul flux à concevoir, à tester et à maintenir."
+  captionPosition="bottom-left"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",  type: "trigger", icon: "ph:calendar-plus",    label: "Événement créé",    sub: "CRM",           x: 120,  y: 420 },
+    { id: "au", type: "action",  icon: "ph:users-three",      label: "Cibler l'audience", sub: "Selon le type", x: 426,  y: 420 },
+    { id: "in", type: "action",  icon: "ph:paper-plane-tilt", label: "Invitations",       sub: "Modèle param.", x: 732,  y: 420 },
+    { id: "rs", type: "action",  icon: "ph:check-square",     label: "RSVP",              sub: "CRM",           x: 1038, y: 420 },
+    { id: "re", type: "action",  icon: "ph:bell-ringing",     label: "Relances",          sub: "J-3, J-1",      x: 1344, y: 420 },
+    { id: "su", type: "action",  icon: "ph:chart-line-up",    label: "Suivi",             sub: "Scoring",       x: 1650, y: 420 },
+  ]}
+  connections={[
+    { from: "t",  to: "au" },
+    { from: "au", to: "in" },
+    { from: "in", to: "rs" },
+    { from: "rs", to: "re" },
+    { from: "re", to: "su" },
+  ]}
+/>
+
+{/* Mise en regard explicite des deux approches. La note porte le pivot. */}
+<Compare
+  title="Un workflow par événement, vraiment ?"
+  italicPart="par événement"
+  subtitle="Le même besoin revient à chaque rendez-vous. Deux façons de l'automatiser, deux trajectoires."
+  left={{
+    heading: "Un workflow par événement",
+    items: [
+      "On crée « Salon Lausanne », puis on le duplique en « Salon Genève », puis en « Soirée VIP ».",
+      "Chaque copie embarque ses propres réglages, donc ses propres oublis.",
+      "Quarante événements par an, quarante workflows à tenir à jour.",
+    ],
+  }}
+  right={{
+    heading: "Un workflow pour tous les événements",
+    items: [
+      "Une seule logique, paramétrée par les attributs de l'événement.",
+      "La donnée varie (type, date, audience), le workflow reste unique.",
+      "Un correctif appliqué une fois profite à tous les événements.",
+    ],
+  }}
+  note="On ne crée plus un workflow par événement, mais un workflow qui s'adapte à tous les événements."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Discussion (idéation, mode live) : comment automatiser l'automation, transposé
+    depuis l'exemple événementiel de la maison horlogère vers leurs propres cas. */}
+<Debat
+  live
+  eyebrow="Discussion"
+  title="Comment automatiser l'automation ?"
+  italicPart="l'automation"
+  intro="Sur l'événementiel de la maison horlogère, le principe est clair : un seul workflow plutôt qu'un par événement. À vous de le transposer à vos cas."
+  prompts={[
+    "Dans votre organisation, quelle famille de cas répétitifs (événements, demandes, dossiers) pourrait passer d'un workflow par cas à un seul workflow paramétrable ?",
+    "D'un cas à l'autre, qu'est-ce qui change vraiment (la donnée) et qu'est-ce qui reste identique (la logique) ?",
+    "Qu'est-ce qui vous empêche aujourd'hui de mutualiser ces workflows en un seul ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* La leçon : la bascule est une décision de cohérence, donc de stratégie.
+    Thèse d'ouverture en Statement (titre serif souligné sur deux lignes). */}
 <Statement
+  wide
   title={"Sans stratégie, vous automatisez\nle désordre plus vite"}
   italicPart="le désordre plus vite"
-  body="Vous avez structuré vos données, modélisé vos processus et construit un workflow. Trois briques solides. Mais des briques sans plan restent des briques : la stratégie est ce qui les relie, les priorise et leur donne une direction."
+  body="Passer d'un workflow par événement à un workflow unique n'est pas une astuce n8n. C'est une décision de cohérence : penser le système plutôt que la tâche. C'est précisément le rôle d'une stratégie."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -81,7 +239,7 @@ import Workshop from '@/components/slides/Workshop.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   cards={[
-    { icon: "ph:compass", label: "Alignement", value: "Une direction claire et partagée : toute l'équipe sait vers quoi on construit." },
+    { icon: "ph:link", label: "Cohérence", value: "Une logique d'ensemble plutôt que des automatisations qui se dupliquent et finissent par diverger." },
     { icon: "ph:list-checks", label: "Priorisation", value: "Savoir quoi faire d'abord, et surtout ce qu'on ne fait pas tout de suite." },
     { icon: "ph:path", label: "Séquencement", value: "Une feuille de route dans le temps plutôt qu'une liste de souhaits sans ordre." },
     { icon: "ph:chart-line-up", label: "Mesure", value: "Des indicateurs pour savoir si ça marche, et corriger le tir." },
@@ -195,6 +353,5 @@ import Workshop from '@/components/slides/Workshop.astro';
     { label: "Objectif", value: "Une feuille de route priorisée qui relie vos trois livrables." },
     { label: "Sujet", value: "Votre organisation, ou le cas que vous suivez depuis le début." },
     { label: "Output", value: "Une matrice impact/effort et une feuille de route en trois horizons." },
-    { label: "Restitution", value: "Deux minutes par personne ou par groupe." },
   ]}
 />

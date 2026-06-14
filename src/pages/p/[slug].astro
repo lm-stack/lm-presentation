@@ -69,7 +69,7 @@ const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
       <Questions
         nextSlug={nextDeck.id}
         nextTitle={nextDeck.data.title}
-        nextShort={nextDeck.data.short ?? nextDeck.data.subtitle}
+        nextShort={nextDeck.data.description}
         nextCover={nextDeck.data.cover}
         cover={entry.data.cover}
         brand={endingBrand}

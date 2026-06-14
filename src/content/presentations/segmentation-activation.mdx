@@ -7,17 +7,17 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/segmentation-activation/cover-archer.jpg"
-description: "Découper sa base en segments actionnables et déclencher la bonne action : axes de segmentation, persona contre segment, leviers d'IA et quatre modes d'activation. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Segmenter sa base en cibles actionnables et déclencher la bonne action."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
 import Poll from '@/components/slides/Poll.astro';
+import Debat from '@/components/slides/Debat.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Compare from '@/components/slides/Compare.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Table from '@/components/slides/Table.astro';
-import Spreadsheet from '@/components/slides/Spreadsheet.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import Demo from '@/components/slides/Demo.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
@@ -31,21 +31,19 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 
   Parti pris : recentrer sur le sujet réel (brochure #4 Segmentation client).
   Récit : 01 Pourquoi segmenter, 02 Les axes (4 axes classiques + le prédictif),
-  03 L'IA pour segmenter, 04 L'activation (4 modes + lien funnel/message),
+  03 L'IA pour segmenter, 04 L'activation (4 modes + segment vers activation),
   05 La maturité du lead (funnel vers MQL/SQL) et le nurturing en pratique,
   avec l'atelier de nurturing.
 
-  Démos : teardown du nurturing de Zapier dans Gmail, et un segment vu comme une
-  vue filtrée (Spreadsheet, tool-agnostic). Pas de fil rouge Cédric.
-  Placeholders Unsplash à remplacer : grille des 4 axes (sauf démographique),
-  leviers IA, 4 modes d'activation, cover.
+  Démos : teardown du nurturing de Zapier dans Gmail. Pas de fil rouge Cédric.
+  Placeholders Unsplash restants : image leviers IA, image 4 modes d'activation.
 */}
 
 {/* Ouverture : Cover */}
 <Cover
   title="Segmentation et activation"
   italicPart="activation"
-  eyebrow="Jour 3 : Sujet 1"
+  eyebrow="Jour 3"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -53,13 +51,31 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   theme="halo-gold"
 />
 
-{/* Ouverture : sondage diagnostic, situe la salle */}
-<Poll
-  id="seg-v2-ciblage-actuel"
-  question="Aujourd'hui, comment ciblez-vous vos communications ?"
+{/* Ouverture : discussion diagnostic, situe la salle (ex-sondage, passé en Debat) */}
+<Debat
+  live
+  eyebrow="Discussion"
+  tocLabel="Discussion"
+  title="Aujourd'hui, comment ciblez-vous vos communications ?"
   italicPart="comment ciblez-vous"
-  subtitle="Une seule réponse, depuis ton téléphone"
-  options={["Le même message pour tous", "Quelques listes faites à la main", "Des segments dynamiques", "Du scoring automatique"]}
+  intro="Du même message envoyé à toute la base jusqu'au scoring automatique, chacun se situe quelque part sur l'échelle. Positionnez-vous, puis confrontez vos pratiques."
+  reactions={[
+    "On envoie le même mail à tout le monde",
+    "Moi, j'ai mes listes dans Excel",
+    "Nos segments se mettent à jour seuls",
+    "Le scoring priorise pour nous",
+    "Je n'ai jamais le temps de segmenter",
+    "On fait un peu au feeling",
+    "Trop de données, rien d'exploité",
+    "Ça marche, pourquoi changer ?",
+    "On aimerait, mais par où commencer ?",
+    "Nos outils ne se parlent pas",
+  ]}
+  prompts={[
+    "Le même message pour tout le monde, ou déjà des listes montées à la main ?",
+    "Qui a des segments qui se mettent à jour tout seuls, voire un scoring automatique ?",
+    "Qu'est-ce qui vous empêche, aujourd'hui, de passer au niveau au-dessus ?",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -81,6 +97,7 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 {/* Le coût du message unique */}
 <Statement
   eyebrow="Le coût caché"
+  wide
   title="Un message pour tous finit par ne convaincre personne"
   italicPart="personne"
   body="Le dirigeant d'une PME industrielle et la responsable d'une association n'ont ni les mêmes enjeux, ni le même vocabulaire. Le même email les laisse indifférents tous les deux. À la clé : des taux d'ouverture qui s'effondrent, des désabonnements qui grimpent, et une délivrabilité qui se dégrade pour toute la base. Segmenter inverse la logique : moins d'envois, plus de pertinence, une base qui reste engagée."
@@ -138,16 +155,17 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=800&h=600&fit=crop", alt: "Figurines alignées, métaphore des profils clients", title: "Démographique", text: "Qui ils sont : âge, langue, région, secteur, taille. Facile à capter, rarement suffisant seul." },
-    { src: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop", alt: "Illustration de l'axe comportemental", title: "Comportemental", text: "Ce qu'ils font : pages vues, emails ouverts, téléchargements. Le meilleur signal d'intention." },
-    { src: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=600&fit=crop", alt: "Illustration de l'axe valeur", title: "Valeur (RFM)", text: "Ce qu'ils pèsent : récence, fréquence, montant des achats. Sépare les clients clés des dormants." },
-    { src: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&h=600&fit=crop", alt: "Illustration de l'axe cycle de vie", title: "Cycle de vie", text: "Où ils en sont : prospect, actif, dormant, ambassadeur. Chaque étape, un message différent." },
+    { src: "/decks/segmentation-activation/axe-demographique.jpg", alt: "Foule de piétons traversant un carrefour urbain animé", title: "Démographique", text: "Qui ils sont : âge, langue, région, secteur, taille. Facile à capter, rarement suffisant seul." },
+    { src: "/decks/segmentation-activation/axe-comportemental.jpg", focal: "center 42%", alt: "Mains de personnes de carnations différentes en train de se toucher", title: "Comportemental", text: "Ce qu'ils font : pages vues, emails ouverts, téléchargements. Le meilleur signal d'intention." },
+    { src: "/decks/segmentation-activation/axe-valeur.jpg", alt: "Gros plan de billets de cent dollars", title: "Valeur (RFM)", text: "Ce qu'ils pèsent : récence, fréquence, montant des achats. Sépare les clients clés des dormants." },
+    { src: "/decks/segmentation-activation/axe-cycle-de-vie.jpg", focal: "center 45%", alt: "Jeune pousse verte émergeant du sol en sous-bois", title: "Cycle de vie", text: "Où ils en sont : prospect, actif, dormant, ambassadeur. Chaque étape, un message différent." },
   ]}
 />
 
 {/* Le prédictif sur sa slide dédiée : pont vers la section IA qui suit */}
 <Statement
   eyebrow="Le 5e axe"
+  wide
   title="Le prédictif : segmenter sur ce qui n'est pas encore arrivé"
   italicPart="ce qui n'est pas encore arrivé"
   body="Les quatre axes précédents décrivent le passé et le présent. Le prédictif, lui, regarde devant : un score calculé par l'IA sur votre historique estime la probabilité d'achat, le risque de départ (churn) ou la valeur vie d'un contact. C'est l'axe le plus puissant, et il ouvre la porte à l'IA, qu'on détaille tout de suite après."
@@ -201,24 +219,11 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 {/* La règle d'or du module */}
 <Statement
   eyebrow="La règle d'or"
+  wide
+  titleSize="m"
   title="Segmenter sans activer, c'est perdre son temps"
   italicPart="perdre son temps"
   body="Un segment n'a de valeur qu'au moment où il déclenche une action. Combien de bases CRM regorgent de listes parfaitement définies que personne n'utilise ? La discipline des équipes qui performent tient en une phrase : pour chaque segment créé, une action derrière. Jamais de segment orphelin."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Lien avec le funnel : le message dépend de l'étage du parcours */}
-<Table
-  title="Le message change selon l'étage du funnel"
-  italicPart="l'étage du funnel"
-  subtitle="On ne parle pas pareil à qui découvre et à qui hésite à acheter. Le même segment reçoit un message différent selon où il en est."
-  headers={["Étage du funnel", "Où en est le contact", "Communication adaptée"]}
-  rows={[
-    ["TOFU, en haut", "Il découvre, il se renseigne", "On éduque sans vendre : article, post, infographie"],
-    ["MOFU, au milieu", "Il compare, il évalue", "On différencie par la preuve : cas d'usage, webinaire, livre blanc"],
-    ["BOFU, en bas", "Il est prêt à décider", "On rassure et on pousse à l'acte : démo, offre, témoignage"],
-  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -227,7 +232,7 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 <Steps
   title="Quatre façons d'activer un segment"
   italicPart="Quatre façons"
-  subtitle="Chaque segment appelle un geste dominant. À vous d'associer le bon mode au bon groupe."
+  subtitle="Chaque segment appelle un geste dominant. À vous d'associer le bon."
   image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -261,28 +266,6 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
     ["Visiteur page tarifs (comportemental)", "Message déclenché", "Offre d'essai limitée dans le temps"],
     ["Client à forte valeur (RFM)", "Relais commercial", "Prise de contact personnalisée du commercial"],
     ["Client dormant (cycle de vie)", "Audience publicitaire", "Campagne de réactivation ciblée"],
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Démo tool-agnostic : un segment = une vue filtrée */}
-<Spreadsheet
-  title="Un segment, c'est une vue filtrée"
-  italicPart="vue filtrée"
-  subtitle="Excel, Airtable ou un CRM : même logique. On filtre sur des critères, on obtient une liste prête à activer."
-  sheets={[
-    {
-      name: "Segment",
-      formula: '=FILTRE(Contacts; Score>70)',
-      activeCell: "A1",
-      columns: ["Nom", "Société", "Score", "Dernier achat"],
-      rows: [
-        ["Marie Favre", "Atelier Léman", "82", "il y a 2 mois"],
-        ["Luc Berset", "Berset SA", "76", "il y a 5 mois"],
-        ["Nadia Roth", "Association Élan", "91", "il y a 3 semaines"],
-      ],
-    },
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"

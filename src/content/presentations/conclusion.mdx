@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/conclusion/cover-smile.jpg"
-description: "Conclusion du parcours CRM, Data & Automation : deux débats (éthique de l'automatisation, souveraineté des données) et des sondages de clôture (sujets marquants, webinaire de suivi). HEC Lausanne Executive Education."
+description: "Deux débats (éthique, souveraineté) et les sondages de clôture du parcours."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -15,6 +15,9 @@ import Recap from '@/components/slides/Recap.astro';
 import Debat from '@/components/slides/Debat.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import Statement from '@/components/slides/Statement.astro';
 
 {/*
   MIGRATION conclusion.mdx -> conclusion-new.mdx
@@ -91,12 +94,23 @@ import WordCloud from '@/components/slides/WordCloud.astro';
 <Cover
   title="Conclusion"
   italicPart="Conclusion"
-  eyebrow="Module 35"
+  eyebrow="Jour 3"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   image="/decks/conclusion/cover-smile.jpg"
   theme="halo-gold"
+/>
+
+{/* Section 01 : Récap */}
+<SubSection
+  kicker="Conclusion"
+  index="01"
+  title="Récap"
+  italicPart="Récap"
+  subtitle="Tout ce que vous avez construit, vu en démonstration, et savez désormais faire."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Récap scindé : ce que vous avez construit (workshops), puis vu en démo. */}
@@ -116,6 +130,58 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   title="Ce qu'on a vu en démonstration"
   italicPart="démonstration"
   subtitle="Les outils manipulés en direct pendant la formation."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Transition : "c'est en forgeant qu'on devient forgeron", avant de montrer ce qu'ils savent faire. */}
+<Statement
+  eyebrow="À vous de jouer"
+  title="C'est en forgeant qu'on devient forgeron"
+  italicPart="forgeron"
+  body="Voici ce que vous savez faire. Vous devez maintenant vous entraîner pour que ça devienne concret."
+  wide
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Ce que vous savez faire (1/2) : les fondations data. SVG duotone maison. */}
+<ImageGrid
+  title="Ce que vous savez faire"
+  italicPart="savez faire"
+  subtitle="Vos fondations : collecter, modéliser, structurer. Et ça repart avec vous."
+  mediaFit="contain"
+  images={[
+    { src: "/decks/conclusion/cap-collecter.svg", alt: "Base de données alimentée et validée", title: "Collecter et fiabiliser vos données", text: "Des sources propres, prêtes à l'emploi." },
+    { src: "/decks/conclusion/cap-modeliser.svg", alt: "Processus modélisé en étapes reliées", title: "Modéliser vos processus", text: "Cartographier avant d'automatiser." },
+    { src: "/decks/conclusion/cap-crm.svg", alt: "CRM central relié à ses contacts", title: "Monter votre CRM", text: "Un socle unique pour vos relations clients." },
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Ce que vous savez faire (2/2) : le moteur d'activation. SVG duotone maison. */}
+<ImageGrid
+  title="Ce que vous savez faire"
+  italicPart="savez faire"
+  subtitle="Votre moteur d'activation : segmenter, automatiser, augmenter avec l'IA."
+  mediaFit="contain"
+  images={[
+    { src: "/decks/conclusion/cap-segmenter.svg", alt: "Audience segmentée, un segment activé", title: "Segmenter et activer vos audiences", text: "Le bon message au bon segment." },
+    { src: "/decks/conclusion/cap-automatiser.svg", alt: "Workflow automatisé", title: "Automatiser vos workflows", text: "La machine tourne pendant que vous dormez." },
+    { src: "/decks/conclusion/cap-ia.svg", alt: "IA branchée sur votre stack", title: "Brancher l'IA", text: "Un copilote greffé sur vos outils." },
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Section 02 : Feedbacks */}
+<SubSection
+  kicker="Conclusion"
+  index="02"
+  title="Feedbacks"
+  italicPart="Feedbacks"
+  subtitle="Vos retours à chaud, sujet par sujet, et l'envie d'un webinaire de suivi."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -158,11 +224,21 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   brandSub="Executive Education"
 />
 
+{/* Section 03 : Débats */}
+<SubSection
+  kicker="Conclusion"
+  index="03"
+  title="Débats"
+  italicPart="Débats"
+  subtitle="Deux questions ouvertes : éthique de l'automatisation et souveraineté des données."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Débats de clôture (mode live) : on termine la formation sur la discussion. */}
 {/* Débat 1 : responsabilité humaine de l'automatisation */}
 <Debat
   live
-  tocLabel="Responsabilité"
   title="Automatiser, jusqu'où est-ce juste ?"
   italicPart="juste"
   intro="Vous savez désormais automatiser une large part de votre métier. Derrière chaque tâche reprise par la machine, il y a des emplois et des collègues."
@@ -177,7 +253,6 @@ import WordCloud from '@/components/slides/WordCloud.astro';
 {/* Débat 2 : géopolitique et souveraineté des données */}
 <Debat
   live
-  tocLabel="Souveraineté des données"
   title="Où vivent vraiment vos données ?"
   italicPart="vraiment"
   intro="Chaque outil que vous choisissez décide où vos données sont stockées et sous quelle juridiction elles tombent. Un choix technique, ou politique ?"

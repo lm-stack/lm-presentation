@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/marketing-automation/cover-robot.jpg"
-description: "Marketing automation : pourquoi automatiser, les APIs, le JSON, le no-code, et la place de l'IA. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Pourquoi automatiser : APIs, JSON, no-code et la place de l'IA."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -27,6 +27,8 @@ import Statement from '@/components/slides/Statement.astro';
 import Compare from '@/components/slides/Compare.astro';
 import Spreadsheet from '@/components/slides/Spreadsheet.astro';
 import Demo from '@/components/slides/Demo.astro';
+import Debat from '@/components/slides/Debat.astro';
+import UseCase from '@/components/slides/UseCase.astro';
 
 {/* Reprise intégrale du deck marketing-automation (ancien format) en ExecEd-style.
     Images réutilisées telles quelles depuis public/decks/marketing-automation/.
@@ -38,7 +40,7 @@ import Demo from '@/components/slides/Demo.astro';
 <Cover
   title="Marketing automation"
   italicPart="automation"
-  eyebrow="Module 23"
+  eyebrow="Jour 2"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -135,8 +137,8 @@ import Demo from '@/components/slides/Demo.astro';
 {/* État des lieux : le mème automation vs agent IA (hype contre fiabilité).
     Image carrée LinkedIn affichée entière via imageFit="contain". */}
 <SplitImage
-  title="la ruée vers l'agent IA"
-  italicPart="agent IA"
+  title="la ruée vers l'IA"
+  italicPart="IA"
   subtitle="La masse pousse vers l'IA. Souvent, un simple workflow est plus fiable."
   image="/decks/marketing-automation/automation-vs-agent-ia.jpg"
   imageFit="contain"
@@ -251,25 +253,9 @@ import Demo from '@/components/slides/Demo.astro';
   ]}
 />
 
-{/* Slide 18 : Philips stack (grille 1 image, contain + image courte, source chiefmartec) */}
-<ImageGrid
-  title="L'ensemble des outils digitaux constitue le stack"
-  italicPart="stack"
-  subtitle="Exemple : le stack de Philips, son écosystème marketing et e-commerce."
-  mediaFit="contain"
-  mediaHeight="520px"
-  source="Philips Digital Marketing & e-Commerce, The Stackies (chiefmartec.com)"
-  sourceUrl="https://chiefmartec.com/2020/04/7-amazing-martech-stacks-cisco-infutor-juniper-networks-philips-poly-sargento-usps/"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/philips-stack.png", alt: "Écosystème marketing et e-commerce de Philips, exemple de stack" },
-  ]}
-/>
-
 {/* Démo BuiltWith : explorer le stack réel d'une entreprise précise en direct */}
 <Demo
-  toolLogo="/decks/marketing-automation/logos/builtwith.png"
+  toolLogo="/decks/marketing-automation/logos/builtwith.svg"
   toolName="BuiltWith"
   toolUrl="https://builtwith.com"
   objectives={[
@@ -352,7 +338,7 @@ import Demo from '@/components/slides/Demo.astro';
     { label: "Silos de données entre les services", value: 47 },
   ]}
   source="ZHAW, Marketing Automation Report 2022 (n ≈ 295), plusieurs réponses possibles"
-  sourceUrl="https://doi.org/10.21256/zhaw-3130"
+  sourceUrl="https://digitalcollection.zhaw.ch/server/api/core/bitstreams/e6010880-891a-4364-bffa-23f36847d390/content"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -360,13 +346,13 @@ import Demo from '@/components/slides/Demo.astro';
 {/* Slide 23 : Limites et freins (Poll) */}
 <Poll
   id="freins-automatisation"
-  question="Quel est le plus gros frein à l'automatisation dans votre organisation ?"
-  italicPart="le plus gros frein"
+  question="Quel est votre plus gros frein à l'automatisation ?"
+  italicPart="plus gros frein"
   subtitle="Une seule réponse"
   options={[
-    "Manque de temps ou de ressources",
-    "Manque de compétences techniques",
-    "Outils trop chers ou trop complexes",
+    "Manque de ressources",
+    "Manque de compétences",
+    "Outils chers ou complexes",
     "Pas de soutien de la direction",
     "Données trop dispersées",
   ]}
@@ -400,9 +386,9 @@ import Demo from '@/components/slides/Demo.astro';
 
 {/* Slide 7 : Définition (3 cards) */}
 <ImageGrid
-  title="Définition et applications"
-  italicPart="Définition"
-  subtitle="L'ensemble des techniques pour automatiser les tâches répétitives à faible valeur ajoutée."
+  title="Trois terrains à automatiser"
+  italicPart="Trois terrains"
+  subtitle="Le marketing automation automatise les tâches répétitives à faible valeur ajoutée : la donnée, les processus, les campagnes."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
@@ -412,31 +398,33 @@ import Demo from '@/components/slides/Demo.astro';
   ]}
 />
 
-{/* Slide 8 : Exemple Facebook Lead Ads */}
-<Media
-  title="Exemple : Facebook Lead Ads"
-  italicPart="Lead Ads"
-  subtitle="Annonce sponsorisée, formulaire intégré, capture en un clic."
-  image="/decks/marketing-automation/facebook-lead-ads.jpg"
-  alt="Trois écrans iPhone : annonce sponsorisée, formulaire de lead, confirmation"
+{/* Slide 8 : Cas d'usage : une banque attire de nouveaux clients via Facebook Lead Ads */}
+<UseCase
+  you={{ icon: "ph:bank", label: "Une banque de détail" }}
+  target={{ icon: "ph:user-plus", label: "De nouveaux clients" }}
+  objective="Attirer de nouveaux clients via une campagne Facebook Lead Ads, avec un formulaire pré-rempli intégré à l'annonce."
+  collect={["Nom", "Email", "Téléphone", "Canton"]}
+  source="Facebook Lead Ads (Meta)"
+  image="/decks/marketing-automation/usecase-ubs.jpg"
+  imageAlt="Entrée du siège UBS à Zürich, logo UBS"
+  focal="center 35%"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 9 : Partage d'expérience Facebook Lead Ads */}
-<InfoCards
+{/* Slide 9 : Discussion (Debat, pastille "Discussion") sur Facebook Lead Ads */}
+<Debat
+  eyebrow="Discussion"
   title="Partage d'expérience"
   italicPart="expérience"
-  subtitle="Cinq questions pour confronter Facebook Lead Ads à vos pratiques."
+  intro="Confrontons les campagnes Facebook Lead Ads à vos pratiques."
+  prompts={[
+    "Êtes-vous familiers avec les campagnes Facebook Lead Ads ?",
+    "Quels sont, d'après vous, les défis de ce type de campagne en matière de marketing automation ?",
+    "Quel est l'un des seuls éléments difficiles à automatiser ?",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  cards={[
-    { icon: "ph:eye", label: "Familiarité", value: "Êtes-vous familiers avec les campagnes Facebook Lead Ads ?" },
-    { icon: "ph:gear", label: "Pratique", value: "Avez-vous déjà géré des campagnes de ce type ?" },
-    { icon: "ph:warning-circle", label: "Défis", value: "Quels sont, d'après vous, les défis de ce type de campagne en matière de marketing automation ?" },
-    { icon: "ph:prohibit", label: "Limites", value: "Quel est l'un des seuls éléments difficiles à automatiser ?" },
-    { icon: "ph:user-circle", label: "Owner", value: "Qui est responsable de l'automatisation dans vos organisations ?" },
-  ]}
 />
 
 {/* Slide 10 : Avantages principaux (BarChart reconstruit depuis le chart ZHAW 2022, % très important) */}
@@ -455,24 +443,7 @@ import Demo from '@/components/slides/Demo.astro';
     { label: "Générer plus de prospects", value: 43 },
   ]}
   source="Marketing Automation Report 2022, ZHAW (n=414)"
-  sourceUrl="https://digitalcollection.zhaw.ch/handle/11475/24445"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 11 : Vos avantages (Poll) */}
-<Poll
-  id="avantages-ma"
-  question="Selon vous, quel avantage du marketing automation pèse le plus lourd ?"
-  italicPart="le plus lourd"
-  subtitle="Une seule réponse"
-  options={[
-    "Rendre les processus plus efficaces",
-    "Communiquer de manière personnalisée",
-    "Optimiser les conversions",
-    "Gagner du temps sur les tâches répétitives",
-    "Améliorer la qualité des prospects",
-  ]}
+  sourceUrl="https://digitalcollection.zhaw.ch/server/api/core/bitstreams/e6010880-891a-4364-bffa-23f36847d390/content"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -611,19 +582,8 @@ import Demo from '@/components/slides/Demo.astro';
   ]}
 />
 
-{/* Slide 35 : Automatisations simples du quotidien */}
-<ImageGrid
-  title="Automatisations simples du quotidien"
-  italicPart="quotidien"
-  subtitle="Les outils digitaux que nous utilisons sont déjà partiellement no-code. Vous en avez déjà créés."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  images={[
-    { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
-    { src: "/decks/marketing-automation/auto-clickup.png", alt: "Assignation de tâche auto", title: "Assignation de tâche auto", text: "Une tâche créée dans un statut donné se voit assigner automatiquement à la bonne personne." },
-    { src: "/decks/marketing-automation/auto-facebook.jpg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
-  ]}
-/>
+{/* Slide « Automatisations simples du quotidien » déplacé vers le deck workflow
+    (section « Types d'automatisation ») le 2026-06-14. */}
 
 {/* Section 05 : MCP (intercalaire) */}
 <SubSection
@@ -660,19 +620,4 @@ import Demo from '@/components/slides/Demo.astro';
     { icon: "ph:plugs-connected", label: "Là où vous travaillez", value: "Agenda, CRM, emails, fichiers : l'IA se branche sur vos outils existants." },
     { icon: "ph:flask", label: "À tester en direct", value: "Demandez à Claude de retrouver un client et de préparer un message de relance." },
   ]}
-/>
-
-{/* Démo finale : créer entités et champs Zoho via le MCP Zoho, en langage naturel */}
-<Demo
-  toolLogo="/decks/marketing-automation/logos/zoho.svg"
-  toolName="Zoho CRM"
-  toolUrl="https://www.zoho.com/crm/"
-  objectives={[
-    "Brancher le MCP Zoho sur Claude",
-    "Créer un module CRM en langage naturel",
-    "Générer les champs automatiquement",
-    "Vérifier le résultat en direct dans Zoho",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />

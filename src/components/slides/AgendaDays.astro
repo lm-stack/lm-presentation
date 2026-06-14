@@ -4,7 +4,7 @@
 // par jour du parcours). Lit la structure `days` d'un parcours (label + theme)
 // et, pour chaque jour, résout les slugs de `decks` en titres réels via la
 // collection `presentations`. Aucun texte d'agenda n'est écrit dans le deck :
-// tout est dérivé du parcours au build. Frère de Agenda.astro (vue résumé).
+// tout est dérivé du parcours au build.
 import { getCollection } from 'astro:content';
 import { splitHighlight } from '@/utils/highlight';
 
@@ -67,7 +67,7 @@ const columns = days.map((d) => {
   return { label: d.label, theme: d.theme, decks };
 });
 
-// brand / brandSub dérivés comme la route p/[slug].astro et Agenda.astro.
+// brand / brandSub dérivés comme la route p/[slug].astro.
 const INSTITUTION: Record<string, string> = {
   execed: 'Executive Education',
   lm: 'Lausanne Marketing',
@@ -255,7 +255,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
 
   /* Corps : titre + grille 3 colonnes, centré dans l'espace sous le header
-     (titre + grille comme un bloc, pattern Programme / AgendaFull). */
+     (titre + grille comme un bloc, pattern Programme). */
   .agenda-days__main {
     position: relative;
     z-index: 1;

@@ -597,11 +597,13 @@ body.is-fullscreen .deck-search {
   margin-right: 24px;
 }
 
-/* Le span "Lausanne Marketing" a une bande jaune rotative en pseudo-element via */
-/* `.underline::after` (defini dans global.css). On ne re-applique PAS un second */
-/* background-image plat ici, sinon doublon visuel (deux bandes superposees). */
+/* Eyebrow du menu (ToC) : on retire la bande decorative (.underline::after, definie
+   dans global.css) ET tout soulignement. Elle surchargeait visuellement le sommaire. */
 .deck-menu__eyebrow .underline {
   text-decoration: none;
+}
+.deck-menu__eyebrow .underline::after {
+  display: none;
 }
 
 /* Lien retour au parcours dans le menu (active par JS si ?from=<slug>) :

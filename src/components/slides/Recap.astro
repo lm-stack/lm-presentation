@@ -68,9 +68,15 @@ const resolvedBrand = brand ?? entry.data.title;
 const resolvedBrandSub = brandSub ?? INSTITUTION[entry.data.scheme];
 const titleParts = splitHighlight(title, italicPart);
 
+// Dédoublonnage en conservant l'ordre d'apparition : un même outil démontré dans
+// plusieurs decks (ex. Zoho CRM, vu dans des-donnees-au-crm, digitaliser et
+// marketing-automation) ne doit figurer qu'une fois dans le récap.
+const uniqWorkshops = [...new Set(workshops)];
+const uniqDemos = [...new Set(demos)];
+
 const allCols = [
-  { key: 'workshops', icon: 'ph:chalkboard-teacher-fill', label: 'Workshops', count: workshops.length, items: workshops },
-  { key: 'demos', icon: 'ph:monitor-play-fill', label: 'Démonstrations', count: demos.length, items: demos },
+  { key: 'workshops', icon: 'ph:chalkboard-teacher-fill', label: 'Workshops', count: uniqWorkshops.length, items: uniqWorkshops },
+  { key: 'demos', icon: 'ph:monitor-play-fill', label: 'Démonstrations', count: uniqDemos.length, items: uniqDemos },
 ];
 const cols = only ? allCols.filter((c) => c.key === only) : allCols;
 ---
@@ -98,10 +104,10 @@ const cols = only ? allCols.filter((c) => c.key === only) : allCols;
         <article class="recap__card">
           <div class="recap__card-head">
             <span class="recap__icon" aria-hidden="true"><Icon name={col.icon} /></span>
-            <span class="recap__count">{col.count}</span>
+            <span class="recap__count">{String(col.count).padStart(2, '0')}</span>
             <span class="recap__card-label">{col.label}</span>
           </div>
-          <ul class="recap__list">
+          <ul class="recap__list" style={`--list-cols: ${Math.max(1, Math.ceil(col.items.length / 6))}`}>
             {col.items.map((item) => (
               <li class="recap__item">
                 <span class="recap__mark" aria-hidden="true"></span>
@@ -207,20 +213,54 @@ const cols = only ? allCols.filter((c) => c.key === only) : allCols;
     align-items: start;
   }
 
-  /* Mode "un seul thème" (slide dédié) : une carte large centrée, liste sur 2 colonnes. */
+  /* Mode "un seul thème" (slide dédié) : chiffre géant à gauche, liste à droite. */
   .recap--single .recap__grid {
     grid-template-columns: 1fr;
+  }
+  /* Titre + sous-titre centrés horizontalement (demandé sur les deux récaps). */
+  .recap--single .recap__title,
+  .recap--single .recap__subtitle {
+    text-align: center;
   }
   .recap--single .recap__card {
     max-width: 1280px;
     margin: 0 auto;
     width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 72px;
+    padding: 56px 72px;
   }
+  /* Colonne gauche : le chiffre géant + son label, empilés, séparés par un filet. */
+  .recap--single .recap__card-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0 72px 0 0;
+    border-bottom: none;
+    border-right: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    flex: 0 0 auto;
+  }
+  .recap--single .recap__icon {
+    display: none;
+  }
+  .recap--single .recap__count {
+    font-size: 200px;
+  }
+  /* Colonne droite : la liste, max 6 items par colonne, une 2e colonne au-delà.
+     Le nombre de colonnes est calculé au build (--list-cols = ceil(n / 6)) et posé
+     en style inline sur le <ul>. On déclare les pistes EXPLICITEMENT plutôt que de
+     compter sur les colonnes implicites (grid-auto-columns), qui ne se génèrent pas
+     de façon fiable ici sous Reveal. */
   .recap--single .recap__list {
+    flex: 1 1 auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-template-rows: repeat(6, auto);
+    grid-template-columns: repeat(var(--list-cols, 1), minmax(0, 1fr));
     column-gap: 56px;
-    row-gap: 16px;
+    row-gap: 18px;
+    align-content: center;
   }
 
   .recap__card {

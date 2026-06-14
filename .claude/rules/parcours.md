@@ -23,12 +23,15 @@ Un parcours (`src/content/parcours/<slug>.mdx`) est un portail qui agrège plusi
 
 ## Agenda dynamique (RÈGLE)
 
-L'agenda d'un deck d'introduction n'est **pas écrit à la main**. On utilise le composant `<Agenda parcours="<slug>" />` (`src/components/slides/Agenda.astro`), qui dérive l'agenda de la structure `days` du parcours au build.
+L'agenda d'un deck d'introduction n'est **pas écrit à la main**. On utilise le composant `<AgendaDays parcours="<slug>" />` (`src/components/slides/AgendaDays.astro`), qui dérive l'agenda de la structure `days` du parcours au build.
 
-- Chaque jour qui doit apparaître dans l'agenda porte `theme` (titre éditorial du jour, ex. « Les fondations data ») et `summary` (description courte). Ces deux champs sont optionnels au schéma mais **requis dès qu'un `<Agenda>` cible ce parcours** : un jour incomplet fait échouer le build avec un message explicite.
-- L'agenda rend une ligne par jour, au format `<label> : <theme>` + `summary`. Le `brand` (titre du parcours) et le `brandSub` (institution selon `scheme`) sont dérivés automatiquement, comme pour les slides de fin.
-- Prop `image` optionnelle pour l'illustration latérale (défaut : `cover` du parcours). Le composant de présentation sous-jacent `<Programme>` reste utilisable en manuel (items écrits à la main) pour les one-shots hors parcours.
-- Conséquence : modifier l'ordre des jours, un `theme`, un `summary`, ou déplacer un deck d'un jour à l'autre dans le frontmatter du parcours régénère l'agenda au prochain build, sans toucher au deck.
+- Rendu : une grille de colonnes (une par jour du parcours). Chaque colonne affiche le `label` du jour, son `theme` (titre éditorial, ex. « Les fondations data ») et la liste des decks du jour, dont les titres sont résolus automatiquement depuis la collection `presentations`.
+- Chaque jour **doit définir `theme`**. Un jour sans `theme`, un parcours sans `days`, ou un slug de deck introuvable font **échouer le build** avec un message explicite.
+- Détection auto des ateliers : un deck est marqué « workshop » si son corps MDX contient un `<Workshop>`. Prop `noWorkshop={["slug", ...]}` pour exclure un deck de ce marquage.
+- Prop `examDecks={["slug", ...]}` : met ces decks en avant et grise tous les autres (vue « recap examen » qui isole les ateliers évalués).
+- `brand` (titre du parcours) et `brandSub` (institution selon `scheme`) sont dérivés automatiquement, comme pour les slides de fin.
+- Conséquence : modifier l'ordre des jours, un `theme`, ou déplacer un deck d'un jour à l'autre dans le frontmatter du parcours régénère l'agenda au prochain build, sans toucher au deck.
+- Le composant sous-jacent `<Programme>` reste utilisable en manuel (items écrits à la main) pour les one-shots hors parcours.
 
 ## Pièges (gotchas)
 

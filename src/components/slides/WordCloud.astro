@@ -16,6 +16,8 @@ interface Props {
   italicPart?: string;
   brand?: string;
   brandSub?: string;
+  /** Libellé ToC. Sans lui, le nuage de mots n'apparaît pas au Sommaire (opt-in). */
+  tocLabel?: string;
 }
 
 const {
@@ -25,13 +27,14 @@ const {
   italicPart,
   brand = 'Titre de la présentation',
   brandSub,
+  tocLabel,
 } = Astro.props;
 const titleParts = splitHighlight(question, italicPart);
 ---
 <section
   class="wordcloud"
   data-layout="wordcloud"
-  data-section-title={question.slice(0, 60)}
+  data-section-title={tocLabel}
   data-poll-id={id}
   data-poll-type="word"
   data-poll-question={question}

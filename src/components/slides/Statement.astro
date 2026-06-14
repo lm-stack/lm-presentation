@@ -9,8 +9,9 @@ interface Props {
   /** Titre statement. Un \n force un saut de ligne (white-space: pre-line). */
   title: string;
   italicPart?: string;
-  /** Taille du titre : 'xl' (défaut) ou 'l' (réduit, pour les Statement denses avec bullets). */
-  titleSize?: 'xl' | 'l';
+  /** Taille du titre : 'xl' (défaut), 'l' (réduit, Statement denses avec bullets)
+   *  ou 'm' (fs-hero-m, pour tenir un titre long sur une seule ligne en pleine largeur). */
+  titleSize?: 'xl' | 'l' | 'm';
   body?: string;
   /** Liste à puces avec icône Phosphor devant chaque item (colonne gauche). */
   bullets?: { icon: string; text: string }[];
@@ -166,7 +167,7 @@ const ecFillData = [
           <span class="statement__eyebrow-square" aria-hidden="true"></span>{eyebrow}
         </p>
       )}
-      <h2 class:list={['statement__title', titleSize === 'l' && 'statement__title--l']}>
+      <h2 class:list={['statement__title', titleSize === 'l' && 'statement__title--l', titleSize === 'm' && 'statement__title--m']}>
         {titleParts
           ? <>{titleParts.before}<em class="statement__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
@@ -370,6 +371,11 @@ const ecFillData = [
   .statement__title--l {
     font-size: var(--fs-hero-l);
   }
+  /* Titre encore plus réduit (titleSize="m") : permet de tenir un titre long sur
+     une seule ligne en pleine largeur (token --fs-hero-m). */
+  .statement__title--m {
+    font-size: var(--fs-hero-m);
+  }
   .statement__body {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: var(--fs-lead);
@@ -377,7 +383,6 @@ const ecFillData = [
     font-weight: 400;
     color: var(--c-muted);
     margin: 28px 0 0;
-    max-width: var(--measure-m);
   }
   /* Colonne gauche aérée pour le slide à grande carte abstraite (Les 4 entités) :
      plus d'air sous le titre (avant les bullets) et avant le body. Ciblé via
@@ -397,7 +402,6 @@ const ecFillData = [
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: var(--measure-m);
   }
   .statement__bullet {
     display: flex;

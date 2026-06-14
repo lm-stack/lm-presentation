@@ -14,3 +14,9 @@ source/
 # Fichiers Cloudflare
 .wrangler/
 .superpowers/
+
+# Artefacts de dev local (logs serveur, screenshots de diagnostic, tooling)
+*.log
+diag-shots/
+.playwright-cli/
+__shot.mjs

@@ -62,11 +62,12 @@ ou en colonne (split, intercalaires) gardent un cap `--measure-*`.
 
 ## Hors scope
 
-Composants **legacy restants** (non importés par les decks, pas encore adoptés : `Default`,
-`Title`, `Calendar`, `Conventions`, `AgendaFull`, `AgendaLight`, `Timer`, `IconCatalog`, `Custom`)
-ne sont pas migrés : à archiver, pas à harmoniser.
+Plus aucun composant legacy : le nettoyage est **terminé**. Supprimés le 2026-06-09 (versions
+pré-Hero), puis le 2026-06-14 : les legacy `Calendar`, `Conventions`, `AgendaFull`, `AgendaLight`,
+`IconCatalog`, plus les orphelins `Agenda` (remplacé par `AgendaDays`) et `WorkflowCanvas` (remplacé
+par `N8nCanvas`).
 
-Les autres composants legacy (versions pré-Hero) ont été **supprimés lors du nettoyage 2026-06-09**,
-remplacés par leur équivalent Hero : `Cover`, `Section`, `Closing`/`ClosingHero`, `Statement`,
-`Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Capture`, `Exchange`, `ImageGrid`,
-`BigImage`, `TableSlide`/`TwoColumnTable`, `NumberedCards`/`NumberedCardWithDetail`, `Poll`, `WordCloud`.
+Équivalents Hero des anciens layouts pré-Hero : `Cover`, `Section`, `Closing`/`ClosingHero`,
+`Statement`, `Quote`, `AboutMe`/`AboutMeBullets`, `Workshop`/`WorkshopBrief`, `Capture`, `Exchange`,
+`ImageGrid`, `BigImage`, `TableSlide`/`TwoColumnTable`, `NumberedCards`/`NumberedCardWithDetail`,
+`Poll`, `WordCloud`. La famille `src/components/slides/` est désormais entièrement « Hero ».

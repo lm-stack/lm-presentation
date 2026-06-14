@@ -162,7 +162,7 @@ const titleParts = splitHighlight(data.title, data.highlight);
         {decksData.map((deck, i) => {
           const num = String(i + 1).padStart(2, '0');
           const dayLabel = dayOf.get(deck.slug) ?? '';
-          const desc = deck.description ?? deck.short ?? '';
+          const desc = deck.description ?? '';
           const searchBlob = `${deck.title} ${desc} ${deck.slug}`.toLowerCase();
           return (
             <li class="module-row" data-day={dayLabel} data-search={searchBlob} style={`--stagger-i: ${i}`}>
@@ -200,7 +200,10 @@ const titleParts = splitHighlight(data.title, data.highlight);
     </main>
 
     <footer class="parcours-footer">
-      <span class="parcours-footer__brand">Lausanne Marketing</span>
+      <span class="parcours-footer__brand">
+        <span class="parcours-footer__brand-lm">Lausanne Marketing</span>
+        <span class="parcours-footer__brand-execed">HEC Lausanne</span>
+      </span>
       <span class="parcours-footer__sep" aria-hidden="true">•</span>
       <span class="parcours-footer__short">{data.short ?? data.title}</span>
     </footer>
@@ -381,6 +384,11 @@ const titleParts = splitHighlight(data.title, data.highlight);
         border-top: 1px solid color-mix(in srgb, var(--c-ink) 6%, transparent);
       }
       .parcours-footer__brand { color: var(--c-ink); }
+      /* Crédit institution selon le thème : LM par défaut, HEC Lausanne en ExecEd.
+         Bascule via [data-scheme] sur <body> (statique ET switcher live). */
+      .parcours-footer__brand-execed { display: none; }
+      [data-scheme="execed"] .parcours-footer__brand-lm { display: none; }
+      [data-scheme="execed"] .parcours-footer__brand-execed { display: inline; }
       .parcours-footer__sep { color: color-mix(in srgb, var(--c-ink) 25%, transparent); }
 
       @keyframes parcours-stagger { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }

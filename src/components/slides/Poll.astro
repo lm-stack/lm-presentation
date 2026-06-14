@@ -16,6 +16,8 @@ interface Props {
   subtitle?: string;
   brand?: string;
   brandSub?: string;
+  /** Libellé ToC. Sans lui, le sondage n'apparaît pas au Sommaire (opt-in). */
+  tocLabel?: string;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   subtitle,
   brand = 'Titre de la présentation',
   brandSub,
+  tocLabel,
 } = Astro.props;
 const titleParts = splitHighlight(question, italicPart);
 
@@ -36,7 +39,7 @@ if (options.length < 2 || options.length > 6) {
 <section
   class="poll"
   data-layout="poll"
-  data-section-title={question.slice(0, 60)}
+  data-section-title={tocLabel}
   data-poll-id={id}
   data-poll-type="choice"
   data-poll-question={question}
@@ -223,7 +226,7 @@ if (options.length < 2 || options.length > 6) {
      et centré verticalement (align-content: center) dans la min-height. */
   .poll__chart {
     display: grid;
-    grid-template-columns: max-content 560px 72px;
+    grid-template-columns: minmax(0, max-content) minmax(0, 560px) 72px;
     justify-content: center;
     align-content: center;
     align-items: center;
@@ -246,7 +249,8 @@ if (options.length < 2 || options.length > 6) {
   .poll__bar-label {
     font-family: 'Hanken Grotesk', sans-serif;
     font-weight: 700;
-    font-size: var(--fs-lead);
+    font-size: var(--fs-body);
+    line-height: 1.25;
     color: var(--c-ink);
     text-align: right;
   }

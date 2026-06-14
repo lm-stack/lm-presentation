@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "https://images.unsplash.com/photo-1640158615573-cd28feb1bf4e?w=1200&h=750&fit=crop"
-description: "Ouverture du parcours CRM, Data & Automation : présentation de l'intervenant et vue d'ensemble des trois jours de formation."
+description: "Présentation de l'intervenant, du programme des trois jours et de l'examen."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -20,6 +20,7 @@ import ListImage from '@/components/slides/ListImage.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Table from '@/components/slides/Table.astro';
 import CTA from '@/components/slides/CTA.astro';
+import Statement from '@/components/slides/Statement.astro';
 
 <Cover
   title="CRM, Data & Automation"
@@ -107,6 +108,7 @@ import CTA from '@/components/slides/CTA.astro';
   title="Tour de table"
   italicPart="table"
   subtitle="Faisons connaissance avant de plonger dans la donnée."
+  cardTextLarge
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
@@ -114,8 +116,8 @@ import CTA from '@/components/slides/CTA.astro';
       src: 'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=1800&h=1200&fit=crop',
       alt: 'Figurines Lego noir et blanc',
       focal: 'center 80%',
-      title: 'À vous, en trois points',
-      text: 'Votre prénom, votre entreprise, et votre rapport actuel aux données.',
+      title: 'À vous, en quatre points',
+      text: 'Votre prénom, votre entreprise, votre rapport actuel aux données, et vos attentes du cours.',
     },
   ]}
 />
@@ -157,6 +159,17 @@ import CTA from '@/components/slides/CTA.astro';
   ]}
   buttonLabel="Voir le slidedeck en ligne"
   buttonHref="/parcours/crm-data-automation/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Mot personnel sur la propriété intellectuelle : accès perso (code par email), responsabilisation. */}
+<Statement
+  eyebrow="Propriété intellectuelle"
+  title="Ces supports sont à vous, rien qu'à vous"
+  italicPart="rien qu'à vous"
+  body="Je passe des dizaines d'heures à créer ces supports. Ils sont une œuvre protégée, © Thomas Rouaud, tous droits réservés. Votre accès est personnel et non transférable : pas de reproduction ni de diffusion, même partielle, sans mon accord écrit. Je vous fais confiance pour le respecter."
+  wide
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

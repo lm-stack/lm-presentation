@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/ia-automatisation/cover-ai-chip.jpg"
-description: "IA & Automation : les quatre leviers de l'IA dans le marketing automation, génération de contenu, chatbots connectés aux données. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+description: "Les quatre leviers de l'IA dans le marketing automation, démo à l'appui."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -15,8 +15,8 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Media from '@/components/slides/Media.astro';
 import BarChart from '@/components/slides/BarChart.astro';
-import Capture from '@/components/slides/Capture.astro';
-import Workshop from '@/components/slides/Workshop.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Debat from '@/components/slides/Debat.astro';
 
 {/*
   MIGRATION : ia-automatisation.mdx → ia-automatisation-new.mdx
@@ -118,7 +118,7 @@ import Workshop from '@/components/slides/Workshop.astro';
 <Cover
   title="IA & Automation"
   italicPart="IA"
-  eyebrow="Module 34"
+  eyebrow="Jour 3"
   footer="HEC Lausanne : Juin 2026"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -196,7 +196,7 @@ import Workshop from '@/components/slides/Workshop.astro';
 <ImageGrid
   title="Deux cas d'usage à explorer"
   italicPart="cas d'usage"
-  subtitle="Pour ancrer ces possibilités, deux scénarios que nous allons construire ensemble dans n8n."
+  subtitle="Pour ancrer ces possibilités, deux scénarios concrets d'IA appliquée au marketing."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
@@ -215,35 +215,57 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Slide 6 : Démonstration sur n8n (ex-Demo sans capture)
-    PLACEHOLDER : image Unsplash générique n8n. Remplacer par une vraie capture
-    du workflow n8n (nodes IA : génération d'article + chatbot) après la démo. */}
-<Capture
-  title="Démonstration sur n8n"
-  italicPart="n8n"
-  subtitle="Construction live des deux cas d'usage avec les nodes IA natifs de n8n et un modèle Claude ou GPT."
-  image="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1600&h=1000&fit=crop"
-  caption="Workflow n8n : génération d'articles et chatbot connecté aux données (à remplacer)"
+{/* Fil rouge Zoho CRM : resitue le contexte (l'outil) avant la démo Claude + MCP. */}
+<Statement
+  eyebrow="Le fil rouge"
+  title="Notre CRM : Zoho"
+  italicPart="Zoho"
+  body="Tout au long du cours, l'outil fil rouge est Zoho CRM : c'est là qu'on a posé les entités et modélisé les processus. Avant d'automatiser, on revient dans ce CRM, et on va le piloter directement depuis Claude."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Outil", value: "n8n, nodes IA natifs (AI Agent, LLM Chain) connectés à Claude ou GPT-4o." },
-    { label: "Cas 1", value: "Génération d'article : trigger sur brief, rédaction LLM, publication CMS automatique." },
-    { label: "Cas 2", value: "Chatbot RAG : questions prospects, lookup CRM, réponse contextuelle en temps réel." },
-    { label: "À retenir", value: "Deux patterns distincts : génération batch (article) et conversation temps réel (chatbot)." },
-  ]}
 />
 
-{/* Slides 7+8 : Workshop + WorkshopBrief FUSIONNÉS en Workshop */}
-<Workshop
-  subtitle="À vous de réfléchir : quels cas d'usage IA seraient les plus impactants dans votre organisation ?"
-  defaultMinutes={20}
-  presets={[10, 15, 20]}
+{/* Démo : configurer un serveur MCP pour Claude, puis piloter Zoho en langage naturel.
+    Loupe = logo Claude (l'outil que l'on configure). SVG officiel Simple Icons (CC0). */}
+<Demo
+  toolLogo="/decks/ia-automatisation/logos/claude.svg"
+  toolName="Claude"
+  toolUrl="https://claude.ai"
+  objectives={[
+    "Ouvrir Claude (Desktop ou Code) et sa configuration des serveurs MCP.",
+    "Déclarer le serveur MCP de Zoho : les outils du CRM (champs, modules) apparaissent dans Claude.",
+    "En langage naturel, demander à Claude de créer un champ, puis une entité complète dans Zoho.",
+    "Le résultat : un schéma CRM modifié en langage naturel, sans code ni quitter Claude.",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    { label: "Temps", value: "20 minutes : 10 en individuel, 10 en peer-sharing." },
-    { label: "Objectif", value: "Réfléchir à des applications pratiques de l'IA dans le marketing automation." },
-    { label: "Sujet", value: "Un cas concret applicable à votre organisation, avec un levier IA identifié." },
+/>
+
+{/* Discussion : quels autres serveurs MCP brancher, après la démo Zoho. */}
+<Debat
+  live
+  eyebrow="Discussion"
+  tocLabel="Discussion"
+  title="Quels autres outils brancheriez-vous sur Claude ?"
+  italicPart="autres outils"
+  intro="On vient de piloter Zoho depuis Claude via un serveur MCP. Le même principe marche avec des dizaines d'outils : agenda, email, facturation, support, documentation, bases de données."
+  reactions={[
+    "Mon agenda Google",
+    "La compta dans Bexio",
+    "Le support Zendesk",
+    "Mes factures, enfin",
+    "Slack pour les alertes",
+    "Notion, ma doc produit",
+    "WhatsApp Business ?",
+    "Ma boîte mail",
+    "Google Sheets",
+    "La base interne",
   ]}
+  prompts={[
+    "Quel outil de votre quotidien gagnerait à être piloté en langage naturel ?",
+    "Agenda, boîte mail, facturation, support : lequel brancheriez-vous en premier ?",
+    "Qu'est-ce qui vous retient aujourd'hui de connecter vos outils à une IA ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
