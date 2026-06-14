@@ -17,6 +17,7 @@ import Media from '@/components/slides/Media.astro';
 import BarChart from '@/components/slides/BarChart.astro';
 import Demo from '@/components/slides/Demo.astro';
 import Debat from '@/components/slides/Debat.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
 
 {/*
   MIGRATION : ia-automatisation.mdx → ia-automatisation-new.mdx
@@ -216,11 +217,15 @@ import Debat from '@/components/slides/Debat.astro';
 />
 
 {/* Fil rouge Zoho CRM : resitue le contexte (l'outil) avant la démo Claude + MCP. */}
-<Statement
-  eyebrow="Le fil rouge"
-  title="Notre CRM : Zoho"
-  italicPart="Zoho"
-  body="Tout au long du cours, l'outil fil rouge est Zoho CRM : c'est là qu'on a posé les entités et modélisé les processus. Avant d'automatiser, on revient dans ce CRM, et on va le piloter directement depuis Claude."
+<FilRouge
+  active={4}
+  subtitle="Zoho CRM nous sert de fil rouge sur toute la démo : quatre étapes, un seul outil, pour ne pas se perdre."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

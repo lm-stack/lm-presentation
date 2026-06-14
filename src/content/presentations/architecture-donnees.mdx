@@ -22,6 +22,7 @@ import Compare from '@/components/slides/Compare.astro';
 import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
 import Table from '@/components/slides/Table.astro';
+import UseCase from '@/components/slides/UseCase.astro';
 
 {/*
   Modèle ERD fil rouge du module (4 entités, use case traiteur). Positions dans la scène 1920x1080
@@ -181,18 +182,6 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* KPI : la donnée pas prête, premier frein à l'IA (Gartner, février 2025). */}
-<Kpi
-  eyebrow="Le frein n°1 à l'IA"
-  value="60"
-  unit="%"
-  label="des projets d'IA seront abandonnés d'ici 2026, faute de données prêtes."
-  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
-  sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 {/* Le modèle appartient au métier (CMO), pas à l'IT */}
 <Compare
   title="Le modèle appartient au métier"
@@ -333,11 +322,14 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 />
 
 {/* Cas d'usage du fil rouge : le traiteur, posé avant de construire son modèle. */}
-<Statement
+<UseCase
   eyebrow="Le fil rouge"
-  title="Notre cas d'usage : un traiteur"
-  italicPart="un traiteur"
-  body="Un traiteur événementiel reçoit des demandes pour des mariages et des séminaires, de particuliers comme d'entreprises. Il qualifie chaque piste, puis répond par un devis. C'est ce métier qu'on va modéliser dans les prochaines slides : des premières demandes jusqu'au devis signé, en quatre entités."
+  you={{ icon: "ph:cooking-pot", label: "Un traiteur événementiel" }}
+  target={{ icon: "ph:users-three", label: "Particuliers et entreprises" }}
+  objective="Qualifier chaque demande, des premières pistes jusqu'au devis signé."
+  collect={["Source", "Type de client", "Besoin"]}
+  image="/decks/architecture-donnees/usecase-traiteur.jpg"
+  imageAlt="Buffet dressé d'un traiteur événementiel"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -487,3 +479,4 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     { label: "Restitution", value: "3 à 4 minutes par groupe." },
   ]}
 />
+

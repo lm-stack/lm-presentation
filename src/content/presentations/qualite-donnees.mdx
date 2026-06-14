@@ -16,6 +16,7 @@ import Quote from '@/components/slides/Quote.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import StatRings from '@/components/slides/StatRings.astro';
+import Kpi from '@/components/slides/Kpi.astro';
 import Table from '@/components/slides/Table.astro';
 import Demo from '@/components/slides/Demo.astro';
 import Spreadsheet from '@/components/slides/Spreadsheet.astro';
@@ -60,15 +61,12 @@ import Tip from '@/components/slides/Tip.astro';
     (Gartner, communiqué « Lack of AI-Ready Data Puts AI Projects at Risk », 26/02/2025 ;
     enquête T3 2024, 248 responsables data). gartner.com bloque le fetch (403) :
     chiffres du communiqué officiel, citables tels quels. */}
-<StatRings
-  title="Sans données prêtes, pas d'IA"
-  italicPart="pas d'IA"
-  subtitle="Gartner, février 2025 : la donnée non préparée est le premier frein aux projets d'IA."
-  items={[
-    { label: "des projets d'IA abandonnés d'ici 2026, faute de données prêtes", value: 60, emphasis: true },
-    { label: "des organisations sans gestion des données fiable pour l'IA", value: 63 },
-  ]}
-  source="Gartner, « AI-Ready Data Puts AI Projects at Risk », 2025."
+<Kpi
+  eyebrow="Le frein n°1 à l'IA"
+  value="60"
+  unit="%"
+  label="des projets d'IA seront abandonnés d'ici 2026, faute de données prêtes."
+  source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
   sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"

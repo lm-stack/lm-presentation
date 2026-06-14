@@ -20,6 +20,7 @@ import Table from '@/components/slides/Table.astro';
 import Demo from '@/components/slides/Demo.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import Debat from '@/components/slides/Debat.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
 
 {/* Deck Workflow (Jour 2, dernier sujet). Structure :
     01 Types d'automatisation (simples du quotidien -> complexes cross-outils)
@@ -487,6 +488,20 @@ import Debat from '@/components/slides/Debat.astro';
     ],
   }}
   note="Le test : qu'est-ce qui déclenche cette étape ? Si c'est un autre événement, c'est un autre workflow."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Fil rouge Zoho CRM (étape 3 : automatiser une action), juste avant la démo n8n. */}
+<FilRouge
+  active={3}
+  subtitle="On reprend le fil rouge de la démo Zoho : étape 3, on automatise une action."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
