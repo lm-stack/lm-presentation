@@ -117,6 +117,18 @@ body.is-fullscreen .deck-footer {
   text-align: left;
 }
 
+/* Anti-FOUC : avant que Reveal ait fini d'initialiser (il pose .ready sur .reveal),
+   toutes les sections sont display:flex !important (règle layout plus bas) +
+   position:absolute (reveal.css), donc empilées et visibles. La DERNIÈRE du DOM
+   (slide de fin « Des questions ? » / « Merci », fond image full-bleed) est peinte
+   au-dessus le temps d'un flash, puis Reveal affiche la slide 0. On masque les
+   slides tant que Reveal n'est pas prêt. visibility (pas display:none) pour que
+   Reveal puisse mesurer les slides à l'init. Exception .deck-init-failed : on garde
+   le fallback « contenu lisible en flux normal ». */
+body:not(.deck-init-failed) .reveal:not(.ready) .slides {
+  visibility: hidden;
+}
+
 /* ============================================================ */
 /* LIENS DANS LES SLIDES                                        */
 /* ============================================================ */
@@ -544,6 +556,7 @@ body.is-fullscreen .deck-search {
   left: 16px;
   z-index: 101;
   max-width: 380px;
+  min-width: 320px;
   background: var(--c-surface);
   color: var(--c-ink);
   border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
@@ -769,6 +782,7 @@ body.is-fullscreen .deck-search {
     left: 8px;
     right: 8px;
     max-width: none;
+    min-width: 0;
     padding: 20px 20px 16px;
     max-height: calc(100vh - 16px);
     overflow-y: auto;

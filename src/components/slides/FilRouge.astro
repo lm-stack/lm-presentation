@@ -1,14 +1,17 @@
 ---
 // src/components/slides/FilRouge.astro
-// Slide "fil rouge" de la démo : un stepper horizontal des étapes de la démo,
-// relié par un fil accent (le fil rouge), avec UNE étape active mise en avant
-// et les autres grisées. Réutilisable : on le ré-affiche à chaque étape en
-// changeant `active`. Titre FIGÉ "Fil rouge" (italique serif + soulignement
+// Slide "fil rouge" de la démo : une rangée de CARTES (une par étape), reliées
+// par le fil accent (le fil rouge) qui les traverse. Motif de fond animé façon
+// agenda/horaires : un fil ondule en travers du slide et une "navette" (perle
+// accent) le parcourt en boucle. Trois états par étape : passée (carte normale),
+// active (carte accent, "vous êtes ici") et à venir (nettement plus grisée).
+// Réutilisable : on ré-affiche le slide en changeant `active` pour avancer le
+// fil de progression. Titre FIGÉ "Fil rouge" (italique serif + soulignement
 // accent), inviolable comme Workshop / Démonstration.
 interface Props {
   /** Étapes du fil rouge (3 à 5), dans l'ordre. */
   steps: string[];
-  /** Index 1-based de l'étape active ; les autres sont grisées. */
+  /** Index 1-based de l'étape active ; les précédentes sont "passées", les suivantes "à venir" (plus grisées). */
   active?: number;
   /** Phrase d'explication (pourquoi un fil rouge). */
   subtitle?: string;
@@ -24,6 +27,15 @@ const {
 } = Astro.props;
 ---
 <section class="filrouge" data-layout="filrouge">
+  <div class="filrouge__weave" aria-hidden="true">
+    <svg class="filrouge__weave-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <path class="filrouge__thread filrouge__thread--faint" d="M -60 300 C 360 240 680 380 1020 340 S 1640 230 2060 200" />
+      <path class="filrouge__thread" d="M -60 250 C 360 190 680 330 1020 290 S 1640 180 2060 150" />
+      <path class="filrouge__spark filrouge__spark--glow" pathLength="100" d="M -60 250 C 360 190 680 330 1020 290 S 1640 180 2060 150" />
+      <path class="filrouge__spark" pathLength="100" d="M -60 250 C 360 190 680 330 1020 290 S 1640 180 2060 150" />
+    </svg>
+  </div>
+
   <header class="filrouge__header">
     <div class="filrouge__brand-text">
       <p class="filrouge__brand-main">{brand}</p>
@@ -42,13 +54,19 @@ const {
       {subtitle && <p class="filrouge__subtitle">{subtitle}</p>}
     </div>
 
-    <ol class="filrouge__steps" style={`--filrouge-count:${steps.length}`}>
-      {steps.map((step, i) => (
-        <li class:list={['filrouge__step', { 'is-active': i + 1 === active }]}>
-          <span class="filrouge__node">{String(i + 1).padStart(2, '0')}</span>
-          <span class="filrouge__step-label">{step}</span>
-        </li>
-      ))}
+    <ol class="filrouge__steps" style={`--filrouge-count:${steps.length}; --filrouge-active:${active}`}>
+      {steps.map((step, i) => {
+        const n = i + 1;
+        const state = n < active ? 'is-done' : n === active ? 'is-active' : 'is-upcoming';
+        return (
+          <li class:list={['filrouge__step', state]}>
+            <span class="filrouge__node">{String(n).padStart(2, '0')}</span>
+            <div class="filrouge__card">
+              <span class="filrouge__step-label">{step}</span>
+            </div>
+          </li>
+        );
+      })}
     </ol>
   </div>
 </section>
@@ -67,7 +85,63 @@ const {
     justify-content: flex-start !important;
   }
 
+  /* Motif de fond « navette » (façon horloge / soleil) : un fil ondule en travers
+     du slide, une perle accent le parcourt en boucle. Décoratif, derrière le
+     contenu (z0). La perle disparaît en prefers-reduced-motion, le fil reste. */
+  .filrouge__weave {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .filrouge__weave-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .filrouge__thread {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-accent) 22%, transparent);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .filrouge__thread--faint {
+    stroke: color-mix(in srgb, var(--c-accent) 11%, transparent);
+    stroke-width: 2;
+  }
+  /* La « navette » : un point accent qui parcourt le fil. Réalisé par un tiret
+     très court (linecap rond = un point) animé en CSS via stroke-dashoffset,
+     plutôt qu'un SMIL animateMotion : une animation CSS redémarre de façon
+     fiable quand Reveal ré-affiche la slide (hors viewDistance, la slide passe
+     en display:none, ce qui figeait le SMIL au 1er passage). pathLength=100 =>
+     tiret en unités normalisées ; les deux bouts du tracé sont hors écran, donc
+     le bouclage est invisible. */
+  .filrouge__spark {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 16;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 99.9;
+    animation: filrouge-spark 11s linear infinite;
+  }
+  .filrouge__spark--glow {
+    stroke: color-mix(in srgb, var(--c-accent) 30%, transparent);
+    stroke-width: 34;
+  }
+  @keyframes filrouge-spark {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -100; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .filrouge__spark { animation: none; }
+  }
+
+  /* Header full-width (RÈGLE) : brand gauche + logo LM droite + border-bottom. */
   .filrouge__header {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -100,12 +174,14 @@ const {
   }
 
   .filrouge__body {
+    position: relative;
+    z-index: 1;
     flex: 1 1 auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 96px;
+    gap: 60px;
     padding: 36px 96px 64px;
   }
 
@@ -134,7 +210,9 @@ const {
     max-width: var(--measure-xl);
   }
 
-  /* Stepper : N étapes en colonnes égales, reliées par le fil rouge (accent). */
+  /* Stepper : N cartes en colonnes égales, reliées par le fil rouge (accent).
+     Pas de column-gap : l'espacement vient du padding des étapes, pour que les
+     centres des noeuds tombent exactement à (k - 0.5) / count (alignement du fil). */
   .filrouge__steps {
     list-style: none;
     margin: 0;
@@ -144,7 +222,7 @@ const {
     align-items: start;
     position: relative;
   }
-  /* Le fil : ligne accent reliant le centre des noeuds (premier -> dernier). */
+  /* Le fil de base : ligne faible reliant le centre des noeuds (premier -> dernier). */
   .filrouge__steps::before {
     content: '';
     position: absolute;
@@ -153,7 +231,20 @@ const {
     right: calc(50% / var(--filrouge-count, 4));
     height: 3px;
     transform: translateY(-50%);
-    background: color-mix(in srgb, var(--c-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--c-accent) 22%, transparent);
+    z-index: 0;
+  }
+  /* Le fil « fait » : segment accent plein, du premier noeud jusqu'au noeud actif. */
+  .filrouge__steps::after {
+    content: '';
+    position: absolute;
+    top: 44px;
+    left: calc(50% / var(--filrouge-count, 4));
+    width: calc((var(--filrouge-active, 1) - 1) / var(--filrouge-count, 4) * 100%);
+    height: 3px;
+    transform: translateY(-50%);
+    background: var(--c-accent);
+    z-index: 0;
   }
 
   .filrouge__step {
@@ -162,8 +253,8 @@ const {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 26px;
-    padding: 0 16px;
+    gap: 24px;
+    padding: 0 14px;
     text-align: center;
   }
   .filrouge__node {
@@ -180,6 +271,21 @@ const {
     background: var(--c-surface);
     border: 2px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
     color: var(--c-faint);
+    flex: 0 0 auto;
+  }
+  /* Carte de l'étape : convention carte du repo (surface, bordure légère,
+     radius 4px, drop-shadow légère). */
+  .filrouge__card {
+    width: 100%;
+    min-height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 22px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
   }
   .filrouge__step-label {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -187,18 +293,43 @@ const {
     line-height: 1.25;
     font-weight: 500;
     color: var(--c-muted);
-    max-width: 300px;
   }
 
-  /* Étape active : noeud accent plein + label en encre, le reste grisé. */
+  /* Étape passée : noeud en anneau accent, carte normale, label en encre pleine. */
+  .filrouge__step.is-done .filrouge__node {
+    border-color: var(--c-accent);
+    color: var(--c-accent);
+  }
+  .filrouge__step.is-done .filrouge__step-label {
+    color: var(--c-ink);
+  }
+
+  /* Étape active : noeud accent plein + carte accentuée + label encre gras. */
   .filrouge__step.is-active .filrouge__node {
     background: var(--c-accent);
     border-color: var(--c-accent);
     color: var(--c-on-accent);
     box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--c-accent) 55%, transparent);
   }
+  .filrouge__step.is-active .filrouge__card {
+    background: color-mix(in srgb, var(--c-accent) 6%, var(--c-surface));
+    border-color: color-mix(in srgb, var(--c-accent) 45%, transparent);
+  }
   .filrouge__step.is-active .filrouge__step-label {
     color: var(--c-ink);
     font-weight: 700;
+  }
+
+  /* Étape à venir : carte nettement plus grisée (teaser estompé) + pointillé.
+     L'opacité ne touche QUE la carte : le cercle garde son fond plein opaque,
+     pour ne jamais laisser voir le fil derrière. */
+  .filrouge__step.is-upcoming .filrouge__card {
+    opacity: 0.45;
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--c-ink) 16%, transparent);
+    box-shadow: none;
+  }
+  .filrouge__step.is-upcoming .filrouge__step-label {
+    color: var(--c-faint);
   }
 </style>

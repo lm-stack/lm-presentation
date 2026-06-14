@@ -7,14 +7,13 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "/decks/conclusion/cover-smile.jpg"
-description: "Conclusion du parcours CRM, Data & Automation : la stratégie avant les outils, un stack abordable pour petites structures, retour de feedback collectif. HEC Lausanne Executive Education."
+description: "Conclusion du parcours CRM, Data & Automation : deux débats (éthique de l'automatisation, souveraineté des données) et des sondages de clôture (sujets marquants, webinaire de suivi). HEC Lausanne Executive Education."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
-import Media from '@/components/slides/Media.astro';
-import Table from '@/components/slides/Table.astro';
 import Recap from '@/components/slides/Recap.astro';
-import Exchange from '@/components/slides/Exchange.astro';
+import Debat from '@/components/slides/Debat.astro';
+import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 
 {/*
@@ -100,89 +99,92 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   theme="halo-gold"
 />
 
-{/* Slide 2 : Le chemin parcouru — récap workshops + démos, dérivé du parcours */}
+{/* Récap scindé : ce que vous avez construit (workshops), puis vu en démo. */}
 <Recap
   parcours="crm-data-automation"
-  title="Le chemin parcouru ensemble"
-  italicPart="ensemble"
-  subtitle="Trois jours de pratique : ce que vous avez construit et vu en démonstration."
-  noWorkshop={["funnel-marketing", "segmentation-activation"]}
+  only="workshops"
+  title="Ce que vous avez construit"
+  italicPart="construit"
+  subtitle="Vos ateliers des trois jours : à chaque fois, un livrable concret qui repart avec vous."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : La stratégie avant les outils — message clé de la formation */}
-<Media
-  title="La stratégie avant les outils"
-  italicPart="stratégie"
-  subtitle="Dans un monde où les outils se multiplient et évoluent sans cesse, ce n'est pas la technologie qui crée la différence."
-  body="C'est la clarté de votre stratégie et la cohérence de vos actions qui font la différence. Les outils servent une vision, ils ne la remplacent jamais."
-  image="/decks/conclusion/strategie-outils.jpeg"
-  alt="Image illustrant la priorité de la stratégie sur les outils digitaux"
-  fit="cover"
+<Recap
+  parcours="crm-data-automation"
+  only="demos"
+  title="Ce qu'on a vu en démonstration"
+  italicPart="démonstration"
+  subtitle="Les outils manipulés en direct pendant la formation."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : Stack pour petite structure — tableau 3 colonnes, 8 lignes */}
-<Table
-  title="Un stack complet pour moins de 50 CHF par mois"
-  italicPart="50 CHF"
-  subtitle="C'est une illusion de penser que les outils digitaux nécessitent des investissements élevés."
-  intro="Proposition de stack pour petite structure sans budget. Huit briques pour couvrir CRM, données, automation, hébergement, comptabilité, design et IA."
-  headers={["Outil", "Fonction", "Prix mensuel"]}
-  rows={[
-    ["Brevo", "CRM, landing page, emailing, calendly-like", "13 CHF"],
-    ["Airtable", "Base de données", "Gratuit"],
-    ["Zapier", "Outil d'automatisation", "Gratuit"],
-    ["Infomaniak", "Hébergement, nom de domaine", "11 CHF"],
-    ["WordPress", "Site web", "Gratuit"],
-    ["Bexio", "Comptabilité et finance", "25 CHF"],
-    ["Canva", "Outil de design", "Gratuit"],
-    ["ChatGPT", "IA générative", "Gratuit"],
-  ]}
+{/* Sondages de clôture : ressenti sur les sujets, puis intérêt et thème d'un webinaire de suivi. */}
+<WordCloud
+  id="sujet-prefere"
+  question="Le sujet que vous avez préféré ?"
+  italicPart="préféré"
+  subtitle="Plusieurs réponses bienvenues, depuis votre téléphone"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 4 : Débat 1 — responsabilité humaine de l'automatisation */}
-<Exchange
-  eyebrow="Débat"
+<WordCloud
+  id="sujet-moins-aime"
+  question="Le sujet que vous avez le moins aimé ?"
+  italicPart="moins aimé"
+  subtitle="Plusieurs réponses bienvenues, depuis votre téléphone"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Poll
+  id="webinaire-followup"
+  question="Souhaitez-vous un webinaire de follow-up ?"
+  italicPart="follow-up"
+  subtitle="Une seule réponse, depuis votre téléphone"
+  options={["Clairement", "Pourquoi pas", "Ça dépend"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<WordCloud
+  id="sujet-webinaire"
+  question="Sujet du webinaire de follow-up ?"
+  italicPart="follow-up"
+  subtitle="Vos idées, depuis votre téléphone"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Débats de clôture (mode live) : on termine la formation sur la discussion. */}
+{/* Débat 1 : responsabilité humaine de l'automatisation */}
+<Debat
+  live
   tocLabel="Responsabilité"
   title="Automatiser, jusqu'où est-ce juste ?"
   italicPart="juste"
-  subtitle="Vous savez désormais automatiser une large part de votre métier. Derrière chaque tâche reprise par la machine, il y a des emplois et des collègues."
+  intro="Vous savez désormais automatiser une large part de votre métier. Derrière chaque tâche reprise par la machine, il y a des emplois et des collègues."
   prompts={[
     "Quelle est votre responsabilité envers ceux dont vous automatisez le travail ?",
     "Supprimer un poste ou faire monter la personne en compétence : qui tranche, et comment ?",
   ]}
-  icon="ph:scales-fill"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 5 : Débat 2 — géopolitique et souveraineté des données */}
-<Exchange
-  eyebrow="Débat"
+{/* Débat 2 : géopolitique et souveraineté des données */}
+<Debat
+  live
   tocLabel="Souveraineté des données"
   title="Où vivent vraiment vos données ?"
   italicPart="vraiment"
-  subtitle="Chaque outil que vous choisissez décide où vos données sont stockées et sous quelle juridiction elles tombent. Un choix technique, ou politique ?"
+  intro="Chaque outil que vous choisissez décide où vos données sont stockées et sous quelle juridiction elles tombent. Un choix technique, ou politique ?"
   prompts={[
     "Outil européen ou américain : qu'est-ce que ça change pour vous et vos clients ?",
     "Cloud Act, RGPD, souveraineté : de quoi êtes-vous vraiment responsable ?",
   ]}
-  icon="ph:globe-hemisphere-west-fill"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 6 : Feedback collectif fin de formation — WordCloud interactif */}
-<WordCloud
-  id="feedback-formation"
-  question="Votre takeaway principal de la formation, en un mot ?"
-  italicPart="un mot"
-  subtitle="Plusieurs réponses bienvenues, depuis votre téléphone"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

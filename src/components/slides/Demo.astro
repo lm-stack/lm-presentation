@@ -8,12 +8,14 @@
 // Dans le verre, des lignes de data défilent vite à l'horizontale, alternées
 // gauche<->droite une ligne sur deux ; le logo de l'outil est révélé au centre
 // (sans son nom). Décor générique tokenisé (marche LM + ExecEd, n'importe quel outil).
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   /** Logo de l'outil de la démo (chemin SVG/PNG dans /public). Révélé dans la loupe. */
   toolLogo: string;
-  /** Nom de l'outil : sert d'alt au logo, n'est plus affiché dans la slide. */
+  /** Nom de l'outil : affiché sous le titre (avec le site) et sert d'alt au logo. */
   toolName?: string;
-  /** URL de l'outil : rend le logo cliquable (ouvre dans un nouvel onglet). */
+  /** URL de l'outil : rend le logo cliquable et affiche le site sous le titre. */
   toolUrl?: string;
   /** Objectifs concrets de la démo (3 à 5 items, ce qu'on fait en direct). */
   objectives: string[];
@@ -31,6 +33,12 @@ const {
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
+
+// Site affiché sous le titre (nom de domaine seul, sans protocole/www/chemin) ;
+// le lien complet reste toolUrl. Ex. "https://www.zoho.com/crm/" -> "zoho.com".
+const toolSite = toolUrl
+  ? toolUrl.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '')
+  : '';
 
 // Jetons de data décoratifs qui défilent dans la loupe. Génériques (agnostiques de
 // l'outil), volontairement courts : champs / valeurs / métriques plausibles d'un
@@ -96,6 +104,20 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
       <h2 class="demo__title">
         <em class="demo__title-italic"><span class="underline">Démonstration</span></em>
       </h2>
+
+      {(toolName || toolSite) && (
+        <p class="demo__tool">
+          <span class="demo__tool-chip">
+            {toolName && <span class="demo__tool-name">{toolName}</span>}
+            {toolName && toolSite && <span class="demo__tool-sep" aria-hidden="true"></span>}
+            {toolSite && (
+              toolUrl
+                ? <a class="demo__tool-site" href={toolUrl} target="_blank" rel="noopener">{toolSite}<Icon name="ph:arrow-up-right" aria-hidden="true" /></a>
+                : <span class="demo__tool-site">{toolSite}</span>
+            )}
+          </span>
+        </p>
+      )}
 
       <ol class="demo__objectives">
         {objectives.map((objective, i) => (
@@ -397,18 +419,63 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
     font-weight: 400;
   }
 
+  /* Ligne outil sous le titre : pill autonome (nom de l'outil + site cliquable). */
+  .demo__tool {
+    margin: 40px 0 0;
+  }
+  .demo__tool-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 8%, transparent);
+  }
+  .demo__tool-name {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+  }
+  .demo__tool-sep {
+    flex: 0 0 auto;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c-ink) 28%, transparent);
+  }
+  .demo__tool-site {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    color: var(--c-accent);
+    text-decoration: none;
+  }
+  .demo__tool-site:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .demo__tool-site :global(svg) {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
   .demo__objectives {
     list-style: none;
     margin: 56px 0 0;
     padding: 0;
-    border-top: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo__objective {
     display: flex;
     align-items: center;
     gap: 36px;
     padding: 22px 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
   }
   .demo__objective-num {
     flex: 0 0 auto;

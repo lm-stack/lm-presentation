@@ -197,7 +197,7 @@ const hasCaption = !!(title || subtitle || caption);
         {title && (
           <p class="erd__caption-title">
             {titleParts
-              ? <>{titleParts.before}<em class="erd__caption-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
+              ? <>{titleParts.before}<em class="erd__caption-italic">{titleParts.match}</em>{titleParts.after}</>
               : title}
           </p>
         )}

@@ -15,15 +15,18 @@ import SubSection from '@/components/slides/SubSection.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Media from '@/components/slides/Media.astro';
 import ImageFull from '@/components/slides/ImageFull.astro';
+import SplitImage from '@/components/slides/SplitImage.astro';
 import Definition from '@/components/slides/Definition.astro';
 import BarChart from '@/components/slides/BarChart.astro';
 import ColumnChart from '@/components/slides/ColumnChart.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
+import Table from '@/components/slides/Table.astro';
 import Poll from '@/components/slides/Poll.astro';
 import WordCloud from '@/components/slides/WordCloud.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Compare from '@/components/slides/Compare.astro';
 import Spreadsheet from '@/components/slides/Spreadsheet.astro';
+import Demo from '@/components/slides/Demo.astro';
 
 {/* Reprise intégrale du deck marketing-automation (ancien format) en ExecEd-style.
     Images réutilisées telles quelles depuis public/decks/marketing-automation/.
@@ -49,6 +52,27 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   title="État des lieux"
   italicPart="lieux"
   subtitle="Comment l'IA générative a rebattu les cartes de l'automation."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Technologies marketing pertinentes (BarChart reconstruit depuis le chart ZHAW 2022,
+    part « assez ou très importante »), placé juste après l'intercalaire État des lieux */}
+<BarChart
+  title="Technologies marketing pertinentes"
+  italicPart="pertinentes"
+  subtitle="Part des répondants jugeant la technologie assez ou très importante."
+  items={[
+    { label: "CRM Marketing", value: 87 },
+    { label: "Emailing / Newsletter", value: 86 },
+    { label: "Moteurs de recherche", value: 83 },
+    { label: "Réseaux sociaux", value: 80 },
+    { label: "Digital Analytics", value: 76 },
+    { label: "Inbound Marketing", value: 76 },
+    { label: "Marketing automation", value: 65, emphasis: true },
+  ]}
+  source="ZHAW, Marketing Automation Report 2022 (n = 414)"
+  sourceUrl="https://digitalcollection.zhaw.ch/server/api/core/bitstreams/e6010880-891a-4364-bffa-23f36847d390/content"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -108,40 +132,34 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   sourceUrl="https://zapier.com"
 />
 
-{/* Slide 2 : Chart ZHAW Technologies pertinentes */}
-<Media
-  title="Technologies marketing pertinentes"
-  italicPart="pertinentes"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-techno-zhaw-04.png"
-  alt="Classement des technologies marketing par importance, ZHAW 2022"
+{/* État des lieux : le mème automation vs agent IA (hype contre fiabilité).
+    Image carrée LinkedIn affichée entière via imageFit="contain". */}
+<SplitImage
+  title="la ruée vers l'agent IA"
+  italicPart="agent IA"
+  subtitle="La masse pousse vers l'IA. Souvent, un simple workflow est plus fiable."
+  image="/decks/marketing-automation/automation-vs-agent-ia.jpg"
+  imageFit="contain"
+  columns={[
+    { icon: "ph:gear-six", label: "Automation", text: "Fiabilité, ROI, scalabilité. Éprouvée et prévisible, mais sans le buzz : la file reste vide." },
+    { icon: "ph:robot", label: "Agent IA", text: "Hallucinations, coût, effet de mode. Tout le monde s'y précipite, malgré les inconvénients." },
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 3 : Chart ZHAW Objectifs */}
-<Media
-  title="Objectifs marketing digitaux"
-  italicPart="Objectifs"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-objectifs-zhaw-05.png"
-  alt="Classement des objectifs marketing digitaux par importance, ZHAW 2022"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 4 : Vos objectifs (Poll) */}
+{/* Vos pratiques : sondage d'entrée sur l'usage des outils d'automation */}
 <Poll
-  id="objectifs-marketing"
-  question="Et chez vous, quel objectif marketing digital est le plus important ?"
-  italicPart="le plus important"
+  id="usage-automation"
+  question="Avez-vous déjà utilisé des outils d'automation ?"
+  italicPart="déjà utilisé"
   subtitle="Une seule réponse, depuis ton téléphone"
   options={[
-    "Augmenter les ventes",
-    "Générer de nouveaux prospects",
-    "Fidéliser les clients",
-    "Accroître la notoriété",
-    "Réduire les coûts",
+    "Jamais",
+    "Rarement",
+    "Parfois",
+    "Souvent",
+    "Au quotidien",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -186,16 +204,16 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
     { label: "2012", value: 7 },
     { label: "2013", value: 9 },
     { label: "2014", value: 12 },
-    { label: "2015", value: 16 },
-    { label: "2016", value: 19 },
+    { label: "2015", value: 18 },
+    { label: "2016", value: 21 },
     { label: "2017", value: 26 },
-    { label: "2018", value: 33 },
+    { label: "2018", value: 35 },
     { label: "2019", value: 45 },
     { label: "2020", value: 52 },
     { label: "2021", value: 64 },
     { label: "2022", value: 79 },
-    { label: "2023", value: 101 },
-    { label: "2024", value: 130 },
+    { label: "2023", value: 115 },
+    { label: "2024", value: 140 },
     { label: "2025", value: 175, emphasis: true },
   ]}
   source="Data Age 2025 (IDC Global DataSphere), sponsorisé par Seagate, mai 2020"
@@ -208,7 +226,10 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
 <ImageGrid
   title="Multiplication des outils"
   italicPart="outils"
-  subtitle="Le nombre d'outils et technologies marketing est passé d'environ 150 en 2011 à 9'932 en 2022, soit une augmentation de 6'521 % dans les 11 dernières années."
+  subtitle="D'environ 150 outils marketing en 2011 à 9'932 en 2022, soit une hausse de 6'521 % en 11 ans."
+  source="MartechMap 2022, Scott Brinker (chiefmartec.com)"
+  sourceUrl="https://martechmap.com"
+  logos
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
@@ -226,43 +247,63 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   brandSub="Executive Education"
   images={[
     { src: "/decks/marketing-automation/pme.jpg", alt: "Petites et moyennes entreprises", title: "Petites et moyennes entreprises", text: "Stack léger, souvent SaaS tout-en-un, opéré par une ou deux personnes." },
-    { src: "/decks/marketing-automation/grande-entreprise.jpeg", alt: "Grandes entreprises", title: "Grandes entreprises", text: "Stack composite, plusieurs vendors par couche, gouvernance partagée IT et marketing." },
+    { src: "/decks/marketing-automation/grande-entreprise.jpeg", alt: "Grandes entreprises", title: "Grandes entreprises", text: "Stack composite, plusieurs vendors, gouvernance IT et marketing." },
   ]}
 />
 
-{/* Slide 18 : Philips stack */}
-<Media
+{/* Slide 18 : Philips stack (grille 1 image, contain + image courte, source chiefmartec) */}
+<ImageGrid
   title="L'ensemble des outils digitaux constitue le stack"
   italicPart="stack"
-  subtitle="Exemple : le stack utilisé par Philips, organisé en onze catégories distinctes."
-  body="Une carte vivante du marketing et du e-commerce : activation, content, sales enablement, data, voix client, conversion."
-  image="/decks/marketing-automation/philips-stack.png"
-  alt="Stack marketing de Philips, onze catégories"
+  subtitle="Exemple : le stack de Philips, son écosystème marketing et e-commerce."
+  mediaFit="contain"
+  mediaHeight="520px"
+  source="Philips Digital Marketing & e-Commerce, The Stackies (chiefmartec.com)"
+  sourceUrl="https://chiefmartec.com/2020/04/7-amazing-martech-stacks-cisco-infutor-juniper-networks-philips-poly-sargento-usps/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    { src: "/decks/marketing-automation/philips-stack.png", alt: "Écosystème marketing et e-commerce de Philips, exemple de stack" },
+  ]}
+/>
+
+{/* Démo BuiltWith : explorer le stack réel d'une entreprise précise en direct */}
+<Demo
+  toolLogo="/decks/marketing-automation/logos/builtwith.png"
+  toolName="BuiltWith"
+  toolUrl="https://builtwith.com"
+  objectives={[
+    "Entrer le domaine d'une entreprise",
+    "Révéler son stack martech réel",
+    "Repérer analytics, CMS, publicité, tags",
+    "Comparer deux concurrents",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Slide 19 : Types d'outils */}
-<InfoCards
+{/* Slide 19 : Familles d'outils (tableau) */}
+<Table
   title="Quelques familles d'outils dans un stack"
   italicPart="familles"
   subtitle="Cinq catégories qu'on retrouve à peu près partout."
+  headers={["Famille", "Exemples d'outils"]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  cards={[
-    { icon: "ph:database", label: "Contenus et stockage", value: "CMS, DAM, SEO, cookies, serveurs, CDN." },
-    { icon: "ph:users", label: "Relation client", value: "CRM, CDP, réseaux sociaux, messagerie." },
-    { icon: "ph:chart-bar", label: "Analyse et reporting", value: "BI, enquêtes, dashboards, attribution." },
-    { icon: "ph:megaphone", label: "Publicité et ventes", value: "SEM, emailing, programmatique, e-commerce." },
-    { icon: "ph:wrench", label: "Autres outils", value: "Cookie consent, anti-fraude, accessibilité." },
+  rows={[
+    ["Contenus et stockage", "CMS, DAM, SEO, cookies, serveurs, CDN."],
+    ["Relation client", "CRM, CDP, réseaux sociaux, messagerie."],
+    ["Analyse et reporting", "BI, enquêtes, dashboards, attribution."],
+    ["Publicité et ventes", "SEM, emailing, programmatique, e-commerce."],
+    ["Autres outils", "Cookie consent, anti-fraude, accessibilité."],
   ]}
 />
 
 {/* Slide 20 : Growth marketing WordCloud */}
 <WordCloud
-  id="growth-marketing-def"
-  question="Le growth marketing en un mot, c'est quoi pour vous ?"
-  italicPart="en un mot"
+  id="outils-stack"
+  question="Quels outils composent votre stack ?"
+  italicPart="votre stack"
   subtitle="Plusieurs réponses bienvenues"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -296,6 +337,26 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   ]}
 />
 
+{/* Les freins du marketing online en 2022 (BarChart reconstruit depuis l'Abbildung 11
+    du rapport ZHAW : part « défi moyen ou important » = grosse + mittlere Herausforderung) */}
+<BarChart
+  title="Les freins du marketing online"
+  italicPart="freins"
+  subtitle="Part des répondants pour qui c'est un défi moyen ou important."
+  items={[
+    { label: "Manque de données sur les contacts prêts à acheter", value: 65, emphasis: true },
+    { label: "Manque de ressources pour générer des leads", value: 64 },
+    { label: "Pas de processus pour entretenir les leads", value: 62 },
+    { label: "Manque de ressources pour le content marketing", value: 62 },
+    { label: "Manque de ressources financières", value: 49 },
+    { label: "Silos de données entre les services", value: 47 },
+  ]}
+  source="ZHAW, Marketing Automation Report 2022 (n ≈ 295), plusieurs réponses possibles"
+  sourceUrl="https://doi.org/10.21256/zhaw-3130"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 23 : Limites et freins (Poll) */}
 <Poll
   id="freins-automatisation"
@@ -309,25 +370,6 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
     "Pas de soutien de la direction",
     "Données trop dispersées",
   ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 23b : Les vrais freins a l'IA (chart reconstruit, ZHAW 2024) */}
-<BarChart
-  title="Les vrais freins à l'IA"
-  italicPart="freins"
-  subtitle="Ce qui bloque l'adoption de l'IA en marketing, selon les entreprises."
-  items={[
-    { label: "Ressources et compétences limitées", value: 72, emphasis: true },
-    { label: "Craintes sur la protection des données", value: 28 },
-    { label: "Pas de vue d'ensemble, ne sait pas par où commencer", value: 28 },
-    { label: "Limites technologiques", value: 21 },
-    { label: "Pas une priorité de la direction", value: 21 },
-    { label: "Manque de prise de conscience", value: 20 },
-  ]}
-  source="ZHAW, Marketing Automation & AI Report 2024 (n=253), plusieurs réponses possibles"
-  sourceUrl="https://www.zhaw.ch/storage/sml/upload/Zumstein-et-al_Marketing-Automation-AI-Report_2024.pdf"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -351,7 +393,7 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/marketing-automation/imagination-code.jpeg", alt: "Imagination", title: "Imagination", text: "Lignes de code, terminaux noirs, dépendances et compétences informatiques pointues." },
+    { src: "/decks/marketing-automation/imagination-code.jpeg", alt: "Imagination", title: "Imagination", text: "Lignes de code, terminaux noirs et compétences pointues." },
     { src: "/decks/marketing-automation/realite-workshop.jpeg", alt: "Réalité", title: "Réalité", text: "Des marketeurs autour d'une table, des post-it, un workflow dessiné à la main." },
   ]}
 />
@@ -397,13 +439,23 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   ]}
 />
 
-{/* Slide 10 : Chart ZHAW Avantages */}
-<Media
+{/* Slide 10 : Avantages principaux (BarChart reconstruit depuis le chart ZHAW 2022, % très important) */}
+<BarChart
   title="Avantages principaux"
   italicPart="Avantages"
-  subtitle="Marketing Automation Report 2022, ZHAW, 414 réponses."
-  image="/decks/marketing-automation/chart-avantages-zhaw-11.png"
-  alt="Classement des avantages du marketing automation, ZHAW 2022"
+  subtitle="Part des répondants jugeant chaque avantage très important."
+  items={[
+    { label: "Rendre les processus plus efficaces", value: 64, emphasis: true },
+    { label: "Communiquer de manière personnalisée", value: 55 },
+    { label: "Optimiser les conversions", value: 52 },
+    { label: "Gagner du temps sur les tâches répétitives", value: 50 },
+    { label: "Améliorer la qualité des prospects et contacts", value: 48 },
+    { label: "Augmenter la réactivité", value: 46 },
+    { label: "Proposer des contenus pertinents le long du parcours", value: 45 },
+    { label: "Générer plus de prospects", value: 43 },
+  ]}
+  source="Marketing Automation Report 2022, ZHAW (n=414)"
+  sourceUrl="https://digitalcollection.zhaw.ch/handle/11475/24445"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -421,16 +473,6 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
     "Gagner du temps sur les tâches répétitives",
     "Améliorer la qualité des prospects",
   ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 12 : Vos expériences (WordCloud) */}
-<WordCloud
-  id="vos-experiences-ma"
-  question="Votre expérience du marketing automation, en un mot ?"
-  italicPart="en un mot"
-  subtitle="Plusieurs réponses bienvenues"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -527,6 +569,7 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   title="Démo : une donnée qui arrive toute seule"
   italicPart="toute seule"
   subtitle="Une formule dans une cellule, et la donnée tombe en direct. Sans une ligne de code : vous venez d'appeler une API."
+  app="sheets"
   sheets={[
     {
       name: "Démo",
@@ -544,6 +587,17 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   brandSub="Executive Education"
 />
 
+{/* Webhook : la variante "push" de l'API (déplacé depuis le deck workflows le
+    2026-06-14 : webhook vs API en polling, sa place naturelle est dans la section APIs). */}
+<Statement
+  eyebrow="Webhook"
+  title="Un webhook est une requête qui envoie des données"
+  italicPart="webhook"
+  body="À la différence d'une API interrogée à intervalle régulier, un webhook est déclenché par un événement. Exemple : Stripe pousse un événement « nouveau paiement » à l'instant où la transaction réussit. Pas de polling, pas de latence."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 34 : No-code et low-code */}
 <ImageGrid
   title="No-code et low-code"
@@ -552,8 +606,8 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/marketing-automation/nocode.jpeg", alt: "No-code", title: "No-code", text: "Pas de développement. On configure, on connecte, on exécute. Zapier, n8n, Make, Airtable." },
-    { src: "/decks/marketing-automation/lowcode.jpeg", alt: "Low-code", title: "Low-code", text: "Développement ponctuel. On étend, on personnalise, on intègre du code custom là où c'est nécessaire." },
+    { src: "/decks/marketing-automation/nocode-custom.svg", alt: "Blocs visuels reliés en flux et glisser-déposer, sans code", title: "No-code", text: "Pas de développement. On configure, on connecte, on exécute. Zapier, n8n, Make, Airtable." },
+    { src: "/decks/marketing-automation/lowcode-custom.svg", alt: "Blocs visuels complétés par une fenêtre de code custom", title: "Low-code", text: "Développement ponctuel. On étend, on personnalise, on intègre du code custom là où c'est nécessaire." },
   ]}
 />
 
@@ -606,4 +660,19 @@ import Spreadsheet from '@/components/slides/Spreadsheet.astro';
     { icon: "ph:plugs-connected", label: "Là où vous travaillez", value: "Agenda, CRM, emails, fichiers : l'IA se branche sur vos outils existants." },
     { icon: "ph:flask", label: "À tester en direct", value: "Demandez à Claude de retrouver un client et de préparer un message de relance." },
   ]}
+/>
+
+{/* Démo finale : créer entités et champs Zoho via le MCP Zoho, en langage naturel */}
+<Demo
+  toolLogo="/decks/marketing-automation/logos/zoho.svg"
+  toolName="Zoho CRM"
+  toolUrl="https://www.zoho.com/crm/"
+  objectives={[
+    "Brancher le MCP Zoho sur Claude",
+    "Créer un module CRM en langage naturel",
+    "Générer les champs automatiquement",
+    "Vérifier le résultat en direct dans Zoho",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />

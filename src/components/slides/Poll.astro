@@ -218,11 +218,17 @@ if (options.length < 2 || options.length > 6) {
 
   /* Toutes les réponses dans une carte blanche bordée, à la même hauteur que
      wordcloud-hero__chart (min-height 560px), barres centrées verticalement. */
+  /* Carte = UNE seule grille (colonne label partagée -> barres alignées). Le bloc
+     [label | barre | compte] est centré dans la carte (justify-content: center)
+     et centré verticalement (align-content: center) dans la min-height. */
   .poll__chart {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: max-content 560px 72px;
     justify-content: center;
-    gap: 20px;
+    align-content: center;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 20px;
     min-height: 560px;
     background: var(--c-surface);
     border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
@@ -231,12 +237,10 @@ if (options.length < 2 || options.length > 6) {
     padding: 32px 36px;
   }
 
+  /* Les cellules de chaque ligne remontent dans la grille de .poll__chart
+     (colonne label partagée, barres alignées, bloc centré). */
   .poll__bar-row {
-    display: grid;
-    grid-template-columns: 260px 1fr 72px;
-    align-items: center;
-    gap: 16px;
-    height: 52px;
+    display: contents;
   }
 
   .poll__bar-label {

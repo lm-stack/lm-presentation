@@ -1,0 +1,200 @@
+---
+title: "Stratégie data & automation"
+subtitle: "CRM, Data & Automation"
+short: "Stratégie data & automation"
+date: 2026-06-14
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=750&fit=crop"
+description: "Le module de synthèse du parcours CRM, Data & Automation : relier architecture, processus et workflow dans une stratégie data & automation priorisée. Quatrième livrable de l'examen. HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Steps from '@/components/slides/Steps.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Table from '@/components/slides/Table.astro';
+import Tip from '@/components/slides/Tip.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+
+{/* Module Stratégie data & automation (Jour 3, capstone), créé le 2026-06-14.
+    Dernier module d'enseignement, juste avant la conclusion : c'est la synthèse du
+    parcours et le module qui produit le 4e livrable de l'examen (la stratégie).
+    Structure : 01 Pourquoi une stratégie -> 02 Construire la stratégie (maturité,
+    priorisation, roadmap) -> 03 Rédiger le livrable -> Workshop.
+    Composants 100 % existants. Images : placeholders Unsplash, à remplacer. */}
+
+{/* Slide 1 : Cover (image placeholder Unsplash, à remplacer). */}
+<Cover
+  title="Stratégie data & automation"
+  italicPart="automation"
+  eyebrow="Jour 3 : Synthèse"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&h=1200&fit=crop"
+  theme="halo-gold"
+/>
+
+{/* ============ 01 POURQUOI UNE STRATÉGIE ============ */}
+<SubSection
+  kicker="Stratégie data & automation"
+  index="01"
+  title="Pourquoi une stratégie ?"
+  italicPart="Pourquoi"
+  subtitle="Vous avez les briques. Sans plan pour les relier, elles restent des briques."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Thèse d'ouverture en Statement (titre serif souligné sur deux lignes). */}
+<Statement
+  title={"Sans stratégie, vous automatisez\nle désordre plus vite"}
+  italicPart="le désordre plus vite"
+  body="Vous avez structuré vos données, modélisé vos processus et construit un workflow. Trois briques solides. Mais des briques sans plan restent des briques : la stratégie est ce qui les relie, les priorise et leur donne une direction."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Recap des trois livrables déjà construits (le contenu vu avant). */}
+<Steps
+  title="Ce que vous avez déjà construit"
+  italicPart="déjà construit"
+  subtitle="Trois livrables concrets, posés au fil des trois jours. Il manque le plan qui les relie."
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Architecture de données : le socle, vos entités et leurs relations." },
+    { text: "Processus modélisés : le flux métier cartographié, qui fait quoi et dans quel ordre." },
+    { text: "Workflow : l'exécution automatisée, un processus pris en charge de bout en bout." },
+  ]}
+/>
+
+{/* Ce qu'une stratégie ajoute par-dessus les briques (4 cartes 2x2). */}
+<InfoCards
+  title="Ce qu'une stratégie ajoute"
+  italicPart="ajoute"
+  subtitle="Quatre apports qui transforment des briques isolées en système cohérent."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:compass", label: "Alignement", value: "Une direction claire et partagée : toute l'équipe sait vers quoi on construit." },
+    { icon: "ph:list-checks", label: "Priorisation", value: "Savoir quoi faire d'abord, et surtout ce qu'on ne fait pas tout de suite." },
+    { icon: "ph:path", label: "Séquencement", value: "Une feuille de route dans le temps plutôt qu'une liste de souhaits sans ordre." },
+    { icon: "ph:chart-line-up", label: "Mesure", value: "Des indicateurs pour savoir si ça marche, et corriger le tir." },
+  ]}
+/>
+
+{/* ============ 02 CONSTRUIRE VOTRE STRATÉGIE ============ */}
+<SubSection
+  kicker="Stratégie data & automation"
+  index="02"
+  title="Construire votre stratégie"
+  italicPart="Construire"
+  subtitle="Trois temps : où vous en êtes, ce qui compte d'abord, et dans quel ordre avancer."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Diagnostic : échelle de maturité en 4 niveaux. */}
+<Steps
+  title="Où en êtes-vous aujourd'hui ?"
+  italicPart="aujourd'hui"
+  subtitle="Quatre niveaux de maturité data & automation. Situez-vous avant de viser l'étape d'après."
+  image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Artisanal : des tableurs épars, la donnée vit dans les têtes et les boîtes mail." },
+    { text: "Outillé : un CRM en place, mais peu d'automatisation et des données inégales." },
+    { text: "Intégré : données propres, processus modélisés, premiers workflows en production." },
+    { text: "Piloté : des indicateurs suivis, une amélioration continue, l'IA en appui." },
+  ]}
+/>
+
+{/* Priorisation : matrice impact contre effort, décrite en 4 quadrants (2x2). */}
+<InfoCards
+  title="Prioriser : impact contre effort"
+  italicPart="impact contre effort"
+  subtitle="Tout n'a pas la même valeur. Croisez l'impact attendu et l'effort à fournir."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:rocket-launch", label: "Quick wins", value: "Fort impact, faible effort. À lancer tout de suite : ce sont vos preuves rapides." },
+    { icon: "ph:buildings", label: "Chantiers structurants", value: "Fort impact, effort élevé. À planifier et découper : l'essentiel de votre feuille de route." },
+    { icon: "ph:clock", label: "Secondaire", value: "Faible impact, faible effort. À faire s'il reste du temps, sans y mettre d'énergie." },
+    { icon: "ph:prohibit", label: "À écarter", value: "Faible impact, effort élevé. À laisser de côté : le piège qui épuise sans résultat." },
+  ]}
+/>
+
+{/* Roadmap : trois horizons séquencés. */}
+<Steps
+  title="Une feuille de route en trois horizons"
+  italicPart="trois horizons"
+  subtitle="Une stratégie n'est pas une liste, c'est une séquence. On avance par paliers."
+  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Stabiliser : assainir les données et poser le socle CRM. Rien de solide sans cette base." },
+    { text: "Automatiser : prendre en charge les processus à plus forte valeur, un par un." },
+    { text: "Industrialiser : passer à l'échelle avec l'IA, le suivi des performances et l'amélioration continue." },
+  ]}
+/>
+
+{/* ============ 03 RÉDIGER VOTRE STRATÉGIE (livrable examen) ============ */}
+<SubSection
+  kicker="Stratégie data & automation"
+  index="03"
+  title="Rédiger votre stratégie"
+  italicPart="Rédiger"
+  subtitle="Le quatrième livrable de l'examen : la vision qui relie et priorise les trois autres."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Structure attendue du livrable stratégie (Table 2 colonnes, 6 lignes). */}
+<Table
+  title="Ce que doit contenir votre stratégie"
+  italicPart="votre stratégie"
+  subtitle="Six ingrédients pour une stratégie data & automation qui tient debout."
+  headers={["Section", "Ce qu'on attend"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Vision", "Où vous voulez aller, et pourquoi : la situation cible en une à deux phrases."],
+    ["Diagnostic", "Où vous en êtes aujourd'hui : votre niveau de maturité et vos points faibles."],
+    ["Priorisation", "Ce qui passe d'abord, justifié par l'impact et l'effort."],
+    ["Feuille de route", "Les trois horizons séquencés : stabiliser, automatiser, industrialiser."],
+    ["Liens entre livrables", "Comment votre architecture, vos processus et votre workflow s'articulent."],
+    ["Indicateurs", "Les quelques KPIs qui diront si la stratégie produit ses effets."],
+  ]}
+/>
+
+{/* Pivot final : la stratégie relie, elle n'ajoute pas un silo. */}
+<Tip
+  title="La stratégie n'est pas un quatrième silo"
+  italicPart="un quatrième silo"
+  body="C'est le fil qui coud les trois autres livrables ensemble. Une bonne stratégie ne rajoute pas une couche : elle donne du sens à ce que vous avez déjà construit."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Workshop : esquisser leur propre stratégie data & automation. */}
+<Workshop
+  subtitle="À vous de jouer : esquissez la stratégie data & automation de votre organisation."
+  defaultMinutes={40}
+  presets={[20, 30, 40]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Temps", value: "40 minutes : 30 en individuel, 10 en peer-sharing." },
+    { label: "Objectif", value: "Une feuille de route priorisée qui relie vos trois livrables." },
+    { label: "Sujet", value: "Votre organisation, ou le cas que vous suivez depuis le début." },
+    { label: "Output", value: "Une matrice impact/effort et une feuille de route en trois horizons." },
+    { label: "Restitution", value: "Deux minutes par personne ou par groupe." },
+  ]}
+/>

@@ -23,6 +23,7 @@ import Steps from '@/components/slides/Steps.astro';
 import ListImage from '@/components/slides/ListImage.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import Statement from '@/components/slides/Statement.astro';
+import Kpi from '@/components/slides/Kpi.astro';
 import Definition from '@/components/slides/Definition.astro';
 import Form from '@/components/slides/Form.astro';
 import Compare from '@/components/slides/Compare.astro';
@@ -51,6 +52,7 @@ import AgendaFull from '@/components/slides/AgendaFull.astro';
 import AgendaLight from '@/components/slides/AgendaLight.astro';
 import IconCatalog from '@/components/slides/IconCatalog.astro';
 import CTA from '@/components/slides/CTA.astro';
+import Debat from '@/components/slides/Debat.astro';
 import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
 
 <SchemeSwitcher />
@@ -544,6 +546,19 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
+{/* KPI : un chiffre-clé en héros (géant, centré) sur un fond « equalizer » animé
+    (barres qui montent en cascade, CSS). Pour mettre un indicateur fort en avant,
+    bien plus que le `stat` latéral d'un Statement. */}
+<Kpi
+  eyebrow="État des lieux"
+  value="73"
+  unit="%"
+  label="de la donnée d'entreprise n'est jamais exploitée"
+  source="Forrester"
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
+/>
+
 {/* Définition : introduit un concept. Terme en grand serif italique + définition
     en gros texte (tout calé à gauche). image optionnelle en fond, floutée + voile
     clair façon Quote. */}
@@ -566,6 +581,22 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
     { label: "Output", value: "Architecture de données complète de votre organisation" },
     { label: "Présentation", value: "2 minutes par groupe" },
   ]}
+/>
+
+{/* Débat : un temps de discussion en classe. Question + intro de contexte, puis
+    les points de débat rendus en bulles de discussion (avatars alternés or/encre),
+    avec une nuée de voix en ambiance. Pendant "débat" de Exchange. */}
+<Debat
+  live
+  title="Une question qui divise"
+  italicPart="divise"
+  intro="Une phrase de contexte qui pose l'enjeu avant de lancer la discussion en salle."
+  prompts={[
+    "Le premier point de débat, formulé comme une vraie question ouverte.",
+    "Le second point, qui pousse à trancher : qui décide, et selon quels critères ?",
+  ]}
+  brand="Titre de la présentation"
+  brandSub="Titre du parcours ou de l'événement"
 />
 
 <Form

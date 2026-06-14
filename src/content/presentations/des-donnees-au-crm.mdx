@@ -17,6 +17,10 @@ import FilRouge from '@/components/slides/FilRouge.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import DataPipeline from '@/components/slides/DataPipeline.astro';
 import Table from '@/components/slides/Table.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Statement from '@/components/slides/Statement.astro';
+import Definition from '@/components/slides/Definition.astro';
+import Kpi from '@/components/slides/Kpi.astro';
 
 {/* Slide 1 : Cover. */}
 <Cover
@@ -28,6 +32,59 @@ import Table from '@/components/slides/Table.astro';
   brandSub="Executive Education"
   image="/decks/des-donnees-au-crm/cover.jpg"
   theme="halo-gold"
+/>
+
+{/* État des lieux (ouverture, juste après la Cover) : le KPI en héros (composant
+    Kpi, fond equalizer). Angle : la majorité des entreprises n'exploite pas vraiment
+    sa donnée. Chiffre Wavestone (ex-NewVantage / Randy Bean), Data & AI Leadership
+    Survey 2024, Fortune 1000 : 48,1% ont bâti une organisation pilotée par la donnée
+    (42,6% une culture data ; 78% citent l'humain comme frein). Lien = rapport officiel
+    Wavestone (PDF, leur domaine). La narration se fait à l'oral autour du chiffre. */}
+<Kpi
+  eyebrow="État des lieux"
+  value="48"
+  unit="%"
+  label="des entreprises seulement sont réellement pilotées par la donnée"
+  source="Wavestone, Data & AI Leadership Survey 2024 (Fortune 1000)"
+  sourceUrl="https://www.wavestone.com/wp-content/uploads/2024/11/data-ai-executive-leadership-survey-2024.pdf"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Définition : pose "c'est quoi un CRM" pour le public non-dev, juste après
+    l'état des lieux et avant de situer le CRM parmi CDP/ERP. */}
+<Definition
+  eyebrow="Définition"
+  term="Le CRM"
+  termItalicPart="CRM"
+  definition="Un outil qui réunit au même endroit tout ce que vous savez de vos clients et prospects, pour suivre chaque relation et déclencher la bonne action au bon moment."
+  image="https://images.pexels.com/photos/7439127/pexels-photo-7439127.jpeg"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Le rôle : le CRM comme plaque tournante (hub) de la relation client. Statement
+    avec l'animation "réseau" à droite. */}
+<Statement
+  eyebrow="Le rôle"
+  title="Le CRM, plaque tournante de la relation client"
+  italicPart="plaque tournante"
+  body="Site, formulaires, emailing, support, facturation : tout s'y connecte et y dépose sa donnée. Résultat : une seule fiche à jour par client, partagée par toute l'équipe, au lieu de dix outils qui s'ignorent."
+  entityCard={{
+    name: 'Contact',
+    abstract: true,
+    fields: [
+      { name: 'id', key: 'pk' },
+      { name: 'nom' },
+      { name: 'email' },
+      { name: 'téléphone' },
+      { name: 'Société', key: 'fk' },
+      { name: 'fonction' },
+      { name: 'statut' },
+    ],
+  }}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Slide comparatif CDP / CRM / ERP : situe le CRM parmi ses systèmes voisins
@@ -51,6 +108,23 @@ import Table from '@/components/slides/Table.astro';
   brandSub="Executive Education"
 />
 
+{/* Slide pivot : la frontière CDP / CRM / ERP s'efface. Suite directe du tableau
+    comparatif (trois rôles distincts) : en pratique, les éditeurs convergent.
+    Quatre facettes concrètes ; InfoCards 2x2. */}
+<InfoCards
+  title="Une frontière de plus en plus floue"
+  italicPart="floue"
+  subtitle="Sur le papier, trois rôles distincts. Sur le marché, les éditeurs convergent et les catégories se recouvrent."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: 'ph:database', label: "Le CRM absorbe le CDP", value: "Salesforce Data Cloud, HubSpot : le CRM intègre l'unification des profils, terrain historique du CDP." },
+    { icon: 'ph:users', label: "L'ERP monte vers le client", value: "SAP, Microsoft Dynamics : l'ERP embarque ventes et relation client, longtemps l'apanage du CRM." },
+    { icon: 'ph:stack', label: "Les suites tout-en-un", value: "Microsoft, Zoho, Odoo : un seul éditeur, une seule base, les trois rôles réunis." },
+    { icon: 'ph:target', label: "La donnée prime sur la catégorie", value: "Ce qui compte n'est pas la catégorie d'outil, mais une donnée unifiée, fiable et actionnable." },
+  ]}
+/>
+
 {/* Slide pipeline : de la donnée brute à la fiche CRM (composant DataPipeline ;
     la donnée se transforme d'étape en étape, fin sur la fiche CRM). Refondu le
     2026-06-13 : titre généralisé (plus "scrapée"), tags Qualité en teaser. */}
@@ -69,9 +143,52 @@ import Table from '@/components/slides/Table.astro';
     { label: "Secteur", value: "Restauration" },
     { label: "Ville", value: "Lausanne" },
   ] }}
-  note="Nettoyer et enrichir sont approfondis au module suivant, Qualité des données."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+{/* Migration : faire entrer la donnée existante (Excel, vieil outil) dans le CRM.
+    Suite logique du pipeline (la donnée qui entre), avant de choisir l'outil. */}
+<InfoCards
+  title="Faire entrer l'existant"
+  italicPart="l'existant"
+  subtitle="Vos données dorment déjà dans Excel ou un vieil outil : les importer proprement, sans tout casser."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:flow-arrow", label: "Cartographier les champs", value: "Faire correspondre chaque colonne de l'ancien fichier à un champ du CRM, avant tout import." },
+    { icon: "ph:broom", label: "Nettoyer d'abord", value: "Dédupliquer et corriger en amont : importer de la donnée sale, c'est polluer le CRM dès le départ." },
+    { icon: "ph:flask", label: "Tester sur un échantillon", value: "Importer vingt lignes, vérifier le résultat, puis seulement lancer l'import complet." },
+    { icon: "ph:floppy-disk", label: "Garder la source", value: "Conserver le fichier d'origine comme sauvegarde : un import raté se rejoue toujours." },
+  ]}
+/>
+
+{/* Intercalaire 01 : ouverture de la partie "marché" (le choix de l'outil).
+    Précède Les quatre grands, le comparatif, les alternatives et le choix de Zoho. */}
+<SubSection
+  kicker="Le marché"
+  index="01"
+  title="Quel CRM choisir ?"
+  italicPart="choisir"
+  subtitle="Les poids lourds, les alternatives abordables, et celui qu'on retient."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Critères de choix : la grille de décision, juste après l'intercalaire "Quel CRM
+    choisir ?" et avant de passer les options en revue. */}
+<InfoCards
+  title="Comment choisir le bon CRM"
+  italicPart="choisir"
+  subtitle="Pas le plus connu ni le plus complet : celui qui colle à votre réalité."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:target", label: "Vos besoins réels", value: "Ce que vous allez vraiment faire (suivre, relancer, segmenter), pas une liste de fonctionnalités." },
+    { icon: "ph:tag", label: "Le coût total", value: "Licence, mais aussi paramétrage, formation et add-ons : le prix affiché n'est que le début." },
+    { icon: "ph:puzzle-piece", label: "Les intégrations", value: "Se connecte-t-il à vos outils (site, emailing, compta) ? Un CRM isolé reste un silo de plus." },
+    { icon: "ph:users", label: "L'adoption", value: "Simple à prendre en main : l'outil le plus puissant ne sert à rien si l'équipe ne l'utilise pas." },
+  ]}
 />
 
 {/* Slide 2 : Les 4 plus grands CRM (grille logos, mode contain).
@@ -90,6 +207,27 @@ import Table from '@/components/slides/Table.astro';
     { src: "/decks/des-donnees-au-crm/logos/dynamics365.svg", alt: "Microsoft Dynamics 365", title: "Dynamics 365", text: "Intégré à l'écosystème Microsoft, pour grandes structures." },
     { src: "/decks/des-donnees-au-crm/logos/zoho.svg", alt: "Zoho CRM", title: "Zoho CRM", text: "Complet et abordable, bon rapport qualité-prix pour PME." },
   ]}
+/>
+
+{/* Comparatif des 4 grands CRM : CRM en lignes, 2 attributs (cible, point fort).
+    Pas de prix (volontairement) ; positionnement d'après G2 (catégorie CRM, avis
+    vérifiés, sans placement payant). Placé entre les logos des grands et les
+    alternatives abordables. */}
+<Table
+  title="Les quatre grands, comparés"
+  italicPart="comparés"
+  subtitle="À chaque profil son CRM : pour qui il est fait, et ce qui le distingue vraiment."
+  headers={["CRM", "Idéal pour", "Ce qui le distingue"]}
+  rows={[
+    ["Salesforce", "Grandes entreprises", "Leader du marché : très puissant et extensible, mais cher et complexe."],
+    ["HubSpot", "PME orientées marketing", "Tout-en-un marketing et ventes, simple à adopter ; les coûts grimpent vite."],
+    ["Dynamics 365", "Grands comptes Microsoft", "Intégration native à Microsoft 365, Teams et Power Platform."],
+    ["Zoho CRM", "PME et organisations en croissance", "Meilleur rapport puissance-prix, tout-en-un (notre fil rouge)."],
+  ]}
+  source="Comparatif d'après G2, catégorie CRM (avis vérifiés, sans placement payant), 2026"
+  sourceUrl="https://www.g2.com/categories/crm"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Slide 3 : Alternatives bon marché (grille logos, mode contain). */}
@@ -124,7 +262,48 @@ import Table from '@/components/slides/Table.astro';
   ]}
 />
 
-{/* Slide 5 : Démonstration Zoho CRM en live. Titre figé "Démonstration",
+{/* Adoption (KPI : chiffre héros). Le rappel « un CRM ne vaut que s'il est utilisé »
+    se dit à l'oral. Chiffre vérifié à la source : Johnny Grow, CRM Failure Report 2025
+    (« the CRM implementation failure rate is 55 percent » = déploiements qui n'atteignent
+    pas leurs objectifs). Cabinet CRM, pas analyste, mais page publique et cliquable. */}
+<Kpi
+  eyebrow="Le piège"
+  value="55"
+  unit="%"
+  label="des implémentations CRM n'atteignent pas leurs objectifs"
+  source="Johnny Grow, CRM Failure Report 2025"
+  sourceUrl="https://johnnygrow.com/crm/the-crm-failure-rate-is-55-percent/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Intercalaire 02 : ouverture de la partie pratique (fil rouge + démo live Zoho). */}
+<SubSection
+  kicker="La démo"
+  index="02"
+  title="Place à la pratique"
+  italicPart="pratique"
+  subtitle="On déroule le fil rouge, puis on construit en direct dans Zoho CRM."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 5 : Fil rouge de la démo (cartes 4 étapes, étape 1 active, les suivantes
+    grisées). Placé AVANT la démo : la feuille de route des 4 étapes. */}
+<FilRouge
+  active={1}
+  subtitle="Zoho CRM nous sert de fil rouge sur toute la démo : quatre étapes, un seul outil, pour ne pas se perdre."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 6 : Démonstration Zoho CRM en live. Titre figé "Démonstration",
     logo de l'outil + objectifs concrets de la démo. */}
 <Demo
   toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
@@ -134,20 +313,6 @@ import Table from '@/components/slides/Table.astro';
     "Créer une entité sur Zoho CRM (module)",
     "Créer un champ normal",
     "Créer un champ lookup (relation)",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Slide 6 : Fil rouge de la démo (stepper 4 étapes, étape 1 active, le reste grisé). */}
-<FilRouge
-  active={1}
-  subtitle="Zoho CRM nous sert de fil rouge sur toute la démo : quatre étapes, un seul outil, pour ne pas se perdre."
-  steps={[
-    "Personnaliser les données",
-    "Digitaliser un processus",
-    "Automatiser une action",
-    "Paramétrer un MCP",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"

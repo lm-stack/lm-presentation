@@ -1,0 +1,214 @@
+---
+// src/components/slides/Kpi.astro
+// Slide "KPI" : un chiffre-clé en HÉROS (géant, centré), pensé pour mettre un
+// indicateur bien plus en avant que le `stat` latéral d'un Statement. Fond animé
+// « equalizer » : des barres verticales montent et descendent en cascade (motif
+// « donnée / métrique », le pendant de l'horloge de l'agenda et du soleil des
+// horaires). 100% CSS, gelé en prefers-reduced-motion. Header marque standard.
+interface Props {
+  /** Petit label au-dessus du chiffre. */
+  eyebrow?: string;
+  /** Le chiffre-clé, en grand. Ex "73". */
+  value: string;
+  /** Unité accolée au chiffre (rendue en accent). Ex "%", "x", "CHF". */
+  unit?: string;
+  /** Légende sous le chiffre : ce que mesure le KPI. */
+  label?: string;
+  /** Étude citée, en bas à gauche. */
+  source?: string;
+  /** Lien rendant la source cliquable. */
+  sourceUrl?: string;
+  brand?: string;
+  brandSub?: string;
+}
+const {
+  eyebrow,
+  value,
+  unit,
+  label,
+  source,
+  sourceUrl,
+  brand = 'Titre de la présentation',
+  brandSub,
+} = Astro.props;
+
+// Barres de fond (equalizer) : hauteur de base, délai et durée dérivés de l'index
+// (déterministe, pas de Math.random, pour un rendu stable au build et au PDF).
+const BAR_COUNT = 22;
+const BARS = Array.from({ length: BAR_COUNT }, (_, i) => ({
+  base: 26 + Math.round(42 * Math.abs(Math.sin(i * 0.8 + 0.5))),
+  delay: (i * 0.16).toFixed(2),
+  dur: (2.4 + (i % 5) * 0.3).toFixed(2),
+}));
+---
+<section class="kpi" data-layout="kpi">
+  <div class="kpi__bars" aria-hidden="true">
+    {BARS.map((b) => (
+      <span class="kpi__bar" style={`--base:${b.base}%; animation-delay:${b.delay}s; animation-duration:${b.dur}s`}></span>
+    ))}
+  </div>
+
+  <header class="kpi__header">
+    <div class="kpi__brand-text">
+      <p class="kpi__brand-main">{brand}</p>
+      {brandSub && <p class="kpi__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="kpi__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="kpi__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="kpi__body">
+    {eyebrow && (
+      <p class="kpi__eyebrow"><span class="kpi__eyebrow-square" aria-hidden="true"></span>{eyebrow}</p>
+    )}
+    <p class="kpi__value">{value}{unit && <span class="kpi__unit">{unit}</span>}</p>
+    {label && <p class="kpi__label">{label}</p>}
+  </div>
+
+  {source && (sourceUrl
+    ? <a class="slide-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+    : <p class="slide-source">Source : {source}</p>)}
+</section>
+
+<style>
+  .kpi {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 64px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Fond « equalizer » : barres verticales qui montent et descendent en cascade.
+     Décoratif (z0), derrière le contenu, ancré au bas du slide. Gelé en
+     prefers-reduced-motion (barres figées à leur hauteur de base). */
+  .kpi__bars {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 62%;
+    z-index: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 1%;
+    pointer-events: none;
+  }
+  .kpi__bar {
+    flex: 1 1 0;
+    height: var(--base, 40%);
+    background: color-mix(in srgb, var(--c-accent) 13%, transparent);
+    border-radius: 3px 3px 0 0;
+    transform-origin: bottom;
+    animation-name: kpi-bar;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    will-change: transform;
+  }
+  @keyframes kpi-bar {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1.16); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kpi__bar { animation: none; }
+  }
+
+  /* Header full-width (RÈGLE) : brand gauche + logo LM droite + border-bottom. */
+  .kpi__header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .kpi__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+  }
+  .kpi__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+  }
+  .kpi__brand-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  /* Corps : le KPI héros, centré dans l'espace sous le header. */
+  .kpi__body {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+  }
+  .kpi__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--c-muted);
+    margin: 0;
+  }
+  .kpi__eyebrow-square {
+    width: 12px;
+    height: 12px;
+    background: var(--c-accent);
+    flex: 0 0 auto;
+  }
+  /* Chiffre héros : exception « grand numéro décoratif » assumée (cf typographie.md,
+     au même titre que les chiffres géants de Cover / Section / Statement). */
+  .kpi__value {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: clamp(160px, 18vw, 300px);
+    line-height: 0.9;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--c-ink);
+    margin: 6px 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Unité de la même couleur que le chiffre (encre) : pas de pop accent dessus. */
+  .kpi__unit {
+    color: var(--c-ink);
+    margin-left: 0.04em;
+  }
+  .kpi__label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 500;
+    color: var(--c-muted);
+    margin: 10px 0 0;
+    max-width: var(--measure-l);
+  }
+</style>

@@ -14,6 +14,7 @@ import Cover from '@/components/slides/Cover.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Media from '@/components/slides/Media.astro';
+import BarChart from '@/components/slides/BarChart.astro';
 import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 
@@ -170,6 +171,25 @@ import Workshop from '@/components/slides/Workshop.astro';
       text: "Conversation contextuelle 24/7, connectée au CRM et à la documentation. L'IA tient le dialogue, l'automation déclenche les actions.",
     },
   ]}
+/>
+
+{/* Les vrais freins à l'IA (BarChart reconstruit, ZHAW 2024) : déplacé depuis le deck marketing-automation */}
+<BarChart
+  title="Les vrais freins à l'IA"
+  italicPart="freins"
+  subtitle="Ce qui bloque l'adoption de l'IA en marketing, selon les entreprises."
+  items={[
+    { label: "Ressources et compétences limitées", value: 72, emphasis: true },
+    { label: "Craintes sur la protection des données", value: 28 },
+    { label: "Pas de vue d'ensemble, ne sait pas par où commencer", value: 28 },
+    { label: "Limites technologiques", value: 21 },
+    { label: "Pas une priorité de la direction", value: 21 },
+    { label: "Manque de prise de conscience", value: 20 },
+  ]}
+  source="ZHAW, Marketing Automation & AI Report 2024 (n=253), plusieurs réponses possibles"
+  sourceUrl="https://www.zhaw.ch/storage/sml/upload/Zumstein-et-al_Marketing-Automation-AI-Report_2024.pdf"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Slide 5 : Deux cas d'usage à explorer (ex-ImageGrid 2 cards) */}

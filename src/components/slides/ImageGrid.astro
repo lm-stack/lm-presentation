@@ -26,6 +26,13 @@ interface Props {
   images: ImageItem[];
   /** Mode logos : image "contain" centrée sur fond clair (au lieu de "cover"), pour des logos non rognés. */
   logos?: boolean;
+  /** Source citée en bas à gauche (footer global .slide-source, cliquable si sourceUrl). */
+  source?: string;
+  sourceUrl?: string;
+  /** Hauteur du cadre média (variante 1 image), ex: "520px". Défaut 540px. */
+  mediaHeight?: string;
+  /** Ajustement image : 'cover' (défaut, rogne) ou 'contain' (entière, fond clair). */
+  mediaFit?: 'cover' | 'contain';
   brand?: string;
   brandSub?: string;
 }
@@ -36,6 +43,10 @@ const {
   subtitle,
   images,
   logos = false,
+  source,
+  sourceUrl,
+  mediaHeight,
+  mediaFit = 'cover',
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -43,7 +54,7 @@ const titleParts = splitHighlight(title, italicPart);
 const count = Math.min(Math.max(images.length, 1), 5);
 const variantClass = `image-grid__grid--${count}`;
 ---
-<section class={`image-grid ${logos ? 'image-grid--logos' : ''}`} data-layout="image-grid">
+<section class:list={['image-grid', logos && 'image-grid--logos', mediaFit === 'contain' && 'image-grid--contain']} style={mediaHeight ? `--media-h: ${mediaHeight}` : undefined} data-layout="image-grid">
   <header class="image-grid__header">
     <div class="image-grid__brand-text">
       <p class="image-grid__brand-main">{brand}</p>
@@ -84,6 +95,10 @@ const variantClass = `image-grid__grid--${count}`;
       ))}
     </div>
   </div>
+
+  {source && (sourceUrl
+    ? <a class="slide-source" href={sourceUrl} target="_blank" rel="noopener">Source : {source}</a>
+    : <p class="slide-source">Source : {source}</p>)}
 </section>
 
 <style>
@@ -197,7 +212,7 @@ const variantClass = `image-grid__grid--${count}`;
     justify-items: stretch;
   }
   .image-grid__grid--1 .image-grid__item {
-    height: 540px;
+    height: var(--media-h, 540px);
     width: 100%;
   }
   .image-grid__grid--1 .image-grid__media {
@@ -255,6 +270,15 @@ const variantClass = `image-grid__grid--${count}`;
   .image-grid--logos .image-grid__media img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+  }
+
+  /* Variante contain (mediaFit="contain") : image entière sur fond clair, sans le
+     padding du mode logos. Pour un visuel large non rogné (ex: stack Philips). */
+  .image-grid--contain .image-grid__media {
+    background: var(--c-surface);
+  }
+  .image-grid--contain .image-grid__media img {
     object-fit: contain;
   }
 

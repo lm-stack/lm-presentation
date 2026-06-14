@@ -16,9 +16,12 @@ interface Props {
   // Slugs de decks à NE jamais marquer "workshop" (override de la détection auto),
   // ex. un deck legacy hors-brochure qui garde un atelier mais ne compte pas.
   noWorkshop?: string[];
+  // Slugs de decks à mettre en avant : si non vide, tous les AUTRES decks sont
+  // grisés (vue « recap examen » qui isole les workshops évalués).
+  examDecks?: string[];
 }
 
-const { parcours: slug, title = 'Agenda', italicPart = 'Agenda', noWorkshop = [] } = Astro.props;
+const { parcours: slug, title = 'Agenda', italicPart = 'Agenda', noWorkshop = [], examDecks = [] } = Astro.props;
 
 const entry = (await getCollection('parcours')).find((p) => p.id === slug);
 if (!entry) {
@@ -55,7 +58,11 @@ const columns = days.map((d) => {
         `<AgendaDays> : deck "${deckSlug}" (jour "${d.label}", parcours "${slug}") introuvable dans src/content/presentations/.`
       );
     }
-    return { title: meta.title, hasWorkshop: meta.hasWorkshop && !noWorkshop.includes(deckSlug) };
+    return {
+      title: meta.title,
+      hasWorkshop: meta.hasWorkshop && !noWorkshop.includes(deckSlug),
+      dimmed: examDecks.length > 0 && !examDecks.includes(deckSlug),
+    };
   });
   return { label: d.label, theme: d.theme, decks };
 });
@@ -108,7 +115,7 @@ const titleParts = splitHighlight(title, italicPart);
           </div>
           <ol class="agenda-days__decks">
             {col.decks.map((deck, i) => (
-              <li class:list={['agenda-days__deck', { 'agenda-days__deck--workshop': deck.hasWorkshop }]}>
+              <li class:list={['agenda-days__deck', { 'agenda-days__deck--workshop': deck.hasWorkshop, 'agenda-days__deck--dimmed': deck.dimmed }]}>
                 <span class="agenda-days__deck-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <span class="agenda-days__deck-title">{deck.title}</span>
                 {deck.hasWorkshop && <span class="agenda-days__deck-tag">Workshop</span>}
@@ -337,6 +344,11 @@ const titleParts = splitHighlight(title, italicPart);
     display: flex;
     align-items: baseline;
     gap: 16px;
+  }
+  /* Vue recap examen (prop examDecks) : les decks hors examen sont grisés pour
+     isoler visuellement les workshops évalués. */
+  .agenda-days__deck--dimmed {
+    opacity: 0.3;
   }
   .agenda-days__deck-num {
     flex: 0 0 auto;

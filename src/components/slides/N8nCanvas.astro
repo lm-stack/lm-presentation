@@ -1,0 +1,316 @@
+---
+// src/components/slides/N8nCanvas.astro
+// Canvas d'automatisation PLEIN CADRE au langage visuel n8n : canvas pointillé sur
+// tout le slide (façon Erd / architecture-donnees), noeuds n8n (icône + libellé
+// SOUS le noeud, ports d'entrée/sortie en pastilles), connecteurs en COURBE bézier
+// horizontale entre le port de sortie d'un noeud et le port d'entrée du suivant.
+// Le noeud déclencheur a le bord gauche arrondi (forme "départ" n8n, pas de port
+// d'entrée). Réutilisable : on passe `nodes` (positions x/y dans la scène
+// 1920x1080) et `connections` (from -> to, avec label optionnel pour une branche).
+// Un noeud peut porter un `sub` (tag appli en capitales) OU un `desc` (description
+// qui s'enroule, ex. pour présenter des types). Box de légende optionnelle.
+//
+// Couleurs 100% tokenisées (var(--c-…)) => suit le thème (rouge ExecEd / jaune LM).
+// Note radius : les noeuds suivent l'arrondi n8n (8px, bord gauche très arrondi
+// pour le déclencheur) à la demande explicite « vraiment le design de n8n », au
+// même titre que l'ERD reprend l'arrondi de lm-diagrams (exception assumée).
+import { Icon } from 'astro-icon/components';
+
+interface N8nNode {
+  id: string;
+  /** 'trigger' = bord gauche arrondi, sans port d'entrée. Défaut 'action'. */
+  type?: 'trigger' | 'action' | 'special';
+  icon: string;
+  /** Nom du noeud, affiché SOUS le noeud (gras). */
+  label: string;
+  /** Petite ligne en capitales sous le nom (ex. l'application). */
+  sub?: string;
+  /** Description qui s'enroule sous le nom (ex. présenter un type). */
+  desc?: string;
+  x: number;
+  y: number;
+}
+interface N8nConnection { from: string; to: string; label?: string; }
+
+interface Props {
+  nodes: N8nNode[];
+  connections?: N8nConnection[];
+  /** Box de légende (façon Erd / ImageFull). */
+  captionTitle?: string;
+  captionItalic?: string;
+  captionText?: string;
+  captionPosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  /** Acceptés pour cohérence d'appel (non rendus : plein cadre sans bandeau marque). */
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+}
+const {
+  nodes,
+  connections = [],
+  captionTitle,
+  captionItalic,
+  captionText,
+  captionPosition = 'bottom-left',
+  tocLabel = 'Canvas n8n',
+} = Astro.props;
+
+// Géométrie des noeuds (chip) dans la scène 1920x1080.
+const NODE_W = 156;
+const NODE_H = 120;
+const byId = new Map(nodes.map((n) => [n.id, n]));
+const outPt = (n: N8nNode) => ({ x: n.x + NODE_W, y: n.y + NODE_H / 2 });
+const inPt = (n: N8nNode) => ({ x: n.x, y: n.y + NODE_H / 2 });
+
+// Connecteurs : courbe bézier cubique horizontale (signature n8n) du port de
+// sortie au port d'entrée. Poignées de contrôle décalées horizontalement.
+const edges = connections
+  .map((c) => {
+    const a = byId.get(c.from);
+    const b = byId.get(c.to);
+    if (!a || !b) return null;
+    const s = outPt(a);
+    const t = inPt(b);
+    const k = Math.max(60, Math.abs(t.x - s.x) * 0.5);
+    return {
+      d: `M ${s.x},${s.y} C ${s.x + k},${s.y} ${t.x - k},${t.y} ${t.x},${t.y}`,
+      label: c.label ?? '',
+      mx: (s.x + t.x) / 2,
+      my: (s.y + t.y) / 2,
+    };
+  })
+  .filter((e): e is { d: string; label: string; mx: number; my: number } => e !== null);
+
+// Quels noeuds portent un port d'entrée / de sortie (présence d'une connexion).
+const hasIn = new Set(connections.map((c) => c.to));
+const hasOut = new Set(connections.map((c) => c.from));
+
+const hasCaption = !!(captionTitle || captionText);
+---
+<section class:list={['n8n', `n8n--cap-${captionPosition}`]} data-layout="n8n-canvas" data-section-title={tocLabel}>
+  <svg class="n8n__edges" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true">
+    {edges.map((e) => <path class="n8n-edge" d={e.d} />)}
+  </svg>
+
+  {edges.filter((e) => e.label).map((e) => (
+    <span class="n8n-edge-label" style={`left:${e.mx}px; top:${e.my}px`}>{e.label}</span>
+  ))}
+
+  {nodes.map((n) => (
+    <div class:list={['n8n-node', `n8n-node--${n.type ?? 'action'}`]} style={`left:${n.x}px; top:${n.y}px; width:${NODE_W}px;`}>
+      <div class="n8n-node__chip" style={`height:${NODE_H}px`}>
+        {n.type !== 'trigger' && hasIn.has(n.id) && <span class="n8n-node__port n8n-node__port--in" aria-hidden="true"></span>}
+        {hasOut.has(n.id) && <span class="n8n-node__port n8n-node__port--out" aria-hidden="true"></span>}
+        <Icon name={n.icon} class="n8n-node__ic" aria-hidden="true" />
+      </div>
+      <div class="n8n-node__label">
+        <span class="n8n-node__name">{n.label}</span>
+        {n.sub && <span class="n8n-node__sub">{n.sub}</span>}
+        {n.desc && <span class="n8n-node__desc">{n.desc}</span>}
+      </div>
+    </div>
+  ))}
+
+  {hasCaption && (
+    <div class="n8n__caption">
+      <span class="n8n__caption-dot" aria-hidden="true"></span>
+      <div class="n8n__caption-body">
+        {captionTitle && (
+          <p class="n8n__caption-title">
+            {captionItalic && captionTitle.includes(captionItalic)
+              ? <>{captionTitle.split(captionItalic)[0]}<em class="n8n__caption-italic">{captionItalic}</em>{captionTitle.split(captionItalic)[1]}</>
+              : captionTitle}
+          </p>
+        )}
+        {captionText && <p class="n8n__caption-text">{captionText}</p>}
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  /* Plein cadre : canvas pointillé "ReactFlow" sur tout le slide (valeurs Erd). */
+  .n8n {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 !important;
+    display: block !important;
+    background-color: var(--c-surface);
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--c-ink) 15%, transparent) 1.4px, transparent 1.5px);
+    background-size: 28px 28px;
+    background-position: 14px 14px;
+    color: var(--c-ink);
+  }
+
+  /* Connecteurs courbés (sous les noeuds). */
+  .n8n__edges {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    z-index: 0;
+  }
+  .n8n-edge {
+    stroke: color-mix(in srgb, var(--c-ink) 30%, transparent);
+    stroke-width: 2;
+    fill: none;
+  }
+  /* Libellé de branche posé au milieu d'un connecteur (façon n8n / Erd). */
+  .n8n-edge-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    color: var(--c-muted);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--c-ink) 6%, transparent);
+  }
+
+  /* Noeud : conteneur (chip + libellé dessous). */
+  .n8n-node {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* Chip : la "boîte" du noeud n8n (icône au centre, ports sur les bords). */
+  .n8n-node__chip {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--c-surface);
+    border: 1.5px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .n8n-node__ic {
+    width: 58px;
+    height: 58px;
+    color: var(--c-accent);
+    flex: 0 0 auto;
+  }
+
+  /* Déclencheur : bord gauche très arrondi (forme "départ" n8n), bord accent. */
+  .n8n-node--trigger .n8n-node__chip {
+    border-radius: 60px 8px 8px 60px;
+    border-color: var(--c-accent);
+    background: color-mix(in srgb, var(--c-accent) 7%, var(--c-surface));
+  }
+
+  /* Ports d'entrée / sortie : pastilles sur les bords verticaux du chip. */
+  .n8n-node__port {
+    position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--c-surface);
+    border: 2px solid color-mix(in srgb, var(--c-ink) 34%, transparent);
+    transform: translateY(-50%);
+  }
+  .n8n-node__port--in { left: -8px; }
+  .n8n-node__port--out {
+    right: -8px;
+    border-color: var(--c-accent);
+    background: color-mix(in srgb, var(--c-accent) 22%, var(--c-surface));
+  }
+
+  /* Libellé sous le noeud : nom (gras) + sous-ligne (appli) ou description. Plus
+     large que le chip, centré dessus (comme n8n). */
+  .n8n-node__label {
+    width: 248px;
+    margin: 0 calc((156px - 248px) / 2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-align: center;
+  }
+  .n8n-node__name {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--c-ink);
+  }
+  .n8n-node__sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-muted);
+  }
+  .n8n-node__desc {
+    margin-top: 3px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 400;
+    line-height: 1.32;
+    color: var(--c-muted);
+  }
+
+  /* Box de légende dans un coin (façon Erd / ImageFull). */
+  .n8n__caption {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 880px;
+    padding: 24px 30px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px -6px color-mix(in srgb, var(--c-ink) 16%, transparent);
+  }
+  .n8n--cap-top-left .n8n__caption { top: 56px; left: 64px; }
+  .n8n--cap-top-right .n8n__caption { top: 56px; right: 64px; }
+  .n8n--cap-bottom-left .n8n__caption { bottom: 64px; left: 64px; }
+  .n8n--cap-bottom-right .n8n__caption { bottom: 64px; right: 64px; }
+  .n8n__caption-dot {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    margin-top: 14px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .n8n__caption-body { display: flex; flex-direction: column; gap: 6px; }
+  .n8n__caption-title {
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-card-title);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--c-ink);
+  }
+  .n8n__caption-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .n8n__caption-text {
+    margin: 0;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--c-muted);
+  }
+</style>

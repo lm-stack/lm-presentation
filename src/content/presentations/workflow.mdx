@@ -1,0 +1,402 @@
+---
+title: "Workflow"
+subtitle: "CRM, Data & Automation"
+short: "Workflow"
+date: 2026-06-14
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "/decks/workflow/cover-whiteboard.jpg"
+description: "Workflow : l'anatomie d'un workflow (déclencheur, types de déclencheur, actions, actions spéciales), quand le scinder en deux, et construction live d'un workflow cross-outils. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Statement from '@/components/slides/Statement.astro';
+import ImageGrid from '@/components/slides/ImageGrid.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Media from '@/components/slides/Media.astro';
+import N8nCanvas from '@/components/slides/N8nCanvas.astro';
+import WorkflowCanvas from '@/components/slides/WorkflowCanvas.astro';import Compare from '@/components/slides/Compare.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Workshop from '@/components/slides/Workshop.astro';
+import Debat from '@/components/slides/Debat.astro';
+
+{/* Deck Workflow (Jour 2, dernier sujet), refait intégralement le 2026-06-14.
+    Structure : 01 L'anatomie d'un workflow (déclencheur, types de déclencheur,
+    actions/noeuds, actions spéciales, données) -> 02 Construire un workflow
+    (WorkflowCanvas interactif, règle « un workflow un déclencheur », démo n8n)
+    -> Workshop. Pièce centrale : WorkflowCanvas, le pendant de BpmnCanvas
+    (modeliser-les-processus) mais pour un workflow d'exécution linéaire.
+    Déplacé / retiré lors de la refonte :
+    - Slide webhook (définition) -> envoyé vers marketing-automation (section APIs).
+    - Outils no-code (Zapier/Make/n8n) : retiré, déjà couvert dans marketing-automation.
+    - Démo Zoho native (placeholder) : retirée, territoire de digitaliser-les-processus.
+    - Poll « automatisation complexe », « process vs workflow », « appli in-house »,
+      « finaliser le workflow », « tout commence par les applications » : retirés
+      (redondance ou amorce d'un slide déplacé).
+    Images réutilisées depuis public/decks/workflow/. */}
+
+{/* Slide 1 : Cover */}
+<Cover
+  title="Workflow"
+  italicPart="Workflow"
+  eyebrow="Jour 2 : Sujet 5"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="/decks/workflow/cover-whiteboard.jpg"
+  theme="halo-gold"
+/>
+
+{/* Slide 2 : amorce, pont depuis modélisation / digitalisation vers la construction */}
+<Statement
+  eyebrow="On construit"
+  title="Du processus au workflow qui tourne"
+  italicPart="workflow qui tourne"
+  body="Vous avez modélisé vos processus, puis digitalisé dans le CRM. Place maintenant à la construction d'un workflow d'exécution, qui orchestre plusieurs outils de bout en bout."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide 3 : ce qu'un workflow permet (3 exemples concrets) */}
+<ImageGrid
+  title="Automatisations complexes"
+  italicPart="complexes"
+  subtitle="Interfacer plusieurs outils. Seules limites : votre imagination et quelques contraintes techniques."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  images={[
+    {
+      src: "/decks/workflow/complexe-abandon-panier.jpeg",
+      alt: "Abandon de panier",
+      title: "Abandon de panier",
+      text: "Relancer un acheteur qui n'a pas finalisé sa commande, avec un email et un code promo conditionnel.",
+    },
+    {
+      src: "/decks/workflow/complexe-email-bienvenue.jpg",
+      alt: "Email de bienvenue",
+      title: "Email de bienvenue",
+      text: "Souhaiter la bienvenue, segmenter selon le canal d'acquisition et déclencher le bon onboarding.",
+    },
+    {
+      src: "/decks/workflow/complexe-rendez-vous.jpg",
+      alt: "Rendez-vous automatisé",
+      title: "Rendez-vous automatisé",
+      text: "Planifier un rendez-vous, envoyer un rappel SMS et bloquer l'agenda du commercial concerné.",
+    },
+  ]}
+/>
+
+{/* ============ 01 L'ANATOMIE D'UN WORKFLOW ============ */}
+<SubSection
+  kicker="Workflow"
+  index="01"
+  title="L'anatomie d'un workflow"
+  italicPart="anatomie"
+  subtitle="Tout workflow se ramène aux mêmes briques : un déclencheur, des actions, des actions spéciales et des données qui circulent."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Les types de déclencheur : canvas n8n plein cadre. Quatre noeuds déclencheur
+    (forme n8n, bord gauche arrondi) + box de légende avec la définition. Passé
+    en design n8n le 2026-06-14. */}
+<N8nCanvas
+  captionTitle="Le déclencheur"
+  captionItalic="déclencheur"
+  captionText="L'événement qui met le workflow en marche. Il y en a un seul par workflow, à choisir parmi ces quatre types."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t1", type: "trigger", icon: "ph:bell-ringing",  label: "Événement appli", desc: "Un formulaire, une ligne, un statut qui change.", x: 210,  y: 300 },
+    { id: "t2", type: "trigger", icon: "ph:clock",         label: "Planifié",        desc: "Le temps : tous les lundis, chaque fin de mois.", x: 660,  y: 300 },
+    { id: "t3", type: "trigger", icon: "ph:webhooks-logo", label: "Webhook",         desc: "Une appli externe pousse l'événement en direct.", x: 1110, y: 300 },
+    { id: "t4", type: "trigger", icon: "ph:cursor-click",  label: "Manuel",          desc: "Un humain lance le workflow à la demande.",       x: 1560, y: 300 },
+  ]}
+/>
+
+{/* Les actions / noeuds : canvas n8n (chaîne déclencheur -> actions). Remplace
+    l'ancien Media « Puis s'enchaînent les actions » (2026-06-14). */}
+<N8nCanvas
+  captionTitle="Les actions"
+  captionItalic="actions"
+  captionText="Chaque étape est un noeud : une action exécutée dans une application."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms", x: 240,  y: 380 },
+    { id: "a1", type: "action",  icon: "ph:user-plus",       label: "Créer le contact",   sub: "Zoho CRM",     x: 670,  y: 380 },
+    { id: "a2", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",  sub: "Slack",        x: 1100, y: 380 },
+    { id: "a3", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",        x: 1530, y: 380 },
+  ]}
+  connections={[
+    { from: "t",  to: "a1" },
+    { from: "a1", to: "a2" },
+    { from: "a2", to: "a3" },
+  ]}
+/>
+
+{/* Les actions spéciales : une par slide (déclencheur -> action spéciale ->
+    action(s) en aval pour montrer les possibilités). 4 actions : Filtrer,
+    Formatter, Retarder, Switch (ajouté le 2026-06-14). */}
+
+{/* Action spéciale 1/4 : Filtrer. */}
+<N8nCanvas
+  captionTitle="Filtrer"
+  captionItalic="Filtrer"
+  captionText="Ne laisse continuer que si les conditions sont remplies. Ici, l'email ne part que si le consentement est donné. Sinon, le workflow s'arrête."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t", type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms",    x: 320,  y: 420 },
+    { id: "f", type: "special", icon: "ph:funnel",          label: "Filtrer",            sub: "Si consentement", x: 832,  y: 420 },
+    { id: "a", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",           x: 1344, y: 420 },
+  ]}
+  connections={[
+    { from: "t", to: "f" },
+    { from: "f", to: "a" },
+  ]}
+/>
+
+{/* Action spéciale 2/4 : Formatter. */}
+<N8nCanvas
+  captionTitle="Formatter"
+  captionItalic="Formatter"
+  captionText="Met en forme les données reçues (majuscules, dates, numéros de téléphone) avant de les enregistrer proprement dans le CRM."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",  type: "trigger", icon: "ph:lightning", label: "Nouveau formulaire", sub: "Google Forms",  x: 320,  y: 420 },
+    { id: "fo", type: "special", icon: "ph:text-aa",   label: "Formatter",          sub: "Mise en forme", x: 832,  y: 420 },
+    { id: "a",  type: "action",  icon: "ph:user-plus", label: "Créer le contact",   sub: "Zoho CRM",      x: 1344, y: 420 },
+  ]}
+  connections={[
+    { from: "t",  to: "fo" },
+    { from: "fo", to: "a" },
+  ]}
+/>
+
+{/* Action spéciale 3/4 : Retarder. */}
+<N8nCanvas
+  captionTitle="Retarder"
+  captionItalic="Retarder"
+  captionText="Met le workflow en pause un temps défini avant de poursuivre. Indispensable pour les relances et les séquences."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t", type: "trigger", icon: "ph:lightning",       label: "Nouvelle inscription", sub: "Zoho CRM",  x: 320,  y: 420 },
+    { id: "d", type: "special", icon: "ph:hourglass",       label: "Retarder",             sub: "3 jours",   x: 832,  y: 420 },
+    { id: "a", type: "action",  icon: "ph:envelope-simple", label: "Envoyer un rappel",    sub: "Gmail",     x: 1344, y: 420 },
+  ]}
+  connections={[
+    { from: "t", to: "d" },
+    { from: "d", to: "a" },
+  ]}
+/>
+
+{/* Action spéciale 4/4 : Switch (aiguille vers plusieurs actions selon une
+    valeur ; 3 actions en aval pour montrer les possibilités). */}
+<N8nCanvas
+  captionTitle="Switch"
+  captionItalic="Switch"
+  captionText="Aiguille le workflow vers différents chemins selon une valeur. Chaque branche déclenche ses propres actions."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire",  sub: "Google Forms",  x: 170,  y: 470 },
+    { id: "sw", type: "special", icon: "ph:git-branch",      label: "Switch",              sub: "Type de client", x: 620,  y: 470 },
+    { id: "a1", type: "action",  icon: "ph:envelope-simple", label: "Séquence B2C",        sub: "Gmail",         x: 1200, y: 220 },
+    { id: "a2", type: "action",  icon: "ph:user-plus",       label: "Handover commercial", sub: "Zoho CRM",      x: 1200, y: 470 },
+    { id: "a3", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",   sub: "Slack",         x: 1200, y: 720 },
+  ]}
+  connections={[
+    { from: "t",  to: "sw" },
+    { from: "sw", to: "a1", label: "Particulier" },
+    { from: "sw", to: "a2", label: "Entreprise" },
+    { from: "sw", to: "a3", label: "Partenaire" },
+  ]}
+/>
+
+{/* Les données circulent d'une étape à l'autre (Media + Lead Ads) */}
+<Media
+  title="Les données circulent d'une étape à l'autre"
+  italicPart="données"
+  subtitle="Au-delà du design du workflow, lister les données collectées à chaque étape est crucial."
+  body="Cas typique, un formulaire Lead Ads (campagne Facebook). Champs par défaut : nom, prénom, email, téléphone, entreprise. Champs personnalisés : texte libre, choix multiples, questions conditionnelles, prise de rendez-vous."
+  image="/decks/workflow/donnees-lead-ads.jpeg"
+  alt="Formulaire Facebook Lead Ads avec champs par défaut et champs personnalisés"
+  fit="cover"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 02 CONSTRUIRE UN WORKFLOW ============ */}
+<SubSection
+  kicker="Workflow"
+  index="02"
+  title="Construire un workflow"
+  italicPart="Construire"
+  subtitle="On assemble les briques en direct, puis on pose la règle qui évite l'erreur la plus fréquente."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démo interactive : on construit le workflow en avançant (fragments Reveal). */}
+<WorkflowCanvas
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* La règle d'or : un workflow, un déclencheur (Statement sans image) */}
+<Statement
+  eyebrow="La règle d'or"
+  title="Un workflow, un déclencheur"
+  italicPart="un déclencheur"
+  body="L'erreur la plus fréquente : tout entasser dans un seul workflow sans repérer le vrai déclencheur de chaque partie. Or un workflow ne démarre que sur un seul événement."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Quand faut-il deux workflows ? (Compare : le piège vs la règle) */}
+<Compare
+  title="Quand faut-il deux workflows ?"
+  italicPart="deux workflows"
+  subtitle="Un même objectif métier, mais deux événements déclencheurs distincts."
+  left={{
+    heading: "Le piège : tout dans un seul",
+    items: [
+      "Déclencheur : nouveau formulaire reçu",
+      "Créer le contact, envoyer l'email de bienvenue",
+      "Puis : enquête de satisfaction 3 mois plus tard",
+      "Mais ces 3 mois ne dépendent pas du formulaire : le workflow ne sait pas attendre un autre événement",
+    ],
+  }}
+  right={{
+    heading: "La règle : un workflow par déclencheur",
+    items: [
+      "Workflow 1, déclencheur nouveau formulaire : contact + email de bienvenue",
+      "Workflow 2, déclencheur 3 mois après l'inscription : enquête de satisfaction",
+      "Chacun démarre sur son propre événement, clair et fiable",
+    ],
+  }}
+  note="Le test : qu'est-ce qui déclenche cette étape ? Si c'est un autre événement, c'est un autre workflow."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démonstration live n8n : formulaire -> Zoho CRM -> Gmail */}
+<Demo
+  toolLogo="/decks/marketing-automation/logos/n8n.svg"
+  toolName="n8n"
+  toolUrl="https://n8n.io"
+  objectives={[
+    "Déclencher sur un nouveau formulaire reçu (Google Forms)",
+    "Créer ou mettre à jour le contact dans Zoho CRM",
+    "Envoyer l'email de confirmation via Gmail",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 03 DES EXEMPLES CONCRETS ============ */}
+<SubSection
+  kicker="Workflow"
+  index="03"
+  title="Des exemples concrets"
+  italicPart="exemples"
+  subtitle="Des workflows fréquents pour vous inspirer, avant de concevoir le vôtre."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Exemple 1 : conversion e-commerce (achat -> Google Ads + mise à jour CDP). */}
+<N8nCanvas
+  captionTitle="Conversion e-commerce"
+  captionItalic="Conversion"
+  captionText="Un achat finalisé remonte la conversion à Google Ads et met à jour le profil client dans le CDP. Optimisation des campagnes et donnée client, sans intervention."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",   type: "trigger", icon: "ph:shopping-cart",   label: "Achat finalisé",          sub: "Shopify",       x: 200,  y: 470 },
+    { id: "fmt", type: "special", icon: "ph:text-aa",         label: "Préparer les données",    sub: "Mise en forme", x: 680,  y: 470 },
+    { id: "ga",  type: "action",  icon: "ph:megaphone",       label: "Remonter la conversion",  sub: "Google Ads",    x: 1300, y: 300 },
+    { id: "cdp", type: "action",  icon: "ph:database",        label: "Mettre à jour le profil", sub: "CDP",           x: 1300, y: 640 },
+  ]}
+  connections={[
+    { from: "t",   to: "fmt" },
+    { from: "fmt", to: "ga" },
+    { from: "fmt", to: "cdp" },
+  ]}
+/>
+
+{/* Exemple 2 : génération automatique d'une offre (devis -> PDF -> envoi -> CRM). */}
+<N8nCanvas
+  captionTitle="Génération d'offre"
+  captionItalic="offre"
+  captionText="Une demande de devis génère l'offre en PDF, l'envoie au client et met à jour l'opportunité dans le CRM. Plus de copier-coller, zéro oubli."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",    type: "trigger", icon: "ph:lightning",       label: "Demande de devis",            sub: "Zoho CRM",  x: 240,  y: 420 },
+    { id: "gen",  type: "action",  icon: "ph:file-pdf",        label: "Générer l'offre",             sub: "PDFMonkey", x: 660,  y: 420 },
+    { id: "send", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'offre",             sub: "Gmail",     x: 1080, y: 420 },
+    { id: "upd",  type: "action",  icon: "ph:briefcase",       label: "Mettre à jour l'opportunité", sub: "Zoho CRM",  x: 1500, y: 420 },
+  ]}
+  connections={[
+    { from: "t",    to: "gen" },
+    { from: "gen",  to: "send" },
+    { from: "send", to: "upd" },
+  ]}
+/>
+
+{/* Exemple 3 : capture de lead Facebook Lead Ads (lead -> CRM -> notif -> email). */}
+<N8nCanvas
+  captionTitle="Lead Facebook"
+  captionItalic="Lead"
+  captionText="Un lead Facebook Lead Ads crée le contact dans le CRM, notifie le commercial et déclenche l'email de bienvenue. Aucun lead ne passe entre les mailles."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  nodes={[
+    { id: "t",    type: "trigger", icon: "ph:facebook-logo",   label: "Nouveau lead",           sub: "Facebook Lead Ads", x: 240,  y: 420 },
+    { id: "crm",  type: "action",  icon: "ph:user-plus",       label: "Créer le contact",       sub: "Zoho CRM",          x: 660,  y: 420 },
+    { id: "noti", type: "action",  icon: "ph:slack-logo",      label: "Notifier le commercial", sub: "Slack",             x: 1080, y: 420 },
+    { id: "mail", type: "action",  icon: "ph:envelope-simple", label: "Email de bienvenue",     sub: "Gmail",             x: 1500, y: 420 },
+  ]}
+  connections={[
+    { from: "t",    to: "crm" },
+    { from: "crm",  to: "noti" },
+    { from: "noti", to: "mail" },
+  ]}
+/>
+
+{/* Débat : idéation collective avant le workshop. Mode live = animation permanente
+    (bulles qui flottent + flux continu de réactions, "la salle qui s'enflamme"). */}
+<Debat
+  title="Quels autres workflows créer ?"
+  italicPart="créer"
+  live
+  intensity="intense"
+  intro="Vous avez vu l'anatomie, la construction et des exemples concrets. À vous d'imaginer ce que vous pourriez automatiser."
+  prompts={[
+    "Dans votre organisation, quelle tâche répétitive mériterait un workflow dès demain ?",
+    "Quel serait son déclencheur, et quelles actions en aval ?",
+    "Qu'est-ce qui vous empêche de le mettre en place aujourd'hui ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Workshop (inchangé : celui que Thomas adore) */}
+<Workshop
+  subtitle="À vous de jouer : modélisez et concevez un workflow applicable à votre organisation."
+  defaultMinutes={45}
+  presets={[15, 30, 45]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    { label: "Temps", value: "45 minutes : 30 en individuel, 15 en peer-sharing." },
+    { label: "Objectif", value: "Un workflow de 8 étapes minimum." },
+    { label: "Sujet", value: "Applicable à votre organisation." },
+    { label: "Attentes", value: "Au moins une action spéciale (filtre, format, délai) et les données utilisées à chaque étape." },
+  ]}
+/>

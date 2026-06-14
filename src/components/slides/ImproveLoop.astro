@@ -63,9 +63,9 @@ const titleParts = splitHighlight(title, italicPart);
           {steps.map((s, i) => (
             <>
               {i > 0 && (
-                <span class="iloop__arrow" aria-hidden="true"><Icon name="ph:arrow-right" class="iloop__arrow-ic" /></span>
+                <span class="iloop__arrow fragment" data-fragment-index={i} aria-hidden="true"><Icon name="ph:arrow-right" class="iloop__arrow-ic" /></span>
               )}
-              <article class="iloop__step">
+              <article class:list={["iloop__step", { fragment: i > 0 }]} data-fragment-index={i > 0 ? i : undefined}>
                 <div class="iloop__step-badge"><Icon name={s.icon} aria-hidden="true" /></div>
                 <h3 class="iloop__step-label">{s.label}</h3>
               </article>
@@ -73,7 +73,7 @@ const titleParts = splitHighlight(title, italicPart);
           ))}
         </div>
 
-        <div class="iloop__return" aria-hidden="true">
+        <div class="iloop__return fragment" data-fragment-index={steps.length} aria-hidden="true">
           <span class="iloop__return-arrow"></span>
           <span class="iloop__return-label">{returnLabel}</span>
         </div>
@@ -180,7 +180,7 @@ const titleParts = splitHighlight(title, italicPart);
   /* Flux : la rangée d'étapes + la flèche de retour en U dessous. */
   .iloop__flow {
     position: relative;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     margin: 0 auto;
     display: flex;
@@ -196,8 +196,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   /* Étape : carte (icône ronde + label). */
   .iloop__step {
-    flex: 0 0 auto;
-    width: 300px;
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -251,7 +251,9 @@ const titleParts = splitHighlight(title, italicPart);
   .iloop__return {
     position: relative;
     height: 58px;
-    margin: 0 150px;
+    /* La boucle relie le centre de la 1re carte au centre de la dernière :
+       demi-carte de marge (4 cartes flex + 3 espaces de 78px = 234px). */
+    margin: 0 calc((100% - 234px) / 8);
     border: 3px solid color-mix(in srgb, var(--c-accent) 52%, transparent);
     border-top: none;
     border-radius: 0 0 18px 18px;

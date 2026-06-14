@@ -52,7 +52,7 @@ Les decks présents dans `src/content/presentations/` sont une reprise du cours 
 - Sondages Poll/WordCloud aux moments-clés
 - Calendar repris dans chaque deck d'un même jour, slot courant mis en avant
 
-## État au 2026-05-29 (3 jours avant la formation)
+## État au 2026-06-14
 
 Decks présents dans le parcours :
 
@@ -62,12 +62,11 @@ Decks présents dans le parcours :
 | collecte-donnees        | Jour 1, syllabus #3 (partie capture)       |
 | qualite-donnees         | Jour 1, syllabus #3 (cleaning, enrichment) + bouts de #1 Modélisation (ownership, routines) |
 | architecture-donnees    | Jour 1, syllabus #2                        |
-| segmentation-activation | Jour 1, syllabus #4                        |
+| segmentation-activation | Jour 3, syllabus #4 (segmentation) + #9 (lead nurturing). Deck refait from scratch le 2026-06-14, recentré sur le sujet (l'ancien deck consolidé funnel+nurturing a été supprimé). Garde le lien funnel/maturité et l'explication MQL/SQL. |
+| strategie-data-automation | Jour 3, capstone : 4e livrable de l'examen (la stratégie). Deck créé le 2026-06-14 |
 | marketing-automation    | Jour 2, syllabus #8                        |
 | modeliser-les-processus | Jour 1, syllabus #1 (Modélisation des processus) |
 | workflow                | Jour 2, syllabus #6 Implémentation/automatisation (le bloc modélisation a été extrait vers `modeliser-les-processus` le 2026-06-13) |
-| lead-nurturing          | Jour 3, syllabus #9                        |
-| funnel-marketing        | HORS BROCHURE, héritage Growth Marketing   |
 | protection-donnees      | Jour 2, syllabus #5                        |
 | workflows-avances       | Jour 3, syllabus #10                       |
 | ia-automatisation       | Jour 3, syllabus #11                       |
@@ -79,14 +78,18 @@ Decks manquants par rapport à la brochure :
 - **Jour 2** : Implémentation CRM, Data visualisation et dashboards
 - **Jour 3** : Suivi des performances
 
-Decks à arbitrer :
+Decks arbitrés :
 
-- `funnel-marketing` : hors syllabus brochure, à archiver, recycler en partie dans un autre module, ou re-targeter
+- (résolu le 2026-06-14) `funnel-marketing` et `lead-nurturing` ont été fusionnés dans `segmentation-activation`. Voir l'historique ci-dessous.
 
 Historique des splits et réorganisations :
 
 - **2026-05-29** : split du deck `collecte-qualite-donnees` (Jour 1, sujet 2 dans l'ancienne organisation, 2h) en deux decks `collecte-donnees` et `qualite-donnees` (1h30 chacun). Architecture déplacée du sujet 1 au sujet 3 pour partir de la pratique (capter, nettoyer) avant de monter en abstraction. Jour 1 passe de 3 sujets de 2h à 4 sujets de 1h30 (+ synthèse 30 min).
 - **2026-06-13** : création du deck `modeliser-les-processus` (Jour 1, après `des-donnees-au-crm`). Le bloc modélisation (chaos, BPMN, 4 notions clés, Exchange, outils d'édition BPMN, process vs workflow) est **extrait intégralement** de `workflow` (Jour 2) vers ce nouveau deck, plus deux slides net-neuf (mapping BPMN vers objets CRM, démo Zoho Blueprint). `workflow` redémarre désormais sur les outils no-code et la construction, en assumant la modélisation faite au Jour 1. Images rapatriées vers `public/decks/modeliser-les-processus/`.
+- **2026-06-14** : fusion de `lead-nurturing` et `funnel-marketing` (deux decks supprimés) dans `segmentation-activation` (Jour 3, sujet 1). Le module devient un récit unique en 5 sections : 01 Le funnel marketing, 02 Le parcours du lead, 03 Faire progresser les leads (nurturing, scoring, 4 workflows d'automation), 04 La segmentation, 05 L'activation. La partie Segmentation + activation **ferme volontairement le deck** (clôture opérationnelle). Dédoublonnage : un seul traitement TOFU/MOFU/BOFU (les 3 Statements concept fondus dans les sous-titres des ImageGrid contenus), un seul Cover, un seul atelier (le flow de nurturing, placé en fin de section 03). Coupé : démo ActiveCampaign, slide omnicanale, exemple Digitec réduit de 2 slides à 1. Frontmatter parcours mis à jour (retrait de `funnel-marketing` de `decks` et du Jour 3), exclusions `noWorkshop` nettoyées dans `introduction` (deux appels) et `conclusion`. Images conservées sous `public/decks/funnel-marketing/` et `public/decks/lead-nurturing/`.
+- **2026-06-14** : création du deck capstone `strategie-data-automation` (Jour 3, dernier module avant la conclusion) pour porter le 4e livrable de l'examen (la stratégie), jusque-là sans module dédié. Barème de l'examen passé à **25 % par livrable** (auparavant 20/20/20/40 : la stratégie ne pèse plus le double). Récap examen de l'`introduction` déplacé **après le barème** et passé à « Les quatre workshops de l'examen » (ajout de `strategie-data-automation` aux `examDecks`). Frontmatter du parcours mis à jour (`decks` + Jour 3). Agenda complet et `Recap` de la conclusion régénérés au build. Composants 100 % existants, images placeholders Unsplash.
+
+- **2026-06-14 (suite)** : `segmentation-activation` **refait from scratch** et recentré sur le sujet ; l'ancien deck consolidé (funnel + lead nurturing fusionnés) a été **supprimé**, le nouveau prend son slug et devient le module principal. Contenu : grille des 4 axes + slide prédictif dédié, lien funnel/message en activation, échelle de maturité (funnel vers MQL/SQL) avec définition de MQL et SQL, bonnes pratiques du nurturing (8 cartes sur 2 slides), démo Zapier (teardown du nurturing de Zapier dans Gmail), atelier de nurturing conservé. Par ailleurs, la démo du deck `workflows` est passée de Zapier à n8n.
 
 ## Choix structurants
 
@@ -200,7 +203,9 @@ Historique des splits et réorganisations :
   4. Changer d'outil sans tout refaire
   5. Grossir sans casser
 
-### Module Segmentation et activation (Jour 1, sujet 4)
+### Module Segmentation et activation (Jour 3, sujet 1, deck consolidé le 2026-06-14)
+
+> Depuis le 2026-06-14, ce deck absorbe aussi `lead-nurturing` et `funnel-marketing` (cf. historique). Le plan détaillé ci-dessous ne décrit que le coeur segmentation + activation, désormais placé en clôture du module (sections 04 et 05). Les sections 01 à 03 (funnel marketing, parcours du lead, nurturing et scoring) proviennent des decks fusionnés.
 
 - **Durée** : 90 min (1h30)
 - **Thèse centrale** : "Segmenter sans activer, c'est perdre son temps."
@@ -259,6 +264,19 @@ Historique des splits et réorganisations :
   | Workshop BPMN | 25 |
   | Restitution + débrief | 8 |
 
+### Module Stratégie data & automation (Jour 3, capstone, créé 2026-06-14)
+
+- **Durée** : 90 min (1h30).
+- **Placement** : dernier module d'enseignement du Jour 3, juste avant la conclusion. C'est la synthèse du parcours et le module qui produit le 4e livrable de l'examen (la stratégie), jusque-là sans foyer dédié.
+- **Idée centrale** : « Des briques sans plan restent des briques. » Architecture, processus et workflow sont trois livrables construits au fil des jours ; la stratégie est ce qui les relie, les priorise et leur donne une direction.
+- **Structure (3 sections + workshop)** :
+  - **01 Pourquoi une stratégie** : Statement (thèse), recap des 3 briques déjà construites (Steps), ce qu'une stratégie ajoute (InfoCards : alignement, priorisation, séquencement, mesure).
+  - **02 Construire votre stratégie** : échelle de maturité en 4 niveaux (Artisanal, Outillé, Intégré, Piloté), priorisation impact contre effort (4 quadrants), feuille de route en 3 horizons (Stabiliser, Automatiser, Industrialiser).
+  - **03 Rédiger votre stratégie** : ce que doit contenir le livrable (Table : vision, diagnostic, priorisation, feuille de route, liens entre livrables, KPIs), plus un Tip « la stratégie n'est pas un 4e silo ».
+- **Workshop** : esquisser la stratégie data & automation de leur organisation (matrice impact/effort + feuille de route 3 horizons reliant leurs 3 livrables). Il compte donc dans le `Recap` de la conclusion et dans le récap examen de l'introduction (passé à 4 workshops).
+- **Composants** : Cover, SubSection, Statement, Steps, InfoCards, Table, Tip, Workshop (tous existants, aucun composant net-neuf).
+- **Images** : placeholders Unsplash, à remplacer.
+
 ## Examen (décidé 2026-06-13)
 
 Présenté dans le deck `introduction` (section `03 L'examen`), trois slides : intercalaire, livrables, barème.
@@ -284,16 +302,16 @@ Présenté dans le deck `introduction` (section `03 L'examen`), trois slides : i
 
 | Livrable | Poids |
 |----------|-------|
-| Architecture | 20 % |
-| Processus | 20 % |
-| Workflow | 20 % |
-| Stratégie | 40 % |
+| Architecture | 25 % |
+| Processus | 25 % |
+| Workflow | 25 % |
+| Stratégie | 25 % |
 
-La stratégie pèse le double : c'est là que se mesure la compétence brochure « Piloter une stratégie d'automatisation », au-delà de la preuve technique. Pondération posée par défaut, à réviser librement (modifier le `<Table>` de `introduction.mdx`).
+Pondération égale : chaque livrable vaut 25 %. Les trois premiers (architecture, processus, workflow) sont quasi les outputs des workshops ; le quatrième, la stratégie, capitalise dessus via son module dédié `strategie-data-automation` (Jour 3, capstone), où se mesure la compétence brochure « Piloter une stratégie d'automatisation », au-delà de la preuve technique. Pondération posée par défaut, à réviser librement (modifier le `<Table>` de `introduction.mdx`).
 
 ## Récap de fin (conclusion)
 
 Le deck `conclusion` ouvre sur un slide `<Recap parcours="crm-data-automation">` (composant `src/components/slides/Recap.astro`) qui **dérive au build** le nombre de workshops et de démonstrations du parcours, comme `AgendaDays` :
 
-- **Workshops** : tout deck dont le corps contient un `<Workshop>`, moins l'override `noWorkshop` (mêmes exclusions que l'agenda : `funnel-marketing`, `segmentation-activation`). Libellé = titre du deck.
-- **Démonstrations** : chaque `<Demo toolName="...">` rencontré. Seuls 4 decks utilisent aujourd'hui le composant `<Demo>` (Tally, Apify, Apollo.io, Zoho CRM) : les démos faites en direct sans slide `<Demo>` ne sont pas comptées. État au 2026-06-13 : 5 workshops, 4 démos. Le récap se met à jour tout seul quand on ajoute un atelier ou une démo.
+- **Workshops** : tout deck dont le corps contient un `<Workshop>`, moins l'override `noWorkshop`. Depuis le 2026-06-14, plus aucune exclusion : `funnel-marketing` (seul deck réellement exclu) a été supprimé, et `segmentation-activation` compte désormais son atelier de nurturing. Libellé = titre du deck.
+- **Démonstrations** : chaque `<Demo toolName="...">` rencontré. Seuls 4 decks utilisent aujourd'hui le composant `<Demo>` (Tally, Apify, Apollo.io, Zoho CRM) : les démos faites en direct sans slide `<Demo>` ne sont pas comptées. État au 2026-06-13 : 5 workshops, 4 démos ; le module `strategie-data-automation` (2026-06-14) ajoute un atelier de plus. Le récap se met à jour tout seul quand on ajoute un atelier ou une démo.

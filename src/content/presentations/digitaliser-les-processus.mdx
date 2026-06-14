@@ -1,0 +1,217 @@
+---
+title: "Digitaliser les processus"
+subtitle: "CRM, Data & Automation"
+short: "Digitaliser les processus"
+date: 2026-06-14
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "https://images.pexels.com/photos/11337254/pexels-photo-11337254.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1200&h=750"
+description: "Digitaliser les processus : traduire les processus modélisés en automatisations concrètes dans le CRM. Module du parcours CRM, Data & Automation, HEC Lausanne Executive Education."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import Statement from '@/components/slides/Statement.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
+import Demo from '@/components/slides/Demo.astro';
+import UseCase from '@/components/slides/UseCase.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Compare from '@/components/slides/Compare.astro';
+
+{/* Deck scaffold créé le 2026-06-14 : placé au Jour 2, juste après « Modéliser les
+    processus ». Contenu à étoffer (pour l'instant : cover + un statement d'amorce). */}
+
+<Cover
+  title="Digitaliser les processus"
+  italicPart="Digitaliser"
+  eyebrow="Jour 2 : Sujet 2"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.pexels.com/photos/11337254/pexels-photo-11337254.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=800&h=1000"
+  theme="halo-gold"
+/>
+
+{/* Amorce : le pont entre le processus modélisé (BPMN) et son exécution dans le CRM. */}
+<Statement
+  eyebrow="Du modèle à l'exécution"
+  title="On a modélisé le processus. Maintenant, on le digitalise."
+  italicPart="on le digitalise."
+  body="La modélisation BPMN du sujet précédent devient ici une automatisation concrète dans le CRM : déclencheurs, étapes, conditions et actions."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 01 POURQUOI DIGITALISER ============ */}
+<SubSection
+  kicker="Digitaliser les processus"
+  index="01"
+  title="Pourquoi digitaliser ?"
+  italicPart="Pourquoi"
+  subtitle="Un processus modélisé reste lettre morte tant que l'outil ne l'exécute pas."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Pourquoi : ce que la digitalisation du processus apporte concrètement. */}
+<InfoCards
+  title="Ce que la digitalisation apporte"
+  italicPart="apporte"
+  subtitle="Le processus ne vit plus dans les têtes : l'outil le porte, l'impose et le mesure."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:list-checks", label: "Étapes imposées", value: "Le CRM n'autorise que les passages prévus, dans l'ordre. Plus d'étape oubliée ni de raccourci sauvage." },
+    { icon: "ph:shield-check", label: "Rien ne se perd", value: "Chaque dossier suit le même chemin, tracé et horodaté. Le départ d'une personne n'emporte plus le processus." },
+    { icon: "ph:target", label: "Donnée captée au bon moment", value: "Les champs requis se demandent à l'étape où ils ont du sens, pas en vrac à la fin." },
+    { icon: "ph:chart-line-up", label: "Visibilité et pilotage", value: "On voit en temps réel où en est chaque dossier, et où ça coince. Le reporting devient possible." },
+  ]}
+/>
+
+{/* ============ 02 QU'EST-CE QU'ON DIGITALISE ============ */}
+{/* Prérequis « à faire en premier » : un BPMN n'est pas digital de bout en bout,
+    on trie d'abord ce qui peut passer dans le CRM avant de construire le Blueprint. */}
+<SubSection
+  kicker="Digitaliser les processus"
+  index="02"
+  title="Qu'est-ce qu'on digitalise ?"
+  italicPart="digitalise"
+  subtitle="Première étape avant de construire : tout le processus n'est pas digitalisable."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Trier le BPMN au crible : ce qui passe dans le CRM (accent) vs ce qui reste
+    humain (neutre). Sert directement le « voir ce qui peut être digitalisé ». */}
+<Compare
+  title="Trier les étapes du BPMN"
+  italicPart="Trier"
+  subtitle="Chaque étape va dans le CRM, ou reste entre des mains humaines."
+  left={{
+    heading: "Reste humain",
+    items: [
+      "Un entretien ou un appel de qualification",
+      "Une négociation, un arbitrage au cas par cas",
+      "Un acte physique : signature en présentiel, remise de documents",
+      "Une décision qui demande du jugement",
+    ],
+  }}
+  right={{
+    heading: "Passe dans le CRM",
+    items: [
+      "Les changements de statut jalonnés par des règles",
+      "Les contrôles de complétude d'un dossier",
+      "Les envois d'email et la création de tâches",
+      "Les relances et rappels automatiques",
+    ],
+  }}
+  note="Règle simple : une étape à règle claire sur des données structurées se digitalise ; le reste demande un humain."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============ 03 L'ANATOMIE D'UN BLUEPRINT ============ */}
+<SubSection
+  kicker="Digitaliser les processus"
+  index="03"
+  title="L'anatomie d'un Blueprint"
+  italicPart="anatomie"
+  subtitle="Cinq briques suffisent à transformer un processus dessiné en processus exécutable."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Les 5 briques du Blueprint (columns=3 : 2 rangées 3+2). Tool-agnostic, illustré
+    sur le Blueprint des inscriptions d'ExecEd. Prolonge le mapping BPMN -> CRM. */}
+<InfoCards
+  title="Les briques d'un Blueprint"
+  italicPart="briques"
+  subtitle="Tool-agnostic dans la pensée, illustrées sur le Blueprint des inscriptions d'ExecEd HEC Lausanne."
+  columns={3}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:flag-pennant", label: "État", value: "Où en est l'enregistrement : le statut courant du cycle de vie (Demande reçue, Dossier complet, Inscription confirmée)." },
+    { icon: "ph:arrow-right", label: "Transition", value: "Le passage autorisé d'un état au suivant. On définit qui peut le faire, et quand." },
+    { icon: "ph:funnel", label: "Condition (avant)", value: "Ce qui doit être vrai pour que le passage s'offre. Le gateway du BPMN devient cette condition." },
+    { icon: "ph:textbox", label: "Champ requis (pendant)", value: "Ce qu'on doit saisir pour valider le passage. La donnée se capte ici, au bon moment." },
+    { icon: "ph:lightning", label: "Action (après)", value: "Ce qui se déclenche une fois le passage validé : email, tâche, mise à jour de champ." },
+  ]}
+/>
+
+{/* Les pièges classiques de la digitalisation d'un processus (pattern « 5 pièges »
+    du module Architecture, ici 4). */}
+<InfoCards
+  title="Les pièges à éviter"
+  italicPart="pièges"
+  subtitle="Quatre erreurs classiques qui transforment un beau Blueprint en usine à gaz."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:stack", label: "Trop d'états", value: "Vingt statuts pour un processus simple : personne ne s'y retrouve. Restez sur l'essentiel." },
+    { icon: "ph:robot", label: "Tout automatiser d'un coup", value: "Chaque transition bardée d'actions dès le départ. Commencez simple, ajoutez ensuite." },
+    { icon: "ph:intersect", label: "États non exclusifs", value: "Un dossier qui pourrait être dans deux états à la fois. Chaque enregistrement n'est qu'à un seul endroit." },
+    { icon: "ph:flask", label: "Déployer sans tester", value: "Mis en prod sans le jouer sur un cas réel. Testez le parcours complet avant d'ouvrir aux équipes." },
+  ]}
+/>
+
+{/* ============ 04 PLACE À LA PRATIQUE ============ */}
+<SubSection
+  kicker="Digitaliser les processus"
+  index="04"
+  title="Place à la pratique"
+  italicPart="pratique"
+  subtitle="On déroule le fil rouge, puis on ouvre un vrai Blueprint d'inscriptions dans Zoho."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Cas d'usage : la gestion des inscriptions d'ExecEd HEC Lausanne (le cas réel de
+    la démo). On gère le cycle de vie d'une inscription, état par état. */}
+<UseCase
+  eyebrow="Cas d'usage"
+  you={{ icon: "ph:graduation-cap", label: "Executive Education HEC Lausanne" }}
+  target={{ icon: "ph:briefcase", label: "Professionnels et entreprises" }}
+  objective="Gérer le cycle de vie d'une inscription."
+  collect={["Coordonnées", "Formation visée", "Profil professionnel", "Financement", "Entreprise"]}
+  source="Zoho CRM"
+  image="https://res.cloudinary.com/execed/image/fetch/q_auto,f_auto,w_1000,h_1300,c_fill,g_auto/https://execed.unil.ch/media/pages/formation-continue/3fa35a95bd-1757323783/formation-continue.jpg"
+  imageAlt="Professionnel en formation continue à HEC Lausanne Executive Education"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Fil rouge de la démo Zoho, repris à l'identique de des-donnees-au-crm (mêmes
+    4 étapes) : seul `active` change pour faire avancer le fil. Ici étape 2
+    « Digitaliser un processus » active ; l'étape 1 est « faite », 3 et 4 grisées. */}
+<FilRouge
+  active={2}
+  subtitle="On reprend le fil rouge de la démo Zoho : étape 2, on digitalise le processus qu'on vient de modéliser."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Démonstration live Zoho CRM : on ne construit pas le Blueprint, on montre celui
+    des inscriptions déjà en production chez ExecEd HEC Lausanne, puis on crée une
+    inscription en direct avec la salle et on la fait avancer dans le processus.
+    Logo Zoho réutilisé depuis des-donnees-au-crm (asset public partagé). */}
+<Demo
+  toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
+  toolName="Zoho CRM"
+  toolUrl="https://www.zoho.com/crm/"
+  objectives={[
+    "Ouvrir le Blueprint des inscriptions",
+    "Lire ses états et ses transitions, brique par brique",
+    "Créer une nouvelle inscription en direct, avec vous",
+    "La faire avancer d'un état à l'autre, champs requis à l'appui",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

@@ -19,6 +19,8 @@ interface Props {
   subtitle?: string;
   /** Slugs de decks à NE jamais compter comme workshop (même override que l'agenda). */
   noWorkshop?: string[];
+  /** N'afficher qu'une seule catégorie (slide dédié). Sinon les deux côte à côte. */
+  only?: 'workshops' | 'demos';
   brand?: string;
   brandSub?: string;
 }
@@ -29,6 +31,7 @@ const {
   italicPart = 'parcouru',
   subtitle,
   noWorkshop = [],
+  only,
   brand,
   brandSub,
 } = Astro.props;
@@ -65,12 +68,13 @@ const resolvedBrand = brand ?? entry.data.title;
 const resolvedBrandSub = brandSub ?? INSTITUTION[entry.data.scheme];
 const titleParts = splitHighlight(title, italicPart);
 
-const cols = [
-  { icon: 'ph:chalkboard-teacher-fill', label: 'Workshops', count: workshops.length, items: workshops },
-  { icon: 'ph:monitor-play-fill', label: 'Démonstrations', count: demos.length, items: demos },
+const allCols = [
+  { key: 'workshops', icon: 'ph:chalkboard-teacher-fill', label: 'Workshops', count: workshops.length, items: workshops },
+  { key: 'demos', icon: 'ph:monitor-play-fill', label: 'Démonstrations', count: demos.length, items: demos },
 ];
+const cols = only ? allCols.filter((c) => c.key === only) : allCols;
 ---
-<section class="recap" data-layout="recap">
+<section class:list={['recap', { 'recap--single': only }]} data-layout="recap">
   <header class="recap__header">
     <div class="recap__brand-text">
       <p class="recap__brand-main">{resolvedBrand}</p>
@@ -201,6 +205,22 @@ const cols = [
     grid-template-columns: repeat(2, 1fr);
     gap: 32px;
     align-items: start;
+  }
+
+  /* Mode "un seul thème" (slide dédié) : une carte large centrée, liste sur 2 colonnes. */
+  .recap--single .recap__grid {
+    grid-template-columns: 1fr;
+  }
+  .recap--single .recap__card {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .recap--single .recap__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 56px;
+    row-gap: 16px;
   }
 
   .recap__card {

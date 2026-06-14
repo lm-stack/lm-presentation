@@ -3,8 +3,8 @@
 // Slide "deux pôles + cycle" : deux cartes (gauche / droite) reliées par un moyeu
 // circulaire de flèches (ph:arrows-clockwise) qui signale un aller-retour permanent
 // entre les deux. Header + heading calqués sur Schema/Compare, 100% tokenisé.
-// Le titre reste épinglé en haut (body flex-start) ; le diagramme est centré dans
-// l'espace restant (slides.md : titre fixe, contenu centré sous le titre).
+// Le bloc titre + diagramme est centré verticalement sous le header ; titre et
+// sous-titre centrés horizontalement ; diagramme pleine largeur (cartes flex).
 // Usage : "Par où commencer ? Architecture des données <-> Modélisation des processus".
 import { Icon } from 'astro-icon/components';
 import { splitHighlight } from '@/utils/highlight';
@@ -40,10 +40,8 @@ const {
 const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="pcycle" data-layout="process-cycle">
-  {/* Filigrane : énorme flèche circulaire (le cycle), haut-gauche, derrière le
-      contenu, coupée par le bord (overflow hidden). Écho de l'horloge du deck
-      d'introduction (AgendaDays). */}
-  <div class="pcycle__watermark" aria-hidden="true"><Icon name="ph:arrow-clockwise" /></div>
+  {/* Le filigrane animé du « cycle » est rendu dans le moyeu central
+      (.pcycle__hub) pour être concentrique au moyeu doré : voir plus bas. */}
   <header class="pcycle__header">
     <div class="pcycle__brand-text">
       <p class="pcycle__brand-main">{brand}</p>
@@ -79,6 +77,33 @@ const titleParts = splitHighlight(title, italicPart);
         <span class="pcycle__link" aria-hidden="true"></span>
 
         <div class="pcycle__hub" aria-hidden="true">
+          {/* Filigrane animé du « cycle », concentrique au moyeu doré (même centre) :
+              cadran fixe + flèche en rotation + anneau pointillé en contre-rotation +
+              point doré en orbite. Rendu derrière le contenu (z-index -1), décoratif. */}
+          <div class="pcycle__watermark">
+            <svg class="pcycle__cycle" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="pcycle-head" markerWidth="6" markerHeight="6" refX="4.2" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+                  <path class="pcycle__cycle-head" d="M1 1 L4.5 3 L1 5" />
+                </marker>
+              </defs>
+              {/* Cadran fixe : cercle fin + 12 graduations (écho de l'horloge AgendaDays). */}
+              <g class="pcycle__cycle-dial">
+                <circle class="pcycle__cycle-rim" cx="100" cy="100" r="93" />
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <line class="pcycle__cycle-tick" x1="100" y1="9" x2="100" y2="20" transform={`rotate(${i * 30} 100 100)`} />
+                ))}
+              </g>
+              {/* Anneau pointillé interne, contre-rotation lente (profondeur). */}
+              <circle class="pcycle__cycle-dots" cx="100" cy="100" r="64" />
+              {/* La flèche circulaire (le cycle), fine, en rotation. */}
+              <path class="pcycle__cycle-arrow" d="M143 25.5 A86 86 0 1 1 57 25.5" marker-end="url(#pcycle-head)" />
+              {/* Point d'accent doré en orbite (écho de la trotteuse dorée de l'horloge). */}
+              <g class="pcycle__cycle-orbit">
+                <circle class="pcycle__cycle-dot" cx="100" cy="14" r="4.2" />
+              </g>
+            </svg>
+          </div>
           <span class="pcycle__hub-ring"><Icon name={hubIcon} class="pcycle__hub-ic" /></span>
         </div>
 
@@ -110,28 +135,96 @@ const titleParts = splitHighlight(title, italicPart);
     justify-content: flex-start !important;
   }
 
-  /* Filigrane : énorme flèche circulaire derrière le contenu (z-index 0), coupée
-     par le bord haut-gauche (overflow hidden). Très faible opacité, décorative. */
+  /* Filigrane animé : un « cycle » fin et tournant, calqué sur l'horloge du slide
+     agenda (AgendaDays). Cadran fixe (cercle + graduations) survolé par une flèche
+     circulaire en rotation, un anneau pointillé en contre-rotation, et un point
+     doré en orbite (écho de la trotteuse). Concentrique au moyeu doré (enfant du
+     moyeu, centré dessus), derrière le contenu (z-index -1), décoratif. */
   .pcycle__watermark {
     position: absolute;
-    top: -360px;
-    left: -380px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 1240px;
     height: 1240px;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
-    color: color-mix(in srgb, var(--c-accent) 13%, transparent);
   }
-  .pcycle__watermark :global(svg) {
+  .pcycle__cycle {
     width: 100%;
     height: 100%;
     display: block;
+    overflow: visible;
+  }
+
+  /* Cadran fixe : cercle fin + graduations, teinte encre neutre (comme l'horloge). */
+  .pcycle__cycle-rim {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 10%, transparent);
+    stroke-width: 0.5;
+  }
+  .pcycle__cycle-tick {
+    stroke: color-mix(in srgb, var(--c-ink) 13%, transparent);
+    stroke-width: 0.7;
+    stroke-linecap: round;
+  }
+
+  /* Anneau pointillé interne, contre-rotation lente. */
+  .pcycle__cycle-dots {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 12%, transparent);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-dasharray: 0.6 5;
+    transform-box: view-box;
+    transform-origin: 100px 100px;
+    animation: pcycle-spin-rev 72s linear infinite;
+  }
+
+  /* La flèche circulaire (fine) + sa pointe, en rotation lente. */
+  .pcycle__cycle-arrow {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 17%, transparent);
+    stroke-width: 0.8;
+    stroke-linecap: round;
+    transform-box: view-box;
+    transform-origin: 100px 100px;
+    animation: pcycle-spin 48s linear infinite;
+  }
+  .pcycle__cycle-head {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 17%, transparent);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Point d'accent doré en orbite (écho de la trotteuse dorée de l'horloge). */
+  .pcycle__cycle-orbit {
+    transform-box: view-box;
+    transform-origin: 100px 100px;
+    animation: pcycle-spin 18s linear infinite;
+  }
+  .pcycle__cycle-dot {
+    fill: color-mix(in srgb, var(--c-accent) 55%, transparent);
+  }
+
+  @keyframes pcycle-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pcycle-spin-rev {
+    to { transform: rotate(-360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pcycle__cycle-dots,
+    .pcycle__cycle-arrow,
+    .pcycle__cycle-orbit { animation: none; }
   }
 
   /* Header intangible : brand gauche + logo LM droite + border-bottom. */
   .pcycle__header {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -178,7 +271,7 @@ const titleParts = splitHighlight(title, italicPart);
   }
   .pcycle__heading {
     flex: 0 0 auto;
-    text-align: left;
+    text-align: center;
   }
   .pcycle__title {
     font-family: 'Hanken Grotesk', sans-serif;
@@ -189,7 +282,7 @@ const titleParts = splitHighlight(title, italicPart);
     margin: 0;
     color: var(--c-ink);
     text-wrap: balance;
-    text-align: left;
+    text-align: center;
   }
   .pcycle__title-italic {
     font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
@@ -200,9 +293,9 @@ const titleParts = splitHighlight(title, italicPart);
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: var(--fs-lead);
     line-height: var(--lh-lead);
-    margin: 12px 0 0;
+    margin: 12px auto 0;
     color: var(--c-muted);
-    text-align: left;
+    text-align: center;
     max-width: var(--measure-l);
   }
 
@@ -225,8 +318,8 @@ const titleParts = splitHighlight(title, italicPart);
 
   /* Pôle : carte centrée (icône ronde + label + sous-label). */
   .pcycle__pole {
-    flex: 0 0 auto;
-    width: 380px;
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -282,6 +375,7 @@ const titleParts = splitHighlight(title, italicPart);
 
   /* Moyeu : cercle de flèches (le cycle). */
   .pcycle__hub {
+    position: relative;
     flex: 0 0 auto;
     display: flex;
     align-items: center;

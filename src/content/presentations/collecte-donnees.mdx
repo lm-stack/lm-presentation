@@ -193,6 +193,23 @@ import UseCase from '@/components/slides/UseCase.astro';
   brandSub="Executive Education"
 />
 
+{/* Démo live Yopmail (email jetable) : tester un formulaire de capture sans polluer
+    sa vraie boîte. Pas de logo de marque exploitable : wordmark SVG maison (yopmail.svg,
+    police système car un SVG en <img> n'hérite pas des webfonts du deck). */}
+<Demo
+  toolLogo="/decks/collecte-donnees/logos/yopmail.svg"
+  toolName="Yopmail"
+  toolUrl="https://yopmail.com"
+  objectives={[
+    "Générer une adresse jetable en un clic, sans inscription",
+    "S'envoyer un email de test",
+    "Consulter la boîte de réception temporaire",
+    "Vérifier l'email reçu sans polluer sa vraie boîte",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 <InfoCards
   title="Quatre règles de bonne capture"
   italicPart="bonne capture"
@@ -285,7 +302,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   title="Pourquoi un générateur ?"
   italicPart="générateur"
   subtitle="Taguer à la main marche 5 minutes mais pas à l'échelle d'une équipe."
-  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1000&h=1400&fit=crop"
+  image="https://images.unsplash.com/photo-1683322499436-f4383dd59f5a?w=1000&h=1400&fit=crop"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[

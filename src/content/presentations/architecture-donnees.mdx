@@ -22,6 +22,7 @@ import BarChart from '@/components/slides/BarChart.astro';
 import Compare from '@/components/slides/Compare.astro';
 import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
+import Table from '@/components/slides/Table.astro';
 
 {/*
   Modèle ERD fil rouge du module (4 entités, use case traiteur). Positions dans la scène 1920x1080
@@ -46,13 +47,13 @@ export const ERD = {
       { name: 'téléphone', type: 'texte' },
       { name: 'societe_id', key: 'fk', type: '→ Société' },
     ] },
-    { name: 'Société', x: 600, y: 110, fields: [
+    { name: 'Société', x: 600, y: 142, fields: [
       { name: 'id', key: 'pk' },
       { name: 'nom', type: 'texte' },
       { name: 'secteur', type: 'liste' },
       { name: 'taille', type: 'nombre' },
     ] },
-    { name: 'Offre', x: 1110, y: 490, fields: [
+    { name: 'Offre', x: 1110, y: 420, fields: [
       { name: 'id', key: 'pk' },
       { name: 'menu', type: 'texte' },
       { name: 'montant', type: 'CHF' },
@@ -63,6 +64,7 @@ export const ERD = {
   ],
   relations: [
     { from: 'Contact', to: 'Société', label: 'appartient à' },
+    { from: 'Prospect', to: 'Société', label: 'rattaché à' },
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Offre', to: 'Contact', label: 'pour' },
     { from: 'Offre', to: 'Société', label: 'adressée à' },
@@ -270,23 +272,32 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Slide 7 : Quatre entités couvrent 80% des CRM (ex-Statement sans image) */}
+{/* Slide 7 : Les entités les plus fréquentes (liste à puces icônes + carte abstraite + nuage de points) */}
 <Statement
   eyebrow="Le schéma minimal"
-  title="Quatre entités couvrent 80% des CRM"
-  italicPart="80%"
+  title="Les 4 entités fréquentes"
+  italicPart="fréquentes"
+  titleSize="l"
+  bullets={[
+    { icon: "ph:user-plus", text: "Prospect : une demande qui entre, à qualifier." },
+    { icon: "ph:address-book", text: "Contact : la piste qualifiée, liée à une Société." },
+    { icon: "ph:buildings", text: "Société : l'entreprise cliente (demandes pro)." },
+    { icon: "ph:receipt", text: "Offre : le devis (menu, prix), parfois plusieurs." },
+  ]}
+  body="Ce schéma sera notre fil rouge tout au long du cours."
   entityCard={{
     name: 'Contact',
+    abstract: true,
     fields: [
       { name: 'id', key: 'pk' },
       { name: 'nom' },
       { name: 'email' },
       { name: 'téléphone' },
       { name: 'Société', key: 'fk' },
+      { name: 'fonction' },
+      { name: 'statut' },
     ],
-    satellites: ['Société', 'Prospect', 'Offre'],
   }}
-  body="Prospect, Contact, Société, Offre. Une demande de devis entre comme Prospect ; une fois qualifiée, elle devient un Contact rattaché à une Société (pour les clients pro). À chaque client, une ou plusieurs Offres (le devis : menu, couverts, prix). Ce schéma sera notre fil rouge tout au long du cours."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -303,7 +314,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     "Plutôt géré par le marketing ou la prospection.",
   ] }}
   right={{ heading: "Contact", items: [
-    "Une relation établie : personne identifiée, rattachée à une Société.",
+    "Une relation établie : personne et société identifiée.",
     "Fiche riche : coordonnées, rôle, historique, Affaires liées.",
     "Adressé en direct : suivi personnalisé, un commercial dédié.",
     "Plutôt géré par les ventes ou le compte qui le suit.",
@@ -319,10 +330,32 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   index="04"
   title="Construire votre architecture"
   italicPart="votre architecture"
-  subtitle="On assemble le modèle entité par entité, puis on déjoue les pièges qui plombent la plupart des CRM."
+  subtitle="On crée le modèle entité par entité, puis on déjoue les pièges fréquents."
   subtitleWrap={true}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+{/* Étape préalable à la construction : les types de champs usuels (les briques de
+    base avant de poser la première entité). Inséré avant le Prospect. */}
+<Table
+  title="Chaque champ a un type"
+  italicPart="un type"
+  subtitle="Le type décide de ce qu'on peut valider, filtrer et calculer : on le choisit avant de saisir."
+  headers={["Type", "Exemple de champ", "Ce qu'il permet"]}
+  caption="D'autres types existent (texte long, téléphone, URL, liste à choix multiple) ; ceux-ci couvrent l'essentiel."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Texte", "nom, ville, notes", "Saisie libre, courte ou longue."],
+    ["Email", "l'adresse email", "Format validé, envoi direct."],
+    ["Nombre", "nombre d'employés", "Tri, seuils et calculs."],
+    ["Montant (CHF)", "budget, prix du devis", "Devise, totaux et moyennes."],
+    ["Date", "échéance, date de création", "Tri chronologique, relances."],
+    ["Liste déroulante", "statut, source, secteur", "Valeurs cadrées, filtrage fiable."],
+    ["Case à cocher", "consentement, client actif", "Oui ou non, rien d'autre."],
+    ["Relation", "la Société liée au contact", "Relie deux entités (clé étrangère)."],
+  ]}
 />
 
 {/* Exemple de construction pas à pas (use case : un traiteur).
@@ -345,8 +378,9 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 <Erd
   title="L'entreprise, connue dès la demande"
   italicPart="entreprise"
-  subtitle="Pour un événement d'entreprise (séminaire, inauguration), la demande arrive déjà avec sa Société. On la pose tout de suite, au niveau de la piste : on la reliera juste après."
+  subtitle="Pour un événement d'entreprise (séminaire, inauguration), la demande arrive déjà avec sa Société. On la pose, et on peut déjà la relier à la piste : c'est souvent possible dans les CRM."
   entities={[{ ...E['Prospect'] }, { ...E['Société'], state: 'accent' }]}
+  relations={[{ from: 'Prospect', to: 'Société', label: 'rattaché à' }]}
   caption="Étape 2 sur 4 : poser tôt les entités qu'on connaît déjà (ici, l'entreprise cliente)."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
@@ -357,7 +391,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   title="La demande devient un Contact"
   italicPart="Contact"
   subtitle="Le prospect qualifié devient un Contact, rattaché à sa Société. Pourquoi déjà un Contact, et plus un Prospect ? Parce qu'on ne rédige un devis que pour une demande qualifiée : faire une offre, c'est justement l'acte qui fait passer la piste en Contact."
-  entities={[{ ...E['Prospect'] }, { ...E['Société'] }, { ...E['Contact'], state: 'accent' }]}
+  entities={[{ ...E['Prospect'], state: 'ghost' }, { ...E['Société'] }, { ...E['Contact'], state: 'accent' }]}
   relations={[
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },
     { from: 'Contact', to: 'Société', label: 'appartient à' },
@@ -372,7 +406,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   title="Le devis, c'est une Offre"
   italicPart="Offre"
   subtitle="Le menu proposé, le nombre de couverts, le prix, le statut (envoyé, accepté, refusé) : c'est une Offre, adressée au Contact et à sa Société. Le modèle du traiteur est complet, et c'est le même quel que soit l'outil."
-  entities={[{ ...E['Prospect'] }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Offre'], state: 'accent' }]}
+  entities={[{ ...E['Prospect'], state: 'ghost' }, { ...E['Contact'] }, { ...E['Société'] }, { ...E['Offre'], state: 'accent' }]}
   relations={ERD.relations}
   caption="Étape 4 sur 4 : votre architecture, prête à être outillée."
   brand="CRM, Data & Automation"
@@ -421,34 +455,15 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Slide 11 : Section 04 — Trois outils, un seul schéma */}
+{/* Intercalaire §05 : transition vers l'atelier (le Workshop suit). */}
 <SubSection
-  kicker="Démonstration"
+  kicker="À vous de jouer"
   index="05"
-  title="Trois outils, un seul schéma"
-  italicPart="un seul schéma"
-  subtitle="Excel pour la TPE, Airtable pour la PME en croissance, Zoho pour la grande structure : trois véhicules, un schéma."
+  title="À votre tour"
+  italicPart="votre tour"
+  subtitle="Le schéma d'abord, l'outil ensuite : à vous de modéliser, sur votre propre métier."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-/>
-
-{/* Slide 12 : Démonstration live (ex-Demo bare, pas de screenshot disponible)
-    Image placeholder Unsplash "ERD / database schema" — à remplacer par une
-    capture réelle de la démo (Excel ou Airtable). */}
-<Capture
-  title="Même schéma, trois tailles d'entreprise"
-  italicPart="trois tailles"
-  subtitle="Construction live du modèle Contact + Société + Offre dans trois outils calibrés sur trois profils."
-  image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&h=1000&fit=crop"
-  caption="Capture démo Excel / Airtable / Zoho (à remplacer)"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  rows={[
-    { label: "Outil", value: "Excel (TPE et associations), Airtable (PME en croissance), Zoho CRM (grande structure)." },
-    { label: "Cible", value: "Modèle Contact + Société + Offre, identique dans les trois outils." },
-    { label: "Étapes", value: "Création des tables, ajout des champs, première relation entre entités. Environ 4 minutes par outil." },
-    { label: "À retenir", value: "L'outil n'invente pas le schéma : c'est vous qui le faites, une fois, puis vous le portez partout." },
-  ]}
 />
 
 {/* Slide 13 : Workshop — atelier ERD final du module. */}
@@ -461,7 +476,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
   rows={[
     { label: "Format", value: "Groupes de 4 à 6 personnes." },
-    { label: "Temps", value: "25 minutes en groupe, 20 minutes de restitution en plénière." },
+    { label: "Temps", value: "25 minutes en groupe, 20 minutes de restitution." },
     { label: "Output", value: "Un ERD dessiné sur une feuille A3." },
     { label: "Restitution", value: "3 à 4 minutes par groupe." },
   ]}

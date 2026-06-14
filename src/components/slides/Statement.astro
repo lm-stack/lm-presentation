@@ -9,7 +9,11 @@ interface Props {
   /** Titre statement. Un \n force un saut de ligne (white-space: pre-line). */
   title: string;
   italicPart?: string;
+  /** Taille du titre : 'xl' (défaut) ou 'l' (réduit, pour les Statement denses avec bullets). */
+  titleSize?: 'xl' | 'l';
   body?: string;
+  /** Liste à puces avec icône Phosphor devant chaque item (colonne gauche). */
+  bullets?: { icon: string; text: string }[];
   /** Grand chiffre mis en avant, ex "21%". Optionnel. */
   stat?: string;
   /** Légende sous le chiffre. */
@@ -33,14 +37,20 @@ interface Props {
     name: string;
     fields: { name: string; key?: 'pk' | 'fk' }[];
     satellites?: string[];
+    /** Rendu abstrait : titre et champs en barres placeholder (sans texte),
+     *  satellites nommés masqués au profit d'un nuage de points autour de la carte. */
+    abstract?: boolean;
   };
 }
+import { Icon } from 'astro-icon/components';
 import { splitHighlight } from '@/utils/highlight';
 const {
   eyebrow,
   title,
   italicPart,
+  titleSize = 'xl',
   body,
+  bullets,
   stat,
   statCaption,
   source,
@@ -82,25 +92,61 @@ const dlinks = (diagram?.links ?? [])
   })
   .filter((l): l is NonNullable<typeof l> => l !== null);
 
-// Carte Entité (option entityCard) : un TableNode mis en avant + des dots (entités
-// liées) reliés par des connecteurs horizontaux. Scène fixe en px dans l'espace
-// 1920x1080 du slide (mêmes px que le reste, scalés uniformément par Reveal).
-const EC_STAGE_W = 584;
-const EC_STAGE_H = 560;
-const EC_CARD_W = 290;
-const EC_CARD_X = 264;
-const EC_HEAD_H = 56;
-const EC_ROW_H = 40;
+// Carte Entité (option entityCard). Mode standard : TableNode + satellites (entités
+// liées) reliés à gauche. Mode abstrait : carte plus grande et CENTRÉE dans la scène,
+// champs qui se peuplent de data côté client, entourée d'un nuage de points. Scène
+// fixe en px (espace 1920x1080 du slide, scalé uniformément par Reveal).
+const ecAbstract = !!entityCard?.abstract;
+const EC_STAGE_W = ecAbstract ? 760 : 584;
+const EC_STAGE_H = ecAbstract ? 780 : 560;
+const EC_CARD_W = ecAbstract ? 500 : 290;
+const EC_HEAD_H = ecAbstract ? 78 : 56;
+const EC_ROW_H = ecAbstract ? 62 : 40;
 const EC_DOT_X = 124;
 const ecCardH = entityCard ? EC_HEAD_H + entityCard.fields.length * EC_ROW_H : 0;
 const ecCardY = (EC_STAGE_H - ecCardH) / 2;
-const ecSats = entityCard?.satellites ?? [];
+// Carte centrée dans la scène en mode abstrait (plus de satellites) ; ancrée à
+// droite (satellites reliés à sa gauche) en mode standard.
+const EC_CARD_X = ecAbstract ? (EC_STAGE_W - EC_CARD_W) / 2 : 264;
+const ecSats = ecAbstract ? [] : (entityCard?.satellites ?? []);
 const ecSatPts = ecSats.map((label, i) => {
   const top = ecCardY + 30;
   const bot = ecCardY + ecCardH - 30;
   const y = ecSats.length <= 1 ? (top + bot) / 2 : top + (bot - top) * (i / (ecSats.length - 1));
   return { label, y };
 });
+
+// Nuage de points décoratif réparti sur TOUTE la scène (la carte masque le centre).
+// Positions déterministes (hash sin-based : pas de Math.random, stable au build).
+const ecFract = (x: number) => x - Math.floor(x);
+const EC_DOTS_N = 64;
+const ecDotCloud = ecAbstract
+  ? Array.from({ length: EC_DOTS_N }, (_, i) => {
+      const hx = ecFract(Math.sin((i + 1) * 12.9898) * 43758.5453);
+      const hy = ecFract(Math.sin((i + 1) * 78.233) * 12721.531);
+      const hr = ecFract(Math.sin((i + 1) * 3.137) * 9281.77);
+      const ho = ecFract(Math.cos((i + 1) * 1.71) * 6571.33);
+      return {
+        x: hx * EC_STAGE_W,
+        y: hy * EC_STAGE_H,
+        r: 2.2 + hr * 4,
+        o: 0.1 + ho * 0.5,
+        accent: i % 3 === 0,
+      };
+    })
+  : [];
+
+// Valeurs de data qui "se peuplent" dans les champs de la carte abstraite (animées
+// côté client : remplissage + brève réparation). Un jeu de valeurs par ligne.
+const ecFillData = [
+  ['CRM-1048', 'CRM-2271', 'CRM-3392', 'CRM-5067'],
+  ['A. Dupont', 'M. Rey', 'L. Martin', 'C. Nord'],
+  ['contact@dupont.ch', 'hello@rey.ch', 'info@martin.co', 'a.nord@studio.ch'],
+  ['+41 21 312 44 90', '+41 79 644 12 08', '+41 22 731 55 20', '+41 26 422 18 73'],
+  ['Dupont SA', 'Atelier Rey', 'Martin & Co', 'Studio Nord'],
+  ['Resp. RH', 'Directrice', 'Gérant', 'Fondateur'],
+  ['Cliente', 'Prospect', 'Cliente', 'Prospect'],
+];
 ---
 <section class="statement" data-layout="statement">
   <header class="statement__header">
@@ -113,18 +159,28 @@ const ecSatPts = ecSats.map((label, i) => {
     </a>
   </header>
 
-  <div class="statement__content">
+  <div class="statement__content" data-dense={ecAbstract ? 'true' : undefined}>
     <div class="statement__text">
       {eyebrow && (
         <p class="statement__eyebrow">
           <span class="statement__eyebrow-square" aria-hidden="true"></span>{eyebrow}
         </p>
       )}
-      <h2 class="statement__title">
+      <h2 class:list={['statement__title', titleSize === 'l' && 'statement__title--l']}>
         {titleParts
           ? <>{titleParts.before}<em class="statement__title-italic"><span class="underline">{titleParts.match}</span></em>{titleParts.after}</>
           : title}
       </h2>
+      {bullets && bullets.length > 0 && (
+        <ul class="statement__bullets">
+          {bullets.map((b) => (
+            <li class="statement__bullet">
+              <span class="statement__bullet-icon"><Icon name={b.icon} aria-hidden="true" /></span>
+              <span class="statement__bullet-text">{b.text}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       {body && <p class="statement__body">{body}</p>}
     </div>
 
@@ -163,26 +219,45 @@ const ecSatPts = ecSats.map((label, i) => {
     )}
 
     {entityCard && (
-      <div class="statement__entitycard" aria-hidden="true">
+      <div class="statement__entitycard" data-abstract={ecAbstract ? 'true' : 'false'} aria-hidden="true">
         <div class="ec-stage" style={`width:${EC_STAGE_W}px;height:${EC_STAGE_H}px`}>
-          <svg class="ec-edges" viewBox={`0 0 ${EC_STAGE_W} ${EC_STAGE_H}`} preserveAspectRatio="none">
-            {ecSatPts.map((p) => <line class="ec-link" x1={EC_DOT_X} y1={p.y} x2={EC_CARD_X} y2={p.y} />)}
-            {ecSatPts.map((p) => <circle class="ec-dot" cx={EC_DOT_X} cy={p.y} r="7" />)}
-            {ecSatPts.map((p) => <circle class="ec-handle" cx={EC_CARD_X} cy={p.y} r="4" />)}
-          </svg>
-          {ecSatPts.map((p) => (
+          {ecAbstract ? (
+            <svg class="ec-cloud" viewBox={`0 0 ${EC_STAGE_W} ${EC_STAGE_H}`} preserveAspectRatio="none">
+              {ecDotCloud.map((d) => (
+                <circle class:list={['ec-cloud-dot', { 'ec-cloud-dot--accent': d.accent }]} cx={d.x} cy={d.y} r={d.r} style={`opacity:${d.o}`} />
+              ))}
+            </svg>
+          ) : (
+            <svg class="ec-edges" viewBox={`0 0 ${EC_STAGE_W} ${EC_STAGE_H}`} preserveAspectRatio="none">
+              {ecSatPts.map((p) => <line class="ec-link" x1={EC_DOT_X} y1={p.y} x2={EC_CARD_X} y2={p.y} />)}
+              {ecSatPts.map((p) => <circle class="ec-dot" cx={EC_DOT_X} cy={p.y} r="7" />)}
+              {ecSatPts.map((p) => <circle class="ec-handle" cx={EC_CARD_X} cy={p.y} r="4" />)}
+            </svg>
+          )}
+          {!ecAbstract && ecSatPts.map((p) => (
             <span class="ec-sat" style={`top:${p.y}px;width:${EC_DOT_X - 16}px`}>{p.label}</span>
           ))}
-          <article class="ec-card" style={`left:${EC_CARD_X}px;top:${ecCardY}px;width:${EC_CARD_W}px`}>
+          <article class:list={['ec-card', { 'ec-card--abstract': ecAbstract }]} style={`left:${EC_CARD_X}px;top:${ecCardY}px;width:${EC_CARD_W}px`}>
             <div class="ec-card__head" style={`height:${EC_HEAD_H}px`}>
-              <span class="ec-card__title">{entityCard.name}</span>
+              {ecAbstract
+                ? <span class="ec-ph ec-ph--title"></span>
+                : <span class="ec-card__title">{entityCard.name}</span>}
             </div>
             <div class="ec-card__body">
-              {entityCard.fields.map((f) => (
+              {entityCard.fields.map((f, i) => (
                 <div class="ec-card__row" style={`height:${EC_ROW_H}px`}>
-                  <span class="ec-card__field">{f.name}</span>
-                  {f.key === 'pk' && <span class="ec-badge ec-badge--pk">PK</span>}
-                  {f.key === 'fk' && <span class="ec-badge ec-badge--fk">FK</span>}
+                  {ecAbstract ? (
+                    <>
+                      <span class="ec-ph-chip"></span>
+                      <span class="ec-fill" data-vals={JSON.stringify(ecFillData[i % ecFillData.length])}>{ecFillData[i % ecFillData.length][0]}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span class="ec-card__field">{f.name}</span>
+                      {f.key === 'pk' && <span class="ec-badge ec-badge--pk">PK</span>}
+                      {f.key === 'fk' && <span class="ec-badge ec-badge--fk">FK</span>}
+                    </>
+                  )}
                 </div>
               ))}
             </div>
@@ -291,6 +366,10 @@ const ecSatPts = ecSats.map((label, i) => {
     font-style: italic;
     font-weight: 400;
   }
+  /* Titre réduit (opt-in via titleSize="l") pour les Statement denses (bullets + carte). */
+  .statement__title--l {
+    font-size: var(--fs-hero-l);
+  }
   .statement__body {
     font-family: 'Hanken Grotesk', sans-serif;
     font-size: var(--fs-lead);
@@ -299,6 +378,53 @@ const ecSatPts = ecSats.map((label, i) => {
     color: var(--c-muted);
     margin: 28px 0 0;
     max-width: var(--measure-m);
+  }
+  /* Colonne gauche aérée pour le slide à grande carte abstraite (Les 4 entités) :
+     plus d'air sous le titre (avant les bullets) et avant le body. Ciblé via
+     data-dense, posé uniquement sur ce slide (carte abstraite). */
+  .statement__content[data-dense='true'] .statement__bullets {
+    margin-top: 48px;
+  }
+  .statement__content[data-dense='true'] .statement__body {
+    margin-top: 44px;
+  }
+
+  /* Liste à puces avec icône Phosphor devant chaque item. */
+  .statement__bullets {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: var(--measure-m);
+  }
+  .statement__bullet {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .statement__bullet-icon {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--c-accent) 14%, transparent);
+  }
+  .statement__bullet-icon :global(svg) {
+    width: 26px;
+    height: 26px;
+    color: var(--c-accent);
+  }
+  .statement__bullet-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    color: var(--c-ink);
   }
 
   /* Chiffre-clé à droite, centré horizontalement dans sa colonne. */
@@ -477,6 +603,51 @@ const ecSatPts = ecSats.map((label, i) => {
   }
   .ec-badge--pk { background: var(--c-accent); color: var(--c-on-accent); }
   .ec-badge--fk { background: color-mix(in srgb, var(--c-ink) 9%, transparent); color: var(--c-muted); }
+
+  /* ---- Mode abstrait : carte placeholder + nuage de points autour ---- */
+  .ec-card { z-index: 1; }
+  .ec-cloud {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    z-index: 0;
+  }
+  .ec-cloud-dot { fill: color-mix(in srgb, var(--c-ink) 55%, transparent); }
+  .ec-cloud-dot--accent { fill: var(--c-accent); }
+  /* Colonne d'illustration élargie en mode abstrait (carte agrandie). */
+  .statement__entitycard[data-abstract='true'] { flex-basis: 50%; }
+  .ec-card--abstract .ec-card__row { justify-content: flex-start; gap: 16px; }
+  .ec-ph {
+    display: inline-block;
+    background: color-mix(in srgb, var(--c-ink) 13%, transparent);
+    border-radius: 4px;
+  }
+  .ec-ph--title { width: 46%; height: 20px; }
+  .ec-card--abstract .ec-ph-chip {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--c-accent) 35%, transparent);
+  }
+  /* Champs qui se peuplent de data (animation client) + effet de réparation. */
+  .ec-fill {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.35s ease;
+  }
+  .ec-fill--repair { color: color-mix(in srgb, var(--c-ink) 28%, transparent); }
+  .ec-fill--set { color: var(--c-accent); }
 </style>
 
 {/* Le style du footer source (.slide-source) est canonique dans
@@ -575,5 +746,45 @@ const ecSatPts = ecSats.map((label, i) => {
     document.addEventListener('DOMContentLoaded', initStatementNetworks);
   } else {
     initStatementNetworks();
+  }
+</script>
+
+<script>
+  // Carte abstraite (entityCard.abstract) : les champs se "peuplent" de data en
+  // boucle, avec un bref effet de "réparation" (valeur brouillée -> valeur propre
+  // en accent) qui illustre la donnée qui se nettoie. Décor (carte aria-hidden).
+  function initEntityFill(card: HTMLElement) {
+    if (card.dataset.fillInit) return;
+    card.dataset.fillInit = '1';
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fills = Array.from(card.querySelectorAll<HTMLElement>('.ec-fill'));
+    fills.forEach((el, idx) => {
+      let vals: string[] = [];
+      try { vals = JSON.parse(el.dataset.vals || '[]'); } catch { vals = []; }
+      if (vals.length < 2) return;
+      let i = 0;
+      const cycle = () => {
+        el.classList.add('ec-fill--repair');
+        el.textContent = '••••••••';
+        window.setTimeout(() => {
+          i = (i + 1) % vals.length;
+          el.textContent = vals[i];
+          el.classList.remove('ec-fill--repair');
+          el.classList.add('ec-fill--set');
+          window.setTimeout(() => el.classList.remove('ec-fill--set'), 650);
+        }, 420);
+      };
+      if (reduce) return;
+      window.setInterval(cycle, 3400 + idx * 260);
+      window.setTimeout(cycle, 700 + idx * 320);
+    });
+  }
+  function initEntityFills() {
+    document.querySelectorAll<HTMLElement>('.ec-card--abstract').forEach(initEntityFill);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEntityFills);
+  } else {
+    initEntityFills();
   }
 </script>

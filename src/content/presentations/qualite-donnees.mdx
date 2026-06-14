@@ -17,7 +17,7 @@ import SubSection from '@/components/slides/SubSection.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import StatRings from '@/components/slides/StatRings.astro';
 import Table from '@/components/slides/Table.astro';
-import Video from '@/components/slides/Video.astro';
+import Demo from '@/components/slides/Demo.astro';
 import Spreadsheet from '@/components/slides/Spreadsheet.astro';
 import Steps from '@/components/slides/Steps.astro';
 import Tip from '@/components/slides/Tip.astro';
@@ -181,42 +181,35 @@ import Tip from '@/components/slides/Tip.astro';
   brandSub="Executive Education"
 />
 
-{/* Démo vidéo NeverBounce (screen recording).
-    Vidéo déposée. Le poster (thumbnail PDF) est généré à `posterTime` (0:43) par
-    `npm run build:posters` (ffmpeg, aussi en prebuild) vers
-    neverbounce-cleaning-poster.jpg, dérivé du nom de la vidéo. */}
-<Video
-  title="Cleaning avec NeverBounce"
-  italicPart="NeverBounce"
-  align="left"
-  video="/decks/qualite-donnees/neverbounce-cleaning.mp4"
-  posterTime="0:43"
+{/* Démo live NeverBounce (validation d'emails en masse). Logo : favicon officiel
+    256px (neverbounce.com bloque le scrape, aucun SVG public dispo). La liste de
+    démo neverbounce-demo-list.csv est déjà dans les assets du deck. */}
+<Demo
+  toolLogo="/decks/qualite-donnees/logos/neverbounce.png"
+  toolName="NeverBounce"
+  toolUrl="https://neverbounce.com"
+  objectives={[
+    "Importer un fichier de contacts (CSV) à vérifier",
+    "Lancer la validation : valides, invalides, risqués, jetables",
+    "Lire le rapport : score de la liste et bounces évités",
+    "Exporter la liste nettoyée, prête à l'envoi",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-{/* Démo mail-tester : placeholder vidéo (remplace l'ancienne astuce Tip).
-    Déposer la vidéo enregistrée dans /decks/qualite-donnees/mail-tester-demo.mp4. */}
-<Video
-  title="Testez votre délivrabilité avant d'envoyer"
-  italicPart="délivrabilité"
-  subtitle="mail-tester.com : on envoie un email à l'adresse fournie, on reçoit une note sur 10 et un diagnostic SPF, DKIM, DMARC, contenu et blacklists."
-  video="/decks/qualite-donnees/mail-tester-demo.mp4"
-  posterTime="0:03"
-  caption="Démo à enregistrer (placeholder) : www.mail-tester.com"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Démo Yopmail : placeholder vidéo. En vidéo plutôt qu'en Demo loupe car Yopmail
-    n'a pas de logo exploitable. Vidéo dans /decks/qualite-donnees/yopmail-demo.mp4. */}
-<Video
-  title="Yopmail, l'email jetable"
-  italicPart="jetable"
-  subtitle="Une adresse email temporaire en un clic, sans inscription : pour tester un formulaire ou un workflow sans polluer sa vraie boîte."
-  video="/decks/qualite-donnees/yopmail-demo.mp4"
-  posterTime="0:03"
-  caption="Démo à enregistrer (placeholder) : www.yopmail.com"
+{/* Démo live mail-tester.com (test de délivrabilité). Logo : wordmark officiel
+    SVG (logo-white.svg recoloré en encre foncée #15151E pour le fond clair de la loupe). */}
+<Demo
+  toolLogo="/decks/qualite-donnees/logos/mail-tester.svg"
+  toolName="mail-tester"
+  toolUrl="https://www.mail-tester.com"
+  objectives={[
+    "Récupérer l'adresse de test unique générée par mail-tester",
+    "Envoyer un email depuis son outil habituel à cette adresse",
+    "Lire la note sur 10 et le diagnostic SPF, DKIM, DMARC",
+    "Corriger les points signalés : contenu, authentification, blacklists",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -262,6 +255,32 @@ import Tip from '@/components/slides/Tip.astro';
   ]}
 />
 
+{/* Démo live Genderize.io (déduction du genre depuis le prénom). Pas de logo de
+    marque exploitable (favicon = simple cercle orange) : wordmark SVG maison. */}
+<Demo
+  toolLogo="/decks/qualite-donnees/logos/genderize.svg"
+  toolName="Genderize"
+  toolUrl="https://genderize.io"
+  objectives={[
+    "Saisir un prénom dans genderize.io",
+    "Lire le genre prédit et sa probabilité (degré de confiance)",
+    "Vérifier le count : le volume de données derrière la prédiction",
+    "Tester un prénom ambigu ou peu courant pour voir les limites",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Bridge collecte -> enrichment : le scraping ne sert pas qu'à constituer une
+    liste, il alimente massivement l'enrichment (compléter des fiches existantes). */}
+<Quote
+  icon="ph:lightbulb"
+  text="Le scraping ne sert pas qu'à collecter."
+  lead="On l'a vu en phase de collecte pour constituer une liste. Mais c'est en enrichment qu'il travaille le plus : scraper un site, un annuaire ou un profil pour compléter des fiches déjà dans le CRM. Même technique, deux usages, et de loin le plus gros volume côté enrichment."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 8 : La stack d'enrichment moderne, du plus simple au plus puissant. */}
 <Table
   title="La stack d'enrichment moderne"
@@ -279,19 +298,19 @@ import Tip from '@/components/slides/Tip.astro';
   ]}
 />
 
-{/* Slide 9 : Deep-dive Clay - le waterfall enrichment. */}
+{/* Slide 9 : Deep-dive Clay - le waterfall enrichment. "waterfall" via italicPart
+    (soulignement rouge signature en diagonale). Image : cascade (métaphore waterfall). */}
 <Steps
   title="Le waterfall enrichment de Clay"
   italicPart="waterfall"
   subtitle="L'enrichissement de niveau entreprise rendu accessible : la couverture maximale, sans payer le vide."
-  image="/decks/qualite-donnees/cover-filter.jpg"
+  image="/decks/qualite-donnees/waterfall.jpg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
     { text: "Le point de départ : une liste d'emails ou de domaines, comme un tableur. Clay, c'est un Google Sheets sous stéroïdes, branché sur des dizaines de fournisseurs." },
     { text: "La cascade : pour chaque champ manquant, Clay interroge une source, puis une deuxième si la première est vide, puis une troisième, jusqu'à trouver." },
     { text: "Le résultat : un taux de couverture très supérieur à n'importe quel outil seul, en ne payant que les appels qui aboutissent." },
-    { text: "Claygent, l'agent IA : il lit un site web ou un profil pour répondre à une question libre (quelle techno ? ont-ils levé des fonds ?) quand aucune base ne sait." },
   ]}
 />
 
@@ -311,7 +330,7 @@ import Tip from '@/components/slides/Tip.astro';
   title="Trois piliers pour tenir la qualité dans le temps"
   italicPart="dans le temps"
   subtitle="Sans ces trois, la base se dégrade en six mois et l'outil retombe en désuétude."
-  image="/decks/qualite-donnees/cover-filter.jpg"
+  image="https://images.pexels.com/photos/7437091/pexels-photo-7437091.jpeg"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[

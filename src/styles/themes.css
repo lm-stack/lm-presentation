@@ -50,7 +50,8 @@
    Placé APRÈS la règle générale (spécificité égale → gagne par ordre source). */
 .list-image-hero__brand-logo,
 .numbered-split__brand-logo,
-.programme-hero__brand-logo { content: var(--logo-url-white); }
+.programme-hero__brand-logo,
+.usecase__brand-logo { content: var(--logo-url-white); }
 
 /* Logo ExecEd à la même hauteur que le logo LM (48px, via le style scopé des
    composants) : pas d'override de hauteur par schéma. */

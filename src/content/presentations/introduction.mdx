@@ -129,7 +129,7 @@ import CTA from '@/components/slides/CTA.astro';
   brandSub="Executive Education"
 />
 
-<AgendaDays parcours="crm-data-automation" noWorkshop={["funnel-marketing", "segmentation-activation"]} />
+<AgendaDays parcours="crm-data-automation" />
 
 <InfoCards
   title="Horaires des journées"
@@ -144,6 +144,21 @@ import CTA from '@/components/slides/CTA.astro';
     { icon: "ph:sun", label: "Après-midi", value: "13h30 à 17h00" },
     { icon: "ph:coffee", label: "Pauses", value: "15 mins par demi-journée" },
   ]}
+/>
+
+<CTA
+  title="Ce slidedeck en ligne"
+  italicPart="en ligne"
+  description="Retrouvez tous les slides en ligne. Pas indispensable, mais plus pratique pour explorer à votre rythme."
+  bullets={[
+    "Navigation libre entre les modules",
+    "Contenus interactifs : sondages et démos en direct",
+    "Accessible sur tous vos écrans",
+  ]}
+  buttonLabel="Voir le slidedeck en ligne"
+  buttonHref="/parcours/crm-data-automation/"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <SubSection
@@ -165,7 +180,7 @@ import CTA from '@/components/slides/CTA.astro';
   items={[
     { text: "Architecture de données : le schéma de votre CRM, entités et relations." },
     { text: "Processus modélisés : deux à trois processus clés cartographiés en BPMN." },
-    { text: "Workflow : un processus automatisé de bout en bout dans un outil no-code." },
+    { text: "Workflow : un processus automatisé de bout en bout." },
     { text: "Stratégie data & automation : la vision qui relie et priorise les trois." },
   ]}
 />
@@ -176,26 +191,21 @@ import CTA from '@/components/slides/CTA.astro';
   subtitle="Dossier écrit individuel, rendu après la formation, délai indiqué sur Moodle."
   headers={["Livrable", "Poids", "Ce qui est évalué"]}
   rows={[
-    ["Architecture", "20 %", "Schéma clair, entités et relations justes, pièges classiques évités."],
-    ["Processus", "20 %", "BPMN lisible, acteurs et points de décision explicites."],
-    ["Workflow", "20 %", "Automatisation cohérente, déclencheur et conditions pertinents."],
-    ["Stratégie", "40 %", "Vision d'ensemble, priorisation et liens entre les trois livrables."],
+    ["Architecture", "25 %", "Schéma clair, entités et relations justes, pièges classiques évités."],
+    ["Processus", "25 %", "BPMN lisible, acteurs et points de décision explicites."],
+    ["Workflow", "25 %", "Automatisation cohérente, déclencheur et conditions pertinents."],
+    ["Stratégie", "25 %", "Vision d'ensemble, priorisation et liens entre les trois livrables."],
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
 
-<CTA
-  title="Ce slidedeck en ligne"
-  italicPart="en ligne"
-  description="Retrouvez tous les slides en ligne. Pas indispensable, mais plus pratique pour explorer à votre rythme."
-  bullets={[
-    "Navigation libre entre les modules",
-    "Contenus interactifs : sondages et démos en direct",
-    "Accessible sur tous vos écrans",
-  ]}
-  buttonLabel="Voir le slidedeck en ligne"
-  buttonHref="/parcours/crm-data-automation/"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
+{/* Recap agenda orienté examen, en clôture de la section examen (après le barème) :
+    tout grisé sauf les 4 workshops évalués (Architecture, Modéliser les processus,
+    Workflow, Stratégie data & automation), qui produisent les livrables 1 à 4. */}
+<AgendaDays
+  parcours="crm-data-automation"
+  title="Les quatre workshops de l'examen"
+  italicPart="examen"
+  examDecks={["architecture-donnees", "modeliser-les-processus", "workflow", "strategie-data-automation"]}
 />

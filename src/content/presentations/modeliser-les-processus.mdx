@@ -19,8 +19,9 @@ import ImageFull from '@/components/slides/ImageFull.astro';
 import BpmnCanvas from '@/components/slides/BpmnCanvas.astro';
 import ProcessCycle from '@/components/slides/ProcessCycle.astro';
 import ImproveLoop from '@/components/slides/ImproveLoop.astro';
-import Capture from '@/components/slides/Capture.astro';
 import Workshop from '@/components/slides/Workshop.astro';
+import UseCase from '@/components/slides/UseCase.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 
 {/* Module Modéliser les processus (Jour 2, premier sujet), créé le 2026-06-13.
     Structure : 01 Pourquoi modéliser -> 02 Comment modéliser (BPMN) ->
@@ -42,6 +43,17 @@ import Workshop from '@/components/slides/Workshop.astro';
   brandSub="Executive Education"
   image="/decks/modeliser-les-processus/cover-whiteboard.jpg"
   theme="halo-gold"
+/>
+
+{/* Ouverture : récap du Jour 1 en nuage de mots (rituel d'ouverture de journée,
+    pendant du « takeaway du Jour 2 » de segmentation-activation). */}
+<WordCloud
+  id="recap-jour-1"
+  question="Votre takeaway du Jour 1, en un mot ?"
+  italicPart="Jour 1"
+  subtitle="Plusieurs réponses bienvenues"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* ============ 01 POURQUOI MODÉLISER ============ */}
@@ -166,7 +178,21 @@ import Workshop from '@/components/slides/Workshop.astro';
   index="03"
   title="Modélisons un processus"
   italicPart="Modélisons"
-  subtitle="En direct, pas à pas : de la demande de devis à la réception, chez un traiteur."
+  subtitle="En direct, pas à pas : de la demande d'information au démarrage des cours."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Cas d'usage : le centre de langue (fil rouge), posé avant la démo BPMN. */}
+<UseCase
+  eyebrow="Cas d'usage"
+  you={{ icon: "ph:translate", label: "Un centre de langue" }}
+  target={{ icon: "ph:users-three", label: "Particuliers et entreprises" }}
+  objective="Transformer une demande d'information en inscription à un cours."
+  collect={["Coordonnées", "Langue visée", "Niveau", "Objectif", "Type de client"]}
+  source="Notation BPMN, puis Zoho CRM."
+  image="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1000&h=1300&fit=crop&q=80"
+  imageAlt="Cours de langue en salle avec un formateur"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -196,26 +222,9 @@ import Workshop from '@/components/slides/Workshop.astro';
   ]}
 />
 
-{/* Démo Zoho Blueprint, processus traiteur (capture placeholder à remplacer). */}
-<Capture
-  title="Le processus dans Zoho"
-  italicPart="Zoho"
-  subtitle="On transforme le processus traiteur modélisé en Blueprint Zoho : le cycle de vie de l'Offre, exécutable état par état, directement dans le CRM."
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=1000&fit=crop"
-  caption="Capture Zoho CRM Blueprint (à remplacer)."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-  rows={[
-    { label: "Outil", value: "Zoho CRM, module Blueprint : un processus visuel avec états et transitions, posé sur l'Offre." },
-    { label: "Point de départ", value: "Le processus traiteur qu'on vient de modéliser : de la demande de devis à la réception." },
-    { label: "États", value: "Demande reçue, Qualifiée, Devis envoyé, Accepté, Dégustation, Réception. Chaque activité BPMN devient un état." },
-    { label: "Transitions", value: "Le gateway « Devis accepté ? » devient une transition conditionnelle ; chaque passage exige ses champs et ses actions." },
-  ]}
-/>
-
 {/* Workshop, modélisation BPMN pure. */}
 <Workshop
-  subtitle="À vous de jouer : modélisez un processus métier de votre organisation en notation BPMN."
+  subtitle="Modélisez un processus métier de votre organisation en notation BPMN."
   defaultMinutes={45}
   presets={[15, 30, 45]}
   brand="CRM, Data & Automation"

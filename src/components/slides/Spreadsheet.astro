@@ -1,6 +1,6 @@
 ---
 // src/components/slides/Spreadsheet.astro
-// Slide "style tableur Excel" : même chrome que Table (header marque + logo,
+// Slide style tableur (Excel par défaut, Google Sheets via app="sheets") : même chrome que Table (header marque + logo,
 // titre serif italique partiel + sous-titre), mais le corps est une grille façon
 // Excel : barre de formule (name box + fx + formule), en-têtes de colonnes A/B/C,
 // numéros de lignes, cellules avec quadrillage, cellule active surlignée en vert.
@@ -25,6 +25,8 @@ interface Props {
   italicPart?: string;
   subtitle?: string;
   sheets: Sheet[];
+  /** Habillage du tableur : 'excel' (défaut) ou 'sheets' (Google Sheets). */
+  app?: 'excel' | 'sheets';
   brand?: string;
   brandSub?: string;
 }
@@ -33,6 +35,7 @@ const {
   italicPart,
   subtitle,
   sheets,
+  app = 'excel',
   brand = 'Titre de la présentation',
   brandSub,
 } = Astro.props;
@@ -66,7 +69,7 @@ function activeOf(cell?: string) {
       {subtitle && <p class="sheet-hero__subtitle">{subtitle}</p>}
     </div>
 
-    <div class="xl">
+    <div class:list={['xl', app !== 'sheets' && 'xl--excel']}>
       {sheets.map((sheet, s) => {
         const colLetters = sheet.columns.map((_, i) => String.fromCharCode(65 + i));
         const active = activeOf(sheet.activeCell);
@@ -222,11 +225,11 @@ function activeOf(cell?: string) {
     max-width: none;
   }
 
-  /* Bloc tableur Excel. Police Calibri-like, quadrillage gris, accents verts. */
+  /* Bloc tableur Google Sheets. Police Arial, quadrillage gris clair, sélection bleue, accents verts Google. */
   .xl {
     flex: 0 0 auto;
-    font-family: 'Calibri', 'Segoe UI', 'Aptos', system-ui, sans-serif;
-    border: 1px solid #b7b7b7;
+    font-family: 'Arial', 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    border: 1px solid #c7c7c7;
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.18);
@@ -241,8 +244,8 @@ function activeOf(cell?: string) {
     display: flex;
     align-items: center;
     gap: 0;
-    background: #f6f6f6;
-    border-bottom: 1px solid #d0d0d0;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e8eaed;
     height: 52px;
   }
   .xl__namebox {
@@ -250,7 +253,7 @@ function activeOf(cell?: string) {
     padding: 0 18px;
     font-size: var(--fs-body);
     color: #333;
-    border-right: 1px solid #d0d0d0;
+    border-right: 1px solid #e8eaed;
     line-height: 52px;
   }
   .xl__fx {
@@ -259,7 +262,7 @@ function activeOf(cell?: string) {
     font-family: 'Iowan Old Style', Georgia, serif;
     font-size: var(--fs-body);
     color: #888;
-    border-right: 1px solid #d0d0d0;
+    border-right: 1px solid #e8eaed;
     line-height: 52px;
   }
   .xl__formula {
@@ -280,12 +283,12 @@ function activeOf(cell?: string) {
   /* En-têtes de colonnes (A, B, C...) et coin haut-gauche. */
   .xl__corner,
   .xl__colhead {
-    background: #f0f0f0;
+    background: #f8f9fa;
     color: #5f6368;
     font-weight: 600;
     font-size: var(--fs-eyebrow);
     text-align: center;
-    border: 1px solid #d4d4d4;
+    border: 1px solid #e8eaed;
     height: 38px;
   }
   .xl__corner {
@@ -293,12 +296,12 @@ function activeOf(cell?: string) {
   }
   /* Numéros de lignes (1, 2, 3...). */
   .xl__rownum {
-    background: #f0f0f0;
+    background: #f8f9fa;
     color: #5f6368;
     font-weight: 600;
     font-size: var(--fs-eyebrow);
     text-align: center;
-    border: 1px solid #d4d4d4;
+    border: 1px solid #e8eaed;
     width: 56px;
   }
   /* Cellules de données. */
@@ -319,8 +322,8 @@ function activeOf(cell?: string) {
   }
   /* Cellule active : cadre vert Excel (inset pour ne pas décaler la grille). */
   .xl__cell--active {
-    box-shadow: inset 0 0 0 3px #217346;
-    background: #f3faf5;
+    box-shadow: inset 0 0 0 3px #1a73e8;
+    background: #e8f0fe;
   }
 
   /* Onglets de feuille en bas, cliquables. */
@@ -328,8 +331,8 @@ function activeOf(cell?: string) {
     display: flex;
     align-items: stretch;
     gap: 2px;
-    background: #f0f0f0;
-    border-top: 1px solid #d0d0d0;
+    background: #f8f9fa;
+    border-top: 1px solid #e8eaed;
     padding: 0 8px;
     height: 46px;
   }
@@ -349,15 +352,50 @@ function activeOf(cell?: string) {
   }
   .xl__tab--active {
     background: #fff;
-    color: #217346;
+    color: #188038;
     font-weight: 700;
-    border-top: 3px solid #217346;
-    border-left: 1px solid #d0d0d0;
-    border-right: 1px solid #d0d0d0;
+    border-top: 3px solid #188038;
+    border-left: 1px solid #e8eaed;
+    border-right: 1px solid #e8eaed;
     cursor: default;
   }
   .xl__tab--add {
     color: #9aa0a6;
     cursor: default;
+  }
+
+  /* Variante Excel (app="excel", défaut) : restaure l'habillage Excel par-dessus
+     la base Google Sheets (Calibri, sélection + onglet verts #217346, gris Excel). */
+  .xl--excel {
+    font-family: 'Calibri', 'Segoe UI', 'Aptos', system-ui, sans-serif;
+    border-color: #b7b7b7;
+  }
+  .xl--excel .xl__formulabar {
+    background: #f6f6f6;
+    border-bottom-color: #d0d0d0;
+  }
+  .xl--excel .xl__namebox,
+  .xl--excel .xl__fx {
+    border-right-color: #d0d0d0;
+  }
+  .xl--excel .xl__corner,
+  .xl--excel .xl__colhead,
+  .xl--excel .xl__rownum {
+    background: #f0f0f0;
+    border-color: #d4d4d4;
+  }
+  .xl--excel .xl__cell--active {
+    box-shadow: inset 0 0 0 3px #217346;
+    background: #f3faf5;
+  }
+  .xl--excel .xl__tabs {
+    background: #f0f0f0;
+    border-top-color: #d0d0d0;
+  }
+  .xl--excel .xl__tab--active {
+    color: #217346;
+    border-top-color: #217346;
+    border-left-color: #d0d0d0;
+    border-right-color: #d0d0d0;
   }
 </style>

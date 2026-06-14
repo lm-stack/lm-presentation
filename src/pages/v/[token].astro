@@ -203,6 +203,26 @@ export function getStaticPaths() {
       const statusLabel = document.getElementById('vote-status-label') as HTMLElement;
       const body = document.getElementById('vote-body') as HTMLElement;
 
+      // Identifiant d'appareil stable (persiste en localStorage). Envoye avec chaque
+      // vote, il permet au worker de distinguer deux votants derriere la meme IP et
+      // le meme navigateur (salle sur un wifi commun, telephones identiques). Sans
+      // lui, ils partageraient le meme hash et le 2e vote QCM serait refuse.
+      function getClientId(): string {
+        try {
+          let id = localStorage.getItem('lm_poll_client_id');
+          if (!id) {
+            id = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+              ? crypto.randomUUID()
+              : Math.random().toString(36).slice(2) + Date.now().toString(36);
+            localStorage.setItem('lm_poll_client_id', id);
+          }
+          return id;
+        } catch {
+          // localStorage indisponible (navigation privee stricte) : id non persistant.
+          return 'np-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+        }
+      }
+
       function setStatus(state: 'open' | 'closed' | 'idle', label: string) {
         statusEl.classList.remove('vote-status--open', 'vote-status--closed');
         if (state === 'open') statusEl.classList.add('vote-status--open');
@@ -333,7 +353,7 @@ export function getStaticPaths() {
           const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ choice }),
+            body: JSON.stringify({ choice, clientId: getClientId() }),
           });
           if (res.status === 200) {
             showMessage('✅', 'Merci pour ton vote !', `Tu as voté pour : ${label}`);
@@ -363,7 +383,7 @@ export function getStaticPaths() {
           const res = await fetch(`${LM_POLLS_URL}/api/poll/${token}/vote`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ word }),
+            body: JSON.stringify({ word, clientId: getClientId() }),
           });
           if (res.status === 200) {
             showMessage('✅', 'Réponse envoyée !', 'Propose-en une autre si tu veux.', {

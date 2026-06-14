@@ -13,7 +13,8 @@ interface Props {
   termItalicPart?: string;
   /** La definition (gros texte, sous le terme). */
   definition: string;
-  /** Image de fond optionnelle : floutee + voile clair (facon Quote). */
+  /** Image de fond (floutée + voile clair, façon Quote). Si absente, une image
+   *  par défaut s'applique : règle « toujours une image » sur les Definition. */
   image?: string;
   brand?: string;
   brandSub?: string;
@@ -25,7 +26,8 @@ const {
   term,
   termItalicPart,
   definition,
-  image,
+  // Règle « toujours une image » : fond par défaut si le slide n'en fournit pas.
+  image = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1920&h=1080&fit=crop',
   brand = 'Titre de la présentation',
   brandSub,
   tocLabel,

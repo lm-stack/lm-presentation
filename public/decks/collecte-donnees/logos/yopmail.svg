@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 56" role="img" aria-label="Yopmail">
+  <!-- Wordmark maison : Yopmail n'a pas de logo de marque exploitable. Texte en
+       police systeme (Arial / Liberation Sans) car un SVG charge en <img> n'herite
+       pas des webfonts du deck. Couleur ink neutre, lisible sur fond clair. -->
+  <text x="115" y="41" text-anchor="middle"
+        font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif"
+        font-size="46" letter-spacing="-2" fill="#1f2937">
+    <tspan font-weight="800">yop</tspan><tspan font-weight="500">mail</tspan>
+  </text>
+</svg>

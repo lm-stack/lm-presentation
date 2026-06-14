@@ -199,6 +199,12 @@ const titleParts = splitHighlight(title, italicPart);
     font-style: italic;
     font-weight: 400;
   }
+  /* La barre .underline est posée par un ::after en height:100%, qui ne se résout
+     pas sur un parent inline dans ce titre : inline-block lui donne une hauteur
+     définie pour que la barre rouge s'affiche bien sous le mot. */
+  .steps__title .underline {
+    display: inline-block;
+  }
 
   .steps__subtitle {
     font-family: 'Hanken Grotesk', sans-serif;
