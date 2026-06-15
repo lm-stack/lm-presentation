@@ -13,6 +13,7 @@ description: "LPD, RGPD et sous-traitance, par Yvann Barras (YBCS). Support sur 
 import Cover from '@/components/slides/Cover.astro';
 import About from '@/components/slides/About.astro';
 import Statement from '@/components/slides/Statement.astro';
+import Pause from '@/components/slides/Pause.astro';
 
 {/* Deck volontairement réduit : l'intervenant Yvann Barras anime ce module,
     son support de présentation vit sur Moodle (pas dans ce repo).
@@ -62,6 +63,16 @@ import Statement from '@/components/slides/Statement.astro';
   title="La présentation est sur Moodle"
   italicPart="Moodle"
   body="L'intégralité du support de ce module est disponible sur la plateforme Moodle du cours. Connectez-vous à votre espace pour retrouver les slides et les ressources associées."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide de pause en fin de module (avant la fin auto Questions/Merci injectée par la route). */}
+<Pause
+  title="Pause"
+  italicPart="Pause"
+  subtitle="Café, eau, étirements. On reprend ensemble."
+  tocLabel="Pause"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />

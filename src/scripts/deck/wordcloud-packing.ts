@@ -40,10 +40,14 @@ function shouldRotateWord(word: string, rank: number): boolean {
   return hashStr(word) % 100 < 30;
 }
 
+// Couleurs en tokens de thème (var CSS), pas en hex : les mots sont des <span>
+// DOM enfants du <body data-scheme>, donc var(--c-*) se résout selon le schéma
+// (jaune LM / rouge ExecEd). Le mot dominant prend l'accent, les deux suivants
+// l'encre, le reste le gris atténué. Le module reste pur (renvoie des strings).
 function pickWordColor(rank: number): string {
-  if (rank === 0) return '#FFD838';
-  if (rank <= 2) return '#191919';
-  return '#6B6F84';
+  if (rank === 0) return 'var(--c-accent)';
+  if (rank <= 2) return 'var(--c-ink)';
+  return 'var(--c-muted)';
 }
 
 // Mesure de la bbox via canvas.measureText. ctx peut etre null si l'API n'est

@@ -25,6 +25,8 @@ export type PollInitBody = {
   type: PollType;
   question: string;
   options?: string[];
+  /** Thème du parcours (transmis au worker pour thémer la page de vote). */
+  scheme?: 'lm' | 'execed';
 };
 
 export type PollInitResponse = {
@@ -49,4 +51,7 @@ export type PollPublicInfo = {
   type: PollType;
   question: string;
   options?: string[];
+  /** Thème du parcours, posé à l'init par le deck. Permet à la page de vote de
+      s'afficher dans le thème même quand l'URL est tapée sans ?s=. */
+  scheme?: 'lm' | 'execed';
 };

@@ -5,7 +5,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   X-Robots-Tag: noindex, nofollow
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://images.unsplash.com https://i.scdn.co; font-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://lm-pdf.hello-cb2.workers.dev https://pdf.lausanne.marketing https://lm-polls.hello-cb2.workers.dev; frame-src https://open.spotify.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https://images.unsplash.com https://images.pexels.com https://i.scdn.co; font-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://lm-pdf.hello-cb2.workers.dev https://pdf.lausanne.marketing https://lm-polls.hello-cb2.workers.dev; frame-src https://open.spotify.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

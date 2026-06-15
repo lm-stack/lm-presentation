@@ -163,6 +163,9 @@ async function onPollStart(s: PollSlideState, config: PollsConfig): Promise<void
     pollId: s.pollId,
     type: s.type,
     question: s.question,
+    // Thème du deck transmis au worker : la page de vote s'affichera dans le
+    // thème du parcours (rouge ExecEd / jaune LM), y compris sur URL tapée.
+    scheme: document.body.dataset.scheme === 'execed' ? 'execed' : 'lm',
   };
   if (s.type === 'choice') body.options = s.options;
 
@@ -350,15 +353,22 @@ function renderPollWordCloud(s: PollSlideState, votes: Record<string, number>): 
 }
 
 function renderPollQR(s: PollSlideState, token: string): void {
-  const url = `${window.location.origin}/v/${token}`;
+  const base = `${window.location.origin}/v/${token}`;
+  // Le deck connaît son schéma (data-scheme sur <body>). On le transmet à la page
+  // de vote via ?s=execed pour qu'elle s'affiche dans le thème du parcours (rouge
+  // ExecEd plutôt que jaune LM). On ne l'ajoute QU'au QR (le chemin que tout le
+  // monde scanne) : l'URL courte affichée reste propre à taper et tombe sur le
+  // thème LM par défaut, ce qui reste pleinement fonctionnel.
+  const scheme = document.body.dataset.scheme === 'execed' ? 'execed' : 'lm';
+  const qrUrl = scheme === 'execed' ? `${base}?s=execed` : base;
   const qr = qrcode(0, 'M');
-  qr.addData(url);
+  qr.addData(qrUrl);
   qr.make();
   const svgString = qr.createSvgTag({ scalable: true, margin: 0 });
   const qrEl = s.section.querySelector<HTMLElement>('[data-poll-qr]')!;
   qrEl.innerHTML = svgString;
   s.section.querySelector<HTMLElement>('[data-poll-code]')!.textContent = token;
-  s.section.querySelector<HTMLElement>('[data-poll-url]')!.textContent = url.replace(/^https?:\/\//, '');
+  s.section.querySelector<HTMLElement>('[data-poll-url]')!.textContent = base.replace(/^https?:\/\//, '');
 }
 
 function sumVotes(votes: Record<string, number>): number {

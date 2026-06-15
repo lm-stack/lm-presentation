@@ -59,7 +59,10 @@ const backHref = parcoursSlug ? `/parcours/${parcoursSlug}` : '/parcours/';
         </svg>
         <span>Retourner au parcours</span>
       </a>
-      <span class="deck-menu__eyebrow"><span class="underline">Lausanne Marketing</span></span>
+      <span class="deck-menu__eyebrow">
+        <span class="underline deck-brand__lm">Lausanne Marketing</span>
+        <span class="underline deck-brand__execed">HEC Lausanne</span>
+      </span>
       <h1 class="deck-menu__title">{title}</h1>
       {subtitle && <p class="deck-menu__subtitle">{subtitle}</p>}
       {updated && (
@@ -139,7 +142,11 @@ const backHref = parcoursSlug ? `/parcours/${parcoursSlug}` : '/parcours/';
         </svg>
       </button>
       <div class="deck-footer__center">
-        <span class="deck-brand">Lausanne Marketing</span>
+        <span class="presenter-badge" aria-hidden="true">Présentateur</span>
+        <span class="deck-brand">
+          <span class="deck-brand__lm">Lausanne Marketing</span>
+          <span class="deck-brand__execed">HEC Lausanne</span>
+        </span>
         <span class="deck-sep">•</span>
         <span class="deck-title">{short ?? title}</span>
         <span class="deck-sep">•</span>
@@ -153,8 +160,6 @@ const backHref = parcoursSlug ? `/parcours/${parcoursSlug}` : '/parcours/';
     </footer>
 
     <PdfModal />
-
-    <div class="presenter-badge" aria-hidden="true">Présentateur</div>
 
     <script>
       // Orchestrateur : chaque sous-systeme du deck (presenter, reveal, chrome,

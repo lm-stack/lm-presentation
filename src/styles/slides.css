@@ -295,6 +295,13 @@ body:not(.deck-init-failed) .reveal:not(.ready) .slides {
   color: var(--c-ink);
 }
 
+/* Crédit institution selon le thème : "Lausanne Marketing" en LM (défaut),
+   "HEC Lausanne" en ExecEd. Bascule via [data-scheme] sur <body>, même pattern
+   que parcours-footer. Sert au footer ET à l'eyebrow du menu (mêmes classes). */
+.deck-brand__execed { display: none; }
+[data-scheme="execed"] .deck-brand__lm { display: none; }
+[data-scheme="execed"] .deck-brand__execed { display: inline; }
+
 .deck-footer .deck-title {
   color: var(--c-muted);
 }
@@ -383,30 +390,26 @@ body:not(.deck-init-failed) .reveal:not(.ready) .slides {
 body:not(.is-presenter) .presenter-only { display: none !important; }
 body.is-presenter .viewer-only { display: none !important; }
 
-/* Badge "Présentateur" en haut centre du viewport quand mode actif.
-   Masqué en plein écran avec le reste du chrome. */
+/* Badge "Présentateur" : pastille encre dans le footer, à gauche de la marque,
+   visible seulement en mode présentateur. Le footer entier étant masqué en plein
+   écran (et sur deck-init-failed), le badge l'est aussi : pas de règle dédiée. */
 .presenter-badge {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
   display: none;
   align-items: center;
-  padding: 4px 12px;
+  flex: 0 0 auto;
+  padding: 3px 10px;
   background: var(--c-ink);
   color: var(--c-accent);
-  border-radius: 6px;
+  border-radius: 4px;
   font-family: 'Space Grotesk', monospace;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 [data-scheme="execed"] .presenter-badge { color: #FFFFFF; }
 body.is-presenter .presenter-badge { display: inline-flex; }
-html:has(:fullscreen) .presenter-badge,
-body.is-fullscreen .presenter-badge { display: none !important; }
 
 /* Message "En attente de l'animateur" pour les viewers sur slides poll/wordcloud
    en mode initial. Style discret aligné sur les autres messages d'état. */

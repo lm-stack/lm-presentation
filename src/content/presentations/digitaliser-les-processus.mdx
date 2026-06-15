@@ -18,6 +18,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import InfoCards from '@/components/slides/InfoCards.astro';
 import Compare from '@/components/slides/Compare.astro';
+import Pause from '@/components/slides/Pause.astro';
 
 {/* Deck scaffold créé le 2026-06-14 : placé au Jour 2, juste après « Modéliser les
     processus ». Contenu à étoffer (pour l'instant : cover + un statement d'amorce). */}
@@ -212,6 +213,16 @@ import Compare from '@/components/slides/Compare.astro';
     "Créer une nouvelle inscription en direct, avec vous",
     "La faire avancer d'un état à l'autre, champs requis à l'appui",
   ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Slide de pause en fin de module (avant la fin auto Questions/Merci injectée par la route). */}
+<Pause
+  title="Pause"
+  italicPart="Pause"
+  subtitle="Café, eau, étirements. On reprend ensemble."
+  tocLabel="Pause"
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
