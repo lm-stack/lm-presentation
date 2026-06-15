@@ -14,7 +14,9 @@ interface Props {
   presets?: number[];
   /** Durée affichée par défaut (démarre directement en mode décompte). */
   defaultMinutes?: number;
-  /** URL Spotify (track/album/playlist/episode/show/artist). */
+  /** URL Spotify de la playlist (track/album/playlist/episode/show/artist).
+      Le lecteur est TOUJOURS affiché : sans valeur (ou valeur invalide), on
+      retombe sur DEFAULT_SPOTIFY. C'est le moyen de choisir la musique par deck. */
   spotify?: string;
   brand?: string;
   brandSub?: string;
@@ -37,6 +39,12 @@ const titleParts = splitHighlight(title, italicPart);
 // Pas de Spotify en mode handout (PDF) : l'iframe n'a pas de sens imprimée.
 const isHandout = Astro.url.pathname.includes('/handout/');
 
+// Playlist Spotify par défaut du lecteur de pause (le lecteur est OBLIGATOIRE).
+// CHOISIR LA MUSIQUE : éditer cette constante (défaut global de tous les decks),
+// ou passer la prop spotify="https://open.spotify.com/playlist/..." sur un
+// <Pause> précis (choix par deck, prioritaire sur ce défaut).
+const DEFAULT_SPOTIFY = 'https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ';
+
 const VALID_SPOTIFY_TYPES = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
 function parseSpotifyUrl(raw?: string): { type: string; id: string } | null {
   if (!raw) return null;
@@ -51,10 +59,16 @@ function parseSpotifyUrl(raw?: string): { type: string; id: string } | null {
     return null;
   }
 }
-const spotifyParsed = parseSpotifyUrl(spotify);
+// Lecteur OBLIGATOIRE et non désactivable : un lien vide ou invalide retombe sur
+// la playlist par défaut. La prop spotify reste le moyen de CHOISIR la musique.
+const spotifyParsed =
+  (typeof spotify === 'string' && spotify.trim() ? parseSpotifyUrl(spotify) : null)
+  ?? parseSpotifyUrl(DEFAULT_SPOTIFY);
 const spotifyEmbed = spotifyParsed
   ? `https://open.spotify.com/embed/${spotifyParsed.type}/${spotifyParsed.id}?utm_source=generator&theme=0`
   : null;
+// Toujours visible sur les slides ; omis seulement en handout/PDF (un iframe ne
+// se joue pas dans un document imprimé).
 const showSpotify = !!spotifyEmbed && !isHandout;
 ---
 <section class="pause" data-layout="pause" data-section-title={tocLabel}>
