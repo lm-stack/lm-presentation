@@ -20,3 +20,7 @@ source/
 diag-shots/
 .playwright-cli/
 __shot.mjs
+
+# Exports PDF locaux du skill /pdf (dossier pdf/ à la RACINE uniquement, ancré
+# par le / initial : ne pas ignorer .claude/skills/pdf/). Jamais commités.
+/pdf/
