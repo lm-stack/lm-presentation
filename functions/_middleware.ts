@@ -181,7 +181,8 @@ async function handleRequestCode(request: Request, env: Env): Promise<Response> 
       return json(403, { error: 'turnstile_failed' });
     }
   }
-  if (!env.ACCESS_OTP_SECRET || !env.N8N_OTP_WEBHOOK_URL) {
+  // S3 : on EXIGE le token n8n (echec explicite plutot qu'un Bearer vide envoye).
+  if (!env.ACCESS_OTP_SECRET || !env.N8N_OTP_WEBHOOK_URL || !env.N8N_WEBHOOK_TOKEN) {
     return json(503, { error: 'not_configured' });
   }
 
@@ -449,6 +450,16 @@ function wallPage(env: Env): Response {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'no-store',
       'X-Robots-Tag': 'noindex, nofollow',
+      // S5 : anti-clickjacking + CSP stricte. La page mur est 100% inline ;
+      // seules exceptions : le script/iframe Turnstile (challenges.cloudflare.com).
+      'X-Frame-Options': 'DENY',
+      'Content-Security-Policy':
+        "default-src 'none'; " +
+        "script-src 'unsafe-inline' https://challenges.cloudflare.com; " +
+        "style-src 'unsafe-inline'; " +
+        "frame-src https://challenges.cloudflare.com; " +
+        "connect-src 'self' https://challenges.cloudflare.com; " +
+        "img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
     },
   });
 }
