@@ -1,6 +1,4 @@
 name = "lm-presentation"
-# Compte Cloudflare LM, epingle pour eviter tout deploy sur le mauvais compte.
-account_id = "cb210d92a53c575edf3c493c6070a145"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-05-07"
 
