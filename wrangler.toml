@@ -1,3 +1,23 @@
 name = "lm-presentation"
+# Compte Cloudflare LM, epingle pour eviter tout deploy sur le mauvais compte.
+account_id = "cb210d92a53c575edf3c493c6070a145"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-05-07"
+
+# Rate limiting du mur d'acces (functions/_middleware.ts) : binding KV ACCESS_RL.
+# Les secrets (ACCESS_OTP_SECRET, ACCESS_SIGNING_SECRET, N8N_OTP_WEBHOOK_URL,
+# N8N_WEBHOOK_TOKEN) restent des secrets chiffres geres cote Pages dashboard :
+# ce fichier ne les touche pas. Sur Pages, les bindings ne sont PAS heritables
+# entre environnements : on (re)definit ACCESS_RL pour le local, production ET
+# preview. Absent au runtime -> le limiteur est inactif (fail-open).
+[[kv_namespaces]]
+binding = "ACCESS_RL"
+id = "c5abdd0ea004403eb5cb226c3adcb899"
+
+[[env.production.kv_namespaces]]
+binding = "ACCESS_RL"
+id = "c5abdd0ea004403eb5cb226c3adcb899"
+
+[[env.preview.kv_namespaces]]
+binding = "ACCESS_RL"
+id = "c5abdd0ea004403eb5cb226c3adcb899"

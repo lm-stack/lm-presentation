@@ -21,15 +21,16 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import ffmpegPath from 'ffmpeg-static';
+// NB : cible le composant <Video> (ex-<VideoHero>, renommé au commit bbc03d7).
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const PRESENTATIONS_DIR = join(ROOT, 'src', 'content', 'presentations');
 const PUBLIC_DIR = join(ROOT, 'public');
 
-/** Extrait les blocs <VideoHero ... /> et leurs props video / poster / posterTime. */
-function parseVideoHeros(mdx) {
-  const blocks = mdx.match(/<VideoHero\b[\s\S]*?\/>/g) ?? [];
+/** Extrait les blocs <Video ... /> et leurs props video / poster / posterTime. */
+function parseVideos(mdx) {
+  const blocks = mdx.match(/<Video\b[\s\S]*?\/>/g) ?? [];
   return blocks
     .map((b) => ({
       video: b.match(/\bvideo=["']([^"']+)["']/)?.[1],
@@ -74,7 +75,7 @@ async function main() {
   let skipped = 0;
   for (const file of files) {
     const mdx = await readFile(join(PRESENTATIONS_DIR, file), 'utf8');
-    for (const vh of parseVideoHeros(mdx)) {
+    for (const vh of parseVideos(mdx)) {
       // Poster explicite (non dérivé) = géré à la main, on ne le régénère pas.
       if (vh.poster) continue;
 

@@ -87,17 +87,17 @@ if (options.length < 2 || options.length > 6) {
         </div>
 
         <div class="poll__live" data-poll-state="live" hidden>
-          <div class="poll__qr" data-poll-qr></div>
+          <div class="poll__qr" data-poll-qr role="img" aria-label="QR code pour rejoindre le sondage"></div>
           <div class="poll__code" data-poll-code>------</div>
           <div class="poll__url" data-poll-url>slides.lausanne.marketing/v/------</div>
           <div class="poll__counter" data-poll-counter>0 votes</div>
           <div class="poll__actions presenter-only">
-            <button type="button" class="poll__action-btn" data-poll-freeze title="Figer">
+            <button type="button" class="poll__action-btn" data-poll-freeze title="Figer" aria-label="Figer le sondage">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
                 <path d="M208 80h-32V56a48 48 0 0 0-96 0v24H48a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16M96 56a32 32 0 0 1 64 0v24H96Z"/>
               </svg>
             </button>
-            <button type="button" class="poll__action-btn" data-poll-reset title="Reset">
+            <button type="button" class="poll__action-btn" data-poll-reset title="Réinitialiser" aria-label="Réinitialiser le sondage">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
                 <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
               </svg>
@@ -109,7 +109,7 @@ if (options.length < 2 || options.length > 6) {
           <div class="poll__frozen-badge">Vote terminé</div>
           <div class="poll__counter" data-poll-frozen-counter>0 votes</div>
           <div class="poll__actions presenter-only">
-            <button type="button" class="poll__action-btn" data-poll-reset title="Nouvelle session">
+            <button type="button" class="poll__action-btn" data-poll-reset title="Nouvelle session" aria-label="Nouvelle session">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
                 <path d="M197.67 186.37a8 8 0 0 1 0 11.29C196.58 198.73 170.82 224 128 224c-37.39 0-64.53-22.4-80-39.85V208a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H55.44C67.76 183.35 93 208 128 208c36 0 58.14-21.46 58.36-21.68a8 8 0 0 1 11.31.05M216 40a8 8 0 0 0-8 8v23.85C192.53 54.4 165.39 32 128 32c-42.82 0-68.58 25.27-69.66 26.34a8 8 0 0 0 11.3 11.34C69.86 69.46 92 48 128 48c35 0 60.24 24.65 72.56 40H168a8 8 0 0 0 0 16h48a8 8 0 0 0 8-8V48a8 8 0 0 0-8-8"/>
               </svg>

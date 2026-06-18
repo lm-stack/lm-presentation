@@ -13,7 +13,7 @@
 //    caracteres et on demande a n8n de l'envoyer par email.
 // 3. Le visiteur saisit le code -> POST /api/access/verify : on recalcule le
 //    code attendu (HMAC sans stockage) ; si OK on pose un cookie de session
-//    signe (30 jours) et on logge l'acces (fire-and-forget vers n8n).
+//    signe (15 jours) et on logge l'acces (fire-and-forget vers n8n).
 //
 // Le code OTP est SANS STOCKAGE : code = HMAC(ACCESS_OTP_SECRET, email|fenetre)
 // tronque, avec une fenetre de 10 min (on accepte la fenetre courante et la
@@ -26,17 +26,30 @@
 //   N8N_OTP_WEBHOOK_URL   : URL du webhook n8n qui envoie l'email + logge.
 //   N8N_WEBHOOK_TOKEN     : secret partage, envoye en Bearer pour authentifier
 //                           l'appel Function -> n8n.
+//   ACCESS_RL (optionnel) : binding KV namespace pour le rate limiting (anti
+//                           email-bombing + anti brute-force du code). ABSENT ->
+//                           limiteur inactif (fail-open, l'acces n'est jamais
+//                           bloque). A creer + binder dans Pages > Settings >
+//                           Functions > KV namespace bindings pour l'activer.
 //
 // --- Contrat n8n (le webhook recoit du JSON) ---
 //   { event: "request", email, code, ts }  -> envoyer l'email du code
 //   { event: "access",  email, ts }        -> ajouter une ligne au journal d'acces
 //   Header: Authorization: Bearer <N8N_WEBHOOK_TOKEN>
 
+// Type minimal d'un KV namespace (evite la dependance a @cloudflare/workers-types).
+interface KvLike {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+}
+
 interface Env {
   ACCESS_SIGNING_SECRET?: string;
   ACCESS_OTP_SECRET?: string;
   N8N_OTP_WEBHOOK_URL?: string;
   N8N_WEBHOOK_TOKEN?: string;
+  // Binding KV OPTIONNEL pour le rate limiting (cf. rateAllow). Absent -> fail-open.
+  ACCESS_RL?: KvLike;
 }
 
 // Type minimal du contexte Pages Functions (evite la dependance a
@@ -49,13 +62,26 @@ interface PagesContext {
 }
 
 const SESSION_COOKIE = 'lm_access';
-const SESSION_TTL_S = 60 * 60 * 24 * 30; // 30 jours
+const SESSION_TTL_S = 60 * 60 * 24 * 15; // 15 jours
 const OTP_WINDOW_S = 600; // 10 minutes
 const OTP_LENGTH = 6;
 // Alphabet Crockford base32 SANS caracteres ambigus (pas de I, L, O, U).
 const CROCKFORD = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// --- Rate limiting (best-effort via KV, fenetre fixe par buckets) ---
+// Plafonds volontairement GENEREUX : filet de securite anti-abus, pas un mur.
+// Pensés "salle de formation" : une cohorte entiere derriere une meme IP NAT ne
+// doit jamais etre bloquee, donc les limites PAR IP sont laches. Ce sont les
+// limites PAR EMAIL qui cappent vraiment les abus, insensibles a l'IP partagee :
+// le bombing (emails envoyes a une victime) et le brute-force du code (inutile
+// de toute facon a 32^6 ~ 1e9 combinaisons par fenetre de 10 min).
+const RL_WINDOW_S = 600; // 10 minutes
+const RL_REQUEST_PER_IP = 100; // demandes de code / 10 min / IP (cohorte OK)
+const RL_REQUEST_PER_EMAIL = 8; // emails envoyes / 10 min / adresse cible (anti-bombing)
+const RL_VERIFY_PER_IP = 150; // tentatives de code / 10 min / IP (fautes de frappe)
+const RL_VERIFY_PER_EMAIL = 20; // tentatives / 10 min / email (anti-brute-force)
 
 // Domaines email jetables / temporaires refuses (liste non exhaustive, a
 // etendre au besoin). Comparaison sur le domaine exact, en minuscules.
@@ -122,6 +148,10 @@ function isExempt(path: string): boolean {
 async function handleRequestCode(request: Request, env: Env): Promise<Response> {
   if (request.method !== 'POST') return json(405, { error: 'method_not_allowed' });
 
+  if (!(await rateAllow(env, `req:ip:${clientIp(request)}`, RL_REQUEST_PER_IP))) {
+    return json(429, { error: 'rate_limited' });
+  }
+
   const body = await readJson(request);
   const email = normalizeEmail(String(body?.email ?? ''));
   if (email.length > 254 || !EMAIL_RE.test(email)) {
@@ -129,6 +159,10 @@ async function handleRequestCode(request: Request, env: Env): Promise<Response> 
   }
   if (DISPOSABLE_DOMAINS.has(domainOf(email))) {
     return json(422, { error: 'disposable_email' });
+  }
+  // Cap anti-bombing par adresse cible (insensible a l'IP partagee d'une salle).
+  if (!(await rateAllow(env, `req:email:${email}`, RL_REQUEST_PER_EMAIL))) {
+    return json(429, { error: 'rate_limited' });
   }
   if (!env.ACCESS_OTP_SECRET || !env.N8N_OTP_WEBHOOK_URL) {
     return json(503, { error: 'not_configured' });
@@ -145,9 +179,18 @@ async function handleRequestCode(request: Request, env: Env): Promise<Response> 
 async function handleVerify(request: Request, env: Env, ctx: PagesContext): Promise<Response> {
   if (request.method !== 'POST') return json(405, { error: 'method_not_allowed' });
 
+  if (!(await rateAllow(env, `vfy:ip:${clientIp(request)}`, RL_VERIFY_PER_IP))) {
+    return json(429, { error: 'rate_limited' });
+  }
+
   const body = await readJson(request);
   const email = normalizeEmail(String(body?.email ?? ''));
   if (!EMAIL_RE.test(email)) return json(400, { error: 'invalid_email' });
+
+  // Cap anti-brute-force du code par email cible.
+  if (!(await rateAllow(env, `vfy:email:${email}`, RL_VERIFY_PER_EMAIL))) {
+    return json(429, { error: 'rate_limited' });
+  }
 
   const code = normalizeCode(String(body?.code ?? ''));
   if (code.length !== OTP_LENGTH) return json(400, { error: 'invalid_code' });
@@ -238,6 +281,29 @@ async function notifyN8n(env: Env, payload: Record<string, unknown>): Promise<bo
     return res.ok;
   } catch {
     return false;
+  }
+}
+
+// --- Rate limiting (best-effort) ---
+function clientIp(request: Request): string {
+  return request.headers.get('CF-Connecting-IP') || 'unknown';
+}
+
+// true = autorise, false = au-dela du plafond. Fail-open si pas de binding KV ou
+// si KV est indisponible : on ne bloque JAMAIS un acces legitime sur une panne
+// d'infra. Fenetre fixe par buckets, TTL = 2 fenetres (auto-nettoyage).
+async function rateAllow(env: Env, key: string, limit: number): Promise<boolean> {
+  const kv = env.ACCESS_RL;
+  if (!kv) return true;
+  const bucket = Math.floor(Date.now() / 1000 / RL_WINDOW_S);
+  const k = `rl:${key}:${bucket}`;
+  try {
+    const count = parseInt((await kv.get(k)) ?? '0', 10) || 0;
+    if (count >= limit) return false;
+    await kv.put(k, String(count + 1), { expirationTtl: RL_WINDOW_S * 2 });
+    return true;
+  } catch {
+    return true; // KV indisponible -> fail-open
   }
 }
 
@@ -452,7 +518,7 @@ const WALL_HTML = `<!DOCTYPE html>
       </div>
     </section>
 
-    <p class="hint">Les adresses email jetables ne sont pas acceptées. Une fois validée, ta session reste active 30 jours sur cet appareil.</p>
+    <p class="hint">Les adresses email jetables ne sont pas acceptées. Une fois validée, ta session reste active 15 jours sur cet appareil.</p>
   </main>
 
   <script>
@@ -497,6 +563,7 @@ const WALL_HTML = `<!DOCTYPE html>
         if (res.status === 422) { setMsg(msgEmail, 'Les adresses email jetables ne sont pas acceptées. Utilise une adresse professionnelle ou personnelle.', 'error'); return; }
         if (res.status === 400) { setMsg(msgEmail, 'Cette adresse email semble invalide.', 'error'); return; }
         if (res.status === 503) { setMsg(msgEmail, 'Le service n\\'est pas encore configuré. Réessaie plus tard.', 'error'); return; }
+        if (res.status === 429) { setMsg(msgEmail, 'Trop de demandes. Patiente quelques minutes avant de réessayer.', 'error'); return; }
         setMsg(msgEmail, 'Envoi impossible pour le moment. Réessaie dans un instant.', 'error');
       } catch (err) {
         setMsg(msgEmail, 'Erreur réseau. Vérifie ta connexion.', 'error');
@@ -526,6 +593,7 @@ const WALL_HTML = `<!DOCTYPE html>
         }
         if (res.status === 401) { setMsg(msgCode, 'Code incorrect ou expiré. Vérifie ou demande un nouveau code.', 'error'); return; }
         if (res.status === 400) { setMsg(msgCode, 'Le format du code est invalide.', 'error'); return; }
+        if (res.status === 429) { setMsg(msgCode, 'Trop de tentatives. Patiente quelques minutes avant de réessayer.', 'error'); return; }
         setMsg(msgCode, 'Vérification impossible pour le moment.', 'error');
       } catch (err) {
         setMsg(msgCode, 'Erreur réseau. Vérifie ta connexion.', 'error');

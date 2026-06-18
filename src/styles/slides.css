@@ -888,7 +888,7 @@ body.is-fullscreen .deck-search {
   background: #FFF5F0;
 }
 .pdf-modal__card--error::before {
-  content: 'Erreur, reessayer';
+  content: 'Erreur, réessayer';
   position: absolute;
   top: 6px;
   left: 0;
