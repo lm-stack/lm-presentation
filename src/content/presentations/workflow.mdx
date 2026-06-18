@@ -172,7 +172,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
 
 {/* Les actions spéciales : une par slide (déclencheur -> action spéciale ->
     action(s) en aval pour montrer les possibilités). 5 actions : Filtrer,
-    Formatter, Retarder, Switch, Valider (human in the loop). Toutes alignées
+    Formater, Retarder, Switch, Valider (human in the loop). Toutes alignées
     sur la ligne y=420. */}
 
 {/* Action spéciale 1/5 : Filtrer. */}
@@ -193,16 +193,16 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   ]}
 />
 
-{/* Action spéciale 2/5 : Formatter. */}
+{/* Action spéciale 2/5 : Formater. */}
 <N8nCanvas
-  captionTitle="Formatter"
-  captionItalic="Formatter"
+  captionTitle="Formater"
+  captionItalic="Formater"
   captionText="Met en forme les données reçues (majuscules, dates, numéros de téléphone) avant de les enregistrer proprement dans le CRM."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
     { id: "t",  type: "trigger", icon: "ph:lightning", label: "Nouveau formulaire", sub: "Google Forms",  x: 320,  y: 420 },
-    { id: "fo", type: "special", icon: "ph:text-aa",   label: "Formatter",          sub: "Mise en forme", x: 832,  y: 420 },
+    { id: "fo", type: "special", icon: "ph:text-aa",   label: "Formater",          sub: "Mise en forme", x: 832,  y: 420 },
     { id: "a",  type: "action",  icon: "ph:user-plus", label: "Créer le contact",   sub: "Zoho CRM",      x: 1344, y: 420 },
   ]}
   connections={[
@@ -300,7 +300,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
 <N8nCanvas
   captionTitle="Quand ça casse"
   captionItalic="casse"
-  captionText="Un workflow n'est pas « fire and forget ». Ici, si l'ajout du lead au CRM échoue, l'équipe est alertée plutôt que de perdre le lead en silence. Prévoyez la panne : relance automatique, alerte en cas d'échec, et historique d'exécution à surveiller."
+  captionText="Un workflow n'est pas « fire and forget ». Ici, si l'ajout du lead au CRM échoue, l'équipe est alertée plutôt que de perdre le lead en silence. Prévoyez la panne : relance automatique, alerte en cas d'échec, et historique d'exécution à surveiller."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
@@ -501,6 +501,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
     "Digitaliser un processus",
     "Automatiser une action",
     "Paramétrer un MCP",
+    "Créer un tableau de bord",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"

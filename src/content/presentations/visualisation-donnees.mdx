@@ -1,0 +1,281 @@
+---
+title: "Visualisation des données"
+subtitle: "CRM, Data & Automation"
+short: "Visualisation des données"
+date: 2026-06-16
+type: cours
+scheme: "execed"
+unlisted: true
+cover: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&h=900&fit=crop"
+description: "Lire ses données : KPIs, tableaux de bord et suivi des performances marketing."
+---
+
+import Cover from '@/components/slides/Cover.astro';
+import SubSection from '@/components/slides/SubSection.astro';
+import Statement from '@/components/slides/Statement.astro';
+import InfoCards from '@/components/slides/InfoCards.astro';
+import Compare from '@/components/slides/Compare.astro';
+import Table from '@/components/slides/Table.astro';
+import BarChart from '@/components/slides/BarChart.astro';
+import Definition from '@/components/slides/Definition.astro';
+import Mockup from '@/components/slides/Mockup.astro';
+import Tip from '@/components/slides/Tip.astro';
+import Demo from '@/components/slides/Demo.astro';
+import Poll from '@/components/slides/Poll.astro';
+import Debat from '@/components/slides/Debat.astro';
+import FilRouge from '@/components/slides/FilRouge.astro';
+
+{/* Cover : image placeholder Unsplash, à remplacer par un visuel local. */}
+<Cover
+  title="Visualisation des données"
+  italicPart="données"
+  eyebrow="Jour 3"
+  footer="HEC Lausanne : Juin 2026"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1000&fit=crop"
+  theme="halo-gold"
+/>
+
+{/* Diagnostic d'ouverture en sondage live. */}
+<Poll
+  id="viz-suivi-actuel"
+  question="Comment suivez-vous vos performances aujourd'hui ?"
+  italicPart="performances"
+  subtitle="Une seule réponse, depuis votre téléphone."
+  options={["Au feeling", "Dans Excel", "Un vrai dashboard", "Pas vraiment"]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<SubSection
+  kicker="Visualisation des données"
+  index="01"
+  title="Pourquoi visualiser"
+  italicPart="visualiser"
+  subtitle="Une donnée qu'on ne regarde pas ne sert à personne."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Statement
+  eyebrow="Le constat"
+  title="Ce qui ne se mesure pas ne s'améliore pas"
+  italicPart="ne s'améliore pas"
+  body="Beaucoup de décisions marketing se prennent encore à l'instinct, faute de chiffres sous les yeux. Visualiser ses données, c'est transformer une intuition en décision étayée, et voir enfin ce qui marche vraiment."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<InfoCards
+  title="Ce que la visualisation apporte"
+  italicPart="apporte"
+  subtitle="Mettre ses chiffres en image change la façon de piloter, à tous les niveaux."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:gauge", label: "Décider vite", value: "Un chiffre lisible d'un coup d'œil vaut mieux qu'un export de 5'000 lignes que personne n'ouvre." },
+    { icon: "ph:users-three", label: "Aligner l'équipe", value: "Tout le monde regarde les mêmes indicateurs : fini les débats d'opinion, place aux faits." },
+    { icon: "ph:warning", label: "Repérer les dérives tôt", value: "Une courbe qui décroche se voit en quelques secondes, avant que le problème ne coûte cher." },
+    { icon: "ph:chart-line-up", label: "Prouver le ROI", value: "Relier les actions aux résultats : ce qui rapporte, ce qui coûte, ce qu'on arrête." },
+  ]}
+/>
+
+<SubSection
+  kicker="Visualisation des données"
+  index="02"
+  title="Les indicateurs qui comptent"
+  italicPart="indicateurs"
+  subtitle="Avant de faire de jolis graphiques, choisir les bons chiffres."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Compare
+  title="Vanité ou vraies métriques"
+  italicPart="vraies métriques"
+  subtitle="Toutes les données ne se valent pas : certaines flattent, d'autres font décider."
+  left={{
+    heading: "Métriques de vanité",
+    items: ["Impressions et vues", "Likes et abonnés", "Trafic brut", "Taille de la base"],
+  }}
+  right={{
+    heading: "Métriques actionnables",
+    items: ["Coût d'acquisition (CAC)", "Taux de conversion", "Taux de rétention", "Valeur vie client (LTV)"],
+  }}
+  note="Une bonne métrique guide une décision. Si un chiffre ne change aucune action, il flatte l'ego, sans plus."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Table
+  title="Les KPIs marketing essentiels"
+  italicPart="essentiels"
+  subtitle="Cinq familles d'indicateurs : à choisir selon vos objectifs, pas à empiler."
+  headers={["Étape", "Indicateur clé", "Ce qu'il révèle"]}
+  caption="Le bon KPI répond à une question que vous vous posez vraiment, pas à tout ce qu'on peut mesurer."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Acquisition", "Coût par lead, CAC", "Combien coûte un nouveau contact ou client"],
+    ["Conversion", "Taux de conversion", "La part de visiteurs qui passent à l'action"],
+    ["Engagement", "Taux d'ouverture et de clic", "Si vos messages intéressent vraiment"],
+    ["Rétention", "Taux de churn", "La part de clients qui décrochent"],
+    ["Revenu", "Valeur vie client (LTV), ROI", "Ce que rapporte un client, et chaque franc investi"],
+  ]}
+/>
+
+<BarChart
+  title="Le funnel de conversion"
+  italicPart="funnel"
+  subtitle="À chaque étape, on perd du monde. Le visualiser montre où l'effort doit porter."
+  source="Exemple illustratif, taux de conversion indicatifs"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { label: "Visiteurs du site", value: 100 },
+    { label: "Leads (formulaire rempli)", value: 20 },
+    { label: "MQL (qualifié marketing)", value: 9 },
+    { label: "SQL (transmis aux ventes)", value: 4 },
+    { label: "Clients signés", value: 2, emphasis: true },
+  ]}
+/>
+
+<SubSection
+  kicker="Visualisation des données"
+  index="03"
+  title="Du chiffre au tableau de bord"
+  italicPart="tableau de bord"
+  subtitle="Rassembler les bons indicateurs au même endroit, pour décider sans fouiller."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Definition
+  eyebrow="Définition"
+  term="Un tableau de bord"
+  termItalicPart="tableau de bord"
+  definition="Une vue unique qui rassemble vos indicateurs clés, à jour automatiquement, pour décider d'un coup d'œil au lieu de fouiller dix rapports dispersés."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<InfoCards
+  title="Un bon tableau de bord"
+  italicPart="bon"
+  subtitle="Quatre règles pour un tableau qu'on regarde vraiment, et qui sert à décider."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  cards={[
+    { icon: "ph:target", label: "Une question, un tableau", value: "Chaque tableau répond à une seule question : acquisition, ventes, rétention. Pas un fourre-tout illisible." },
+    { icon: "ph:list-numbers", label: "Cinq à sept indicateurs", value: "Au-delà, l'attention se dilue. On garde l'essentiel, on coupe le reste." },
+    { icon: "ph:scales", label: "Toujours comparer", value: "Un chiffre seul ne dit rien : comparez à un objectif, à la période précédente, à l'an dernier." },
+    { icon: "ph:arrows-clockwise", label: "Automatique et partagé", value: "Mis à jour tout seul et accessible à l'équipe : un rapport refait à la main meurt vite." },
+  ]}
+/>
+
+{/* Mockup desktop : image placeholder Unsplash, à remplacer par une vraie capture de dashboard. */}
+<Mockup
+  device="desktop"
+  title="À quoi ça ressemble"
+  italicPart="ressemble"
+  subtitle="Un tableau de bord marketing : les indicateurs clés réunis sur un seul écran."
+  bullets={[
+    "En haut, les chiffres clés du mois et leur évolution.",
+    "Au centre, les courbes de tendance et le funnel.",
+    "En bas, le détail par canal et par campagne.",
+  ]}
+  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1600&h=1000&fit=crop"
+  alt="Tableau de bord analytique"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Table
+  title="Les outils, par profil"
+  italicPart="par profil"
+  subtitle="Du tableur au logiciel de BI : il existe un outil pour chaque taille d'organisation."
+  headers={["Outil", "Pour qui", "Atout"]}
+  caption="Le principe ne change pas : le bon indicateur compte plus que l'outil."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Google Sheets", "TPE, démarrage", "Gratuit et universel : un graphique vaut mieux que rien"],
+    ["Looker Studio", "PME", "Gratuit, se connecte à vos sources et s'actualise tout seul"],
+    ["Zoho Analytics", "Utilisateurs Zoho", "Intégré au CRM du cours, tableaux de bord prêts à l'emploi"],
+    ["Power BI, Tableau", "Grandes structures", "Puissants et gouvernés, pour de gros volumes de données"],
+  ]}
+/>
+
+<Tip
+  title="Le piège du tableau que personne ne regarde"
+  italicPart="personne ne regarde"
+  body="Un tableau de bord ne sert que s'il déclenche une action. Reliez chaque indicateur à une décision, fixez un rituel de revue (chaque lundi, chaque mois), et supprimez ce que vous ne regardez jamais."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<SubSection
+  kicker="Visualisation des données"
+  index="04"
+  title="En pratique"
+  italicPart="pratique"
+  subtitle="On construit un tableau de bord en direct, branché sur les données du cours."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Fil rouge Zoho CRM : cinquième et dernière étape, juste avant la démo dashboard. */}
+<FilRouge
+  active={5}
+  subtitle="On boucle le fil rouge de la démo Zoho : étape 5, on crée le tableau de bord."
+  steps={[
+    "Personnaliser les données",
+    "Digitaliser un processus",
+    "Automatiser une action",
+    "Paramétrer un MCP",
+    "Créer un tableau de bord",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Demo
+  toolLogo="/decks/des-donnees-au-crm/logos/zoho.svg"
+  toolName="Zoho CRM"
+  toolUrl="https://www.zoho.com/crm/"
+  objectives={[
+    "Ouvrir le module Tableaux de bord de Zoho CRM, branché sur les données du cours.",
+    "Construire en direct un tableau de bord : acquisition, conversion, revenu.",
+    "Ajouter un objectif et une comparaison avec le mois précédent.",
+    "Partager le tableau de bord avec l'équipe, mis à jour automatiquement.",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+<Debat
+  live
+  eyebrow="Discussion"
+  tocLabel="Discussion"
+  title="Quel chiffre piloterait vraiment votre activité ?"
+  italicPart="vraiment"
+  intro="On a vu beaucoup d'indicateurs possibles. Le vrai enjeu n'est pas d'en suivre cent, mais de choisir les quelques-uns qui font décider."
+  reactions={[
+    "Le taux de conversion",
+    "Le coût d'acquisition",
+    "La rétention",
+    "Le ROI par canal",
+    "Le chiffre d'affaires",
+    "Les leads qualifiés",
+    "La marge",
+    "Le panier moyen",
+  ]}
+  prompts={[
+    "Si vous ne deviez garder qu'un seul indicateur, lequel, et pourquoi ?",
+    "Lequel ne suivez-vous pas encore, alors qu'il changerait vos décisions ?",
+    "Qui, dans votre organisation, devrait regarder ce tableau de bord chaque semaine ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>

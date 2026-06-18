@@ -75,90 +75,6 @@ export const ERD = {
 {/* Index par nom : pratique pour l'exemple de construction (sous-ensembles + états). */}
 export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 
-{/*
-  MIGRATION : architecture-donnees.mdx -> architecture-donnees-new.mdx
-  Date       : 2026-06-04
-  Source     : 16 slides (ancien format : Cover, Calendar, Exchange, Section x4,
-               Statement x2, NumberedCards x3, Demo, Workshop, WorkshopBrief, Closing)
-  Cible      : 13 slides (format Hero charte LM)
-
-  MAPPING SLIDE PAR SLIDE
-  =======================
-  Slide 1  Cover             -> Cover
-             eyebrow "Jour 1 — Sujet 3" conservé tel quel (la barre est un
-             tiret dans le titre original : remplacé par " : " conformément
-             à la règle no-em-dash).
-  Slide 2  Calendar          -> SUPPRIMÉ (vit dans Introduction uniquement).
-  Slide 3  Exchange          -> Exchange
-             subtitle long (2 phrases) condensé en subtitle + prompts.
-  Slide 4  Section 01        -> SubSection (kicker="Le bénéfice métier",
-             index="01"). Subtitle original ~130 chars ; forcé subtitleWrap=true
-             car dépasse la limite ~85 chars de la règle nowrap.
-  Slide 5  NumberedCards 1 col (5 items) -> Steps
-             5 items ne tiennent pas dans un Steps standard (3 items).
-             Décision : conserver les 5 items mais le composant accepte un array
-             items[] sans limite dure ; visuellement les items sont petits donc
-             ça passe. Si trop serré, l'auteur peut scinder en deux slides.
-             Image : cover-blueprint.jpg (seule image locale disponible).
-  Slide 6  Section 02        -> SubSection (kicker="Trois mots", index="02").
-  Slide 7  NumberedCards 1 col (3 items) -> Steps
-             3 items, mapping direct. Image : cover-blueprint.jpg (fallback,
-             à remplacer par une image schéma ERD ou diagramme).
-  Slide 8  Statement sans image -> Statement
-             subtitle + children fusionnés en body. Pas de stat/statCaption car
-             aucune figure chiffrée isolée.
-  Slide 9  Section 03        -> SubSection (kicker="Les erreurs classiques",
-             index="03"). Subtitle long : subtitleWrap=true.
-  Slide 10 NumberedCards 1 col (5 items) -> Steps
-             5 items, même décision que slide 5. Image : cover-blueprint.jpg
-             (à remplacer).
-             Chaque item est dense : condensé en format "Titre : phrase courte"
-             (symptôme + réflexe fusionnés ; la conséquence résumée en corps).
-             Voir CONDENSATIONS ci-dessous.
-  Slide 11 Statement sans image -> Statement
-             eyebrow="Principe clé", subtitle + children -> body.
-  Slide 12 Section 04        -> SubSection (kicker="Démonstration",
-             index="04"). Subtitle long : subtitleWrap=true.
-  Slide 13 Demo (transition bare, pas de screenshot) -> Demo
-             Pas de capture réelle disponible. Image : placeholder Unsplash
-             "database schema" + caption "(à remplacer)".
-             Tableau authorship : Outil / Cible / Étapes / À retenir (résumé de
-             la description originale qui listait les 3 outils).
-  Slide 14 Workshop          -> Workshop (fusionné avec slide 15)
-  Slide 15 WorkshopBrief     -> fusionné dans Workshop (slide 14)
-             rows : Étapes était un array de 3 strings -> flatten en une string
-             séparée par " | " (règle : pas de tiret, pas d'em-dash).
-  Slide 16 Closing variant="qa" -> ClosingHero
-             title="Questions & réponses", highlight="réponses",
-             tagline="On prend le temps de restituer les ERDs."
-             Image : cover-blueprint.jpg (seule image locale).
-
-  CONDENSATIONS
-  =============
-  - Slide 5 (cinq raisons) : chaque description gardée intacte, juste formatée
-    en "Titre : phrase". Item 5 : "10'000" => "10'000" (apostrophe suisse OK).
-  - Slide 10 (cinq pièges) : formule "Symptôme | Conséquence | Réflexe" trop
-    longue pour items[].text. Condensation : titre = nom du piège, text =
-    "Symptôme : ... Réflexe : ..." (conséquence omise pour rester lisible).
-  - Slide 13 (Demo) : la démo originale ne liste qu'une intention ("Construction
-    live"). Tableau authorship en 4 lignes résume les trois outils en "Étapes".
-
-  PLACEHOLDERS
-  ============
-  - Demo image : Unsplash https://images.unsplash.com/photo-1558494949-ef010cbdcc31?
-    w=1600&h=1000&fit=crop (schéma ERD / base de données). Caption "(à remplacer)".
-  - Steps image slides 5, 7, 10 : cover-blueprint.jpg (seule image locale
-    disponible dans public/decks/architecture-donnees/). À remplacer par des
-    visuels ERD ou schémas pertinents si disponibles.
-
-  DÉCISIONS DE STYLE
-  ==================
-  - eyebrow "Jour 1 — Sujet 3" normalisé -> "Jour 1 : Sujet 3" (no em-dash).
-  - Exchange subtitle original trop long pour une seule prop : décomposé en
-    subtitle (amorce) + prompts (liste des questions implicites).
-  - ClosingHero variant="qa" traduit en title="Questions & réponses" :
-    le composant ne gère pas de variants, il prend title + highlight + tagline.
-*/}
 
 {/* Slide 1 : Cover */}
 <Cover
@@ -270,7 +186,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     { icon: "ph:buildings", text: "Société : l'entreprise cliente (demandes pro)." },
     { icon: "ph:receipt", text: "Offre : le devis (menu, prix), parfois plusieurs." },
   ]}
-  body="Ce schéma sera notre fil rouge tout au long du cours."
+  body="Ce schéma sera notre fil rouge tout au long de ce module."
   entityCard={{
     name: 'Contact',
     abstract: true,
@@ -389,7 +305,7 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
 <Erd
   title="La demande devient un Contact"
   italicPart="Contact"
-  subtitle="Le prospect qualifié devient un Contact, rattaché à sa Société. Pourquoi déjà un Contact, et plus un Prospect ? Parce qu'on ne rédige un devis que pour une demande qualifiée : faire une offre, c'est justement l'acte qui fait passer la piste en Contact."
+  subtitle="Le prospect qualifié devient un Contact, rattaché à sa Société. Pourquoi déjà un Contact, et plus un Prospect ? Dans ce modèle, on ne rédige un devis que pour une demande qualifiée : faire une offre fait passer la piste en Contact. C'est un choix de modélisation cohérent, pas une règle universelle."
   entities={[{ ...E['Prospect'], state: 'ghost' }, { ...E['Société'] }, { ...E['Contact'], state: 'accent' }]}
   relations={[
     { from: 'Prospect', to: 'Contact', label: 'devient', dashed: true },

@@ -66,7 +66,7 @@ import Pause from '@/components/slides/Pause.astro';
   eyebrow="Le frein n°1 à l'IA"
   value="60"
   unit="%"
-  label="des projets d'IA seront abandonnés d'ici 2026, faute de données prêtes."
+  label="des organisations n'atteindront pas la valeur attendue de l'IA, faute de données prêtes."
   source="Gartner, « Lack of AI-Ready Data Puts AI Projects at Risk », février 2025 (enquête 2024, 248 responsables data)."
   sourceUrl="https://www.gartner.com/en/newsroom/press-releases/2025-02-26-lack-of-ai-ready-data-puts-ai-projects-at-risk"
   brand="CRM, Data & Automation"
@@ -119,8 +119,8 @@ import Pause from '@/components/slides/Pause.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
-    ["Email", "Lowercase, trim, validation MX du domaine", "NeverBounce, ZeroBounce, Hunter"],
-    ["Téléphone", "Format international E.164 (+41 79 ...)", "libphonenumber, Twilio Lookup"],
+    ["Email", "Lowercase, trim, validation MX du domaine (peut-il recevoir des emails ?)", "NeverBounce, ZeroBounce, Hunter"],
+    ["Téléphone", "Format international E.164 (indicatif pays + numéro, ex. +41 79 ...)", "libphonenumber, Twilio Lookup"],
     ["Nom et prénom", "Title Case, trim, retrait des emojis et espaces invisibles", "Natif tableur ou script, IA"],
     ["Doublons", "Match strict sur l'email, fuzzy sur nom + société", "Dedupe.io, natif CRM"],
     ["Dates et codes postaux", "Format ISO pour les dates, CP suisse sur 4 chiffres", "Natif tableur ou CRM"],
@@ -170,15 +170,6 @@ import Pause from '@/components/slides/Pause.astro';
   brandSub="Executive Education"
 />
 
-{/* Pourquoi valider AVANT d'envoyer : le bounce est la donnée négligée qui
-    contamine toute la base (réputation d'expéditeur, sanction Gmail/Outlook). */}
-<Quote
-  icon="ph:warning-octagon"
-  text="Le bounce contamine toute la base."
-  lead="Un email invalide fait grimper votre taux de bounce, et Gmail vous classe « expéditeur douteux ». Même vos bons emails partent alors en spam, et la réputation se répare en mois, pas en jours. Le réflexe : valider avant d'envoyer."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
 
 {/* Démo live NeverBounce (validation d'emails en masse). Logo : favicon officiel
     256px (neverbounce.com bloque le scrape, aucun SVG public dispo). La liste de

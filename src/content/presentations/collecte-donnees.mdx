@@ -7,7 +7,7 @@ type: cours
 scheme: "execed"
 unlisted: true
 cover: "https://images.unsplash.com/photo-1633424974203-6c91b2a651ee?w=1600&h=900&fit=crop"
-description: "Les cinq sources qui alimentent un CRM : formulaires, imports, API, saisie."
+description: "Cinq sources alimentent le CRM : formulaires, scraping, transactions, API et imports."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
@@ -41,7 +41,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 
 <SubSection
   kicker="Collecte des données"
-  index="1.0"
+  index="01"
   title="Source de données"
   italicPart="données"
   subtitle="Formulaires, transactions, scraping, intégrations ou imports : par où la donnée entre."
@@ -147,7 +147,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 
 <SubSection
   kicker="Source de données"
-  index="1.1"
+  index="02"
   title="Formulaires"
   italicPart="Formulaires"
   subtitle="La source que vous maîtrisez de bout en bout : chaque champ demandé est un choix."
@@ -166,7 +166,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   ]}
   webform={{
     url: "www.site-web.ch",
-    siteName: "Cédric",
+    siteName: "NutriCoach",
     headline: "Recevez le guide gratuit",
     blurb: "Laissez vos coordonnées, on vous envoie tout par email.",
     fields: ["Nom", "Prénom", "Email"],
@@ -318,7 +318,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   toolUrl="https://tally.so"
   objectives={[
     "Repérer les champs visibles : prénom et email, le strict minimum",
-    "Dévoiler les champs cachés : UTM, lead magnet, gclid, etc.",
+    "Dévoiler les champs cachés : UTM, lead magnet, gclid (identifiant de clic Google Ads), etc.",
     "Vérifier la validation : format email, champs requis, anti-bot",
     "Suivre le trajet du clic jusqu'à la fiche CRM",
   ]}
@@ -343,7 +343,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 
 <SubSection
   kicker="Source de données"
-  index="1.2"
+  index="03"
   title="Scraping"
   italicPart="Scraping"
   subtitle="Aller chercher de la donnée publique sur le web, à grande échelle et dans les règles."
@@ -426,7 +426,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   cards={[
     { icon: 'ph:scales', label: "Base légale et finalité", value: "Sachez pourquoi vous collectez et sur quelle base (intérêt légitime). Sans finalité claire, pas de collecte." },
     { icon: 'ph:identification-card', label: "Public n'est pas libre", value: "Une donnée publique reste une donnée personnelle : nLPD et RGPD s'appliquent, même sans connexion." },
-    { icon: 'ph:prohibit', label: "robots.txt et CGU", value: "CGU, robots.txt, CAPTCHA : ces oppositions ont valeur juridique. Passer outre, c'est rompre le contrat." },
+    { icon: 'ph:prohibit', label: "robots.txt et CGU", value: "CGU, robots.txt, CAPTCHA expriment un refus : passer outre, c'est rompre le contrat et s'exposer juridiquement." },
     { icon: 'ph:shield-check', label: "Minimiser et sécuriser", value: "Le strict nécessaire, anonymisé tôt. Jamais de faux comptes ni de contenu derrière un login." },
   ]}
 />
@@ -517,7 +517,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 
 <SubSection
   kicker="Source de données"
-  index="1.3"
+  index="04"
   title="Les autres sources"
   italicPart="autres"
   subtitle="Transactions, intégrations, imports : moins visibles, souvent plus riches."

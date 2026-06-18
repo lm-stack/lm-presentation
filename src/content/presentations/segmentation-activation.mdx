@@ -196,19 +196,76 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   items={[
-    { text: "Regroupement automatique : l'IA trouve seule des groupes cohérents dans votre base, sans que vous donniez les critères. Elle révèle des segments que l'oeil ne voit pas." },
+    { text: "Regroupement automatique : l'IA trouve seule des groupes cohérents dans votre base, sans que vous donniez les critères. Elle révèle des segments que l'œil ne voit pas." },
     { text: "Jumeaux statistiques : à partir de vos meilleurs clients, l'IA repère ceux qui leur ressemblent. Idéal pour viser une audience publicitaire ou une liste de prospection." },
     { text: "Score prédictif : chaque contact reçoit une note de probabilité d'achat ou de départ, recalculée à chaque interaction. Elle priorise l'effort commercial." },
   ]}
 />
 
 {/* ============================================================
-     04 L'ACTIVATION
+     04 LA MATURITÉ DU LEAD (prérequis à l'activation)
+     ============================================================ */}
+
+<SubSection
+  kicker="Où en est le lead"
+  index="04"
+  title="La maturité du lead"
+  italicPart="maturité"
+  subtitle="Avant d'activer, savoir où en est le lead dans sa décision."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Le lien funnel, maturité et qualification (introduit MQL et SQL) */}
+<Table
+  title="Une seule échelle : la maturité du lead"
+  italicPart="la maturité"
+  subtitle="Funnel, qualification et cycle de vie décrivent la même chose : où en est le lead dans sa décision."
+  headers={["Étage du funnel", "Maturité du lead", "Qualification"]}
+  rows={[
+    ["TOFU", "Il découvre, il se renseigne", "Visiteur, puis lead brut"],
+    ["MOFU", "Il s'intéresse, il compare", "MQL : Marketing Qualified Lead"],
+    ["BOFU", "Il est prêt à décider", "SQL : Sales Qualified Lead"],
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* MQL et SQL expliqués, le nurturing automatise le passage de l'un à l'autre */}
+<Compare
+  title="MQL et SQL : deux niveaux de qualification"
+  italicPart="deux niveaux"
+  subtitle="Le même lead, à deux moments de sa maturité. Le passage de l'un à l'autre, c'est le travail du nurturing."
+  left={{
+    heading: "MQL, Marketing Qualified Lead",
+    items: [
+      "Repéré par le marketing sur des signaux d'intérêt",
+      "Téléchargements, visites répétées, emails ouverts",
+      "Intéressé, mais pas encore prêt à acheter",
+      "Le marketing le garde et le nourrit",
+    ],
+  }}
+  right={{
+    heading: "SQL, Sales Qualified Lead",
+    items: [
+      "Accepté par les ventes comme prêt pour un échange",
+      "Signaux d'intention : demande de démo, visite des tarifs",
+      "Budget, besoin et calendrier se précisent",
+      "Le commercial prend le relais",
+    ],
+  }}
+  note="Le lead nurturing fait ce travail automatiquement : il nourrit le MQL, suit son score, et déclenche le passage en SQL dès que le seuil est franchi."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* ============================================================
+     05 L'ACTIVATION
      ============================================================ */}
 
 <SubSection
   kicker="Le geste"
-  index="04"
+  index="05"
   title="L'activation"
   italicPart="activation"
   subtitle="Un segment sans action derrière, c'est une statistique. L'activation, c'est le geste."
@@ -259,7 +316,7 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 <Table
   title="À chaque segment, son activation"
   italicPart="son activation"
-  subtitle="La règle d'or rendue concrète : un type de segment, un geste, un premier message."
+  subtitle="Concrètement : un type de segment, un geste d'activation, un premier message qui va avec."
   headers={["Type de segment", "Mode d'activation", "Premier message"]}
   rows={[
     ["Nouveau lead (cycle de vie)", "Séquence automatisée", "Email de bienvenue et ressource utile"],
@@ -272,12 +329,12 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
 />
 
 {/* ============================================================
-     05 LE NURTURING EN PRATIQUE (approfondissement d'un mode + atelier)
+     06 LE NURTURING EN PRATIQUE (approfondissement d'un mode + atelier)
      ============================================================ */}
 
 <SubSection
-  kicker="La maturité du lead"
-  index="05"
+  kicker="Faire mûrir le lead"
+  index="06"
   title="Le nurturing en pratique"
   italicPart="nurturing"
   subtitle="Faire mûrir le lead jusqu'à la décision, et automatiser le passage à la vente."
@@ -285,48 +342,6 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   brandSub="Executive Education"
 />
 
-{/* Le lien funnel <-> maturité <-> qualification (introduit MQL et SQL) */}
-<Table
-  title="Une seule échelle : la maturité du lead"
-  italicPart="la maturité"
-  subtitle="Funnel, qualification et cycle de vie décrivent la même chose : où en est le lead dans sa décision."
-  headers={["Étage du funnel", "Maturité du lead", "Qualification"]}
-  rows={[
-    ["TOFU", "Il découvre, il se renseigne", "Visiteur, puis lead brut"],
-    ["MOFU", "Il s'intéresse, il compare", "MQL : Marketing Qualified Lead"],
-    ["BOFU", "Il est prêt à décider", "SQL : Sales Qualified Lead"],
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* MQL et SQL expliqués + le nurturing automatise le passage de l'un à l'autre */}
-<Compare
-  title="MQL et SQL : deux niveaux de qualification"
-  italicPart="deux niveaux"
-  subtitle="Le même lead, à deux moments de sa maturité. Le passage de l'un à l'autre, c'est le travail du nurturing."
-  left={{
-    heading: "MQL, Marketing Qualified Lead",
-    items: [
-      "Repéré par le marketing sur des signaux d'intérêt",
-      "Téléchargements, visites répétées, emails ouverts",
-      "Intéressé, mais pas encore prêt à acheter",
-      "Le marketing le garde et le nourrit",
-    ],
-  }}
-  right={{
-    heading: "SQL, Sales Qualified Lead",
-    items: [
-      "Accepté par les ventes comme prêt pour un échange",
-      "Signaux d'intention : demande de démo, visite des tarifs",
-      "Budget, besoin et calendrier se précisent",
-      "Le commercial prend le relais",
-    ],
-  }}
-  note="Le lead nurturing fait ce travail automatiquement : il nourrit le MQL, suit son score, et déclenche le passage en SQL dès que le seuil est franchi."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
 
 {/* Bonnes pratiques du nurturing, 1/2 : cadence et contenu (4 cartes) */}
 <InfoCards

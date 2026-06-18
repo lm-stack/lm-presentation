@@ -19,7 +19,6 @@ import Table from '@/components/slides/Table.astro';
 import Tip from '@/components/slides/Tip.astro';
 import Workshop from '@/components/slides/Workshop.astro';
 import Media from '@/components/slides/Media.astro';
-import Compare from '@/components/slides/Compare.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import N8nCanvas from '@/components/slides/N8nCanvas.astro';
 import UseCase from '@/components/slides/UseCase.astro';
@@ -131,7 +130,7 @@ import Debat from '@/components/slides/Debat.astro';
       src: "/decks/workflows-avances/limite-usine-gaz.jpeg",
       alt: "Illustration d'une usine à gaz, métaphore de la complexité incontrôlée",
       title: "Usine à gaz",
-      text: "Qui a créé « Soirée VIP v3 (final) » ? Plus personne ne sait quelle version fait foi.",
+      text: "Qui a créé « Soirée VIP v3 (final) » ? Plus personne ne sait quelle version fait foi.",
     },
   ]}
 />
@@ -162,31 +161,6 @@ import Debat from '@/components/slides/Debat.astro';
   ]}
 />
 
-{/* Mise en regard explicite des deux approches. La note porte le pivot. */}
-<Compare
-  title="Un workflow par événement, vraiment ?"
-  italicPart="par événement"
-  subtitle="Le même besoin revient à chaque rendez-vous. Deux façons de l'automatiser, deux trajectoires."
-  left={{
-    heading: "Un workflow par événement",
-    items: [
-      "On crée « Salon Lausanne », puis on le duplique en « Salon Genève », puis en « Soirée VIP ».",
-      "Chaque copie embarque ses propres réglages, donc ses propres oublis.",
-      "Quarante événements par an, quarante workflows à tenir à jour.",
-    ],
-  }}
-  right={{
-    heading: "Un workflow pour tous les événements",
-    items: [
-      "Une seule logique, paramétrée par les attributs de l'événement.",
-      "La donnée varie (type, date, audience), le workflow reste unique.",
-      "Un correctif appliqué une fois profite à tous les événements.",
-    ],
-  }}
-  note="On ne crée plus un workflow par événement, mais un workflow qui s'adapte à tous les événements."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
 
 {/* Discussion (idéation, mode live) : comment automatiser l'automation, transposé
     depuis l'exemple événementiel de la maison horlogère vers leurs propres cas. */}
