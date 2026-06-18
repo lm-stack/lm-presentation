@@ -31,6 +31,12 @@
 //                           limiteur inactif (fail-open, l'acces n'est jamais
 //                           bloque). A creer + binder dans Pages > Settings >
 //                           Functions > KV namespace bindings pour l'activer.
+//   TURNSTILE_SITEKEY (opt): cle PUBLIQUE du widget Turnstile (anti-bot) sur le
+//                           formulaire email. Variable en clair (non secrete).
+//   TURNSTILE_SECRET (opt) : cle SECRETE Turnstile, verification serveur via
+//                           siteverify. Absente (ou sitekey absente) -> mur sans
+//                           Turnstile (fail-open). Creer le widget dans Cloudflare
+//                           dashboard > Turnstile, puis poser les deux en env.
 //
 // --- Contrat n8n (le webhook recoit du JSON) ---
 //   { event: "request", email, code, ts }  -> envoyer l'email du code
@@ -50,6 +56,9 @@ interface Env {
   N8N_WEBHOOK_TOKEN?: string;
   // Binding KV OPTIONNEL pour le rate limiting (cf. rateAllow). Absent -> fail-open.
   ACCESS_RL?: KvLike;
+  // Turnstile (anti-bot) OPTIONNEL. Les deux absents -> mur sans Turnstile.
+  TURNSTILE_SITEKEY?: string; // cle publique (injectee dans la page mur)
+  TURNSTILE_SECRET?: string; // cle secrete (verification serveur siteverify)
 }
 
 // Type minimal du contexte Pages Functions (evite la dependance a
@@ -126,7 +135,7 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   }
 
   // Sinon -> page mur (a la meme URL : un reload apres validation suffit).
-  return wallPage();
+  return wallPage(env);
 }
 
 // Chemins exemptes du mur email.
@@ -163,6 +172,14 @@ async function handleRequestCode(request: Request, env: Env): Promise<Response> 
   // Cap anti-bombing par adresse cible (insensible a l'IP partagee d'une salle).
   if (!(await rateAllow(env, `req:email:${email}`, RL_REQUEST_PER_EMAIL))) {
     return json(429, { error: 'rate_limited' });
+  }
+  // Turnstile (anti-bot) : verifie le jeton si le secret est configure. Sinon on
+  // saute (fail-open) -> le mur fonctionne sans Turnstile tant qu'il n'est pas pose.
+  if (env.TURNSTILE_SECRET) {
+    const token = typeof body?.turnstileToken === 'string' ? body.turnstileToken : '';
+    if (!(await verifyTurnstile(env.TURNSTILE_SECRET, token, clientIp(request)))) {
+      return json(403, { error: 'turnstile_failed' });
+    }
   }
   if (!env.ACCESS_OTP_SECRET || !env.N8N_OTP_WEBHOOK_URL) {
     return json(503, { error: 'not_configured' });
@@ -307,6 +324,28 @@ async function rateAllow(env: Env, key: string, limit: number): Promise<boolean>
   }
 }
 
+// --- Turnstile (anti-bot) ---
+// Verifie le jeton aupres de l'API siteverify de Cloudflare. true = humain valide.
+// Echoue ferme (false) sur jeton vide, reponse non-ok, ou erreur reseau.
+async function verifyTurnstile(secret: string, token: string, ip: string): Promise<boolean> {
+  if (!token) return false;
+  try {
+    const form = new FormData();
+    form.append('secret', secret);
+    form.append('response', token);
+    if (ip && ip !== 'unknown') form.append('remoteip', ip);
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: form,
+    });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
+
 // --- Utilitaires crypto / encodage ---
 async function hmac(secret: string, message: string): Promise<ArrayBuffer> {
   const key = await crypto.subtle.importKey(
@@ -392,8 +431,19 @@ function getCookie(request: Request, name: string): string | null {
 }
 
 // --- Page mur (HTML inline, autonome, charte LM) ---
-function wallPage(): Response {
-  return new Response(WALL_HTML, {
+function wallPage(env: Env): Response {
+  // Turnstile actif seulement si les deux cles sont posees (et la sitekey saine).
+  const sitekey = env.TURNSTILE_SITEKEY ?? '';
+  const enabled = Boolean(sitekey && /^[A-Za-z0-9_-]+$/.test(sitekey) && env.TURNSTILE_SECRET);
+  const html = WALL_HTML
+    .replace('__TURNSTILE_SCRIPT__', enabled
+      ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>'
+      : '')
+    .replace('__TURNSTILE_WIDGET__', enabled
+      ? `<div class="cf-turnstile" data-sitekey="${sitekey}" data-theme="light" data-language="fr"></div>`
+      : '')
+    .replace('__TURNSTILE_ENABLED__', enabled ? 'true' : 'false');
+  return new Response(html, {
     status: 401,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
@@ -480,7 +530,9 @@ const WALL_HTML = `<!DOCTYPE html>
   .linkbtn:hover { background: none; color: #191919; }
   .hint { font-size: 12px; color: #6B6F84; margin: 20px 0 0; text-align: center; line-height: 1.5; }
   [hidden] { display: none !important; }
+  .cf-turnstile { margin-top: 16px; }
 </style>
+__TURNSTILE_SCRIPT__
 </head>
 <body>
   <main class="card">
@@ -499,6 +551,7 @@ const WALL_HTML = `<!DOCTYPE html>
       <form id="form-email" autocomplete="on" novalidate>
         <label for="email">Adresse email</label>
         <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@entreprise.com" required autofocus />
+        __TURNSTILE_WIDGET__
         <button type="submit" id="btn-email">Recevoir le code</button>
         <p class="msg" id="msg-email" aria-live="polite"></p>
       </form>
@@ -534,6 +587,7 @@ const WALL_HTML = `<!DOCTYPE html>
     var msgCode = document.getElementById('msg-code');
     var emailEcho = document.getElementById('email-echo');
     var btnBack = document.getElementById('btn-back');
+    var TURNSTILE_ENABLED = __TURNSTILE_ENABLED__;
 
     function setMsg(el, text, kind) {
       el.textContent = text;
@@ -545,13 +599,18 @@ const WALL_HTML = `<!DOCTYPE html>
       setMsg(msgEmail, '');
       var email = emailInput.value.trim();
       if (!email) { setMsg(msgEmail, 'Merci de saisir une adresse email.', 'error'); return; }
+      var turnstileToken = '';
+      if (TURNSTILE_ENABLED) {
+        try { turnstileToken = (window.turnstile && window.turnstile.getResponse()) || ''; } catch (e) {}
+        if (!turnstileToken) { setMsg(msgEmail, 'Merci de valider le test anti-robot ci-dessus.', 'error'); return; }
+      }
       btnEmail.disabled = true;
       btnEmail.textContent = 'Envoi...';
       try {
         var res = await fetch('/api/access/request', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email })
+          body: JSON.stringify({ email: email, turnstileToken: turnstileToken })
         });
         if (res.status === 200) {
           emailEcho.textContent = email;
@@ -564,12 +623,14 @@ const WALL_HTML = `<!DOCTYPE html>
         if (res.status === 400) { setMsg(msgEmail, 'Cette adresse email semble invalide.', 'error'); return; }
         if (res.status === 503) { setMsg(msgEmail, 'Le service n\\'est pas encore configuré. Réessaie plus tard.', 'error'); return; }
         if (res.status === 429) { setMsg(msgEmail, 'Trop de demandes. Patiente quelques minutes avant de réessayer.', 'error'); return; }
+        if (res.status === 403) { setMsg(msgEmail, 'Validation anti-robot échouée. Réessaie.', 'error'); return; }
         setMsg(msgEmail, 'Envoi impossible pour le moment. Réessaie dans un instant.', 'error');
       } catch (err) {
         setMsg(msgEmail, 'Erreur réseau. Vérifie ta connexion.', 'error');
       } finally {
         btnEmail.disabled = false;
         btnEmail.textContent = 'Recevoir le code';
+        if (TURNSTILE_ENABLED && window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
       }
     });
 
