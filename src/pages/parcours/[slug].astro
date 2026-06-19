@@ -394,6 +394,11 @@ const titleParts = splitHighlight(data.title, data.highlight);
       @keyframes parcours-stagger { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes parcours-row-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+      /* Tablette + mobile : la description du parcours occupe toute la largeur */
+      @media (max-width: 1024px) {
+        .parcours-hero__lede { max-width: none; }
+      }
+
       @media (max-width: 768px) {
         .parcours-hero__inner { padding: 40px 20px 32px; }
         .parcours-main { padding: 28px 20px 56px; }

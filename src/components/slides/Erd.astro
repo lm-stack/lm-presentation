@@ -59,8 +59,8 @@ const titleParts = splitHighlight(title, italicPart);
 const STAGE_W = 1920;
 const STAGE_H = 1080;
 const NODE_W = 340;
-const HEAD_H = 56;
-const ROW_H = 32;
+const HEAD_H = 64;
+const ROW_H = 40;
 // Hauteur exacte (le CSS fige header et lignes => handles alignés au pixel).
 const nodeH = (e: ErdEntity) => HEAD_H + e.fields.length * ROW_H;
 
@@ -254,7 +254,7 @@ const hasCaption = !!(title || subtitle || caption);
     transform: translate(-50%, -50%);
     z-index: 2;
     font-family: 'Space Grotesk', 'Hanken Grotesk', monospace;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--c-muted);
     background: var(--c-surface);
@@ -298,14 +298,14 @@ const hasCaption = !!(title || subtitle || caption);
   }
   .erd-node__title {
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 19px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: -0.2px;
     color: var(--c-ink);
   }
   .erd-node__group {
     font-family: 'Space Grotesk', monospace;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -330,7 +330,7 @@ const hasCaption = !!(title || subtitle || caption);
     gap: 8px;
     min-width: 0;
     font-family: 'Hanken Grotesk', sans-serif;
-    font-size: 16px;
+    font-size: 22px;
     font-weight: 500;
     color: var(--c-ink);
   }
@@ -341,7 +341,7 @@ const hasCaption = !!(title || subtitle || caption);
   }
   .erd-node__col-type {
     font-family: 'Space Grotesk', monospace;
-    font-size: 14px;
+    font-size: 19px;
     font-weight: 500;
     color: var(--c-muted);
     white-space: nowrap;
@@ -350,7 +350,7 @@ const hasCaption = !!(title || subtitle || caption);
   .erd-badge {
     flex: 0 0 auto;
     font-family: 'Space Grotesk', monospace;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.02em;
     padding: 2px 6px;

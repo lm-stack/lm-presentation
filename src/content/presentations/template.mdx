@@ -11,7 +11,7 @@ description: "Vitrine des composants de slide et des thèmes LM et ExecEd."
 ---
 
 import Cover from '@/components/slides/Cover.astro';
-import About from '@/components/slides/About.astro';
+import AboutThomas from '@/components/slides/AboutThomas.astro';
 import Programme from '@/components/slides/Programme.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import Section from '@/components/slides/Section.astro';
@@ -72,29 +72,9 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   brandSub="Titre du parcours ou de l'événement"
 />
 
-<About
-  firstName="Thomas"
-  lastName="Rouaud"
-  photo="/assets/thomas-rouaud.jpg"
+<AboutThomas
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
-  sections={[
-    {
-      title: "Executive Education HEC Lausanne",
-      body: "Responsable Marketing et Ventes, intervenant régulier en formation continue.",
-      link: "https://execed.unil.ch/",
-    },
-    {
-      title: "Lausanne Marketing",
-      body: "Senior consultant en CRM, Data, IA et Automation pour PME et institutions.",
-      link: "https://lausanne.marketing/",
-    },
-    {
-      title: "Fun fact",
-      body: "N°2 du Marketing Digital en Suisse sur LinkedIn.",
-      link: "https://lausanne.marketing/publications/thomas-rouaud-2eme-meilleur-digital-marketer-linkedin-suisse/",
-    },
-  ]}
 />
 
 <Programme

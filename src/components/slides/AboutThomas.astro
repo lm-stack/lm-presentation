@@ -1,0 +1,47 @@
+---
+// src/components/slides/AboutThomas.astro
+// Slide « Thomas Rouaud » FIGÉE : la bio (prénom, nom, photo, sections) est
+// codée en dur ici = source de vérité unique. Seuls brand / brandSub (le
+// contexte propre au deck) restent réglables. Pour modifier la bio, éditer CE
+// fichier, jamais le MDX d'un deck.
+//
+// About.astro reste un composant GÉNÉRIQUE (réutilisé pour d'autres
+// intervenants, p.ex. Yvann Barras dans protection-donnees). On ne code donc
+// pas Thomas en dur dans About : on le fige dans ce wrapper dédié.
+import About from './About.astro';
+
+interface Props {
+  /** Titre de marque : cours ou parcours. Contexte propre au deck. */
+  brand?: string;
+  /** Sous-titre de marque : institution ou événement. */
+  brandSub?: string;
+}
+const { brand, brandSub } = Astro.props;
+
+// Bio canonique de Thomas Rouaud : FIGÉE. Ne pas la redéclarer dans un deck.
+const sections = [
+  {
+    title: 'Executive Education HEC Lausanne',
+    body: 'Responsable Marketing et Ventes, intervenant régulier en formation continue.',
+    link: 'https://execed.unil.ch/',
+  },
+  {
+    title: 'Lausanne Marketing',
+    body: 'Senior consultant en CRM, Data, IA et Automation.',
+    link: 'https://lausanne.marketing/',
+  },
+  {
+    title: 'Fun fact',
+    body: 'N°2 du Marketing Digital en Suisse sur LinkedIn.',
+    link: 'https://lausanne.marketing/publications/thomas-rouaud-2eme-meilleur-digital-marketer-linkedin-suisse/',
+  },
+];
+---
+<About
+  firstName="Thomas"
+  lastName="Rouaud"
+  photo="/assets/thomas-rouaud.jpg"
+  sections={sections}
+  brand={brand}
+  brandSub={brandSub}
+/>

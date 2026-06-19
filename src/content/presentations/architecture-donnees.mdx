@@ -238,19 +238,6 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   brandSub="Executive Education"
 />
 
-{/* Cas d'usage du fil rouge : le traiteur, posé avant de construire son modèle. */}
-<UseCase
-  eyebrow="Le fil rouge"
-  you={{ icon: "ph:cooking-pot", label: "Un traiteur événementiel" }}
-  target={{ icon: "ph:users-three", label: "Particuliers et entreprises" }}
-  objective="Qualifier chaque demande, des premières pistes jusqu'au devis signé."
-  collect={["Source", "Type de client", "Besoin"]}
-  image="/decks/architecture-donnees/usecase-traiteur.jpg"
-  imageAlt="Buffet dressé d'un traiteur événementiel"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 {/* Étape préalable à la construction : les types de champs usuels (les briques de
     base avant de poser la première entité). Inséré avant le Prospect. */}
 <Table
@@ -271,6 +258,19 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
     ["Case à cocher", "consentement, client actif", "Oui ou non, rien d'autre."],
     ["Relation", "la Société liée au contact", "Relie deux entités (clé étrangère)."],
   ]}
+/>
+
+{/* Cas d'usage du fil rouge : le traiteur, posé avant de construire son modèle. */}
+<UseCase
+  eyebrow="Cas d'usage"
+  you={{ icon: "ph:cooking-pot", label: "Un traiteur événementiel" }}
+  target={{ icon: "ph:users-three", label: "Particuliers et entreprises" }}
+  objective="Qualifier chaque demande, des premières pistes jusqu'au devis signé."
+  collect={["Source", "Type de client", "Besoin"]}
+  image="/decks/architecture-donnees/usecase-traiteur.jpg"
+  imageAlt="Buffet dressé d'un traiteur événementiel"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Exemple de construction pas à pas (use case : un traiteur).

@@ -49,15 +49,6 @@ import UseCase from '@/components/slides/UseCase.astro';
   brandSub="Executive Education"
 />
 
-<WordCloud
-  id="intro-outils-donnees"
-  question="Avec quels outils gérez-vous vos données aujourd'hui ?"
-  italicPart="outils"
-  subtitle="Excel, HubSpot, Zoho, Brevo, rien du tout : citez-les tous, plusieurs réponses bienvenues."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
 <InfoCards
   title="Vous collectez déjà"
   italicPart="déjà"
@@ -70,6 +61,15 @@ import UseCase from '@/components/slides/UseCase.astro';
     { icon: 'ph:table', label: 'Fichier Excel', value: "Votre liste de clients, tenue à la main." },
     { icon: 'ph:browser', label: 'Formulaire en ligne', value: "Quelqu'un remplit, vous recevez ses infos." },
   ]}
+/>
+
+<WordCloud
+  id="intro-outils-donnees"
+  question="Avec quels outils gérez-vous vos données aujourd'hui ?"
+  italicPart="outils"
+  subtitle="Excel, HubSpot, Zoho, Brevo, rien du tout : citez-les tous, plusieurs réponses bienvenues."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 <Compare
@@ -179,7 +179,7 @@ import UseCase from '@/components/slides/UseCase.astro';
 <Compare
   title="Quelles données demander ?"
   italicPart="demander"
-  subtitle="La question qu'on me pose tout le temps. La règle : demander le moins possible."
+  subtitle="La question qu'on me pose tout le temps. La règle : demander le moins possible mais suffisamment pour faire votre travail."
   left={{
     heading: "À demander",
     items: ["Email", "Prénom", "Nom"],
@@ -438,7 +438,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   cards={[
-    { icon: 'ph:cursor-click', label: "No-code", value: "Apify, Octoparse, PhantomBuster : on configure, la plateforme exécute." },
+    { icon: 'ph:cursor-click', label: "No-code", value: "Apify, Octoparse : on configure, la plateforme exécute." },
     { icon: 'ph:browser', label: "Extension navigateur", value: "Web Scraper, Instant Data Scraper : capter une page en quelques clics." },
     { icon: 'ph:table', label: "Tableur", value: "Google Sheets : IMPORTXML et IMPORTHTML pour des extractions ponctuelles." },
     { icon: 'ph:code', label: "Code sur-mesure", value: "Python : BeautifulSoup, Scrapy, Playwright pour les besoins complexes." },
@@ -534,7 +534,7 @@ import UseCase from '@/components/slides/UseCase.astro';
   brandSub="Executive Education"
   rows={[
     ["Transactions", "Donnée fiable et comportementale, base de la segmentation RFM", "Une commande Shopify crée la fiche client et son historique d'achat"],
-    ["Intégrations (API)", "Le tissu conjonctif : la donnée circule sans ressaisie", "Calendly ajoute chaque rendez-vous pris à la fiche CRM"],
+    ["Intégrations (API)", "Le tissu conjonctif : la donnée circule sans ressaisie", "Le support (Zendesk) rattache chaque ticket à la fiche client"],
     ["Imports manuels", "Rapide, universel, zéro mise en place", "Le fichier des participants d'un salon, importé en CSV"],
   ]}
 />
