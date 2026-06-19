@@ -108,11 +108,27 @@ import Tip from '@/components/slides/Tip.astro';
   ]}
 />
 
+{/* Démo live mail-tester.com (test de délivrabilité). Logo : wordmark officiel
+    SVG (logo-white.svg recoloré en encre foncée #15151E pour le fond clair de la loupe). */}
+<Demo
+  toolLogo="/decks/qualite-donnees/logos/mail-tester.svg"
+  toolName="mail-tester"
+  toolUrl="https://www.mail-tester.com"
+  objectives={[
+    "Récupérer l'adresse de test unique générée par mail-tester",
+    "Envoyer un email depuis son outil habituel à cette adresse",
+    "Lire la note sur 10 et le diagnostic SPF, DKIM, DMARC",
+    "Corriger les points signalés : contenu, authentification, blacklists",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 5 : Les six techniques de cleaning par type de donnée.
     Pas de mention d'automation ici (traitée dans un module ultérieur). */}
 <Table
-  title="Six techniques qui couvrent 90 % des cas"
-  italicPart="90 % des cas"
+  title="Six techniques qui couvrent beaucoup de cas"
+  italicPart="beaucoup de cas"
   subtitle="Pour chaque type de donnée, le bon réflexe de nettoyage."
   headers={["Donnée", "Technique de cleaning", "Outils"]}
   brand="CRM, Data & Automation"
@@ -182,22 +198,6 @@ import Tip from '@/components/slides/Tip.astro';
     "Lancer la validation : valides, invalides, risqués, jetables",
     "Lire le rapport : score de la liste et bounces évités",
     "Exporter la liste nettoyée, prête à l'envoi",
-  ]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Démo live mail-tester.com (test de délivrabilité). Logo : wordmark officiel
-    SVG (logo-white.svg recoloré en encre foncée #15151E pour le fond clair de la loupe). */}
-<Demo
-  toolLogo="/decks/qualite-donnees/logos/mail-tester.svg"
-  toolName="mail-tester"
-  toolUrl="https://www.mail-tester.com"
-  objectives={[
-    "Récupérer l'adresse de test unique générée par mail-tester",
-    "Envoyer un email depuis son outil habituel à cette adresse",
-    "Lire la note sur 10 et le diagnostic SPF, DKIM, DMARC",
-    "Corriger les points signalés : contenu, authentification, blacklists",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
