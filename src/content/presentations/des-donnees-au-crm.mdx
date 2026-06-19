@@ -191,6 +191,21 @@ import Kpi from '@/components/slides/Kpi.astro';
   ]}
 />
 
+{/* KPI (chiffre héros) « Le piège », placé juste après la grille de choix du CRM.
+    70% = complément de « only 30% fully meet timeline, budget and scope » (BCG 2024,
+    « Most Large-Scale Tech Programs Fail », qui cite explicitement le CRM). Le lien
+    avec le choix d'un CRM se fait à l'oral. */}
+<Kpi
+  eyebrow="Le piège"
+  value="70"
+  unit="%"
+  label="des grands projets technologiques ne respectent pas pleinement les délais, le budget et le périmètre"
+  source="BCG, 2024"
+  sourceUrl="https://www.bcg.com/publications/2024/most-large-scale-tech-programs-fail-how-to-succeed"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 2 : Les 4 plus grands CRM (grille logos, mode contain).
     Logos locaux pleine couleur. DYNAMICS : placeholder logo Microsoft (officiel,
     couleur), à remplacer par le vrai logo Dynamics 365. */}
@@ -262,20 +277,6 @@ import Kpi from '@/components/slides/Kpi.astro';
   ]}
 />
 
-{/* Adoption (KPI : chiffre héros). Le rappel « un CRM ne vaut que s'il est utilisé »
-    se dit à l'oral. Chiffre vérifié à la source : Johnny Grow, CRM Failure Report 2025
-    (« the CRM implementation failure rate is 55 percent » = déploiements qui n'atteignent
-    pas leurs objectifs). Cabinet CRM, pas analyste, mais page publique et cliquable. */}
-<Kpi
-  eyebrow="Le piège"
-  value="70"
-  unit="%"
-  label="des grands projets technologiques ne respectent pas pleinement les délais, le budget et le périmètre"
-  source="BCG, 2024"
-  sourceUrl="https://www.bcg.com/publications/2024/most-large-scale-tech-programs-fail-how-to-succeed"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
 
 {/* Intercalaire 02 : ouverture de la partie pratique (fil rouge + démo live Zoho). */}
 <SubSection
