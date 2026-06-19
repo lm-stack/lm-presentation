@@ -25,7 +25,7 @@ Conséquence : changer une taille = changer UN token, pas 34 composants.
 | Token | Valeur | Palier | Composants |
 |---|---|---|---|
 | `--fs-cover` | clamp(110px, 11vw, 188px) | Cover | `Cover` |
-| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `Section`, `SubSection`, `About`, `SectionSplit`, `Statement`, `Pause`, `MatrixRain`, `ClosingHero`, `Questions`, `Merci` |
+| `--fs-hero-xl` | clamp(72px, 7vw, 120px) | Sections / transitions | `Section`, `SubSection`, `About`, `SectionSplit`, `Statement`, `MatrixRain`, `ClosingHero`, `Questions`, `Merci` |
 | `--fs-hero-l` | clamp(56px, 5.5vw, 96px) | Contenu standard | `InfoCards`, `Steps`, `Programme`, `Form`, `ListImage`, `Exchange`, `Workshop`, `People`, `Mockup`, `CodeExamples`, `SplitImage`, `Capture`, `Demo`, `UtmGenerator` |
 | `--fs-hero-m` | clamp(40px, 4vw, 72px) | Contenu dense | `ImageGrid`, `Poll`, `WordCloud`, `Compare`, `BarChart`, `Table`, `Media`, `Spreadsheet`, `StatRings`, `Video`, `Schema` |
 | `--fs-term` | clamp(76px, 8vw, 140px) | Spécial | `Definition` (terme serif) |

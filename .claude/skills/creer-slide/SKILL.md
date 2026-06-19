@@ -34,7 +34,6 @@ Lire `template.mdx`, puis ce cheatsheet **intention → composant** (les props e
 | Citation | `Quote` |
 | Ouverture de section | `Section` / `SectionSplit` |
 | Atelier | `Workshop` |
-| Pause | `Pause` |
 | Sondage QCM / nuage de mots | `Poll` / `WordCloud` |
 | Clôture | `ClosingHero` |
 

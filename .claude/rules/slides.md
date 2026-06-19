@@ -21,7 +21,6 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - `Cover` : page de garde, h1 monumental + watermark, peut avoir un eyebrow
 - `Section` / `SubSection` : transition de section, gros numéro + h2 + rule
 - `About` : présentation de l'intervenant
-- `Pause` : pause avec compte à rebours (via `TimerControl`)
 - `Statement`, `Quote`, `Definition` : citations / déclarations fortes
 - Fin de deck : auto-injectée (`Questions` / `Merci`), jamais écrite à la main
 
@@ -51,7 +50,7 @@ Cas particuliers admis (slides "structurelles" avec leur propre identité visuel
 - Si le body est `display: flex; flex-direction: column` → ajouter `justify-content: center`
 - Si le body est `display: flex; flex-direction: row` → ajouter `align-items: center`
 
-**Slides "structurelles"** (`Cover`, `Section`, `SubSection`, `About`, `Statement`, `Quote`, `Definition`, `Pause`, `ImageFull`) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
+**Slides "structurelles"** (`Cover`, `Section`, `SubSection`, `About`, `Statement`, `Quote`, `Definition`, `ImageFull`) — n'utilisent PAS SlideTitle, elles ont leur propre layout avec `justify-content: center !important` sur la section (h1 monumental, watermark, etc.). Leur règle override la nôtre, c'est intentionnel.
 
 **Ne jamais** :
 - Ajouter `justify-content: center` sur `.reveal section` global → casse la position du titre
