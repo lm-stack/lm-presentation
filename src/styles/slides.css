@@ -553,6 +553,14 @@ body.is-fullscreen .deck-search {
   }
 }
 
+/* Bouton Pause (mode présentateur) : pastille fixe juste à droite du menu pill. */
+.deck-pause-btn {
+  position: fixed;
+  top: 16px;
+  left: 64px;
+  z-index: 100;
+}
+
 .deck-menu {
   position: fixed;
   top: 16px;
@@ -779,6 +787,11 @@ body.is-fullscreen .deck-search {
   .deck-menu-pill {
     top: 8px;
     left: 8px;
+  }
+
+  .deck-pause-btn {
+    top: 8px;
+    left: 52px;
   }
 
   /* Menu (panel TOC) : plein largeur ecran, scroll vertical possible */

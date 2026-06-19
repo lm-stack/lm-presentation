@@ -139,3 +139,45 @@ export function initToc(deck: RevealApi): void {
     tocList.appendChild(li);
   });
 }
+
+export function initPauseOverlay(): void {
+  // Overlay Pause à la demande (mode présentateur) : le bouton haut-gauche
+  // (#deck-pause-btn) ouvre/ferme #pause-overlay par-dessus la slide courante
+  // (la position dans le deck est préservée, ce n'est pas une slide Reveal).
+  // La playlist Spotify n'est montée (src) qu'à l'ouverture, et retirée à la
+  // fermeture, pour ne pas jouer de musique en fond quand l'overlay est caché.
+  const btn = document.getElementById('deck-pause-btn');
+  const overlay = document.getElementById('pause-overlay');
+  if (!btn || !overlay) return;
+  const closeBtn = document.getElementById('pause-overlay-close');
+  const iframe = document.getElementById('pause-overlay-spotify') as HTMLIFrameElement | null;
+
+  const open = () => {
+    overlay.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    if (iframe && !iframe.getAttribute('src') && iframe.dataset.embed) {
+      iframe.src = iframe.dataset.embed;
+    }
+  };
+  const close = () => {
+    overlay.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (iframe) iframe.removeAttribute('src');
+  };
+
+  btn.addEventListener('click', () => (overlay.hidden ? open() : close()));
+  closeBtn?.addEventListener('click', close);
+  // Échap ferme l'overlay AVANT que Reveal n'ouvre sa vue d'ensemble : capture
+  // + stopPropagation pour court-circuiter le handler clavier de Reveal.
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      if (e.key === 'Escape' && !overlay.hidden) {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      }
+    },
+    true
+  );
+}

@@ -23,7 +23,6 @@ import Erd from '@/components/slides/Erd.astro';
 import Schema from '@/components/slides/Schema.astro';
 import Table from '@/components/slides/Table.astro';
 import UseCase from '@/components/slides/UseCase.astro';
-import Pause from '@/components/slides/Pause.astro';
 
 {/*
   Modèle ERD fil rouge du module (4 entités, use case traiteur). Positions dans la scène 1920x1080
@@ -397,14 +396,4 @@ export const E = Object.fromEntries(ERD.entities.map((e) => [e.name, e]));
   ]}
 />
 
-{/* Slide de pause en fin de module (avant la fin auto Questions/Merci injectée par la route). */}
-<Pause
-  title="Pause"
-  italicPart="Pause"
-  subtitle="Café, eau, étirements. On reprend ensemble."
-  spotify="https://open.spotify.com/playlist/37i9dQZF1DWV7EzJMK2FUI"
-  tocLabel="Pause"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
 

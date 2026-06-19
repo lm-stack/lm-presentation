@@ -37,7 +37,11 @@ const {
 const BAR_COUNT = 22;
 const BARS = Array.from({ length: BAR_COUNT }, (_, i) => ({
   base: 26 + Math.round(42 * Math.abs(Math.sin(i * 0.8 + 0.5))),
-  delay: (i * 0.16).toFixed(2),
+  // Délai NÉGATIF : l'animation est déjà « en cours » dès la 1re frame (à une
+  // phase décalée par barre). Supprime le saut initial scaleY(1) -> keyframe 0%
+  // (scaleY 0.5) qui faisait saccader chaque barre à son 1er cycle. Le décalage
+  // de phase entre barres (l'effet cascade) est conservé.
+  delay: (-(i * 0.16) - 0.8).toFixed(2),
   dur: (2.4 + (i % 5) * 0.3).toFixed(2),
 }));
 ---

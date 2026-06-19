@@ -1,0 +1,157 @@
+---
+// src/components/deck/PauseOverlay.astro
+// Overlay Pause GLOBAL, à la demande (mode présentateur). Rendu une seule fois
+// par Deck.astro, caché par défaut. Le bouton présentateur haut-gauche
+// (#deck-pause-btn) l'affiche par-dessus la slide courante : la position dans
+// le deck est préservée (ce n'est PAS une slide Reveal). Remplace l'ancien
+// slide <Pause> fixe qui était inséré dans chaque deck.
+//
+// Musique : playlist Spotify unique globale. L'iframe n'a pas de `src` au build ;
+// le chrome (initPauseOverlay) pose data-embed -> src à l'ouverture et le retire
+// à la fermeture, pour qu'aucune musique ne tourne tant que l'overlay est caché.
+import TimerControl from '@/components/slides/TimerControl.astro';
+
+const DEFAULT_SPOTIFY = 'https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ';
+function spotifyEmbedUrl(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    if (!u.hostname.endsWith('spotify.com')) return null;
+    const seg = u.pathname.split('/').filter(Boolean);
+    const types = new Set(['track', 'album', 'playlist', 'episode', 'show', 'artist']);
+    const i = seg.findIndex((s) => types.has(s));
+    if (i === -1 || !seg[i + 1]) return null;
+    return `https://open.spotify.com/embed/${seg[i]}/${seg[i + 1]}?utm_source=generator&theme=0`;
+  } catch {
+    return null;
+  }
+}
+const spotifyEmbed = spotifyEmbedUrl(DEFAULT_SPOTIFY);
+---
+<div class="pause-overlay" id="pause-overlay" hidden role="dialog" aria-modal="true" aria-label="Pause">
+  <button type="button" class="pause-overlay__close" id="pause-overlay-close" title="Fermer la pause (Échap)" aria-label="Fermer la pause">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+      <path d="M205.66 194.34a8 8 0 0 1-11.32 11.32L128 139.31l-66.34 66.35a8 8 0 0 1-11.32-11.32L116.69 128 50.34 61.66a8 8 0 0 1 11.32-11.32L128 116.69l66.34-66.35a8 8 0 0 1 11.32 11.32L139.31 128Z" />
+    </svg>
+  </button>
+
+  <div class:list={['pause-overlay__body', { 'pause-overlay__body--spotify': !!spotifyEmbed }]}>
+    <div class="pause-overlay__main">
+      <h2 class="pause-overlay__title">
+        <em class="pause-overlay__title-italic"><span class="underline">Pause</span></em>
+      </h2>
+      <p class="pause-overlay__subtitle">Café, eau, étirements. On reprend ensemble.</p>
+      <div class="pause-overlay__timer">
+        <TimerControl size="large" presets={[5, 10, 15]} allowCustom={true} defaultMinutes={15} />
+      </div>
+    </div>
+
+    {spotifyEmbed && (
+      <div class="pause-overlay__spotify" aria-label="Lecteur audio">
+        <iframe
+          id="pause-overlay-spotify"
+          data-embed={spotifyEmbed}
+          width="100%"
+          height="100%"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          title="Lecteur Spotify"
+        ></iframe>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .pause-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 96px;
+  }
+  /* `hidden` doit gagner sur le display:flex ci-dessus. */
+  .pause-overlay[hidden] { display: none; }
+
+  .pause-overlay__close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-muted);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .pause-overlay__close:hover {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+    border-color: var(--c-accent);
+  }
+
+  .pause-overlay__body {
+    display: flex;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+    max-width: 1600px;
+  }
+  .pause-overlay__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pause-overlay__title {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-hero-xl);
+    line-height: var(--lh-title);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+  }
+  .pause-overlay__title-italic {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .pause-overlay__subtitle {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    line-height: var(--lh-lead);
+    color: var(--c-muted);
+    margin: 0 0 32px;
+    max-width: 900px;
+  }
+  .pause-overlay__timer { margin-top: 8px; }
+
+  .pause-overlay__spotify {
+    flex: 0 0 460px;
+    align-self: center;
+    height: 520px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--c-ink) 25%, transparent);
+  }
+  .pause-overlay__spotify iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  @media (max-width: 900px) {
+    .pause-overlay__body { flex-direction: column; gap: 32px; }
+    .pause-overlay__spotify { flex-basis: auto; width: 100%; max-width: 460px; height: 360px; }
+  }
+</style>
