@@ -109,11 +109,11 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brandSub="Executive Education"
 />
 
-{/* Deux cas d'usage concrets pour ancrer les leviers. */}
+{/* Un cas d'usage concret (article de blog) pour ancrer les leviers, démontré ensuite en n8n. */}
 <ImageGrid
-  title="Deux cas d'usage à explorer"
+  title="Un cas d'usage à explorer"
   italicPart="cas d'usage"
-  subtitle="Pour ancrer ces possibilités, deux scénarios concrets d'IA appliquée au marketing."
+  subtitle="Pour ancrer ces possibilités, un scénario concret d'IA appliquée au marketing."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
@@ -123,13 +123,22 @@ import FilRouge from '@/components/slides/FilRouge.astro';
       title: "Génération automatique d'articles de blog",
       text: "À partir d'un sujet ou d'un brief, l'IA rédige un article structuré, optimisé SEO, publié automatiquement sur le CMS.",
     },
-    {
-      src: "/decks/ia-automatisation/cas-chatbot.png",
-      alt: "Chatbot connecté aux données client",
-      title: "Chatbot connecté aux données",
-      text: "Un assistant qui répond aux questions des prospects en s'appuyant sur le CRM, la documentation produit et l'historique client.",
-    },
   ]}
+/>
+
+{/* Démonstration n8n : génération automatique d'un article de blog (le cas d'usage retenu). */}
+<Demo
+  toolLogo="/decks/marketing-automation/logos/n8n.svg"
+  toolName="n8n"
+  toolUrl="https://n8n.io"
+  objectives={[
+    "Déclencher sur un nouveau sujet ou brief d'article",
+    "Générer un article structuré et optimisé SEO avec l'IA",
+    "Repasser par une relecture humaine avant publication",
+    "Publier automatiquement l'article sur le CMS (WordPress)",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Garde-fous : l'IA est puissante mais faillible. Indispensable pour un public non-dev. */}
@@ -193,7 +202,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
     "Personnaliser les données",
     "Digitaliser un processus",
     "Automatiser une action",
-    "Paramétrer un MCP",
+    "Paramétrer\nun MCP",
     "Créer un tableau de bord",
   ]}
   brand="CRM, Data & Automation"

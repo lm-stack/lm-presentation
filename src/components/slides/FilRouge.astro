@@ -293,6 +293,9 @@ const {
     line-height: 1.25;
     font-weight: 500;
     color: var(--c-muted);
+    /* Respecte un retour à la ligne explicite (\n) dans un label, ex.
+       « Paramétrer\nun MCP », tout en gardant le wrap normal sinon. */
+    white-space: pre-line;
   }
 
   /* Étape passée : noeud en anneau accent, carte normale, label en encre pleine. */
