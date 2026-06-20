@@ -74,6 +74,12 @@ const perPage = mode === '1' ? 1 : mode === '2' ? 2 : 4;
         });
       }
 
+      // PDF / handout : les liens internes relatifs (/p/, /parcours/) se
+      // resolvent sur l'origine de generation (localhost) et deviennent des liens
+      // morts dans le PDF. On retire leur href (carte « prochain sujet », etc.) ;
+      // les liens absolus (logo de marque) restent cliquables.
+      document.querySelectorAll('a[href^="/"]').forEach((a) => a.removeAttribute('href'));
+
       // Post-mount : groupe les <section> sources par paquets, scale, pagine.
       const source = document.getElementById('handout-source');
       const target = document.getElementById('handout-pages');
