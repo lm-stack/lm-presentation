@@ -261,12 +261,20 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
   @media (prefers-reduced-motion: reduce) {
     .demo__data-strip { animation: none; }
   }
-  /* PDF / impression (puppeteer émule le media print) : la loupe est un décor qui
-     se positionne mal sous le scale du handout (logo rogné en bas, data figée en
-     désordre). On la masque à l'export ; l'outil reste identifié par la pastille
-     sous le titre. La loupe (et son animation) restent intactes à l'écran. */
+  /* PDF / impression : le décor de la loupe (manche, anneau, data animée) se rend
+     mal sous le scale du handout. On le retire et on garde le LOGO de l'outil,
+     cliquable (lien absolu vers l'outil), centré dans la moitié droite. La loupe
+     complète (anneau + data animée) reste intacte à l'écran (présentation). */
   @media print {
-    .demo__loupe { display: none; }
+    .demo__loupe-handle,
+    .demo__data { display: none; }
+    .demo__loupe {
+      top: 0; bottom: 0; left: 58%; right: 0;
+      width: auto; height: auto;
+      transform: none;
+    }
+    .demo__lens { border: none; }
+    .demo__lens-logo::before { display: none; }
   }
 
   /* Logo de l'outil "révélé" au centre du verre. Par défaut posé flat (wordmarks
