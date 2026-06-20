@@ -616,22 +616,7 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   index="7"
   title="Mockups"
   italicPart="Mockups"
-  subtitle="Encadrer une image ou un faux site dans une tablette, un mobile ou un laptop."
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-/>
-
-<Mockup
-  device="tablet"
-  title="Mockup tablette"
-  italicPart="tablette"
-  subtitle="Device à droite (image ou faux site), contenu à gauche."
-  bullets={[
-    "Prop bullets optionnelle : points avec icône check, plus dense qu'un sous-titre.",
-    "Idéale pour détailler ce que montre le device, côté gauche.",
-  ]}
-  image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&h=1200&fit=crop"
-  alt="Exemple de contenu dans une tablette"
+  subtitle="Encadrer une image ou un faux site dans un téléphone : mobile, iPhone ou duo."
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />
@@ -640,19 +625,18 @@ import SchemeSwitcher from '@/components/SchemeSwitcher.astro';
   device="mobile"
   title="Mockup mobile"
   italicPart="mobile"
-  subtitle="Pour une app ou un site responsive : device à droite, contenu à gauche."
-  image="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=1300&fit=crop"
-  alt="Exemple de contenu dans un mobile"
-  brand="Titre de la présentation"
-  brandSub="Titre du parcours ou de l'événement"
-/>
-
-<Mockup
-  device="desktop"
-  title="Mockup desktop"
-  italicPart="desktop"
-  image="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1600&h=1000&fit=crop"
-  alt="Exemple de contenu dans un laptop"
+  bullets={[
+    "Texte à gauche, device à droite : des bullets avec icône check détaillent l'écran.",
+    "Le téléphone affiche une image OU un faux site (mode webform), comme ici.",
+  ]}
+  webform={{
+    url: "www.site-web.ch",
+    siteName: "NutriCoach",
+    headline: "Recevez le guide gratuit",
+    blurb: "Laissez vos coordonnées, on vous envoie tout par email.",
+    fields: ["Nom", "Prénom", "Email"],
+    button: "Recevoir le guide",
+  }}
   brand="Titre de la présentation"
   brandSub="Titre du parcours ou de l'événement"
 />

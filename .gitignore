@@ -13,6 +13,8 @@ source/
 
 # Fichiers Cloudflare
 .wrangler/
+# Carte des thèmes générée au build (prebuild) depuis le frontmatter des decks
+functions/scheme-map.ts
 .superpowers/
 
 # Artefacts de dev local (logs serveur, screenshots de diagnostic, tooling)

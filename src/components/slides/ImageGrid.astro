@@ -317,6 +317,10 @@ const variantClass = `image-grid__grid--${count}`;
   .image-grid__grid--4 .image-grid__card-text,
   .image-grid__grid--5 .image-grid__card-text {
     -webkit-line-clamp: 2;
+    /* Réserve exactement 2 lignes : jamais coupé (clamp 2), jamais moins de
+       2 lignes de haut (min-height), pour des cards uniformes sur les grilles
+       4-5 colonnes. Calibrer les descriptions pour tenir en 2 lignes. */
+    min-height: calc(var(--lh-body) * 2 * 1em);
   }
   /* Texte de card agrandi (prop cardTextLarge) : prompt lisible, sans troncature. */
   .image-grid__card-text--lg {

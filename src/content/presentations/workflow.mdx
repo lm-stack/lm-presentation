@@ -87,9 +87,9 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
+    { src: "https://images.unsplash.com/photo-1556204975-1851fadab092?w=600&h=450&fit=crop&q=80", alt: "Envoi d'email retardé", title: "Envoi d'email retardé", text: "Programmer un envoi à 9h00 demain matin depuis Gmail ou Outlook." },
     { src: "/decks/marketing-automation/auto-clickup.png", alt: "Assignation de tâche auto", title: "Assignation de tâche auto", text: "Une tâche créée dans un statut donné se voit assigner automatiquement à la bonne personne." },
-    { src: "/decks/marketing-automation/auto-facebook.jpg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
+    { src: "/decks/marketing-automation/auto-email.jpeg", alt: "Post Facebook planifié", title: "Post Facebook planifié", text: "Publier à l'heure de pointe sans toucher au téléphone à 18h00." },
   ]}
 />
 
@@ -158,7 +158,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms", x: 240,  y: 420 },
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Tally", x: 240,  y: 420 },
     { id: "a1", type: "action",  icon: "ph:user-plus",       label: "Créer le contact",   sub: "Zoho CRM",     x: 670,  y: 420 },
     { id: "a2", type: "action",  icon: "ph:slack-logo",      label: "Notifier l'équipe",  sub: "Slack",        x: 1100, y: 420 },
     { id: "a3", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",        x: 1530, y: 420 },
@@ -183,7 +183,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t", type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Google Forms",    x: 320,  y: 420 },
+    { id: "t", type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire", sub: "Tally",    x: 320,  y: 420 },
     { id: "f", type: "special", icon: "ph:funnel",          label: "Filtrer",            sub: "Si consentement", x: 832,  y: 420 },
     { id: "a", type: "action",  icon: "ph:envelope-simple", label: "Envoyer l'email",    sub: "Gmail",           x: 1344, y: 420 },
   ]}
@@ -201,7 +201,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t",  type: "trigger", icon: "ph:lightning", label: "Nouveau formulaire", sub: "Google Forms",  x: 320,  y: 420 },
+    { id: "t",  type: "trigger", icon: "ph:lightning", label: "Nouveau formulaire", sub: "Tally",  x: 320,  y: 420 },
     { id: "fo", type: "special", icon: "ph:text-aa",   label: "Formater",          sub: "Mise en forme", x: 832,  y: 420 },
     { id: "a",  type: "action",  icon: "ph:user-plus", label: "Créer le contact",   sub: "Zoho CRM",      x: 1344, y: 420 },
   ]}
@@ -240,7 +240,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   nodes={[
-    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire",  sub: "Google Forms",  x: 170,  y: 420 },
+    { id: "t",  type: "trigger", icon: "ph:lightning",       label: "Nouveau formulaire",  sub: "Tally",  x: 170,  y: 420 },
     { id: "sw", type: "special", icon: "ph:git-branch",      label: "Switch",              sub: "Type de client", x: 620,  y: 420 },
     { id: "a1", type: "action",  icon: "ph:envelope-simple", label: "Séquence B2C",        sub: "Gmail",         x: 1200, y: 170 },
     { id: "a2", type: "action",  icon: "ph:user-plus",       label: "Handover commercial", sub: "Zoho CRM",      x: 1200, y: 420 },
@@ -280,7 +280,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   title="Faire correspondre les champs"
   italicPart="correspondre"
   subtitle="Connecter deux outils, c'est surtout aligner leurs champs un à un."
-  headers={["Champ reçu (Google Forms)", "Champ CRM (Zoho)"]}
+  headers={["Champ reçu (Tally)", "Champ CRM (Zoho)"]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   rows={[
@@ -357,8 +357,8 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   brandSub="Executive Education"
 />
 
-{/* Exemple 1 : conversion e-commerce (achat -> Google Ads + mise à jour CDP).
-    Spine à y=420, branches à 250 / 590. */}
+{/* Exemple 1 : conversion e-commerce (achat -> Préparer -> Google Ads -> CDP).
+    Chaîne linéaire sur la ligne y=420, sans branche. */}
 <N8nCanvas
   captionTitle="Conversion e-commerce"
   captionItalic="Conversion"
@@ -368,13 +368,13 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   nodes={[
     { id: "t",   type: "trigger", icon: "ph:shopping-cart",   label: "Achat finalisé",          sub: "Shopify",       x: 200,  y: 420 },
     { id: "fmt", type: "special", icon: "ph:text-aa",         label: "Préparer les données",    sub: "Mise en forme", x: 680,  y: 420 },
-    { id: "ga",  type: "action",  icon: "ph:megaphone",       label: "Remonter la conversion",  sub: "Google Ads",    x: 1300, y: 250 },
-    { id: "cdp", type: "action",  icon: "ph:database",        label: "Mettre à jour le profil", sub: "CDP",           x: 1300, y: 590 },
+    { id: "ga",  type: "action",  icon: "ph:megaphone",       label: "Remonter la conversion",  sub: "Google Ads",    x: 1080, y: 420 },
+    { id: "cdp", type: "action",  icon: "ph:database",        label: "Mettre à jour le profil", sub: "CDP",           x: 1500, y: 420 },
   ]}
   connections={[
     { from: "t",   to: "fmt" },
     { from: "fmt", to: "ga" },
-    { from: "fmt", to: "cdp" },
+    { from: "ga",  to: "cdp" },
   ]}
 />
 
@@ -513,7 +513,7 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   toolName="n8n"
   toolUrl="https://n8n.io"
   objectives={[
-    "Déclencher sur un nouveau formulaire reçu (Google Forms)",
+    "Déclencher sur un nouveau formulaire reçu (Tally)",
     "Créer ou mettre à jour le contact dans Zoho CRM",
     "Notifier l'équipe sur Slack",
     "Envoyer l'email de confirmation via Gmail",

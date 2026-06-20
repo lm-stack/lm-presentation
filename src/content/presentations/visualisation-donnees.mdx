@@ -18,7 +18,7 @@ import Compare from '@/components/slides/Compare.astro';
 import Table from '@/components/slides/Table.astro';
 import BarChart from '@/components/slides/BarChart.astro';
 import Definition from '@/components/slides/Definition.astro';
-import Mockup from '@/components/slides/Mockup.astro';
+import ImageFull from '@/components/slides/ImageFull.astro';
 import Tip from '@/components/slides/Tip.astro';
 import Demo from '@/components/slides/Demo.astro';
 import Poll from '@/components/slides/Poll.astro';
@@ -174,21 +174,14 @@ import FilRouge from '@/components/slides/FilRouge.astro';
   ]}
 />
 
-{/* Mockup desktop : image placeholder Unsplash, à remplacer par une vraie capture de dashboard. */}
-<Mockup
-  device="desktop"
-  title="À quoi ça ressemble"
-  italicPart="ressemble"
-  subtitle="Un tableau de bord marketing : les indicateurs clés réunis sur un seul écran."
-  bullets={[
-    "En haut, les chiffres clés du mois et leur évolution.",
-    "Au centre, les courbes de tendance et le funnel.",
-    "En bas, le détail par canal et par campagne.",
-  ]}
-  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1600&h=1000&fit=crop"
-  alt="Tableau de bord analytique"
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
+{/* Dashboard en image plein cadre (ImageFull), les 3 zones en légende.
+    Image placeholder Unsplash, à remplacer par une vraie capture de dashboard. */}
+<ImageFull
+  image="https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1600&h=900&fit=crop"
+  alt="Tableau de bord analytique marketing"
+  captionTitle="À quoi ça ressemble"
+  caption="Les indicateurs clés sur un seul écran : en haut les chiffres du mois et leur évolution, au centre les tendances et le funnel, en bas le détail par canal et campagne."
+  captionPosition="bottom-left"
 />
 
 <Table

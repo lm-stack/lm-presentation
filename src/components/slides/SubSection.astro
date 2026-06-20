@@ -6,8 +6,8 @@
 // (section parente) + titre serif italique (accent souligné jaune) + sous-titre.
 // Reveal en cascade du contenu quand la slide devient active.
 interface Props {
-  /** Section parente, ex "Collecte · Jour 1". Optionnel. */
-  kicker?: string;
+  /** Surtitre / section parente, ex "Sous le capot". OBLIGATOIRE (cf. règle slides.md). */
+  kicker: string;
   /** Numéro de sous-section, ex "1.2". Optionnel. */
   index?: string;
   title: string;
@@ -32,6 +32,12 @@ const {
   tocLabel,
   subtitleWrap = false,
 } = Astro.props;
+// Surtitre obligatoire : casse le build si un intercalaire n'en a pas (cf. slides.md).
+if (!kicker || !kicker.trim()) {
+  throw new Error(
+    `SubSection « ${title} » : surtitre (kicker) obligatoire. Ajoute kicker="…" sur cet intercalaire.`,
+  );
+}
 const titleParts = splitHighlight(title, italicPart);
 ---
 <section class="subsection" data-layout="subsection" data-section-title={tocLabel ?? title}>

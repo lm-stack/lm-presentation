@@ -124,6 +124,14 @@ Incident 2026-06-02 : `InfoCards` était resté sur l'ancien fond crème `#FAF8F
 - Numéro court : `00`, `01`, `1.2`. Un chiffre court rend mieux qu'un long nombre.
 - Pour un intercalaire d'ouverture placé **avant** la section `01` (mise en contexte, état des lieux), utiliser `00` plutôt que de renuméroter toutes les sections suivantes.
 
+## Surtitre (kicker) des intercalaires SubSection — RÈGLE ABSOLUE
+
+⚠️ **Tout `SubSection` DOIT porter un surtitre** via la prop `kicker` (le petit label en capitales au-dessus du titre serif : la section ou le thème parent, ex. « Sous le capot », « L'étape d'après »). Jamais d'intercalaire `SubSection` sans surtitre.
+
+- Durci dans le code : `kicker` est **requis** dans l'interface de `src/components/slides/SubSection.astro`, ET un garde-fou runtime **fait échouer le build** si le surtitre manque (même mécanisme qu'`AgendaDays` / validation parcours). Inviolable, pas seulement conventionnel.
+- Style : court et évocateur, **pas une répétition du titre** (le titre dit « Pourquoi automatiser », le surtitre dit « L'enjeu »). Le composant le rend en capitales : l'écrire en casse normale dans le MDX.
+- Ne concerne pas `Section` (intercalaire image plein cadre), qui n'a pas de surtitre.
+
 ## Image plein cadre (`ImageFull`) + légende en box — RÈGLE
 
 `ImageFull` affiche une image en **bleed total** (1920×1080), **sans titre, sans cadre et sans bandeau marque** : rien d'autre que la légende. À réserver aux images **16:9** : le `object-fit: cover` remplit sans rien rogner quand le ratio correspond ; sinon il coupe les bords.

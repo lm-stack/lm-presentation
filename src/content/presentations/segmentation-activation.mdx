@@ -12,6 +12,7 @@ description: "Segmenter sa base en cibles actionnables et déclencher la bonne a
 
 import Cover from '@/components/slides/Cover.astro';
 import Poll from '@/components/slides/Poll.astro';
+import WordCloud from '@/components/slides/WordCloud.astro';
 import Debat from '@/components/slides/Debat.astro';
 import SubSection from '@/components/slides/SubSection.astro';
 import Statement from '@/components/slides/Statement.astro';
@@ -49,6 +50,17 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   brandSub="Executive Education"
   image="/decks/segmentation-activation/cover-archer.jpg"
   theme="halo-gold"
+/>
+
+{/* Ouverture de journée : takeaway du Jour 2 en nuage de mots (pendant du
+    « takeaway du Jour 1 » de modeliser-les-processus). */}
+<WordCloud
+  id="recap-jour-2"
+  question="Votre takeaway du Jour 2, en un mot ?"
+  italicPart="Jour 2"
+  subtitle="Plusieurs réponses bienvenues"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Ouverture : discussion diagnostic, situe la salle (ex-sondage, passé en Debat) */}
@@ -155,10 +167,10 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
   images={[
-    { src: "/decks/segmentation-activation/axe-demographique.jpg", alt: "Foule de piétons traversant un carrefour urbain animé", title: "Démographique", text: "Qui ils sont : âge, langue, région, secteur, taille. Facile à capter, rarement suffisant seul." },
-    { src: "/decks/segmentation-activation/axe-comportemental.jpg", focal: "center 42%", alt: "Mains de personnes de carnations différentes en train de se toucher", title: "Comportemental", text: "Ce qu'ils font : pages vues, emails ouverts, téléchargements. Le meilleur signal d'intention." },
-    { src: "/decks/segmentation-activation/axe-valeur.jpg", alt: "Gros plan de billets de cent dollars", title: "Valeur (RFM)", text: "Ce qu'ils pèsent : récence, fréquence, montant des achats. Sépare les clients clés des dormants." },
-    { src: "/decks/segmentation-activation/axe-cycle-de-vie.jpg", focal: "center 45%", alt: "Jeune pousse verte émergeant du sol en sous-bois", title: "Cycle de vie", text: "Où ils en sont : prospect, actif, dormant, ambassadeur. Chaque étape, un message différent." },
+    { src: "/decks/segmentation-activation/axe-demographique.jpg", alt: "Foule de piétons traversant un carrefour urbain animé", title: "Démographique", text: "Qui ils sont : âge, langue, région. Vite limité seul." },
+    { src: "/decks/segmentation-activation/axe-comportemental.jpg", focal: "center 42%", alt: "Mains de personnes de carnations différentes en train de se toucher", title: "Comportemental", text: "Ce qu'ils font : clics, ouvertures. Le vrai signal d'achat." },
+    { src: "/decks/segmentation-activation/axe-valeur.jpg", alt: "Gros plan de billets de cent dollars", title: "Valeur (RFM)", text: "Ce qu'ils pèsent : récence, fréquence, montant des achats." },
+    { src: "/decks/segmentation-activation/axe-cycle-de-vie.jpg", focal: "center 45%", alt: "Jeune pousse verte émergeant du sol en sous-bois", title: "Cycle de vie", text: "Où ils en sont : prospect, actif, dormant, ambassadeur." },
   ]}
 />
 
@@ -171,6 +183,39 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
   body="Les quatre axes précédents décrivent le passé et le présent. Le prédictif, lui, regarde devant : un score calculé par l'IA sur votre historique estime la probabilité d'achat, le risque de départ (churn) ou la valeur vie d'un contact. C'est l'axe le plus puissant, et il ouvre la porte à l'IA, qu'on détaille tout de suite après."
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
+/>
+
+{/* Discussion : prédire le churn (abonnement télécom) avant qu'il arrive.
+     Pont concret vers l'IA prédictive de la section suivante. */}
+<Debat
+  eyebrow="Discussion"
+  title="Prédire un départ"
+  italicPart="Prédire"
+  intro="Un opérateur télécom veut repérer les clients sur le point de résilier, avant qu'ils ne partent. L'idée : estimer pour chacun une probabilité de départ."
+  prompts={[
+    "Quels signaux trahissent un client sur le point de résilier son abonnement ?",
+    "Quelles données déjà disponibles permettraient d'estimer cette probabilité de départ ?",
+    "Une fois le risque détecté, quelle action déclencher pour le retenir ?",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Pour aller plus loin : la discussion churn synthétisée en une démarche
+     de modélisation (cible, signaux, score logistique, action). */}
+<Steps
+  title="Pour aller plus loin"
+  italicPart="plus loin"
+  subtitle="De la discussion à un vrai modèle de churn : la démarche en quatre temps."
+  image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&h=1400&fit=crop"
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  items={[
+    { text: "Définir la cible : le départ sur un horizon donné, par exemple le mois prochain, en écartant les variables qui trahissent déjà le départ (data leakage)." },
+    { text: "Choisir les signaux : la tendance plus que le niveau. Proximité d'échéance, écart entre forfait payé et usage réel, appels au support récents." },
+    { text: "Scorer avec une régression logistique : chaque client reçoit une probabilité de départ entre 0 et 1, triable et actionnable." },
+    { text: "Agir : prioriser sur la probabilité de départ multipliée par la valeur du client, et relier chaque signal à un geste de rétention." },
+  ]}
 />
 
 {/* ============================================================
@@ -299,17 +344,6 @@ import ImageGrid from '@/components/slides/ImageGrid.astro';
     { text: "L'audience publicitaire : le segment est exporté vers Meta, LinkedIn ou Google Ads pour toucher les contacts en dehors de l'email." },
     { text: "Le relais commercial : un segment chaud est transmis à l'équipe de vente, avec son contexte et son historique. C'est là que le ROI se mesure le mieux." },
   ]}
-/>
-
-{/* Sondage d'engagement */}
-<Poll
-  id="seg-v2-mode-manquant"
-  question="Quel mode d'activation vous manque le plus aujourd'hui ?"
-  italicPart="vous manque"
-  subtitle="Une seule réponse, depuis ton téléphone"
-  options={["Séquence automatisée", "Message déclenché", "Audience publicitaire", "Relais commercial"]}
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
 />
 
 {/* La clé de voûte : relier chaque segment à un geste */}

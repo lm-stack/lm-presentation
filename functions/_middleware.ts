@@ -116,6 +116,19 @@ const DISPOSABLE_DOMAINS = new Set<string>([
 
 const encoder = new TextEncoder();
 
+import { SCHEME_MAP } from './scheme-map';
+
+// Thème déduit du deck/parcours demandé (auto-détection, sans paramètre), pour
+// que le mur d'accès s'affiche dans la charte du contenu visé. /p/<slug>(/handout)
+// -> presentations ; /parcours/<slug> -> parcours. Défaut : lm.
+function schemeForPath(path: string): 'lm' | 'execed' {
+  let m = path.match(/^\/p\/([^/]+)/);
+  if (m && SCHEME_MAP.presentations[m[1]] === 'execed') return 'execed';
+  m = path.match(/^\/parcours\/([^/]+)/);
+  if (m && SCHEME_MAP.parcours[m[1]] === 'execed') return 'execed';
+  return 'lm';
+}
+
 // --- Entree principale du middleware ---
 export async function onRequest(context: PagesContext): Promise<Response> {
   const { request, env, next } = context;
@@ -135,7 +148,8 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   }
 
   // Sinon -> page mur (a la meme URL : un reload apres validation suffit).
-  return wallPage(env);
+  // Thème déduit de la route demandée (execed si le deck/parcours l'est).
+  return wallPage(env, schemeForPath(path));
 }
 
 // Chemins exemptes du mur email.
@@ -432,7 +446,7 @@ function getCookie(request: Request, name: string): string | null {
 }
 
 // --- Page mur (HTML inline, autonome, charte LM) ---
-function wallPage(env: Env): Response {
+function wallPage(env: Env, scheme: 'lm' | 'execed' = 'lm'): Response {
   // Turnstile actif seulement si les deux cles sont posees (et la sitekey saine).
   const sitekey = env.TURNSTILE_SITEKEY ?? '';
   const enabled = Boolean(sitekey && /^[A-Za-z0-9_-]+$/.test(sitekey) && env.TURNSTILE_SECRET);
@@ -443,7 +457,8 @@ function wallPage(env: Env): Response {
     .replace('__TURNSTILE_WIDGET__', enabled
       ? `<div class="cf-turnstile" data-sitekey="${sitekey}" data-theme="light" data-language="fr"></div>`
       : '')
-    .replace('__TURNSTILE_ENABLED__', enabled ? 'true' : 'false');
+    .replace('__TURNSTILE_ENABLED__', enabled ? 'true' : 'false')
+    .replace('__SCHEME__', scheme);
   return new Response(html, {
     status: 401,
     headers: {
@@ -465,14 +480,28 @@ function wallPage(env: Env): Response {
 }
 
 const WALL_HTML = `<!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-scheme="__SCHEME__">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
+<script>
+  // Thème déduit du deck demandé (injecté côté serveur sur <html>). Le paramètre
+  // ?s=execed ou ?s=lm force le thème. Posé avant le paint, sans flash de thème.
+  try { var s = new URLSearchParams(location.search).get('s'); if (s === 'execed' || s === 'lm') document.documentElement.dataset.scheme = s; } catch (e) {}
+</script>
 <title>Accès aux présentations | Lausanne Marketing</title>
 <style>
-  :root { color-scheme: light; }
+  :root {
+    color-scheme: light;
+    /* Tokens de thème, alignés sur src/styles/themes.css. Défaut : LM. */
+    --c-cream: #FAF8F3; --c-ink: #191919; --c-surface: #FFFFFF;
+    --c-muted: #6B6F84; --c-accent: #FFD838; --c-on-accent: #191919;
+  }
+  [data-scheme="execed"] {
+    --c-cream: #F7F9FB; --c-ink: #1E2B3E; --c-surface: #FFFFFF;
+    --c-muted: #4C5666; --c-accent: #E73952; --c-on-accent: #FFFFFF;
+  }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -481,46 +510,51 @@ const WALL_HTML = `<!DOCTYPE html>
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: #FAF8F3;
-    color: #191919;
+    background: var(--c-cream);
+    color: var(--c-ink);
     font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   .card {
-    background: #FFFFFF;
-    border: 1px solid rgba(25, 25, 25, 0.08);
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
     border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(25, 25, 25, 0.08);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--c-ink) 8%, transparent);
     padding: 40px;
     max-width: 420px;
     width: 100%;
   }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
-  .brand svg { display: block; }
-  .brand span { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; }
+  .brand { display: flex; align-items: center; margin-bottom: 28px; }
+  .brand__set { display: inline-flex; align-items: center; gap: 10px; }
+  .brand__set svg, .brand__set img { display: block; }
+  .brand__logo { height: 24px; width: auto; }
+  .brand__name { font-weight: 800; font-size: 15px; letter-spacing: 0.02em; }
+  .brand__execed { display: none; }
+  [data-scheme="execed"] .brand__lm { display: none; }
+  [data-scheme="execed"] .brand__execed { display: inline-flex; }
   h1 { font-size: 26px; font-weight: 800; margin: 0 0 8px; line-height: 1.2; }
-  .sub { font-size: 15px; color: #6B6F84; margin: 0 0 24px; line-height: 1.5; }
-  label { display: block; font-size: 14px; font-weight: 600; color: #6B6F84; margin-bottom: 8px; }
+  .sub { font-size: 15px; color: var(--c-muted); margin: 0 0 24px; line-height: 1.5; }
+  label { display: block; font-size: 14px; font-weight: 600; color: var(--c-muted); margin-bottom: 8px; }
   input {
     width: 100%;
     font: inherit;
     font-size: 18px;
     padding: 14px 16px;
-    background: #FFFFFF;
-    color: #191919;
-    border: 2px solid rgba(25, 25, 25, 0.12);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    border: 2px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
     border-radius: 8px;
     outline: none;
     transition: border-color 0.15s ease;
   }
-  input:focus { border-color: #191919; }
+  input:focus { border-color: var(--c-ink); }
   #code { letter-spacing: 0.3em; text-transform: uppercase; font-weight: 700; text-align: center; }
   button {
     width: 100%;
     font: inherit;
     font-weight: 800;
     font-size: 18px;
-    background: #FFD838;
-    color: #191919;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
     border: none;
     border-radius: 8px;
     padding: 14px 24px;
@@ -528,7 +562,7 @@ const WALL_HTML = `<!DOCTYPE html>
     cursor: pointer;
     transition: background-color 0.2s ease;
   }
-  button:hover:not(:disabled) { background: #FFE55A; }
+  button:hover:not(:disabled) { background: color-mix(in srgb, var(--c-accent) 85%, #fff); }
   button:disabled { opacity: 0.45; cursor: not-allowed; }
   .msg { font-size: 14px; margin: 12px 0 0; min-height: 1.2em; line-height: 1.4; }
   .msg.error { color: #C2410C; }
@@ -536,10 +570,10 @@ const WALL_HTML = `<!DOCTYPE html>
   .linkrow { margin-top: 18px; text-align: center; }
   .linkbtn {
     background: none; border: none; padding: 0; width: auto; margin: 0;
-    font-size: 14px; font-weight: 600; color: #6B6F84; text-decoration: underline; cursor: pointer;
+    font-size: 14px; font-weight: 600; color: var(--c-muted); text-decoration: underline; cursor: pointer;
   }
-  .linkbtn:hover { background: none; color: #191919; }
-  .hint { font-size: 12px; color: #6B6F84; margin: 20px 0 0; text-align: center; line-height: 1.5; }
+  .linkbtn:hover { background: none; color: var(--c-ink); }
+  .hint { font-size: 12px; color: var(--c-muted); margin: 20px 0 0; text-align: center; line-height: 1.5; }
   [hidden] { display: none !important; }
   .cf-turnstile { margin-top: 16px; }
 </style>
@@ -548,12 +582,17 @@ __TURNSTILE_SCRIPT__
 <body>
   <main class="card">
     <div class="brand">
+      <span class="brand__set brand__lm">
       <svg xmlns="http://www.w3.org/2000/svg" width="40" height="26" viewBox="0 0 49 32" fill="none" aria-hidden="true">
         <path d="M25.9557 0L38.391 21.78H13.5204L25.9557 0Z" fill="#FEE487"></path>
         <path d="M36.3557 0L48.791 21.78H23.9204L36.3557 0Z" fill="#FFD838"></path>
         <path d="M1.77273 31.2C1.15227 31.2 0.694318 30.9765 0.398864 30.5295C0.132955 30.0825 0 29.4716 0 28.6968C0 28.2499 0.0443182 27.7582 0.132955 27.2218C0.221591 26.6854 0.325 26.1192 0.443182 25.5232C0.797727 23.9438 1.34432 22.2006 2.08295 20.2934C2.85114 18.3564 3.72273 16.3748 4.69773 14.3484C5.70227 12.2923 6.70682 10.2957 7.71136 8.35874C8.74545 6.42178 9.70568 4.64871 10.592 3.03954C10.6511 2.92034 10.7693 2.69685 10.9466 2.36905C11.1534 2.04126 11.3159 1.80287 11.4341 1.65387C10.2818 1.68367 9.48409 1.63586 8.15454 1.90406C6.85454 2.14245 7.21136 2.15298 6 2.59998C6 2.59998 8.64091 0.0999756 10 0.0999756L18.2148 0C17.5648 0.506589 16.7966 1.43037 15.9102 2.77135C15.0239 4.08252 14.108 5.57249 13.1625 7.24126C12.7489 7.98625 12.2318 8.95473 11.6114 10.1467C10.9909 11.3387 10.3409 12.6648 9.66136 14.1249C8.98182 15.5553 8.33182 17.0006 7.71136 18.4607C7.09091 19.9209 6.55909 21.3066 6.11591 22.6178C5.67273 23.8991 5.39205 25.0017 5.27386 25.9255C5.24432 26.0745 5.22955 26.2235 5.22955 26.3725C5.22955 26.4917 5.22955 26.6258 5.22955 26.7748C5.22955 27.6092 5.45114 28.3095 5.89432 28.8756C6.3375 29.412 7.16477 29.6802 8.37614 29.6802C9.94204 29.6206 11.5227 29.6206 13.1182 29.5014C14.7432 29.3524 16.3239 29.0544 17.8602 28.6074C19.1602 28.2201 20.342 27.6986 21.4057 27.043C22.4693 26.3874 23.2375 25.5679 23.7102 24.5845C23.7693 24.4653 23.8432 24.4057 23.9318 24.4057C24.1386 24.4057 24.242 24.5696 24.242 24.8974C24.242 24.957 24.2273 25.0315 24.1977 25.1209C24.1977 25.2103 24.1829 25.3146 24.1534 25.4338C23.917 26.2086 23.6364 26.894 23.3114 27.49C22.9864 28.086 22.6614 28.5925 22.3364 29.0097C21.5091 30.0229 20.4307 30.6487 19.1011 30.8871C17.8011 31.0957 16.5011 31.2 15.2011 31.2H1.77273Z" fill="#191919"></path>
       </svg>
-      <span>Lausanne Marketing</span>
+        <span class="brand__name">Lausanne Marketing</span>
+      </span>
+      <span class="brand__set brand__execed">
+        <img class="brand__logo" src="/assets/execed-logo.svg" alt="Executive Education" />
+      </span>
     </div>
 
     <section id="step-email">

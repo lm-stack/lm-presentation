@@ -1,12 +1,11 @@
 ---
 // src/components/slides/Mockup.astro
 // Mockup de device "ExecEd-style". Encadre une image OU un faux site web (mode
-// webform) dans un cadre tablette, mobile, laptop, iPhone (PNG détouré), ou
+// webform) dans un cadre mobile, iPhone (PNG détouré), ou
 // "duo" (deux iPhones détourés du SVG : un de dos à gauche derrière, un de face
 // à droite devant ; l'écran de la face est PERCÉ dans le PNG et le faux site
 // passe derrière, donc le châssis le borde proprement, sans débordement).
-//   - tablet / mobile / iphone / duo : texte à gauche, device(s) à droite.
-//   - desktop (laptop) : titre optionnel en haut, device centré.
+//   - mobile / iphone / duo : texte à gauche, device(s) à droite.
 import { splitHighlight } from '@/utils/highlight';
 interface WebForm {
   url?: string;
@@ -17,7 +16,7 @@ interface WebForm {
   button?: string;
 }
 interface Props {
-  device: 'tablet' | 'mobile' | 'desktop' | 'iphone' | 'duo';
+  device: 'mobile' | 'iphone' | 'duo';
   title?: string;
   italicPart?: string;
   subtitle?: string;
@@ -44,7 +43,6 @@ const {
   brandSub,
 } = Astro.props;
 const titleParts = splitHighlight(title, italicPart);
-const isSplit = device === 'tablet' || device === 'mobile' || device === 'iphone' || device === 'duo';
 const isPhoto = device === 'iphone';
 const wf = webform ?? {};
 const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
@@ -60,7 +58,7 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     </a>
   </header>
 
-  <div class:list={['mockup__body', isSplit ? 'mockup__body--split' : 'mockup__body--stack']}>
+  <div class="mockup__body mockup__body--split">
     {(title || subtitle || body || bullets) && (
       <div class="mockup__text">
         {title && (
@@ -165,10 +163,8 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
           )}
         </div>
         {device === 'mobile' && <span class="mockup__notch" aria-hidden="true"></span>}
-        {device === 'tablet' && <span class="mockup__cam" aria-hidden="true"></span>}
       </div>
       )}
-      {device === 'desktop' && <span class="mockup__laptop-base" aria-hidden="true"></span>}
     </div>
   </div>
 </section>
@@ -205,10 +201,8 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     display: flex; gap: 72px;
   }
   .mockup__body--split { flex-direction: row; align-items: center; }
-  .mockup__body--stack { flex-direction: column; align-items: stretch; }
 
   .mockup__text { flex: 0 0 42%; max-width: 42%; }
-  .mockup__body--stack .mockup__text { flex: 0 0 auto; max-width: 1100px; }
   .mockup__title {
     font-family: 'Hanken Grotesk', sans-serif; font-size: var(--fs-hero-l);
     line-height: var(--lh-title); font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--c-ink);
@@ -245,7 +239,6 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     flex: 1 1 auto; min-width: 0; min-height: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .mockup--tablet .mockup__stage,
   .mockup--mobile .mockup__stage,
   .mockup--iphone .mockup__stage {
     align-self: stretch;
@@ -262,18 +255,6 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--c-surface);
   }
   .mockup__img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  /* ---- Tablette (portrait 3:4) ---- */
-  .mockup--tablet .mockup__device {
-    height: 860px; flex-shrink: 0; margin-top: 40px; aspect-ratio: 3 / 4;
-    border-radius: 30px; padding: 20px 18px;
-  }
-  .mockup--tablet .mockup__screen { border-radius: 12px; }
-  .mockup__cam {
-    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #050506; box-shadow: inset 0 0 0 2px rgba(120, 130, 160, 0.4);
-  }
 
   /* ---- Mobile (portrait 9:19) ---- */
   .mockup--mobile .mockup__device {
@@ -329,25 +310,6 @@ const fields = wf.fields ?? ['Nom', 'Prénom', 'Email'];
     position: absolute;
     left: 3.9%; top: 2.4%; width: 92.4%; height: 95.2%;
     border-radius: 30px; overflow: hidden; background: #FFFFFF; z-index: 2;
-  }
-
-  /* ---- Desktop (laptop 16:10) ---- */
-  .mockup--desktop .mockup__device {
-    width: min(100%, 1180px); aspect-ratio: 16 / 10;
-    border-radius: 16px; padding: 16px;
-  }
-  .mockup--desktop .mockup__screen { border-radius: 6px; }
-  .mockup__laptop-base {
-    width: min(100%, 1180px); height: 26px; margin-top: -2px;
-    background: linear-gradient(180deg, #d4d6dd 0%, #a9adba 100%);
-    clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%);
-    border-radius: 0 0 14px 14px;
-    box-shadow: 0 16px 28px -16px color-mix(in srgb, var(--c-ink) 40%, transparent);
-    position: relative;
-  }
-  .mockup__laptop-base::after {
-    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 140px; height: 9px; border-radius: 0 0 9px 9px; background: #8d92a1;
   }
 
   /* ---- Faux site web (mode webform) : landing mobile soignée ---- */

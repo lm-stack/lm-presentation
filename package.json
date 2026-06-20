@@ -6,7 +6,7 @@
   "description": "Site de présentations Lausanne Marketing : slides.lausanne.marketing",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/extract-video-posters.mjs",
+    "prebuild": "node scripts/extract-video-posters.mjs && node scripts/gen-scheme-map.mjs",
     "build": "astro build",
     "build:posters": "node scripts/extract-video-posters.mjs",
     "preview": "astro preview",
