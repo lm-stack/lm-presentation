@@ -57,10 +57,20 @@ async function generatePdf(browser, slug, mode) {
   const url = `${PREVIEW_URL}/p/${slug}/handout/${mode}/`;
   const page = await browser.newPage();
   try {
-    const response = await page.goto(url, { waitUntil: 'networkidle0', timeout: 60000 });
+    // 'load' (et non 'networkidle0') : robuste si une slide contient une video
+    // (autoplay/buffer garde le reseau actif, networkidle0 ne se declenche jamais).
+    const response = await page.goto(url, { waitUntil: 'load', timeout: 60000 });
     if (!response || !response.ok()) {
       throw new Error(`HTTP ${response?.status() ?? '?'} sur ${url}`);
     }
+    // Laisse les images (forcees eager par le layout) se charger/decoder et la
+    // pagination JS se terminer avant l'impression.
+    await page.evaluate(() => Promise.all(
+      Array.from(document.images)
+        .filter((img) => !img.complete)
+        .map((img) => new Promise((res) => { img.onload = img.onerror = res; })),
+    ));
+    await new Promise((r) => setTimeout(r, 800));
     const pdf = await page.pdf({
       printBackground: true,
       margin: { top: '0', bottom: '0', left: '0', right: '0' },
