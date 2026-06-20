@@ -19,6 +19,9 @@ interface Props {
   toolUrl?: string;
   /** Objectifs concrets de la démo (3 à 5 items, ce qu'on fait en direct). */
   objectives: string[];
+  /** Encadre le logo dans une tuile claire (app tile), pour les icônes d'app
+   *  OPAQUES (carré coloré) type Apollo / NeverBounce. Défaut : logo posé flat. */
+  logoTile?: boolean;
   /** Libellé du badge live, défaut "Démo en direct". */
   liveLabel?: string;
   brand?: string;
@@ -29,6 +32,7 @@ const {
   toolName,
   toolUrl,
   objectives,
+  logoTile = false,
   liveLabel = 'Démo en direct',
   brand = 'Titre de la présentation',
   brandSub,
@@ -75,11 +79,13 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
         ))}
       </div>
       <div class="demo__lens-logo">
-        {toolUrl
-          ? <a class="demo__tool-link" href={toolUrl} target="_blank" rel="noopener" aria-label={toolName ? `Ouvrir ${toolName}` : "Ouvrir l'outil"}>
-              <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />
-            </a>
-          : <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />}
+        <div class:list={['demo__lens-frame', logoTile && 'demo__lens-frame--tile']}>
+          {toolUrl
+            ? <a class="demo__tool-link" href={toolUrl} target="_blank" rel="noopener" aria-label={toolName ? `Ouvrir ${toolName}` : "Ouvrir l'outil"}>
+                <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />
+              </a>
+            : <img class="demo__tool-logo" src={toolLogo} alt={toolName ?? ''} />}
+        </div>
       </div>
     </div>
   </div>
@@ -256,7 +262,9 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
     .demo__data-strip { animation: none; }
   }
 
-  /* Logo de l'outil "révélé" au centre du verre (seul, sans nom ni halo : flat). */
+  /* Logo de l'outil "révélé" au centre du verre. Par défaut posé flat (wordmarks
+     transparents). Les icônes d'app OPAQUES (carré coloré : Apollo, NeverBounce)
+     passent en mode tuile via la prop logoTile, sinon elles flottent en carré dur. */
   .demo__lens-logo {
     position: absolute;
     inset: 0;
@@ -265,10 +273,7 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
     align-items: center;
     justify-content: center;
   }
-  /* Mesh derrière le logo : halo radial doux dans le GRIS du fond de slide
-     (token --c-bg-end, la fin du dégradé de .demo) plutôt qu'un blanc arbitraire.
-     Il "efface" la data juste derrière le logo pour le faire ressortir, en fondu
-     pour ne jamais faire une boîte / un fond plein. */
+  /* Halo doux derrière le logo flat : efface la data juste derrière, sans boîte. */
   .demo__lens-logo::before {
     content: '';
     position: absolute;
@@ -283,12 +288,34 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
       transparent 76%
     );
   }
+  /* Cadre passthrough par défaut : le logo se comporte comme posé directement. */
+  .demo__lens-frame { display: contents; }
+  /* Mode tuile (prop logoTile) : carte claire arrondie, logo compact et net. */
+  .demo__lens-frame--tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 46px;
+    background: var(--c-surface);
+    border: 1px solid color-mix(in srgb, var(--c-ink) 8%, transparent);
+    border-radius: 32px;
+    box-shadow: 0 18px 44px -20px color-mix(in srgb, var(--c-ink) 35%, transparent);
+  }
+  /* Une tuile fait déjà le fond : on masque le halo derrière. */
+  .demo__lens-logo:has(.demo__lens-frame--tile)::before { display: none; }
+
   .demo__tool-logo {
     position: relative;
     width: 56%;
     max-width: 390px;
     height: auto;
     display: block;
+  }
+  .demo__lens-frame--tile .demo__tool-logo {
+    width: auto;
+    max-width: 300px;
+    max-height: 190px;
   }
   /* Logo cliquable : la loupe est pointer-events:none, on réactive le clic ici. */
   .demo__tool-link {
@@ -299,6 +326,10 @@ const dataRows: string[][] = Array.from({ length: ROW_COUNT }, (_, r) => {
     pointer-events: auto;
     cursor: pointer;
     transition: transform 0.2s ease;
+  }
+  .demo__lens-frame--tile .demo__tool-link {
+    width: auto;
+    max-width: 300px;
   }
   .demo__tool-link:hover {
     transform: scale(1.05);

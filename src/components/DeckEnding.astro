@@ -1,0 +1,60 @@
+---
+// src/components/DeckEnding.astro
+// Slide de fin auto-injectée d'un deck, PARTAGÉE par la route présentation
+// (/p/[slug]) ET la route handout (/p/[slug]/handout/[mode]) : sans ça, les PDFs
+// handout perdaient la slide de fin. Questions (deck non terminal d'un parcours,
+// avec la preview du deck suivant) ou Merci (one-shot / dernier deck du parcours).
+// Ne rend rien si autoClosing est false (le deck gère sa propre fin, ex. template).
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Questions from '@/components/slides/Questions.astro';
+import Merci from '@/components/slides/Merci.astro';
+
+interface Props {
+  entry: CollectionEntry<'presentations'>;
+}
+const { entry } = Astro.props;
+
+// brand = le cours (titre du parcours, ou titre du deck en one-shot) ;
+// brandSub = l'institution déduite du schéma, pas le titre du deck.
+const INSTITUTION: Record<string, string> = {
+  execed: 'Executive Education',
+  lm: 'Lausanne Marketing',
+};
+
+const decks = await getCollection('presentations');
+const parcoursList = await getCollection('parcours');
+const parcours = parcoursList.find((p) => p.data.decks.includes(entry.id)) ?? null;
+// Retour parcours seulement si le portail existe (parcours non unlisted).
+const parcoursSlug = parcours && !parcours.data.unlisted ? parcours.id : undefined;
+
+let nextDeck: CollectionEntry<'presentations'> | null = null;
+if (parcours) {
+  const idx = parcours.data.decks.indexOf(entry.id);
+  const nextSlug = parcours.data.decks[idx + 1];
+  if (nextSlug) nextDeck = decks.find((x) => x.id === nextSlug) ?? null;
+}
+
+const endingBrand = parcours?.data.title ?? entry.data.title;
+const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
+---
+{entry.data.autoClosing && (
+  nextDeck ? (
+    <Questions
+      nextSlug={nextDeck.id}
+      nextTitle={nextDeck.data.title}
+      nextShort={nextDeck.data.description}
+      nextCover={nextDeck.data.cover}
+      cover={entry.data.cover}
+      brand={endingBrand}
+      brandSub={endingBrandSub}
+      parcoursSlug={parcoursSlug}
+    />
+  ) : (
+    <Merci
+      image={entry.data.cover}
+      brand={endingBrand}
+      brandSub={endingBrandSub}
+    />
+  )
+)}

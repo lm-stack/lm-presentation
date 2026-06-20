@@ -2,35 +2,25 @@
 // src/pages/p/[slug].astro
 import { getCollection, render } from 'astro:content';
 import Deck from '@/layouts/Deck.astro';
-import Questions from '@/components/slides/Questions.astro';
-import Merci from '@/components/slides/Merci.astro';
+import DeckEnding from '@/components/DeckEnding.astro';
 
 export async function getStaticPaths() {
   const decks = await getCollection('presentations');
   const parcoursList = await getCollection('parcours');
 
   return decks.map((d) => {
-    // Contexte de fin : on cherche le premier parcours qui contient ce deck,
-    // puis on en déduit le deck suivant (carte preview) ou, à défaut, une fin
-    // "Merci" (one-shot ou dernier deck du parcours).
+    // parcours : pour le lien retour vers le portail (Deck layout). La logique
+    // de slide de fin (Questions / Merci) est dans <DeckEnding>, partagée avec
+    // la route handout.
     const parcours = parcoursList.find((p) => p.data.decks.includes(d.id));
-    let nextDeck = null;
-    if (parcours) {
-      const idx = parcours.data.decks.indexOf(d.id);
-      const nextSlug = parcours.data.decks[idx + 1];
-      if (nextSlug) {
-        const found = decks.find((x) => x.id === nextSlug);
-        if (found) nextDeck = found;
-      }
-    }
     return {
       params: { slug: d.id },
-      props: { entry: d, parcours: parcours ?? null, nextDeck },
+      props: { entry: d, parcours: parcours ?? null },
     };
   });
 }
 
-const { entry, parcours, nextDeck } = Astro.props;
+const { entry, parcours } = Astro.props;
 // Retour parcours : seulement si le portail /parcours/<slug> existe vraiment
 // (parcours listé). Un parcours unlisted n'a pas de page : on éviterait un 404.
 const parcoursSlug = parcours && !parcours.data.unlisted ? parcours.id : undefined;
@@ -42,16 +32,6 @@ function formatDate(d: Date) {
   return `${day}.${month}.${d.getFullYear()}`;
 }
 const updatedLabel = entry.data.updated ?? formatDate(entry.data.date);
-
-// Header de marque du slide de fin : MÊME header que les slides de contenu.
-// brand = le cours (titre du parcours, ou titre du deck en one-shot) ;
-// brandSub = l'institution déduite du schéma, pas le titre du deck.
-const INSTITUTION: Record<string, string> = {
-  execed: 'Executive Education',
-  lm: 'Lausanne Marketing',
-};
-const endingBrand = parcours?.data.title ?? entry.data.title;
-const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
 ---
 <Deck
   title={entry.data.title}
@@ -64,24 +44,5 @@ const endingBrandSub = INSTITUTION[entry.data.scheme] ?? entry.data.subtitle;
   parcoursSlug={parcoursSlug}
 >
   <Content />
-  {entry.data.autoClosing && (
-    nextDeck ? (
-      <Questions
-        nextSlug={nextDeck.id}
-        nextTitle={nextDeck.data.title}
-        nextShort={nextDeck.data.description}
-        nextCover={nextDeck.data.cover}
-        cover={entry.data.cover}
-        brand={endingBrand}
-        brandSub={endingBrandSub}
-        parcoursSlug={parcoursSlug}
-      />
-    ) : (
-      <Merci
-        image={entry.data.cover}
-        brand={endingBrand}
-        brandSub={endingBrandSub}
-      />
-    )
-  )}
+  <DeckEnding entry={entry} />
 </Deck>

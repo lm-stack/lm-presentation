@@ -5,6 +5,7 @@
 // mais avec le layout Handout au lieu de Deck.
 import { getCollection, render } from 'astro:content';
 import Handout from '@/layouts/Handout.astro';
+import DeckEnding from '@/components/DeckEnding.astro';
 
 export async function getStaticPaths() {
   const decks = await getCollection('presentations');
@@ -26,4 +27,5 @@ const { Content } = await render(entry);
 ---
 <Handout title={entry.data.title} mode={mode as '1' | '2' | '3'} scheme={entry.data.scheme}>
   <Content />
+  <DeckEnding entry={entry} />
 </Handout>
