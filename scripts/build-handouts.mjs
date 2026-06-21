@@ -60,12 +60,20 @@ function findGhostscript() {
 // nouvelle taille (octets), ou null si la compression a echoue (PDF inchange).
 async function compressPdf(gs, file) {
   const tmp = `${file}.tmp`;
+  // PAS le preset /ebook : il aplatit la transparence (halos/degrades) contre du
+  // noir et casse le design. On se contente de sous-echantillonner les images a
+  // 150 DPI, en gardant les couleurs (LeaveColorUnchanged), la transparence
+  // (compat 1.7) et le vectoriel intacts.
   const r = spawnSync(gs, [
     '-sDEVICE=pdfwrite',
-    '-dCompatibilityLevel=1.5',
-    '-dPDFSETTINGS=/ebook',
-    '-dNOPAUSE', '-dBATCH', '-dQUIET',
+    '-dCompatibilityLevel=1.7',
+    '-dColorConversionStrategy=/LeaveColorUnchanged',
+    '-dDownsampleColorImages=true', '-dColorImageResolution=150', '-dColorImageDownsampleType=/Bicubic',
+    '-dDownsampleGrayImages=true', '-dGrayImageResolution=150', '-dGrayImageDownsampleType=/Bicubic',
+    '-dDownsampleMonoImages=true', '-dMonoImageResolution=300', '-dMonoImageDownsampleType=/Subsample',
+    '-dAutoFilterColorImages=true', '-dAutoFilterGrayImages=true',
     '-dDetectDuplicateImages=true',
+    '-dNOPAUSE', '-dBATCH', '-dQUIET',
     `-sOutputFile=${tmp}`,
     file,
   ], { stdio: 'ignore' });
@@ -135,7 +143,8 @@ function loadDeckMeta() {
 function outName(meta, slug, mode) {
   const m = meta.get(slug) || { num: null, base: slug };
   const prefix = m.num != null ? `${String(m.num).padStart(2, '0')}-` : '';
-  const suffix = mode === '1' ? '' : `-${mode}up`;
+  // 1up : pas de suffixe. 2up/3up : meme nom de base + ", N slides".
+  const suffix = mode === '1' ? '' : `, ${mode} slides`;
   return `${prefix}${m.base}${suffix}.pdf`;
 }
 
@@ -186,11 +195,17 @@ async function generatePdf(browser, slug, mode, meta) {
         .map((img) => new Promise((res) => { img.onload = img.onerror = res; })),
     ));
     await new Promise((r) => setTimeout(r, 800));
+    // Taille de page renseignee DIRECTEMENT (au lieu de preferCSSPageSize, qui
+    // pouvait laisser une 1re page au mauvais format) : 1up = paysage 16:9
+    // (297x167mm), 2up/3up = A4 portrait.
+    const pageSize = mode === '1'
+      ? { width: '297mm', height: '167mm' }
+      : { width: '210mm', height: '297mm' };
     const pdf = await page.pdf({
+      ...pageSize,
       printBackground: true,
       margin: { top: '0', bottom: '0', left: '0', right: '0' },
       displayHeaderFooter: false,
-      preferCSSPageSize: true,
     });
     const name = outName(meta, slug, mode);
     await writeFile(join(OUTPUT_DIR, name), pdf);
@@ -223,8 +238,14 @@ async function main() {
         const name = outName(meta, slug, mode);
         const newF = join(OUTPUT_DIR, name);
         if (existsSync(newF)) continue;
-        const suffix = mode === '1' ? '' : `-${mode}up`;
-        const cands = [`${slug}-${mode}up.pdf`, m ? `${nn}${m.legacy}${suffix}.pdf` : null].filter(Boolean);
+        // anciennes formes possibles (suffixe -Nup) : par slug, par 1er mot
+        // (legacy) ou par titre complet, pour retrouver un PDF deja genere.
+        const old = mode === '1' ? '' : `-${mode}up`;
+        const cands = [
+          `${slug}-${mode}up.pdf`,
+          m ? `${nn}${m.legacy}${old}.pdf` : null,
+          m ? `${nn}${m.base}${old}.pdf` : null,
+        ].filter(Boolean);
         const src = cands.find((c) => c !== name && existsSync(join(OUTPUT_DIR, c)));
         if (src) {
           try { await rename(join(OUTPUT_DIR, src), newF); console.log(`  ${src} -> ${name}`); }
