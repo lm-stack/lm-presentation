@@ -39,7 +39,8 @@
 //                           dashboard > Turnstile, puis poser les deux en env.
 //
 // --- Contrat n8n (le webhook recoit du JSON) ---
-//   { event: "request", email, code, ts }  -> envoyer l'email du code
+//   { event: "request", email, code, ts, scheme } -> envoyer l'email du code
+//        scheme = "lm" | "execed" : charte de l'email, alignee sur le mur
 //   { event: "access",  email, ts }        -> ajouter une ligne au journal d'acces
 //   Header: Authorization: Bearer <N8N_WEBHOOK_TOKEN>
 
@@ -201,7 +202,10 @@ async function handleRequestCode(request: Request, env: Env): Promise<Response> 
   }
 
   const code = await deriveCode(env.ACCESS_OTP_SECRET, email, currentBucket());
-  const sent = await notifyN8n(env, { event: 'request', email, code, ts: new Date().toISOString() });
+  // Theme (lm|execed) du deck vise, envoye par la page mur, pour que l'email OTP
+  // soit dans la meme charte que le mur. Liste blanche, defaut lm.
+  const scheme = body?.scheme === 'execed' ? 'execed' : 'lm';
+  const sent = await notifyN8n(env, { event: 'request', email, code, ts: new Date().toISOString(), scheme });
   if (!sent) return json(502, { error: 'send_failed' });
 
   return json(200, { ok: true });
@@ -660,7 +664,7 @@ __TURNSTILE_SCRIPT__
         var res = await fetch('/api/access/request', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, turnstileToken: turnstileToken })
+          body: JSON.stringify({ email: email, turnstileToken: turnstileToken, scheme: document.documentElement.dataset.scheme === 'execed' ? 'execed' : 'lm' })
         });
         if (res.status === 200) {
           emailEcho.textContent = email;
