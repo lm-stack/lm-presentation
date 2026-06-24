@@ -176,6 +176,24 @@ import UseCase from '@/components/slides/UseCase.astro';
   brandSub="Executive Education"
 />
 
+<Table
+  title="Ce qu'on voit pas"
+  italicPart="voit pas"
+  subtitle="Pendant que le visiteur remplit trois champs, le formulaire en capte une dizaine d'autres, à son insu."
+  headers={["Champ caché", "Ce qu'il capte", "À quoi ça sert"]}
+  caption="Champs cachés injectés automatiquement dans le formulaire : invisibles pour le visiteur, précieux pour vous."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+  rows={[
+    ["Paramètres d'URL", "D'où vient le clic : source, canal, campagne", "Attribuer le lead à la bonne campagne"],
+    ["referrer", "La page qui a amené le visiteur", "Reconstituer le parcours"],
+    ["lead magnet, page", "Le contenu qui a déclenché l'inscription", "Mesurer ce qui convertit"],
+    ["timestamp", "Date et heure exactes de l'envoi", "Lancer la séquence au bon moment"],
+    ["IP, pays, langue", "Localisation et langue approximatives", "Segmenter par zone"],
+    ["user agent", "Navigateur et appareil utilisés", "Adapter le suivi, repérer les bots"],
+  ]}
+/>
+
 <Compare
   title="Quelles données demander ?"
   italicPart="demander"
@@ -189,23 +207,6 @@ import UseCase from '@/components/slides/UseCase.astro';
     items: ["Nom complet", "Société (via l'email pro)", "Genre (via le prénom)", "Pays / ville (via l'IP)"],
   }}
   note="Chaque champ en plus fait baisser la conversion : ne demandez que ce que vous ne pouvez pas déduire."
-  brand="CRM, Data & Automation"
-  brandSub="Executive Education"
-/>
-
-{/* Démo live Yopmail (email jetable) : tester un formulaire de capture sans polluer
-    sa vraie boîte. Pas de logo de marque exploitable : wordmark SVG maison (yopmail.svg,
-    police système car un SVG en <img> n'hérite pas des webfonts du deck). */}
-<Demo
-  toolLogo="/decks/collecte-donnees/logos/yopmail.svg"
-  toolName="Yopmail"
-  toolUrl="https://yopmail.com"
-  objectives={[
-    "Générer une adresse jetable en un clic, sans inscription",
-    "S'envoyer un email de test",
-    "Consulter la boîte de réception temporaire",
-    "Vérifier l'email reçu sans polluer sa vraie boîte",
-  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
 />
@@ -224,22 +225,21 @@ import UseCase from '@/components/slides/UseCase.astro';
   ]}
 />
 
-<Table
-  title="Ce qu'on voit pas"
-  italicPart="voit pas"
-  subtitle="Pendant que le visiteur remplit trois champs, le formulaire en capte une dizaine d'autres, à son insu."
-  headers={["Champ caché", "Ce qu'il capte", "À quoi ça sert"]}
-  caption="Champs cachés injectés automatiquement dans le formulaire : invisibles pour le visiteur, précieux pour vous."
+{/* Démo live Yopmail (email jetable) : tester un formulaire de capture sans polluer
+    sa vraie boîte. Pas de logo de marque exploitable : wordmark SVG maison (yopmail.svg,
+    police système car un SVG en <img> n'hérite pas des webfonts du deck). */}
+<Demo
+  toolLogo="/decks/collecte-donnees/logos/yopmail.svg"
+  toolName="Yopmail"
+  toolUrl="https://yopmail.com"
+  objectives={[
+    "Générer une adresse jetable en un clic, sans inscription",
+    "S'envoyer un email de test",
+    "Consulter la boîte de réception temporaire",
+    "Vérifier l'email reçu sans polluer sa vraie boîte",
+  ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
-  rows={[
-    ["Paramètres d'URL", "D'où vient le clic : source, canal, campagne", "Attribuer le lead à la bonne campagne"],
-    ["referrer", "La page qui a amené le visiteur", "Reconstituer le parcours"],
-    ["lead magnet, page", "Le contenu qui a déclenché l'inscription", "Mesurer ce qui convertit"],
-    ["timestamp", "Date et heure exactes de l'envoi", "Lancer la séquence au bon moment"],
-    ["IP, pays, langue", "Localisation et langue approximatives", "Segmenter par zone"],
-    ["user agent", "Navigateur et appareil utilisés", "Adapter le suivi, repérer les bots"],
-  ]}
 />
 
 <CodeExamples
