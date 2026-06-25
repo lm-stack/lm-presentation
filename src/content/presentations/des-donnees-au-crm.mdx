@@ -21,6 +21,7 @@ import SubSection from '@/components/slides/SubSection.astro';
 import Statement from '@/components/slides/Statement.astro';
 import Definition from '@/components/slides/Definition.astro';
 import Kpi from '@/components/slides/Kpi.astro';
+import Debat from '@/components/slides/Debat.astro';
 
 {/* Slide 1 : Cover. */}
 <Cover
@@ -261,6 +262,31 @@ import Kpi from '@/components/slides/Kpi.astro';
   ]}
 />
 
+{/* Tableau de synthèse : les 8 solutions (4 grands + 4 alternatives) croisées avec
+    la taille d'organisation (TPE / PME / grand groupe) et le budget. Placé juste
+    après les alternatives, il prépare le choix de Zoho (seul à cocher les trois
+    tailles tout en restant abordable). Coches = segments où l'outil est le plus à
+    son aise (positionnement d'après le contenu du deck + G2). */}
+<Table
+  title="Quelle solution pour quel profil ?"
+  italicPart="quel profil"
+  subtitle="Les huit outils passés en revue : nature, taille d'organisation visée, prise en main et budget."
+  headers={["Solution", "Type", "TPE", "PME", "Grand groupe", "Tout-en-un", "Prise en main", "Prix"]}
+  rows={[
+    ["Salesforce", "CRM complet", "", "", "✓", "✓", "Exigeante", "€€€"],
+    ["HubSpot", "CRM + marketing", "✓", "✓", "", "✓", "Facile", "€€€"],
+    ["Dynamics 365", "CRM + ERP", "", "", "✓", "✓", "Exigeante", "€€€"],
+    ["Zoho CRM", "CRM complet", "✓", "✓", "✓", "✓", "Facile", "€"],
+    ["Google Sheets / Excel", "Tableur", "✓", "", "", "", "Facile", "Gratuit"],
+    ["Brevo", "Email + CRM", "✓", "✓", "", "✓", "Facile", "€"],
+    ["Airtable", "Base de données", "✓", "✓", "", "", "Moyenne", "€€"],
+    ["Attio", "CRM moderne", "✓", "✓", "", "", "Facile", "€€"],
+  ]}
+  caption="Une coche marque les tailles d'organisation visées et les outils tout-en-un. Prix indicatif : € abordable, €€ intermédiaire, €€€ élevé."
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
 {/* Slide 4 : Pourquoi Zoho CRM ? (grille de 4 raisons, InfoCards).
     Justifie le choix de Zoho comme outil fil rouge des démos et ateliers. */}
 <InfoCards
@@ -315,6 +341,23 @@ import Kpi from '@/components/slides/Kpi.astro';
     "Créer une entité sur Zoho CRM (module)",
     "Créer un champ normal",
     "Créer un champ lookup (relation)",
+  ]}
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
+/>
+
+{/* Discussion de clôture du Jour 1 : faire le point sur l'objectif 1 (les
+    fondations data) et recueillir les sujets à approfondir les jours suivants.
+    Mode calme (prompts en bulles), pas live : c'est une réflexion, pas un débat. */}
+<Debat
+  eyebrow="Discussion"
+  tocLabel="Discussion"
+  title="Avons-nous atteint l'objectif 1 ?"
+  italicPart="l'objectif 1"
+  intro="Objectif 1 : appliquer des méthodes de collecte, structuration et intégration des données clients pour enrichir efficacement un CRM."
+  prompts={[
+    "Cet objectif est-il atteint pour vous, ou reste-t-il des zones de flou à lever ?",
+    "Quels sujets aimeriez-vous approfondir dans les prochains jours ?",
   ]}
   brand="CRM, Data & Automation"
   brandSub="Executive Education"
