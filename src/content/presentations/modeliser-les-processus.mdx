@@ -17,6 +17,7 @@ import InfoCards from '@/components/slides/InfoCards.astro';
 import ImageGrid from '@/components/slides/ImageGrid.astro';
 import ImageFull from '@/components/slides/ImageFull.astro';
 import BpmnCanvas from '@/components/slides/BpmnCanvas.astro';
+import BpmnRecrutement from '@/components/slides/BpmnRecrutement.astro';
 import ProcessCycle from '@/components/slides/ProcessCycle.astro';
 import ImproveLoop from '@/components/slides/ImproveLoop.astro';
 import Workshop from '@/components/slides/Workshop.astro';
@@ -140,6 +141,14 @@ import WordCloud from '@/components/slides/WordCloud.astro';
   source="bpmn.io"
   sourceUrl="https://bpmn.io"
   captionPosition="bottom-left"
+/>
+
+{/* Comment : un vrai processus modélisé en atelier, redessiné proprement en BPMN
+    (3 couloirs Opération / Client / Marketing). Deuxième illustration concrète,
+    plus riche que l'exemple Miro. Libellés et flux à valider avec Thomas. */}
+<BpmnRecrutement
+  brand="CRM, Data & Automation"
+  brandSub="Executive Education"
 />
 
 {/* Comment : les 4 notions clés du BPMN (grille 4 images, symboles SVG stylisés). */}

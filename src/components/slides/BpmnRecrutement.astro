@@ -1,0 +1,474 @@
+---
+// src/components/slides/BpmnRecrutement.astro
+// Slide "exemple de processus réel" : un BPMN complet modélisé en atelier,
+// redessiné proprement. Reprend le langage visuel de BpmnCanvas (fenêtre à
+// chrome, canvas pointillé, swimlanes, noeuds thémés) mais en STATIQUE (tout
+// affiché d'un coup : ici c'est une illustration, pas une construction pas à
+// pas) et avec 3 couloirs au lieu de 2.
+//
+// Coordonnées : canvas fixe 1728x760, viewBox SVG 0 0 1728 760 mappé 1:1 sur
+// les px absolus des noeuds. Aucune couleur en dur, tout via les tokens.
+//
+// Processus (redessiné depuis un whiteboard, libellés à valider) : funnel de
+// recrutement / vente avec remontée de conversion Google. 3 couloirs :
+//   - Opération : accusé de réception -> vente du dossier -> [Dossier accepté ?]
+//     -> [Validé ?] -> envoi email validation -> entretien réalisé ->
+//     [Entretien positif ?] -> Inscrit.
+//   - Client : Demande entrante (début) ; [Rendez-vous obtenu ?].
+//   - Marketing : récolte info campagne -> attribuer conversion campagne ->
+//     [Conversion ?] -> envoi conversion Google (remontée offline vers Ads).
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  brand?: string;
+  brandSub?: string;
+  tocLabel?: string;
+}
+const {
+  brand = 'Titre de la présentation',
+  brandSub,
+  tocLabel = 'Un processus réel',
+} = Astro.props;
+
+// Couloirs (bandes horizontales). top/height en px sur le canvas 1728x760.
+const lanes = [
+  { label: 'Opération', top: 0, height: 340 },
+  { label: 'Client', top: 340, height: 200 },
+  { label: 'Marketing', top: 540, height: 220 },
+];
+
+// Noeuds. x/y = coin haut-gauche de la forme (px). Les tâches portent leur
+// label dans la card ; événements et décisions le portent en légende dessous.
+const nodes = [
+  // --- Opération ---
+  { kind: 'task', x: 110, y: 56, label: 'Accusé de réception' },
+  { kind: 'task', x: 340, y: 56, label: 'Vérifier le dossier' },
+  { kind: 'gateway', x: 600, y: 66, label: 'Dossier complet ?', cap: 'up' },
+  { kind: 'gateway', x: 790, y: 66, label: 'Dossier validé ?', cap: 'up' },
+  { kind: 'task', x: 1180, y: 56, label: 'Envoi email validation' },
+  { kind: 'task', x: 742, y: 222, label: "Demande d'entretien" },
+  { kind: 'task', x: 970, y: 222, label: 'Entretien réalisé' },
+  { kind: 'gateway', x: 1228, y: 234, label: 'Entretien positif ?', cap: 'right' },
+  { kind: 'end', x: 1600, y: 68, label: 'Inscrit', icon: 'ph:flag-checkered' },
+  { kind: 'task', x: 340, y: 222, label: 'Envoyer un email au client' },
+  // --- Client ---
+  { kind: 'start', x: 158, y: 398, label: 'Inscription reçue', icon: 'ph:flag', cap: 'right' },
+  { kind: 'gateway', x: 790, y: 396, label: 'Rendez-vous accepté ?' },
+  { kind: 'end', x: 658, y: 398, label: 'Dossier refusé', icon: 'ph:x', cap: 'left' },
+  // --- Marketing ---
+  { kind: 'task', x: 110, y: 596, label: 'Récolte info campagne' },
+  { kind: 'task', x: 340, y: 596, label: 'Attribuer conversion campagne' },
+  { kind: 'task', x: 570, y: 596, label: 'Envoi conversion Google' },
+  { kind: 'end', x: 820, y: 608, label: 'Conversion envoyée', icon: 'ph:check' },
+];
+
+// Connecteurs (flux de séquence), paths orthogonaux sur le viewBox 0 0 1728 760.
+const links = [
+  // Opération : chemin principal
+  { d: 'M290 110 L340 110' }, // Accusé de réception -> Vérifier le dossier
+  { d: 'M520 110 L600 110' }, // Vérifier le dossier -> Dossier complet ?
+  { d: 'M684 110 L790 110' }, // Dossier complet ? -> Dossier validé ? (Oui)
+  { d: 'M874 110 L1180 110' }, // Dossier validé ? -> Envoi email validation (Oui)
+  { d: 'M1150 276 L1228 276' }, // Entretien réalisé -> Entretien positif ?
+  { d: 'M1270 217 L1270 164' }, // Entretien positif ? Oui -> Envoi email validation
+  { d: 'M1270 335 L1270 527 L700 527 L700 482' }, // Entretien positif ? Non -> Dossier refusé
+  { d: 'M1360 110 L1600 110' }, // Envoi email validation -> Inscrit
+  // Boucle : dossier incomplet -> email au client -> revérification
+  { d: 'M642 166 L642 276 L520 276' }, // Dossier complet ? Non -> Envoyer un email au client
+  { d: 'M430 222 L430 164' }, // Envoyer un email au client -> Vérifier le dossier (retour)
+  // Dossier non validé -> demande d'entretien -> rendez-vous
+  { d: 'M832 166 L832 222' }, // Dossier validé ? Non -> Demande d'entretien
+  { d: 'M832 330 L832 396' }, // Demande d'entretien -> Rendez-vous obtenu ?
+  // Cross-lane
+  { d: 'M200 398 L200 164' }, // Inscription reçue -> Accusé de réception
+  { d: 'M874 440 L1060 440 L1060 330' }, // Rendez-vous obtenu ? Oui -> Entretien réalisé
+  { d: 'M790 440 L742 440' }, // Rendez-vous obtenu ? Non -> Dossier refusé
+  // Marketing
+  { d: 'M200 482 L200 596' }, // Demande entrante -> Récolte info campagne
+  { d: 'M290 650 L340 650' }, // Récolte info campagne -> Attribuer conversion campagne
+  { d: 'M520 650 L570 650' }, // Attribuer conversion campagne -> Envoi conversion Google
+  { d: 'M750 650 L820 650' }, // Envoi conversion Google -> Conversion envoyée
+];
+
+// Étiquettes de branches (Oui / Non), posées au point milieu de la flèche.
+const branchLabels = [
+  { x: 737, y: 98, text: 'Oui' }, // Dossier complet ? -> Validé ?
+  { x: 1025, y: 98, text: 'Oui' }, // Dossier validé ? -> Envoi email validation
+  { x: 1245, y: 188, text: 'Oui' }, // Entretien positif ? -> Envoi email validation
+  { x: 1290, y: 362, text: 'Non' }, // Entretien positif ? -> Dossier refusé
+  { x: 665, y: 205, text: 'Non' }, // Dossier complet ? -> Envoyer un email au client
+  { x: 852, y: 195, text: 'Non' }, // Dossier validé ? -> Demande d'entretien
+  { x: 965, y: 428, text: 'Oui' }, // Rendez-vous obtenu ? -> Entretien réalisé
+  { x: 766, y: 424, text: 'Non' }, // Rendez-vous obtenu ? -> Dossier refusé
+];
+
+// Géométrie des formes (doit matcher le CSS), pour positionner précisément.
+const TASK_W = 180, TASK_H = 108;
+const SHAPE = 84; // diamètre cercle / côté du carré pivoté (gateway)
+---
+<section class="bpr" data-layout="bpmn" data-section-title={tocLabel}>
+  <header class="bpr__header">
+    <div class="bpr__brand-text">
+      <p class="bpr__brand-main">{brand}</p>
+      {brandSub && <p class="bpr__brand-sub">{brandSub}</p>}
+    </div>
+    <a href="https://lausanne.marketing" target="_blank" rel="noopener" class="bpr__brand-logo-link" aria-label="Lausanne Marketing">
+      <img src="/assets/lm-logo.svg" class="bpr__brand-logo" alt="Lausanne Marketing" />
+    </a>
+  </header>
+
+  <div class="bpr__body">
+    <div class="bpr__window">
+      <div class="bpr__chrome">
+        <div class="bpr__dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="bpr__chrome-title">
+          <Icon name="ph:flow-arrow" class="bpr__chrome-icon" aria-hidden="true" />
+          Recrutement : de la candidature à l'inscription
+        </div>
+        <div class="bpr__legend" aria-hidden="true">
+          <span class="bpr__legend-item"><span class="bpr__legend-mark bpr__legend-mark--event"></span>Événement</span>
+          <span class="bpr__legend-item"><span class="bpr__legend-mark bpr__legend-mark--task"></span>Tâche</span>
+          <span class="bpr__legend-item"><span class="bpr__legend-mark bpr__legend-mark--gateway"></span>Décision</span>
+        </div>
+      </div>
+
+      <div class="bpr__canvas">
+        {/* Swimlanes (bandes + label vertical) */}
+        {lanes.map((lane, i) => (
+          <div
+            class:list={["bpr-lane", i > 0 && "bpr-lane--divided"]}
+            style={`top: ${lane.top}px; height: ${lane.height}px;`}
+          >
+            <div class="bpr-lane__label"><span>{lane.label}</span></div>
+          </div>
+        ))}
+
+        {/* Connecteurs */}
+        <svg class="bpr__links" viewBox="0 0 1728 760" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <marker id="bpr-arrow" markerWidth="10" markerHeight="10" refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M1 1 L8 4 L1 7" class="bpr-arrowhead" />
+            </marker>
+          </defs>
+          {links.map((l) => (
+            <path class="bpr-link" d={l.d} marker-end="url(#bpr-arrow)" />
+          ))}
+          {branchLabels.map((b) => (
+            <text x={b.x} y={b.y} class="bpr-branch-label">{b.text}</text>
+          ))}
+        </svg>
+
+        {/* Noeuds */}
+        {nodes.map((n) => {
+          if (n.kind === 'task') {
+            return (
+              <div class="bpr-node bpr-node--task" style={`left: ${n.x}px; top: ${n.y}px;`}>
+                <span class="bpr-node__label">{n.label}</span>
+              </div>
+            );
+          }
+          if (n.kind === 'gateway') {
+            return (
+              <div class="bpr-node bpr-node--gateway" style={`left: ${n.x}px; top: ${n.y}px;`}>
+                <div class="bpr-node__diamond"><span class="bpr-node__diamond-inner"><Icon name="ph:git-branch" class="bpr-node__ic" aria-hidden="true" /></span></div>
+                <span class:list={["bpr-node__caption", n.cap === 'up' && "bpr-node__caption--up", n.cap === 'right' && "bpr-node__caption--right", n.cap === 'left' && "bpr-node__caption--left"]}>{n.label}</span>
+              </div>
+            );
+          }
+          // start / end : cercle
+          return (
+            <div class="bpr-node bpr-node--event" style={`left: ${n.x}px; top: ${n.y}px;`}>
+              <div class:list={["bpr-node__circle", n.kind === 'end' && "bpr-node__circle--end"]}>
+                <Icon name={n.icon} class="bpr-node__ic" aria-hidden="true" />
+              </div>
+              <span class:list={["bpr-node__caption", n.cap === 'up' && "bpr-node__caption--up", n.cap === 'right' && "bpr-node__caption--right", n.cap === 'left' && "bpr-node__caption--left"]}>{n.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bpr {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 44px 96px 44px !important;
+    background: linear-gradient(180deg, var(--c-bg-start) 0%, var(--c-bg-end) 100%);
+    color: var(--c-ink);
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Header intangible : brand gauche + logo LM droite + border-bottom. */
+  .bpr__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 40px;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-ink) 12%, transparent);
+  }
+  .bpr__brand-main {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0;
+    color: var(--c-ink);
+    text-align: left;
+  }
+  .bpr__brand-sub {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-brand-sub);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin: 4px 0 0;
+    color: var(--c-muted);
+    text-align: left;
+  }
+  .bpr__brand-logo { height: 48px; width: auto; display: block; flex: 0 0 auto; }
+
+  /* Corps : la fenêtre centrée sous le header. */
+  .bpr__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .bpr__window {
+    width: 1728px;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px -10px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+
+  /* Barre chrome (flush sur le canvas). */
+  .bpr__chrome {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 14px 26px;
+    background: color-mix(in srgb, var(--c-ink) 3%, var(--c-surface));
+    border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+    border-radius: 6px 6px 0 0;
+    border-bottom: none;
+  }
+  .bpr__dots { display: flex; gap: 8px; flex: 0 0 auto; }
+  .bpr__dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: color-mix(in srgb, var(--c-ink) 22%, transparent);
+  }
+  .bpr__dots span:nth-child(1) { background: color-mix(in srgb, var(--c-accent) 70%, transparent); }
+  .bpr__chrome-title {
+    display: flex; align-items: center; gap: 12px;
+    flex: 1 1 auto;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-label);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--c-ink);
+  }
+  .bpr__chrome-icon { width: 26px; height: 26px; color: var(--c-accent); flex: 0 0 auto; }
+  .bpr__legend { display: flex; align-items: center; gap: 24px; flex: 0 0 auto; }
+  .bpr__legend-item {
+    display: flex; align-items: center; gap: 9px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 500;
+    color: var(--c-muted);
+  }
+  .bpr__legend-mark { width: 18px; height: 18px; flex: 0 0 auto; border: 2px solid var(--c-accent); }
+  .bpr__legend-mark--event { border-radius: 50%; }
+  .bpr__legend-mark--task { border-radius: 3px; background: color-mix(in srgb, var(--c-accent) 12%, transparent); }
+  .bpr__legend-mark--gateway { transform: rotate(45deg); border-radius: 2px; }
+
+  /* Canvas pointillé, boite fixe 1728x760. */
+  .bpr__canvas {
+    position: relative;
+    width: 1728px;
+    height: 760px;
+    border: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+    border-radius: 0 0 6px 6px;
+    background:
+      radial-gradient(circle, color-mix(in srgb, var(--c-ink) 12%, transparent) 1.4px, transparent 1.4px) 0 0 / 26px 26px,
+      var(--c-surface);
+    overflow: hidden;
+  }
+
+  /* Swimlanes. */
+  .bpr-lane {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 0;
+  }
+  .bpr-lane--divided { border-top: 1px dashed color-mix(in srgb, var(--c-ink) 18%, transparent); }
+  .bpr-lane__label {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 56px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--c-ink) 4%, var(--c-surface));
+    border-right: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  }
+  .bpr-lane__label > span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--c-muted);
+  }
+
+  /* Couche connecteurs. */
+  .bpr__links {
+    position: absolute;
+    inset: 0;
+    width: 1728px;
+    height: 760px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .bpr-link {
+    stroke: color-mix(in srgb, var(--c-ink) 30%, transparent);
+    stroke-width: 2.5;
+    fill: none;
+  }
+  .bpr-arrowhead {
+    fill: none;
+    stroke: color-mix(in srgb, var(--c-ink) 42%, transparent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bpr-branch-label {
+    fill: var(--c-ink);
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-source);
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  /* Noeuds. */
+  .bpr-node {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .bpr-node--event { width: 84px; }
+  .bpr-node--gateway { width: 84px; }
+
+  .bpr-node--task {
+    width: 180px;
+    height: 108px;
+    gap: 0;
+    background: var(--c-surface);
+    border: 2px solid color-mix(in srgb, var(--c-ink) 16%, transparent);
+    border-left: 4px solid var(--c-accent);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 12%, transparent);
+    overflow: hidden;
+  }
+  .bpr-node__label {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 16px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.18;
+    color: var(--c-ink);
+    text-align: center;
+  }
+
+  /* Événement : cercle (début trait fin, fin trait épais). */
+  .bpr-node__circle {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    background: var(--c-surface);
+    border: 3px solid var(--c-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .bpr-node__circle--end {
+    border-width: 6px;
+    background: color-mix(in srgb, var(--c-accent) 10%, var(--c-surface));
+  }
+
+  /* Gateway : losange (carré pivoté). */
+  .bpr-node__diamond {
+    width: 84px; height: 84px;
+    transform: rotate(45deg);
+    background: var(--c-surface);
+    border: 2px solid var(--c-accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--c-ink) 14%, transparent);
+  }
+  .bpr-node__diamond-inner { transform: rotate(-45deg); display: flex; }
+  .bpr-node__ic { width: 32px; height: 32px; color: var(--c-accent); flex: 0 0 auto; }
+
+  .bpr-node__caption {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--c-ink);
+    text-align: center;
+    white-space: nowrap;
+  }
+  /* Légende au-dessus de la forme : pour les décisions ayant une sortie vers le
+     bas (sinon la flèche descendante traverserait le texte). */
+  .bpr-node__caption--up {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+  /* Légende sur le côté droit : pour un événement ayant des sorties en haut ET en
+     bas (sinon les flèches verticales traverseraient le texte). */
+  .bpr-node__caption--right {
+    left: 100%;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin: 0 0 0 12px;
+    text-align: left;
+  }
+  /* Légende sur le côté gauche (forme atteinte par le haut, la droite et le bas). */
+  .bpr-node__caption--left {
+    left: auto;
+    right: 100%;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin: 0 12px 0 0;
+    text-align: right;
+  }
+</style>
